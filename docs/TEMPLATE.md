@@ -400,13 +400,15 @@ Adapt the depth and detail to what's useful, not to fill space.
 
 ## Fonts
 
-Three fonts loaded from Google Fonts:
+Three fonts used:
 
-| Font              | Use                              |
-|-------------------|----------------------------------|
-| Instrument Serif  | Page title (`h1`)                |
-| Source Sans 3     | Body text, human descriptions    |
-| IBM Plex Mono     | Technical: DTOs, field names, paths, JSON |
+| Font              | Use                              | Source                |
+|-------------------|----------------------------------|-----------------------|
+| Instrument Serif  | Page title (`h1`)                | Self-hosted (`fonts/`)|
+| Source Sans 3     | Body text, human descriptions    | Google Fonts          |
+| IBM Plex Mono     | Technical: DTOs, field names, paths, JSON | Google Fonts |
+
+Instrument Serif is loaded via `@font-face` in `style.css` from `../fonts/*.woff2`.
 
 ---
 

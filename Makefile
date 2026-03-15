@@ -6,7 +6,7 @@ S3 := s3cmd --access_key=$(SCW_ACCESS_KEY) --secret_key=$(SCW_SECRET_KEY) \
 	--no-mime-magic --guess-mime-type
 
 # Only sync these extensions — everything else is ignored
-INCLUDE := --include '*.html' --include '*.css' --include '*.js' --include '*.json'
+INCLUDE := --include '*.html' --include '*.css' --include '*.js' --include '*.json' --include '*.woff2'
 EXCLUDE := --exclude '*'
 
 .PHONY: deploy build
