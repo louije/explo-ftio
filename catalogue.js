@@ -102,7 +102,10 @@ function renderCards() {
       ? '<a href="' + docPath + '" class="cat-card-title cat-card-title-link">' + escapeHtml(api.title) + ' \u2192</a>'
       : '<div class="cat-card-title">' + escapeHtml(api.title) + '</div>';
 
-    html += '<div class="cat-card" data-slug="' + api.slug + '" data-group="' + api.group + '" data-auth="' + api.auth + '">' +
+    var starHtml = api.starred ? '<div class="cat-star" title="Recommandée">\u2605</div>' : '';
+
+    html += '<div class="cat-card' + (api.starred ? ' starred' : '') + '" data-slug="' + api.slug + '" data-group="' + api.group + '" data-auth="' + api.auth + '">' +
+      starHtml +
       '<div class="cat-card-head">' +
         titleHtml +
         '<div class="cat-card-version">v' + escapeHtml(api.version) + '</div>' +
@@ -204,6 +207,10 @@ function applyFilters() {
 
   // Empty state
   var grid = document.getElementById("api-grid");
+
+  // Toggle starred-first ordering
+  var isFiltered = state.group !== "all" || state.auths.size > 0 || state.query;
+  grid.classList.toggle("filtered", !!isFiltered);
   var empty = grid.querySelector(".cat-empty");
   if (visible === 0 && !empty) {
     grid.insertAdjacentHTML("beforeend", '<div class="cat-empty">Aucune API ne correspond à cette recherche.</div>');

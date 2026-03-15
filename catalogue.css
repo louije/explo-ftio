@@ -98,8 +98,21 @@
   padding: 16px 18px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .cat-card[hidden] { display: none; }
+.cat-card.starred { order: -1; }
+.cat-grid.filtered .cat-card.starred { order: 0; }
+
+/* ── Star badge ── */
+.cat-star {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 0.82rem;
+  color: #d97706;
+  line-height: 1;
+}
 
 .cat-card-head {
   display: flex;
