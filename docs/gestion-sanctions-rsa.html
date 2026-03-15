@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanctions RSA &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Sanctions RSA</h1>
+  <div class="sub">Gestion des manquements, propositions de sanction et d&#xe9;cisions pour les allocataires du RSA</div>
+  <div class="sub-tech">Gestion des sanctions RSA v1.1 &#x2014; 4 endpoints &#xb7; 12 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/gestion-sanctions-rsa/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Manquement et sanctions <span class="dto">DetailManquement</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-c" id="m-manquement">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Manquement &#x2014; fait reproch&#xe9; <span class="dto">identifiantManquement &#xb7; familleManquement</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Nature du manquement aux obligations RSA : absence &#xe0; un rendez-vous, abandon de prestation ou absence en formation
+          <div class="fi-tech"><code>identifiantManquement</code> &#xb7; <code>familleManquement</code> &#xb7; <code>dateManquement</code> &#xb7; <code>dateAvertissement</code> &#xb7; <code>justificationDecisionSanction</code> &#xb7; <code>demarcheRemobilisation</code>
+            <br><span class="ev">F01</span> Absence RDV &#xb7; <span class="ev">F03</span> Abandon prestation &#xb7; <span class="ev">F04</span> Absence formation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3 stack" id="m-faisceau">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Faisceau d'indices <span class="dto">faisceauIndices[] &#xb7; FaisceauIndice</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Preuves justifiant le manquement : nature du d&#xe9;faut, date de constat et attributs d&#xe9;taill&#xe9;s (identifiant RDV, date convocation, type prestation&#x2026;)
+          <div class="fi-tech"><code>natureDefaut</code> &#xb7; <code>dateConstatDefaut</code> &#xb7; <code>attributs[]</code> &#x2014; <code>codeAttribut</code> &#xb7; <code>valeurAttribut</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-b stack" id="m-consequences">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Cons&#xe9;quences de sanction <span class="dto">consequencesSanction[] &#xb7; DetailSanction</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Mesures propos&#xe9;es par France Travail et d&#xe9;cisions valid&#xe9;es par le Conseil d&#xe9;partemental. Chaque cons&#xe9;quence a un type, une modalit&#xe9; (pourcentage ou montant), et une dur&#xe9;e.
+          <div class="fi-tech"><code>idConsequenceSanction</code> &#xb7; <code>typeConsequenceSanction</code> &#xb7; <code>delegation</code> &#xb7; <code>codeInitiateur</code>
+            <br><span class="ev">RAPPEL_A_ORDRE</span> &#xb7; <span class="ev">SUSP_RSA</span> Suspension &#xb7; <span class="ev">SUPPR_RSA</span> Suppression &#xb7; <span class="ev">RADIATION</span></div>
+        </div>
+
+        <div class="n l2c" id="m-proposition">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Proposition France Travail</div>
+          </div>
+          <div class="nb">
+            <div class="fi">Sanction propos&#xe9;e par France Travail avant validation
+              <div class="fi-tech"><code>modaliteProposee</code> &#xb7; <code>montantPropose</code> &#xb7; <code>dureeProposee</code>
+                <br><span class="ev">P</span> Pourcentage &#xb7; <span class="ev">M</span> Montant &#x2014; dur&#xe9;e 1 &#xe0; 4 mois</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2t" id="m-decision">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">D&#xe9;cision valid&#xe9;e</div>
+          </div>
+          <div class="nb">
+            <div class="fi">D&#xe9;cision finale du Conseil d&#xe9;partemental, avec dates d'application
+              <div class="fi-tech"><code>modaliteValidee</code> &#xb7; <code>montantValide</code> &#xb7; <code>dureeValidee</code> &#xb7; <code>dateDebutApplication</code> &#xb7; <code>dateFinApplication</code> &#xb7; <code>dateRemobilisation</code> &#xb7; <code>dateLeveeApplication</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-p stack" id="m-evenements">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">&#xc9;v&#xe9;nements de traitement <span class="dto">evenements[] &#xb7; DetailEvenementSanction</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Historique chronologique du traitement : proposition, saisie, validation, refus, lev&#xe9;e de suspension, annulation
+          <div class="fi-tech"><code>identifiantEvenement</code> &#xb7; <code>typeEvenement</code> &#xb7; <code>dateEvenement</code> &#xb7; <code>motif</code> &#xb7; <code>commentaireEvenement</code>
+            <br><span class="ev">PROP_SANCTION</span> &#xb7; <span class="ev">SAISIE_SANCTION</span> &#xb7; <span class="ev">VALID_SANCTION</span> &#xb7; <span class="ev">REFUS_SANCTION</span> &#xb7; <span class="ev">VALID_LEVEE_SUSP</span> &#xb7; <span class="ev">ANNULATION_SANCTION</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel n&#xe9;cessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+</div>
+
+<div class="note">
+  <strong>Flux de traitement</strong> &#x2014; France Travail propose une sanction (PROP_SANCTION) &#x2192; le Conseil d&#xe9;partemental saisit la d&#xe9;cision (SAISIE_SANCTION) &#x2192; puis valide (VALID_SANCTION) ou refuse (REFUS_SANCTION). La suspension peut &#xea;tre lev&#xe9;e apr&#xe8;s remobilisation (VALID_LEVEE_SUSP).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Sanctions RSA <span class="dt-human">&#x2014; Gestion des manquements</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter un manquement</span><div class="ep-human">D&#xe9;tail du manquement et des sanctions associ&#xe9;es</div><span class="ep-path">/detailManquement</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Transmettre un &#xe9;v&#xe9;nement</span><div class="ep-human">Enregistrer une d&#xe9;cision ou un &#xe9;v&#xe9;nement sur une sanction</div><span class="ep-path">/evenementSanctionRSA</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">D&#xe9;cision sanction partenaire</span><div class="ep-human">Transmettre la d&#xe9;cision de sanction pour un allocataire suivi par un partenaire</div><span class="ep-path">/decisionSanctionRSAPartenaire</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Demander une radiation</span><div class="ep-human">Demander la radiation d'un demandeur pour sanction RSA</div><span class="ep-path">/demandeRadiation</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">12 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Enregistrement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DetailManquement</span> <span class="sc-desc">&#x2014; Manquement et sanctions</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DetailSanction</span> <span class="sc-desc">&#x2014; Cons&#xe9;quence de sanction</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DetailEvenementSanction</span> <span class="sc-desc">&#x2014; &#xc9;v&#xe9;nement de traitement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">FaisceauIndice</span> <span class="sc-desc">&#x2014; Indice justificatif</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DetailAttribut</span> <span class="sc-desc">&#x2014; Attribut d'un indice</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Individu</span> <span class="sc-desc">&#x2014; Identification usager</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">TraitementSanctionRsa</span> <span class="sc-desc">&#x2014; &#xc9;v&#xe9;nement &#xe0; transmettre</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DecisionSanctionRsa</span> <span class="sc-desc">&#x2014; D&#xe9;cision de sanction</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DemandeRadiation</span> <span class="sc-desc">&#x2014; Demande de radiation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">RetourTraitementRsaOTD</span> <span class="sc-desc">&#x2014; Retour traitement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">RetourDecisionSanctionRSA</span> <span class="sc-desc">&#x2014; Retour d&#xe9;cision</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">RetourDemandeRadiation</span> <span class="sc-desc">&#x2014; Retour radiation</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Absence &#xe0; un rendez-vous</strong> &#x2014; Un allocataire du RSA a manqu&#xe9; un rendez-vous avec son conseiller. France Travail propose une suspension de 50% pendant 1 mois. Le Conseil d&#xe9;partemental valide la sanction.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-manquement"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// GET /detailManquement?identifiantSanction=CS-2026-00412</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// Headers:</span>
+<span class="jc">//   ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">//   pa-nom-agent:          Durand</span>
+<span class="jc">//   pa-prenom-agent:       Claire</span>
+<span class="jc">//   pa-identifiant-agent:  CD75-0234</span>
+{
+  <span class="jk">"individu"</span>: { <span class="jk">"numeroFranceTravail"</span>: <span class="js">"98765432100"</span> },
+  <span class="jk">"identifiantManquement"</span>: <span class="js">"MQ-2026-01187"</span>,
+  <span class="jk">"familleManquement"</span>: <span class="js">"F01"</span>,
+  <span class="jk">"dateManquement"</span>: <span class="js">"2026-01-15T10:30:00"</span>,
+  <span class="jk">"dateAvertissement"</span>: <span class="js">"2026-01-20T00:00:00"</span>,
+  <span class="jk">"faisceauIndices"</span>: [
+    {
+      <span class="jk">"natureDefaut"</span>: <span class="js">"Absence non justifi&#xe9;e"</span>,
+      <span class="jk">"dateConstatDefaut"</span>: <span class="js">"2026-01-15T10:30:00"</span>,
+      <span class="jk">"attributs"</span>: [
+        { <span class="jk">"codeAttribut"</span>: <span class="js">"ARDV_DATE_RDV"</span>, <span class="jk">"valeurAttribut"</span>: <span class="js">"2026-01-15"</span> },
+        { <span class="jk">"codeAttribut"</span>: <span class="js">"ARDV_TYPE_RDV"</span>, <span class="jk">"valeurAttribut"</span>: <span class="js">"Entretien de suivi"</span> }
+      ]
+    }
+  ],
+  <span class="jk">"consequencesSanction"</span>: [
+    {
+      <span class="jk">"idConsequenceSanction"</span>: <span class="js">"CS-2026-00412"</span>,
+      <span class="jk">"typeConsequenceSanction"</span>: <span class="js">"SUSP_RSA"</span>,
+      <span class="jk">"delegation"</span>: <span class="jb">false</span>,
+      <span class="jk">"codeInitiateur"</span>: <span class="js">"FT"</span>,
+      <span class="jk">"modaliteProposee"</span>: <span class="js">"P"</span>,
+      <span class="jk">"montantPropose"</span>: <span class="jn">50</span>,
+      <span class="jk">"dureeProposee"</span>: <span class="jn">1</span>,
+      <span class="jk">"modaliteValidee"</span>: <span class="js">"P"</span>,
+      <span class="jk">"montantValide"</span>: <span class="jn">50</span>,
+      <span class="jk">"dureeValidee"</span>: <span class="jn">1</span>,
+      <span class="jk">"dateDebutApplication"</span>: <span class="js">"2026-02-01T00:00:00"</span>,
+      <span class="jk">"dateFinApplication"</span>: <span class="js">"2026-02-28T00:00:00"</span>
+    }
+  ],</div>
+<div data-section="s-evenements">  <span class="jk">"evenements"</span>: [
+      {
+        <span class="jk">"identifiantEvenement"</span>: <span class="js">"a1b2c3d4-e5f6-7890-abcd-ef1234567890"</span>,
+        <span class="jk">"typeEvenement"</span>: <span class="js">"PROP_SANCTION"</span>,
+        <span class="jk">"dateEvenement"</span>: <span class="js">"2026-01-22T14:00:00"</span>,
+        <span class="jk">"motif"</span>: <span class="js">"DELEGATION_FT"</span>
+      },
+      {
+        <span class="jk">"typeEvenement"</span>: <span class="js">"SAISIE_SANCTION"</span>,
+        <span class="jk">"dateEvenement"</span>: <span class="js">"2026-01-28T09:15:00"</span>,
+        <span class="jk">"motif"</span>: <span class="js">"VALIDATION_CD"</span>
+      },
+      {
+        <span class="jk">"typeEvenement"</span>: <span class="js">"VALID_SANCTION"</span>,
+        <span class="jk">"dateEvenement"</span>: <span class="js">"2026-01-30T16:45:00"</span>,
+        <span class="jk">"motif"</span>: <span class="js">"VALIDATION_CD"</span>,
+        <span class="jk">"commentaireEvenement"</span>: <span class="js">"Sanction valid&#xe9;e apr&#xe8;s examen du dossier"</span>
+      }
+    ]
+  }
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-manquement">
+  <div class="ex-title"><span class="ex-ico">&#x26A0;</span> Manquement</div>
+  <div class="ex-card">
+    <h4>Absence non justifi&#xe9;e &#x2014; 15 janvier 2026</h4>
+    <p><span class="ex-tag tag-encours">F01 &#x2014; Absence RDV</span> L'allocataire a manqu&#xe9; un entretien de suivi le 15 janvier 2026. Un avertissement a &#xe9;t&#xe9; &#xe9;mis le 20 janvier.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>&#x2696; Sanction propos&#xe9;e</strong> &#x2192; Suspension RSA 50% pendant 1 mois (propos&#xe9;e par FT)</div>
+      <div class="ex-item"><strong>&#x2696; D&#xe9;cision valid&#xe9;e</strong> &#x2192; Suspension RSA 50% pendant 1 mois (valid&#xe9;e par le CD)</div>
+      <div class="ex-item"><strong>&#x1F4C5; Application</strong> &#x2192; du 1er f&#xe9;vrier au 28 f&#xe9;vrier 2026</div>
+    </div>
+    <div class="ex-agent">Headers requis : jeton usager + identification agent (CD75-0234)</div>
+  </div>
+</div>
+
+<div data-section="s-evenements">
+  <div class="ex-title"><span class="ex-ico">&#x1F4C5;</span> Traitement</div>
+  <div class="ex-card">
+    <h4>Chronologie de la sanction</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>22/01</strong> &#x2014; <span class="ev">PROP_SANCTION</span> France Travail propose la suspension de 50%</div>
+      <div class="ex-item"><strong>28/01</strong> &#x2014; <span class="ev">SAISIE_SANCTION</span> Le Conseil d&#xe9;partemental saisit la d&#xe9;cision</div>
+      <div class="ex-item"><strong>30/01</strong> &#x2014; <span class="ev">VALID_SANCTION</span> Sanction valid&#xe9;e apr&#xe8;s examen du dossier</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">La suspension de 50% du RSA s'applique du 1er au 28 f&#xe9;vrier 2026. L'allocataire peut &#xea;tre remobilis&#xe9; pour obtenir une lev&#xe9;e anticip&#xe9;e (VALID_LEVEE_SUSP).</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; Gestion des sanctions RSA v1.1 &#xb7; api.francetravail.io &#xb7; 4 endpoints &#xb7; 12 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

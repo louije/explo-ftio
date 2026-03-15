@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROME 4.0 Comp&#xe9;tences &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>ROME 4.0 &#x2014; Comp&#xe9;tences</h1>
+  <div class="sub">R&#xe9;f&#xe9;rentiel des savoirs, savoir-faire et savoir-&#xea;tre professionnels du ROME 4.0</div>
+  <div class="sub-tech">ROME 4.0 - Comp&#xe9;tences v1 &#x2014; 21 endpoints &#xb7; 12 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rome-competences/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Comp&#xe9;tence <span class="dto">Competence</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une comp&#xe9;tence au sens g&#xe9;n&#xe9;ral du ROME 4.0 : soit un savoir (connaissance th&#xe9;orique), soit un macro-savoir-faire (capacit&#xe9; pratique), soit un macro-savoir-&#xea;tre professionnel (qualit&#xe9; comportementale), soit une comp&#xe9;tence d&#xe9;taill&#xe9;e (croisement sp&#xe9;cifique).
+      <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>type</code> &#xb7; <code>codeOgr</code> &#xb7; <code>obsolete</code> &#xb7; <code>dateFin</code> &#xb7; <code>transitionEcologique</code> &#xb7; <code>transitionNumerique</code>
+        <br><span class="ev">SAVOIR</span> &#xb7; <span class="ev">MACRO-SAVOIR-FAIRE</span> &#xb7; <span class="ev">MACRO-SAVOIR-ETRE-PROFESSIONNEL</span> &#xb7; <span class="ev">COMPETENCE-DETAILLEE</span></div>
+    </div>
+
+    <div class="n l1-n" id="m-esco">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Correspondance ESCO <span class="dto">competenceEsco &#xb7; CompetenceEsco</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Lien vers le r&#xe9;f&#xe9;rentiel europ&#xe9;en des comp&#xe9;tences ESCO (European Skills, Competences, Qualifications and Occupations)
+          <div class="fi-tech"><code>libelle</code> &#xb7; <code>uri</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-b" id="m-macro">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Macro-comp&#xe9;tence <span class="dto">macroCompetence &#xb7; MacroCompetence</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Regroupement de comp&#xe9;tences d&#xe9;taill&#xe9;es partageant un m&#xea;me objectif professionnel. Peut &#xea;tre un macro-savoir-faire (capacit&#xe9; technique) ou un macro-savoir-&#xea;tre (qualit&#xe9; comportementale).
+          <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>type</code> &#xb7; <code>transferable</code> &#xb7; <code>definition</code> &#xb7; <code>maturite</code> &#xb7; <code>codeArborescence</code> &#xb7; <code>codeOgr</code> &#xb7; <code>riasecMajeur</code> &#xb7; <code>riasecMineur</code>
+            <br><span class="ev">MACRO-SAVOIR-FAIRE</span> &#xb7; <span class="ev">MACRO-SAVOIR-ETRE-PROFESSIONNEL</span>
+            <br>Sous-cat&#xe9;gorie : <span class="ev">TECHNIQUE</span> &#xb7; <span class="ev">TECHNIQUE_EXPERT</span> &#xb7; <span class="ev">TRANSVERSE</span>
+            <br>Maturit&#xe9; : <span class="ev">HETEROGENE</span> &#xb7; <span class="ev">TRES_HOMOGENE</span> &#xb7; <span class="ev">HOMOGENE</span></div>
+        </div>
+
+        <div class="n l2t" id="m-objectif">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Objectif <span class="dto">objectif &#xb7; Objectif</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Objectif professionnel vis&#xe9; par la macro-comp&#xe9;tence (ex. &#xab; Soigner des animaux &#xbb;, &#xab; G&#xe9;rer un projet &#xbb;)
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>codeArborescence</code></div>
+            </div>
+
+            <div class="n l2c" id="m-enjeu">
+              <div class="nh"><div class="dot"></div>
+                <div class="name">Enjeu <span class="dto">enjeu &#xb7; Enjeu</span></div>
+                <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+              </div>
+              <div class="nb">
+                <div class="fi">Grand enjeu de comp&#xe9;tence auquel l'objectif est rattach&#xe9; (ex. &#xab; Soin &#xbb;, &#xab; Animation &#xbb;, &#xab; Fabrication &#xbb;)
+                  <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>codeArborescence</code></div>
+                </div>
+
+                <div class="n l3" id="m-domaine">
+                  <div class="nh"><div class="dot"></div>
+                    <div class="name">Domaine de comp&#xe9;tence <span class="dto">domaineCompetence &#xb7; DomaineCompetence</span></div>
+                    <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+                  </div>
+                  <div class="nb">
+                    <div class="fi">Plus haut niveau de classification : regroupe plusieurs enjeux (ex. &#xab; Management, Social, Soin &#xbb;)
+                      <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>codeArborescence</code></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3 stack" id="m-competences-rattachees">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Comp&#xe9;tences d&#xe9;taill&#xe9;es rattach&#xe9;es <span class="dto">competences[] &#xb7; CompetenceDetaillee</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Comp&#xe9;tences d&#xe9;taill&#xe9;es li&#xe9;es &#xe0; cette macro-comp&#xe9;tence
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>riasecMajeur</code> &#xb7; <code>riasecMineur</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-categorie-savoir">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Cat&#xe9;gorie de savoirs <span class="dto">categorieSavoir &#xb7; CategorieSavoir</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Classement des savoirs par domaine th&#xe9;matique (ex. &#xab; V&#xe9;hicules &#xbb;, &#xab; Informatique &#xbb;). Structure hi&#xe9;rarchique &#xe0; deux niveaux avec sous-cat&#xe9;gories.
+          <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>obsolete</code> &#xb7; <code>dateFin</code></div>
+        </div>
+
+        <div class="n l3 stack" id="m-sous-categories">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Sous-cat&#xe9;gories <span class="dto">sousCategories[] &#xb7; CategorieSavoir</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Sous-cat&#xe9;gories de savoirs rattach&#xe9;es
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3b stack" id="m-savoirs">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Savoirs <span class="dto">savoirs[] &#xb7; Savoir</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Connaissances th&#xe9;oriques et techniques rattach&#xe9;es &#xe0; la cat&#xe9;gorie
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>type</code> &#xb7; <code>codeOgr</code> &#xb7; <code>transitionEcologique</code> &#xb7; <code>transitionNumerique</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>RIASEC</strong> &#x2014; Le mod&#xe8;le RIASEC (R&#xe9;aliste, Investigateur, Artistique, Social, Entreprenant, Conventionnel) permet de caract&#xe9;riser le profil d'int&#xe9;r&#xea;t de chaque comp&#xe9;tence. Les champs <code>riasecMajeur</code> et <code>riasecMineur</code> utilisent les codes <span class="ev">R</span> <span class="ev">I</span> <span class="ev">A</span> <span class="ev">S</span> <span class="ev">E</span> <span class="ev">C</span>.
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique, royaume <code>/partenaire</code> (client credentials). Scopes requis : <code>nomenclatureRome</code> + <code>api_rome-competencesv1</code>. Aucun jeton usager n&#xe9;cessaire.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Cat&#xe9;gories de savoirs <span class="dt-human">&#x2014; Classification th&#xe9;matique des savoirs</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les cat&#xe9;gories de savoirs</span><div class="ep-human">Tous les domaines th&#xe9;matiques de savoirs</div><span class="ep-path">/v1/competences/categorie-savoirs</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une cat&#xe9;gorie de savoirs</span><div class="ep-human">D&#xe9;tail d'un domaine th&#xe9;matique par son code</div><span class="ep-path">/v1/competences/categorie-savoirs/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Comp&#xe9;tences <span class="dt-human">&#x2014; Recherche g&#xe9;n&#xe9;rique tous types confondus</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les comp&#xe9;tences</span><div class="ep-human">Toutes les comp&#xe9;tences (savoirs, savoir-faire, savoir-&#xea;tre, d&#xe9;taill&#xe9;es)</div><span class="ep-path">/v1/competences/competence</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une comp&#xe9;tence</span><div class="ep-human">D&#xe9;tail d'une comp&#xe9;tence par son code</div><span class="ep-path">/v1/competences/competence/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Comp&#xe9;tences d&#xe9;taill&#xe9;es <span class="dt-human">&#x2014; Croisement sp&#xe9;cifique savoir-faire / savoir-&#xea;tre</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les comp&#xe9;tences d&#xe9;taill&#xe9;es</span><div class="ep-human">Comp&#xe9;tences d&#xe9;taill&#xe9;es avec filtres RIASEC et code OGR</div><span class="ep-path">/v1/competences/competence-detaillee</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une comp&#xe9;tence d&#xe9;taill&#xe9;e</span><div class="ep-human">D&#xe9;tail d'une comp&#xe9;tence d&#xe9;taill&#xe9;e par son code</div><span class="ep-path">/v1/competences/competence-detaillee/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Domaines de comp&#xe9;tence <span class="dt-human">&#x2014; Plus haut niveau de classification</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les domaines de comp&#xe9;tence</span><div class="ep-human">Grands domaines (Management, Fabrication, etc.)</div><span class="ep-path">/v1/competences/domaine-competence</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire un domaine de comp&#xe9;tence</span><div class="ep-human">D&#xe9;tail d'un domaine par son code</div><span class="ep-path">/v1/competences/domaine-competence/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Enjeux <span class="dt-human">&#x2014; Sous-domaines de comp&#xe9;tence</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les enjeux de comp&#xe9;tences</span><div class="ep-human">Enjeux rattach&#xe9;s aux domaines (Soin, Animation, etc.)</div><span class="ep-path">/v1/competences/enjeu</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire un enjeu de comp&#xe9;tences</span><div class="ep-human">D&#xe9;tail d'un enjeu par son code</div><span class="ep-path">/v1/competences/enjeu/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Macro-comp&#xe9;tences <span class="dt-human">&#x2014; Regroupement de comp&#xe9;tences d&#xe9;taill&#xe9;es</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les macro-comp&#xe9;tences</span><div class="ep-human">Toutes les macros (savoir-faire + savoir-&#xea;tre)</div><span class="ep-path">/v1/competences/macro-competence</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une macro-comp&#xe9;tence</span><div class="ep-human">D&#xe9;tail d'une macro-comp&#xe9;tence par son code</div><span class="ep-path">/v1/competences/macro-competence/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Macro savoir-faire <span class="dt-human">&#x2014; Capacit&#xe9;s pratiques acquises par l'exp&#xe9;rience</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les macros savoir-faire</span><div class="ep-human">Tous les macro-savoir-faire du r&#xe9;f&#xe9;rentiel</div><span class="ep-path">/v1/competences/macro-savoir-faire</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une macro savoir-faire</span><div class="ep-human">D&#xe9;tail d'un macro-savoir-faire par son code</div><span class="ep-path">/v1/competences/macro-savoir-faire/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Macro savoir-&#xea;tre professionnel <span class="dt-human">&#x2014; Qualit&#xe9;s comportementales en contexte de travail</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les macros savoir-&#xea;tre professionnel</span><div class="ep-human">Tous les savoir-&#xea;tre (autonomie, rigueur, etc.)</div><span class="ep-path">/v1/competences/macro-savoir-etre-professionnel</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une macro savoir-&#xea;tre professionnel</span><div class="ep-human">D&#xe9;tail d'un savoir-&#xea;tre par son code</div><span class="ep-path">/v1/competences/macro-savoir-etre-professionnel/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Objectifs <span class="dt-human">&#x2014; Buts professionnels vis&#xe9;s par les comp&#xe9;tences</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les objectifs</span><div class="ep-human">Tous les objectifs du r&#xe9;f&#xe9;rentiel</div><span class="ep-path">/v1/competences/objectif</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire un objectif</span><div class="ep-human">D&#xe9;tail d'un objectif par son code</div><span class="ep-path">/v1/competences/objectif/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Savoirs <span class="dt-human">&#x2014; Connaissances th&#xe9;oriques et techniques</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les savoirs</span><div class="ep-human">Tous les savoirs class&#xe9;s par cat&#xe9;gorie</div><span class="ep-path">/v1/competences/savoir</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire un savoir</span><div class="ep-human">D&#xe9;tail d'un savoir par son code</div><span class="ep-path">/v1/competences/savoir/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Version <span class="dt-human">&#x2014; Version courante du r&#xe9;f&#xe9;rentiel ROME</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer la version actuelle du ROME</span><div class="ep-human">Num&#xe9;ro de version et date de derni&#xe8;re mise &#xe0; jour</div><span class="ep-path">/v1/competences/version</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">12 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel / Nomenclature</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Competence</span> <span class="sc-desc">&#x2014; Type abstrait (4 sous-types)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CompetenceDetaillee</span> <span class="sc-desc">&#x2014; Croisement savoir-faire / savoir-&#xea;tre</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MacroCompetence</span> <span class="sc-desc">&#x2014; Regroupement de comp&#xe9;tences d&#xe9;taill&#xe9;es</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MacroSavoirFaire</span> <span class="sc-desc">&#x2014; Capacit&#xe9; pratique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MacroSavoirEtreProfessionnel</span> <span class="sc-desc">&#x2014; Qualit&#xe9; comportementale</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Savoir</span> <span class="sc-desc">&#x2014; Connaissance th&#xe9;orique ou technique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CategorieSavoir</span> <span class="sc-desc">&#x2014; Classification th&#xe9;matique des savoirs</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DomaineCompetence</span> <span class="sc-desc">&#x2014; Plus haut niveau de classification</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Enjeu</span> <span class="sc-desc">&#x2014; Sous-domaine de comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Objectif</span> <span class="sc-desc">&#x2014; But professionnel vis&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CompetenceEsco</span> <span class="sc-desc">&#x2014; Correspondance r&#xe9;f&#xe9;rentiel europ&#xe9;en</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">VersionRome</span> <span class="sc-desc">&#x2014; Version du r&#xe9;f&#xe9;rentiel</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Recherche d'une comp&#xe9;tence d&#xe9;taill&#xe9;e</strong> &#x2014; Un &#xe9;diteur de logiciel int&#xe8;gre le r&#xe9;f&#xe9;rentiel ROME dans son outil de matching emploi. Il interroge l'API pour r&#xe9;cup&#xe9;rer le d&#xe9;tail d'une comp&#xe9;tence sp&#xe9;cifique au d&#xe9;veloppement informatique.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-competence"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// GET /v1/competences/competence-detaillee/126360</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"type"</span>: <span class="js">"COMPETENCE-DETAILLEE"</span>,
+  <span class="jk">"code"</span>: <span class="js">"126360"</span>,
+  <span class="jk">"libelle"</span>: <span class="js">"D&#xe9;velopper des applications en Java"</span>,
+  <span class="jk">"codeOgr"</span>: <span class="js">"126360"</span>,
+  <span class="jk">"obsolete"</span>: <span class="jb">false</span>,
+  <span class="jk">"transitionEcologique"</span>: <span class="jb">false</span>,
+  <span class="jk">"transitionNumerique"</span>: <span class="jb">true</span>,
+  <span class="jk">"riasecMajeur"</span>: <span class="js">"I"</span>,
+  <span class="jk">"riasecMineur"</span>: <span class="js">"R"</span>,
+  <span class="jk">"competenceEsco"</span>: {
+    <span class="jk">"libelle"</span>: <span class="js">"utiliser la programmation orient&#xe9;e objet"</span>,
+    <span class="jk">"uri"</span>: <span class="js">"http://data.europa.eu/esco/skill/8b156eab-..."</span>
+  },</div>
+<div data-section="s-macro">  <span class="jk">"macroCompetence"</span>: {
+    <span class="jk">"type"</span>: <span class="js">"MACRO-SAVOIR-FAIRE"</span>,
+    <span class="jk">"code"</span>: <span class="js">"120542"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Programmer en langage informatique"</span>,
+    <span class="jk">"transferable"</span>: <span class="jb">true</span>,
+    <span class="jk">"sousCategorie"</span>: <span class="js">"TECHNIQUE"</span>,
+    <span class="jk">"maturite"</span>: <span class="js">"HOMOGENE"</span>,
+    <span class="jk">"codeOgr"</span>: <span class="js">"120542"</span>,
+    <span class="jk">"riasecMajeur"</span>: <span class="js">"I"</span>,
+    <span class="jk">"riasecMineur"</span>: <span class="js">"R"</span>,
+    <span class="jk">"codeArborescence"</span>: <span class="js">"5B2a"</span>,
+    <span class="jk">"objectif"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"32"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Concevoir et d&#xe9;velopper des solutions num&#xe9;riques"</span>,
+      <span class="jk">"codeArborescence"</span>: <span class="js">"5B2"</span>,
+      <span class="jk">"enjeu"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"14"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Num&#xe9;rique"</span>,
+        <span class="jk">"codeArborescence"</span>: <span class="js">"5B"</span>,
+        <span class="jk">"domaineCompetence"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"5"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Informatique, Num&#xe9;rique, Multim&#xe9;dia"</span>,
+          <span class="jk">"codeArborescence"</span>: <span class="js">"5"</span>
+        }
+      }
+    }
+  }
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-competence">
+  <div class="ex-title"><span class="ex-ico">&#x1F9E0;</span> Comp&#xe9;tence d&#xe9;taill&#xe9;e</div>
+  <div class="ex-card">
+    <h4>D&#xe9;velopper des applications en Java</h4>
+    <p>Comp&#xe9;tence d&#xe9;taill&#xe9;e identifi&#xe9;e dans le ROME 4.0, rattach&#xe9;e &#xe0; la transition num&#xe9;rique. <span class="ex-tag tag-ok">Transition num&#xe9;rique</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Profil RIASEC</strong> &#x2192; Majeur <span class="ev">I</span> (Investigateur) &#xb7; Mineur <span class="ev">R</span> (R&#xe9;aliste)</div>
+      <div class="ex-item"><strong>Correspondance ESCO</strong> &#x2192; &#xab; utiliser la programmation orient&#xe9;e objet &#xbb;</div>
+      <div class="ex-item"><strong>Transition &#xe9;cologique</strong> &#x2192; <span class="ex-tag tag-non">Non</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-macro">
+  <div class="ex-title"><span class="ex-ico">&#x1F3AF;</span> Hi&#xe9;rarchie de comp&#xe9;tences</div>
+  <div class="ex-card">
+    <h4>Programmer en langage informatique</h4>
+    <p>Macro-savoir-faire transf&#xe9;rable, de cat&#xe9;gorie technique et de maturit&#xe9; homog&#xe8;ne.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Objectif</strong> &#x2192; Concevoir et d&#xe9;velopper des solutions num&#xe9;riques</div>
+      <div class="ex-item"><strong>Enjeu</strong> &#x2192; Num&#xe9;rique</div>
+      <div class="ex-item"><strong>Domaine</strong> &#x2192; Informatique, Num&#xe9;rique, Multim&#xe9;dia</div>
+    </div>
+    <div class="ex-agent">Arborescence : 5 &#x2192; 5B &#x2192; 5B2 &#x2192; 5B2a</div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; ROME 4.0 - Comp&#xe9;tences v1 &#xb7; api.francetravail.io &#xb7; 21 endpoints &#xb7; 12 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

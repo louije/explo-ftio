@@ -1,0 +1,81 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Date de Naissance",
+    "description": "L'API Date de Naissance permet d'accéder à l'âge saisi par un individu authentifié sur francetravail.fr. Elle fait partie du dispositif de portabilité des données personnelles.",
+    "version": "1.0",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+    	"email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-datenaissance/v1"
+    }
+  ],
+  "paths": {
+    "/etat-civil": {
+      "get": {
+        "summary": "Récupérer la date de naissance",
+        "description": "Cette API permet d'accéder à l'âge saisi par un individu authentifié sur francetravail.fr. Elle fait partie du lot d'API mis à disposition dans le cadre du dispositif de portabilité des données personnelles d'un individu. Pour pouvoir l'exploiter, l'utilisateur doit préalablement s'être identifié sur votre application avec son compte France Travail grâce à l'API France Travail Connect.",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-datenaissancev1",
+              "datenaissance"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateDeNaissance"
+                },
+                "example": {
+                  "dateDeNaissance": "1960-01-11T00:00:00+01:00"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DateDeNaissance": {
+        "type": "object",
+        "properties": {
+          "dateDeNaissance": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de naissance de l'individu. Norme ISO-8601 (YYYY-MM-DDTHH:MM:SSZ)"
+          }
+        },
+        "required": [
+          "dateDeNaissance"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_peconnect-datenaissancev1": "Obligatoire",
+              "datenaissance": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

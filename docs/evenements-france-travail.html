@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Événements emploi — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Événements emploi</h1>
+  <div class="sub">Salons en ligne, forums, job datings et ateliers organisés par France Travail et ses partenaires</div>
+  <div class="sub-tech">Mes évènements emplois v1.0.0 — 5 endpoints · 5 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/evenements/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="grid-2">
+
+<!-- LEFT: Salons en ligne -->
+<div class="n l0 stack" id="m-salons">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Salons en ligne <span class="dto">SalonEnLigne[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-salon-desc">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Description <span class="dto">titre · description · typeEvenement</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Titre, description HTML, type d'événement, organisateur
+        <div class="fi-tech"><code>titre</code> · <code>description</code> · <code>typeEvenement</code> · <code>organismeOrganisateur</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-salon-dates">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Dates et état <span class="dto">dateDebut · dateFin</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Dates de l'événement et de la période de candidature. Indique si le salon est en cours.
+        <div class="fi-tech"><code>dateDebut</code> · <code>dateFin</code> · <code>dateDebutCandidature</code> · <code>dateFinCandidature</code> · <code>salonEnCours</code> · <code>online</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-salon-offres">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Offres <span class="dto">nombreOffres · urlSalonEnLigne</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Nombre d'offres proposées et lien vers le salon
+        <div class="fi-tech"><code>nombreOffres</code> · <code>urlSalonEnLigne</code> · <code>localisation</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RIGHT: Événement emploi -->
+<div class="n l0" id="m-evenement">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Événement emploi <span class="dto">Evenement</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-evt-desc">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Description <span class="dto">titre · type · description</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Titre, type (Forum, Job Dating, Atelier, Salon en ligne, Conférence…), description et déroulement
+        <div class="fi-tech"><code>titre</code> · <code>type</code> · <code>description</code> · <code>deroulement</code> · <code>multisectoriel</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-evt-lieu">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Lieu et date <span class="dto">ville · codePostal · dateEvenement</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Localisation géographique, date, horaires (UTC) et fuseau horaire
+        <div class="fi-tech"><code>ville</code> · <code>codePostal</code> · <code>codeInsee</code> · <code>longitude</code> · <code>latitude</code> · <code>dateEvenement</code> · <code>heureDebut</code> · <code>heureFin</code> · <code>timezone</code>
+          <br><span class="ev">ADIST A distance</span> · <span class="ev">ENPHY En physique</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-evt-publics">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Publics et objectifs <span class="dto">objectifs · publics · benefices</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Objectifs de l'événement, publics ciblés, bénéfices pour les participants
+        <div class="fi-tech"><code>objectifs</code> · <code>publics</code> · <code>benefices</code> · <code>modalites</code> · <code>codesRome</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-c" id="m-evt-places">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Places et inscriptions <span class="dto">nombrePlaceTotalPresentiel · nombreInscritPresentiel</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Nombre de places et d'inscrits, en présentiel et à distance
+        <div class="fi-tech"><code>nombrePlaceTotalPresentiel</code> · <code>nombrePlaceTotalDistance</code> · <code>nombreInscritPresentiel</code> · <code>nombreInscritDistance</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-evt-orga">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Organisateur <span class="dto">libelleOrganisateurPrincipal · libelleEtablissement</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Organisateur principal et agence de rattachement
+        <div class="fi-tech"><code>libelleOrganisateurPrincipal</code> · <code>libelleEtablissement</code> · <code>offresId</code> · <code>urlDetailEvenement</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- .grid-2 -->
+
+<div class="note">
+  <strong>Authentification partenaire</strong> — Cette API est dans le royaume <code>/partenaire</code> (client credentials). Aucun jeton usager n'est nécessaire. Les salons en ligne sont retournés sans filtre. Les événements emploi acceptent un POST avec critères de recherche (date, lieu, type, objectifs, publics).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Salons en ligne <span class="dt-human">— Événements virtuels</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les salons en ligne</span><div class="ep-human">Salons en cours et à venir</div><span class="ep-path">/salonsenligne</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les salons jeunes</span><div class="ep-human">Salons ciblant les jeunes</div><span class="ep-path">/salonsenligne/jeunes</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Événements emploi <span class="dt-human">— Recherche locale</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher des événements</span><div class="ep-human">Recherche multicritère (lieu, date, type, public)</div><span class="ep-path">/mee/evenements</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Détail d'un événement</span><div class="ep-human">Fiche complète d'un événement</div><span class="ep-path">/mee/evenement/{evenement_id}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel des opérations</span><div class="ep-human">Liste des opérations marketing (1 jeune 1 solution…)</div><span class="ep-path">/mee/tags/opera/lister</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">5 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Recherche</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SalonEnLigne</span> <span class="sc-desc">— Salon en ligne</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EvenementRequest</span> <span class="sc-desc">— Critères de recherche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">EvenementResponse</span> <span class="sc-desc">— Réponse paginée</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Evenement / EvenementDetail</span> <span class="sc-desc">— Événement emploi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Operation</span> <span class="sc-desc">— Opération marketing</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>5 endpoints</strong> · <strong>5 schémas</strong> — 3 en lecture, 1 en écriture (recherche POST), 1 référentiel.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Forum de l'alternance à Saint-Pierre (La Réunion)</strong> — Un partenaire recherche les événements emploi à La Réunion pour orienter des jeunes vers des contrats en alternance.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-recherche"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// RECHERCHE — POST /mee/evenements</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+{
+  <span class="jk">"dateDebut"</span>: <span class="js">"2026-03-01"</span>,
+  <span class="jk">"dateFin"</span>: <span class="js">"2026-04-30"</span>,
+  <span class="jk">"departements"</span>: [<span class="js">"974"</span>],
+  <span class="jk">"typeEvenement"</span>: <span class="jn">14</span>,
+  <span class="jk">"objectifs"</span>: [<span class="jn">19</span>],
+  <span class="jk">"publicCible"</span>: [<span class="jn">1</span>]
+}</div>
+<div data-section="s-resultat"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// RÉPONSE — EvenementResponse</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+{
+  <span class="jk">"totalElements"</span>: <span class="jn">3</span>,
+  <span class="jk">"content"</span>: [
+    {
+      <span class="jk">"id"</span>: <span class="jn">103783</span>,
+      <span class="jk">"titre"</span>: <span class="js">"FORUM DE L'ALTERNANCE"</span>,
+      <span class="jk">"type"</span>: <span class="js">"Forum"</span>,
+      <span class="jk">"dateEvenement"</span>: <span class="js">"2026-03-25T00:00:00.000+0000"</span>,
+      <span class="jk">"heureDebut"</span>: <span class="js">"04:00:00"</span>,
+      <span class="jk">"heureFin"</span>: <span class="js">"08:00:00"</span>,
+      <span class="jk">"timezone"</span>: <span class="js">"Indian/Mauritius"</span>,
+      <span class="jk">"ville"</span>: <span class="js">"Saint-Pierre"</span>,
+      <span class="jk">"codePostal"</span>: <span class="js">"97432"</span>,
+      <span class="jk">"codeInsee"</span>: <span class="js">"97416"</span>,
+      <span class="jk">"latitude"</span>: <span class="jn">-21.3393</span>,
+      <span class="jk">"longitude"</span>: <span class="jn">55.4781</span>,
+      <span class="jk">"description"</span>: <span class="js">"Forum dédié aux contrats en alternance dans les secteurs du commerce, de la restauration et du BTP."</span>,
+      <span class="jk">"deroulement"</span>: <span class="js">"Stands employeurs, entretiens flash, ateliers CV"</span>,
+      <span class="jk">"objectifs"</span>: [<span class="js">"Recrutement"</span>],
+      <span class="jk">"publics"</span>: [<span class="js">"Ouvert aux jeunes"</span>],
+      <span class="jk">"benefices"</span>: [<span class="js">"Contrat en alternance"</span>],
+      <span class="jk">"modalites"</span>: [<span class="js">"en physique"</span>],
+      <span class="jk">"codesRome"</span>: [<span class="js">"D15"</span>, <span class="js">"G18"</span>, <span class="js">"F17"</span>],
+      <span class="jk">"multisectoriel"</span>: <span class="jb">true</span>,
+      <span class="jk">"nombrePlaceTotalPresentiel"</span>: <span class="jn">200</span>,
+      <span class="jk">"nombreInscritPresentiel"</span>: <span class="jn">47</span>,
+      <span class="jk">"libelleOrganisateurPrincipal"</span>: <span class="js">"France Travail"</span>,
+      <span class="jk">"libelleEtablissement"</span>: <span class="js">"Agence SAINT-PIERRE"</span>,
+      <span class="jk">"urlDetailEvenement"</span>: <span class="js">"https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenement/103783"</span>
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-recherche">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche</div>
+  <div class="ex-card">
+    <h4>Critères de recherche</h4>
+    <p>Le partenaire recherche des événements emploi à La Réunion entre mars et avril 2026, ciblant les jeunes et orientés recrutement.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>&#x1F4CD; Département</strong> &#x2192; 974 (La Réunion)</div>
+      <div class="ex-item"><strong>&#x1F4C5; Période</strong> &#x2192; 1er mars – 30 avril 2026</div>
+      <div class="ex-item"><strong>&#x1F3AF; Type</strong> &#x2192; Forum (code 14)</div>
+      <div class="ex-item"><strong>Objectif</strong> &#x2192; Recrutement (code 19)</div>
+      <div class="ex-item"><strong>Public</strong> &#x2192; Jeunes (code 1)</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-resultat">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Résultat</div>
+  <div class="ex-card">
+    <h4>FORUM DE L'ALTERNANCE</h4>
+    <p><span class="ex-tag tag-encours">Forum</span> <span class="ex-tag tag-ok">En physique</span> <span class="ex-tag tag-prio">Multisectoriel</span></p>
+    <p>Forum dédié aux contrats en alternance — commerce, restauration et BTP.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>&#x1F4CD; Lieu</strong> &#x2192; Saint-Pierre, 97432 (La Réunion)</div>
+      <div class="ex-item"><strong>&#x1F4C5; Date</strong> &#x2192; 25 mars 2026, 8h00 – 12h00 (heure locale Indian/Mauritius, UTC+4)</div>
+      <div class="ex-item"><strong>&#x1F465; Inscrits</strong> &#x2192; 47 / 200 places</div>
+      <div class="ex-item"><strong>&#x1F3AF; Objectifs</strong> &#x2192; Recrutement</div>
+      <div class="ex-item"><strong>Public</strong> &#x2192; Ouvert aux jeunes</div>
+      <div class="ex-item"><strong>Bénéfice</strong> &#x2192; Contrat en alternance</div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Déroulement</div>
+    <p>Stands employeurs, entretiens flash, ateliers CV</p>
+
+    <div class="ex-agent">Organisé par France Travail — Agence SAINT-PIERRE</div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — Mes évènements emplois v1.0.0 · api.francetravail.io · 5 endpoints · 5 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

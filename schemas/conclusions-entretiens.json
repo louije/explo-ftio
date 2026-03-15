@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "Conclusions Entretiens",
+    "description": "Ce service permet de récupérer les données concernant les entretiens réalisés par un usager.\n\n\n**Scope** : `api_conclusions-entretiensv1`, `conclusionsentretienagent`\n\n**Royaume** : `/agent`"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/conclusions-entretiens/v1"
+    }
+  ],
+  "paths": {
+    "/entretiens": {
+      "get": {
+        "tags": [
+          "Conclusions Entretiens"
+        ],
+        "summary": "Liste les conclusions d'entretiens d'un usager",
+        "description": "A partir d'un jeton usager, ce service permet de récupérer la liste des conclusions d'entretiens qu'il a eu avec son conseiller.\r\n\r\nVoici les données récupérées pour chaque entretien :\r\n- Le type d’entretien\r\n- Le libellé du type d’entretien\r\n- La date de l’entretien\r\n- Le commentaire saisi qui résume la synthèse de l’entretien\r\n- Le code de la modalité de contact utilisé pour cet entretien\r\n- Le libellé du code de la modalité de contact utilisé pour cet entretien\r\n- Le code du conseiller qui a saisi l’entretien\r\n- Le nom de l’agent qui a saisi l’entretien\r\n- Le code de l’agence du conseiller qui a saisi l’entretien\r\n- Le nom du code de l’agence du conseiller qui a saisi l’entretien",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci).<br>\nPour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.<br>\nAttention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne la liste des entretiens d'un usager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConclusionEntretienPartenaireDetailsDto"
+                  }
+                },
+                "examples": {
+                  "Lecture Entretiens": {
+                    "value": "[\n {\n \"codeAgent\": \"ABXXXX\", \n \"codeModaliteContact\":\"I\", \n \"commentaire\":\"conclusion de l'entretien du...\", \n \"dateEntretien\":\"2025-03-02\", \n \"libelleAgent\": \"DUBOIS JEAN\", \n \"libelleEntretien\": \"ENTRETIEN PERSONNALISE\", \n \"typeEntretien\":\"EDP\", \n \"codeAgence\":\"80492\", \n \"libelleAgence\":\"FRANCE TRAVAIL AMIENS GARE\", \n \"libelleModalite\":\"ENTRETIEN INDIVIDUEL PHYSIQUE\" },\n {\n  \"codeAgent\": \"ABXXXX\", \n \"codeModaliteContact\":\"I\", \n \"commentaire\":\"conclusion de l'entretien du...\", \n \"dateEntretien\":\"2024-08-02\", \n \"libelleAgent\": \"DUBOIS JEAN\", \n \"libelleEntretien\": \"ENTRETIEN PERSONNALISE\", \n \"typeEntretien\":\"EDP\", \n \"codeAgence\":\"80492\", \n \"libelleAgence\":\"FRANCE TRAVAIL AMIENS GARE\", \n \"libelleModalite\":\"ENTRETIEN INDIVIDUEL PHYSIQUE\" }\n ]"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur dans les paramètres d'appel"
+          },
+          "422": {
+            "description": "Erreur fonctionnelle lors du traitement"
+          },
+          "500": {
+            "description": "Erreur technique"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/conclusions-entretiens/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConclusionEntretienPartenaireDetailsDto": {
+        "type": "object",
+        "properties": {
+          "codeAgent": {
+            "type": "string",
+            "description": "Le code de l'Agent qui a réalisé l'entretien",
+            "example": "ABXXXX"
+          },
+          "codeModaliteContact": {
+            "type": "string",
+            "enum": [
+              "B",
+              "C",
+              "F",
+              "I",
+              "R",
+              "T",
+              "V",
+              "W"
+              ],
+            "description": "Le code lié à la modalité de contact\r\n\r\nCode | Libellé\r\n---------|----------\r\n B | BILAN EN LIGNE |\r\n C | ECHANGE COURRIEL |\r\n F | ENTRETIEN VISIOCONFERENCE INFO |\r\n I | ENTRETIEN INDIVIDUEL PHYSIQUE |\r\n R | ENTRETIEN COLLECTIF PHYSIQUE |\r\n T | ENTRETIEN INDIVIDUEL TELEPHONI |\r\n V | ENTRETIEN INDIVIDUEL VISIOGUIC |\r\n W | ENTRETIEN INDIVIDUEL VISIOCONF |",
+            "example": "I"
+          },
+          "commentaire": {
+            "type": "string",
+            "description": "Zone de saisie de la conclusion de l'entretien par l'Agent.",
+            "example": "conclusion de l'entretien du..."
+          },
+          "dateEntretien": {
+            "type": "string",
+            "description": "date de la réalisation de l'entretien",
+            "example": "2024-08-02"
+          },
+          "libelleAgent": {
+            "type": "string",
+            "description": "Le nom et prénom de l'agent qui a réalisé l'entretien",
+            "example": "DUBOIS JEAN"
+          },
+          "libelleEntretien": {
+            "type": "string",
+            "description": "Le libellé du type de l'entretien réalisé",
+            "example": "ENTRETIEN PERSONNALISE"
+          },
+          "typeEntretien": {
+            "type": "string",
+            "enum": [
+              "ESI",
+              "EDP",
+              "CRL",
+              "PE1",
+              "PE2",
+              "PE3",
+              "PBI",
+              "ETP",
+              "PSP",
+              "CRP",
+              "BIL",
+              "SEF",
+              "CPS",
+              "CRE",
+              "IND",
+              "DCE",
+              "USA",
+              "PAK",
+              "EPK",
+              "EDA",
+              "EDO"
+            ],
+            "description": "Le type de l'entretien réalisé\r\n\r\nCode | Libellé\r\n---------|----------\r\n ESI | ENTRETIEN DE SITUATION |\r\n EDP | ENTRETIEN PERSONNALISE |\r\n CRL | ENTRETIEN - LONGUE DUREE |\r\n PE1 | ENTRETIEN TRIPARTITE PEC/CIE |\r\n PE2 | ENTRETIEN DE SUIVI PEC/CIE |\r\n PE3 | ENTRETIEN BILATERAL SORTIE PEC/CIE |\r\n PBI | PRE BILAN CRP |\r\n ETP | ENTRETIEN POINT D'ETAPE |\r\n PSP | PLAN DE SECURISATION PROFESSIONNEL |\r\n CRP | ENTRETIEN ACTUALISATION CRP|\r\n BIL | BILAN CRP |\r\n SEF | SUIVI EMPLOI/FORMATION |\r\n CPS | CONCLUSION PSYCHO DU TRAVAIL |\r\n CRE | CONTROLE RECHERCHE EMPLOI |\r\n IND | ENTRETIEN INDEMNISATION |\r\n DCE | DIAGNOSTIC CROISE CAP EMPLOI |\r\n USA | ENTRETIEN USAGER |\r\n PAK | ENTRETIEN PACK DE DEMARRAGE |\r\n EPK | ENTRETIEN PPAE PACK DIFFERE |\r\n EDA | 1ER ENTRETIEN D'ACCOMPAGNEMENT |\r\n EDO | ENTRETIEN D'ORIENTATION |",
+            "example": "EDP"
+          },
+          "codeAgence": {
+            "type": "string",
+            "description": "Le code l'agence de l'usager",
+            "example": "80492"
+          },
+          "libelleAgence": {
+            "type": "string",
+            "description": "Le libellé de l'agence de l'usager",
+            "example": "FRANCE TRAVAIL AMIENS GARE"
+          },
+          "libelleModalite": {
+            "type": "string",
+            "description": "Le libellé correspondant au type de modalité de contact",
+            "example": "ENTRETIEN INDIVIDUEL PHYSIQUE"
+          }
+        }
+      }
+    }
+  }
+}

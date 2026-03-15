@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "France Travail Connect",
+    "description": "L'API France Travail Connect permet à un utilisateur (demandeur d'emploi ou candidat) de se connecter à votre application avec son compte France Travail. La solution repose sur la cinématique d'authentification utilisateur proposée par France Travail Access Management.\n\n**Attention** : La licence de cette API impose d'utiliser un bouton de connexion spécifique.",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-individu/v1"
+    }
+  ],
+  "paths": {
+    "/userinfo": {
+      "get": {
+        "tags": [
+          "Utilisateur"
+        ],
+        "summary": "Récupérer les informations de l'utilisateur connecté",
+        "description": "Retourne les informations de base de l'utilisateur actuellement connecté via France Travail Connect.",
+        "responses": {
+          "200": {
+            "description": "Informations de l'utilisateur connecté",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "sub": "749dd14f-c82a-48b1-b1bb-fffc5467e4d4",
+                      "gender": "male",
+                      "family_name": "Nom",
+                      "given_name": "Prénom",
+                      "email": "nom-prenom@mail.com",
+                      "idIdentiteExterne": "749dd14f-c82a-48b1-b1bb-fffc5467e4d4",
+                      "subname": null,
+                      "updated_at": 1732610213
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé (jeton invalide ou scope manquant)"
+          },
+          "403": {
+            "description": "Accès refusé"
+          },
+          "500": {
+            "description": "Erreur interne du serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-individuv1",
+              "openid",
+              "profile",
+              "email"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-individu/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "scopes": {
+              "api_peconnect-individuv1": "Obligatoire",
+              "openid": "Obligatoire",
+              "profile": "Facultatif (Permet de récupérer le prénom, le nom, le genre et l'Id France Travail du Demandeur d'emploi)",
+              "email": "Facultatif (Permet de récupérer le mail du Demandeur d'emploi)"
+            },
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "sub": {
+            "type": "string",
+            "description": "Identifiant unique de l'utilisateur",
+            "format": "uuid",
+            "example": "749dd14f-c82a-48b1-b1bb-fffc5467e4d4"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ],
+            "description": "Sexe de l'individu",
+            "example": "male"
+          },
+          "family_name": {
+            "type": "string",
+            "description": "Nom marital de l'utilisateur",
+            "example": "Nom"
+          },
+          "given_name": {
+            "type": "string",
+            "description": "Prénom de l'utilisateur",
+            "example": "Prénom"
+          },
+          "email": {
+            "type": "string",
+            "description": "Adresse email de l'utilisateur (si confirmée dans son espace France Travail)",
+            "format": "email",
+            "example": "nom-prenom@mail.com"
+          },
+          "idIdentiteExterne": {
+            "type": "string",
+            "description": "Identifiant unique de l'utilisateur (identique au sub)",
+            "format": "uuid",
+            "example": "749dd14f-c82a-48b1-b1bb-fffc5467e4d4"
+          },
+          "subname": {
+            "type": "string",
+            "nullable": true,
+            "description": "Champ systématiquement null",
+            "example": null
+          },
+          "updated_at": {
+            "type": "integer",
+            "description": "Timestamp Unix de la dernière mise à jour",
+            "example": 1732610213
+          }
+        },
+        "required": [
+          "sub",
+          "gender",
+          "family_name",
+          "given_name",
+          "idIdentiteExterne",
+          "subname",
+          "updated_at"
+        ]
+      }
+    }
+  }
+}

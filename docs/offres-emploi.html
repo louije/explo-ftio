@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offres d'emploi &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Offres d'emploi</h1>
+  <div class="sub">Recherche et consultation des offres d'emploi de France Travail et de ses partenaires</div>
+  <div class="sub-tech">Offres d'emploi v2 &#x2014; 18 endpoints &#xb7; 22 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/offresdemploi/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;sultat de recherche <span class="dto">ResultatRecherche</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b stack" id="m-offres">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Offres d'emploi <span class="dto">resultats[] &#xb7; Offre</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Chaque offre d'emploi retourn&#xe9;e par la recherche, avec son intitul&#xe9;, sa description, ses dates et ses m&#xe9;tadonn&#xe9;es de classification ROME.
+          <div class="fi-tech"><code>id</code> &#xb7; <code>intitule</code> &#xb7; <code>description</code> &#xb7; <code>dateCreation</code> &#xb7; <code>dateActualisation</code> &#xb7; <code>romeCode</code> &#xb7; <code>romeLibelle</code> &#xb7; <code>appellationlibelle</code> &#xb7; <code>nombrePostes</code>
+            <br><code>typeContrat</code> &#xb7; <code>typeContratLibelle</code> &#xb7; <code>natureContrat</code> &#xb7; <code>alternance</code>
+            <br><span class="ev">CDI</span> &#xb7; <span class="ev">CDD</span> &#xb7; <span class="ev">MIS</span> Int&#xe9;rim &#xb7; <span class="ev">SAI</span> Saisonnier</div>
+        </div>
+
+        <div class="n l1-n" id="m-entreprise">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Entreprise <span class="dto">entreprise &#xb7; Entreprise</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Identification de l'entreprise qui recrute : nom, description, logo et site web. Le flag <code>entrepriseAdaptee</code> indique si l'entreprise est adapt&#xe9;e pour les travailleurs handicap&#xe9;s.
+              <div class="fi-tech"><code>nom</code> &#xb7; <code>description</code> &#xb7; <code>logo</code> &#xb7; <code>url</code> &#xb7; <code>entrepriseAdaptee</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l1-p" id="m-lieu">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Lieu de travail <span class="dto">lieuTravail &#xb7; LieuTravail</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Localisation g&#xe9;ographique du poste : libell&#xe9; lisible (ex. &#xab; 74 - ANNECY &#xbb;), code postal, code commune INSEE et coordonn&#xe9;es GPS.
+              <div class="fi-tech"><code>libelle</code> &#xb7; <code>latitude</code> &#xb7; <code>longitude</code> &#xb7; <code>codePostal</code> &#xb7; <code>commune</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2t" id="m-salaire">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Salaire <span class="dto">salaire &#xb7; Salaire</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">R&#xe9;mun&#xe9;ration propos&#xe9;e avec un libell&#xe9; lisible (ex. &#xab; Mensuel de 1923,00 Euros sur 12 mois &#xbb;), un commentaire libre et jusqu'&#xe0; 5 compl&#xe9;ments (v&#xe9;hicule, primes&#x2026;).
+              <div class="fi-tech"><code>libelle</code> &#xb7; <code>commentaire</code> &#xb7; <code>complement1</code> &#xb7; <code>complement2</code> &#xb7; <code>listeComplements[]</code> &#x2014; <span class="at">@ ComplementSalaire</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l1-c" id="m-experience">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Exp&#xe9;rience et qualifications <span class="dto">experienceExige &#xb7; qualificationCode</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Niveau d'exp&#xe9;rience demand&#xe9; et qualification du poste (mano&#xe9;uvre &#xe0; cadre).
+              <div class="fi-tech"><code>experienceExige</code> &#xb7; <code>experienceLibelle</code> &#xb7; <code>experienceCommentaire</code> &#xb7; <code>qualificationCode</code> &#xb7; <code>qualificationLibelle</code>
+                <br><span class="ev">D</span> D&#xe9;butant accept&#xe9; &#xb7; <span class="ev">S</span> Souhait&#xe9;e &#xb7; <span class="ev">E</span> Exig&#xe9;e</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3 stack" id="m-competences">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Comp&#xe9;tences <span class="dto">competences[] &#xb7; Competence</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Comp&#xe9;tences professionnelles attendues, chacune avec un code, un libell&#xe9; et un niveau d'exigence.
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>exigence</code>
+                <br><span class="ev">E</span> Exig&#xe9;e &#xb7; <span class="ev">S</span> Souhait&#xe9;e</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3 stack" id="m-formations">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Formations <span class="dto">formations[] &#xb7; Formation</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Domaine et niveau de formation souhait&#xe9;s ou exig&#xe9;s (ex. CAP Boulangerie).
+              <div class="fi-tech"><code>codeFormation</code> &#xb7; <code>domaineLibelle</code> &#xb7; <code>niveauLibelle</code> &#xb7; <code>commentaire</code> &#xb7; <code>exigence</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="n l3 stack" id="m-langues">
+            <div class="nh"><div class="dot"></div>
+              <div class="name">Langues <span class="dto">langues[] &#xb7; Langue</span></div>
+              <div class="card">0 ou plus <span class="card-tech">array &#xb7; 0:N</span></div>
+            </div>
+            <div class="nb">
+              <div class="fi">Langues demand&#xe9;es.
+                <div class="fi-tech"><code>libelle</code> &#xb7; <code>exigence</code></div>
+              </div>
+            </div>
+          </div>
+          <div class="n l3 stack" id="m-permis">
+            <div class="nh"><div class="dot"></div>
+              <div class="name">Permis <span class="dto">permis[] &#xb7; Permis</span></div>
+              <div class="card">0 ou plus <span class="card-tech">array &#xb7; 0:N</span></div>
+            </div>
+            <div class="nb">
+              <div class="fi">Permis de conduire demand&#xe9;s.
+                <div class="fi-tech"><code>libelle</code> &#xb7; <code>exigence</code></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2c" id="m-conditions">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Conditions de travail <span class="dto">dureeTravailLibelle &#xb7; contexteTravail</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Dur&#xe9;e de travail (temps plein / partiel), horaires, conditions d'exercice, d&#xe9;placements et accessibilit&#xe9; handicap.
+              <div class="fi-tech"><code>dureeTravailLibelle</code> &#xb7; <code>dureeTravailLibelleConverti</code> &#xb7; <code>complementExercice</code> &#xb7; <code>conditionExercice</code>
+                <br><code>deplacementCode</code> &#xb7; <code>deplacementLibelle</code> &#xb7; <code>accessibleTH</code> &#xb7; <code>entrepriseAdaptee</code> &#xb7; <code>offresManqueCandidats</code>
+                <br><span class="at">@ ContexteTravail</span> &#x2014; <code>horaires[]</code> &#xb7; <code>conditionsExercice[]</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3s" id="m-contact">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Contact et candidature <span class="dto">contact &#xb7; Contact</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Coordonn&#xe9;es du recruteur et liens de postulation. Le courriel contient d&#xe9;sormais un lien vers francetravail.fr (pour raisons de s&#xe9;curit&#xe9;).
+              <div class="fi-tech"><code>nom</code> &#xb7; <code>coordonnees1</code> &#xb7; <code>coordonnees2</code> &#xb7; <code>coordonnees3</code> &#xb7; <code>telephone</code> &#xb7; <code>courriel</code> &#xb7; <code>commentaire</code> &#xb7; <code>urlRecruteur</code> &#xb7; <code>urlPostulation</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3 stack" id="m-qualites">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Qualit&#xe9;s professionnelles <span class="dto">qualitesProfessionnelles[] &#xb7; QualitePro</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Savoir-&#xea;tre attendus (autonomie, rigueur, travail en &#xe9;quipe&#x2026;).
+              <div class="fi-tech"><code>libelle</code> &#xb7; <code>description</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3" id="m-origine">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Origine de l'offre <span class="dto">origineOffre &#xb7; OrigineOffre</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Source de l'offre : France Travail ou partenaire, avec URL et logo du partenaire.
+              <div class="fi-tech"><code>origine</code> &#xb7; <code>urlOrigine</code> &#xb7; <code>partenaires[]</code> &#x2014; <span class="at">@ PartenaireOffre</span>
+                <br><span class="ev">1</span> France Travail &#xb7; <span class="ev">2</span> Partenaire</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l3 stack" id="m-filtres">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Filtres possibles <span class="dto">filtresPossibles[] &#xb7; FiltrePossible</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Facettes de recherche suppl&#xe9;mentaires avec le nombre de r&#xe9;sultats par valeur (ex. natureContrat=E1 : 45 offres).
+          <div class="fi-tech"><code>filtre</code> &#xb7; <code>agregation[]</code> &#x2014; <code>valeurPossible</code> &#xb7; <code>nbResultats</code></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Acc&#xe8;s public</strong> &#x2014; Cette API est accessible en <code>client_credentials</code> (OAuth2, royaume <code>/partenaire</code>). Aucun jeton usager requis. Scopes : <code>o2dsoffre</code> et <code>api_offresdemploiv2</code>. La pagination est limit&#xe9;e &#xe0; 150 r&#xe9;sultats par requ&#xea;te (max index 3149).
+</div>
+
+<div class="note">
+  <strong>Tri et pagination</strong> &#x2014; Le param&#xe8;tre <code>range</code> (ex. <code>0-49</code>) pagine les r&#xe9;sultats. Le header <code>Content-Range</code> indique la position dans le jeu total. Trois modes de tri : <span class="ev">0</span> pertinence &#xb7; <span class="ev">1</span> date &#xb7; <span class="ev">2</span> distance.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Offres <span class="dt-human">&#x2014; Recherche et consultation</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Rechercher des offres</span><div class="ep-human">Recherche multicrit&#xe8;re pagin&#xe9;e parmi toutes les offres France Travail et partenaires</div><span class="ep-path">/offres/search</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter un d&#xe9;tail d'offre</span><div class="ep-human">R&#xe9;cup&#xe9;rer le d&#xe9;tail complet d'une offre par son identifiant</div><span class="ep-path">/offres/{id}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">R&#xe9;f&#xe9;rentiel <span class="dt-human">&#x2014; Tables de r&#xe9;f&#xe9;rence pour les filtres de recherche</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Appellations ROME</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des appellations m&#xe9;tier ROME</div><span class="ep-path">/referentiel/appellations</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Codes NAF</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des codes d'activit&#xe9; NAF/APE</div><span class="ep-path">/referentiel/nafs</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Communes</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des communes (code INSEE, code postal)</div><span class="ep-path">/referentiel/communes</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Continents</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des continents</div><span class="ep-path">/referentiel/continents</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">D&#xe9;partements</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des d&#xe9;partements fran&#xe7;ais</div><span class="ep-path">/referentiel/departements</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Domaines m&#xe9;tiers</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des grands domaines professionnels</div><span class="ep-path">/referentiel/domaines</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Langues</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des langues</div><span class="ep-path">/referentiel/langues</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">M&#xe9;tiers ROME</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des m&#xe9;tiers (fiches ROME)</div><span class="ep-path">/referentiel/metiers</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Natures de contrats</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des natures de contrats</div><span class="ep-path">/referentiel/naturesContrats</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Niveaux de formations</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des niveaux de formation</div><span class="ep-path">/referentiel/niveauxFormations</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Pays</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des pays</div><span class="ep-path">/referentiel/pays</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Permis</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des permis de conduire</div><span class="ep-path">/referentiel/permis</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;gions</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des r&#xe9;gions fran&#xe7;aises</div><span class="ep-path">/referentiel/regions</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Secteurs d'activit&#xe9;s</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des secteurs d'activit&#xe9; (divisions NAF)</div><span class="ep-path">/referentiel/secteursActivites</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Th&#xe8;mes</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des th&#xe8;mes ROME</div><span class="ep-path">/referentiel/themes</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Types de contrats</span><div class="ep-human">R&#xe9;f&#xe9;rentiel des types de contrats (CDI, CDD&#x2026;)</div><span class="ep-path">/referentiel/typesContrats</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">22 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ResultatRecherche</span> <span class="sc-desc">&#x2014; R&#xe9;sultat de recherche pagin&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Offre</span> <span class="sc-desc">&#x2014; Offre d'emploi compl&#xe8;te</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Entreprise</span> <span class="sc-desc">&#x2014; Entreprise qui recrute</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">LieuTravail</span> <span class="sc-desc">&#x2014; Localisation du poste</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Salaire</span> <span class="sc-desc">&#x2014; R&#xe9;mun&#xe9;ration</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ComplementSalaire</span> <span class="sc-desc">&#x2014; Compl&#xe9;ment de r&#xe9;mun&#xe9;ration</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Competence</span> <span class="sc-desc">&#x2014; Comp&#xe9;tence demand&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Formation</span> <span class="sc-desc">&#x2014; Formation demand&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Langue</span> <span class="sc-desc">&#x2014; Langue demand&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Permis</span> <span class="sc-desc">&#x2014; Permis demand&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">QualitePro</span> <span class="sc-desc">&#x2014; Qualit&#xe9; professionnelle</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Contact</span> <span class="sc-desc">&#x2014; Contact recruteur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Agence</span> <span class="sc-desc">&#x2014; Agence France Travail</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ContexteTravail</span> <span class="sc-desc">&#x2014; Horaires et conditions</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OrigineOffre</span> <span class="sc-desc">&#x2014; Source de l'offre</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PartenaireOffre</span> <span class="sc-desc">&#x2014; Partenaire diffuseur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">FiltrePossible</span> <span class="sc-desc">&#x2014; Facette de filtrage</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Agregation</span> <span class="sc-desc">&#x2014; Valeur d'agr&#xe9;gation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Referentiel</span> <span class="sc-desc">&#x2014; Code/libell&#xe9; g&#xe9;n&#xe9;rique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Commune</span> <span class="sc-desc">&#x2014; Commune avec code postal</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Departement</span> <span class="sc-desc">&#x2014; D&#xe9;partement avec r&#xe9;gion</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Region</span> <span class="sc-desc">&#x2014; R&#xe9;gion fran&#xe7;aise</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Recherche de boulanger &#xe0; Annecy</strong> &#x2014; Un d&#xe9;veloppeur int&#xe8;gre l'API Offres d'emploi pour afficher les postes de boulanger disponibles &#xe0; proximit&#xe9; d'Annecy. L'API renvoie une offre en CDD de 6 mois chez &#xab; Le Boulanger Austral &#xbb;.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-identite"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// GET /offres/search?motsCles=boulanger&amp;commune=74010&amp;distance=10</span>
+<span class="jc">// Content-Range: offres 0-0/1</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"resultats"</span>: [
+    {
+      <span class="jk">"id"</span>: <span class="js">"048KLTP"</span>,
+      <span class="jk">"intitule"</span>: <span class="js">"Boulanger / Boulang&#xe8;re (H/F)"</span>,
+      <span class="jk">"description"</span>: <span class="js">"Nous recherchons un/e Boulanger/&#xe8;re pour notre nouveau magasin. Vous r&#xe9;aliserez la fabrication de pains sp&#xe9;ciaux et viennoiseries..."</span>,
+      <span class="jk">"dateCreation"</span>: <span class="js">"2026-03-01T08:15:42Z"</span>,
+      <span class="jk">"dateActualisation"</span>: <span class="js">"2026-03-10T14:30:00Z"</span>,
+      <span class="jk">"romeCode"</span>: <span class="js">"D1102"</span>,
+      <span class="jk">"romeLibelle"</span>: <span class="js">"Boulangerie - viennoiserie"</span>,
+      <span class="jk">"appellationlibelle"</span>: <span class="js">"Boulanger / Boulang&#xe8;re"</span>,
+      <span class="jk">"typeContrat"</span>: <span class="js">"CDD"</span>,
+      <span class="jk">"typeContratLibelle"</span>: <span class="js">"CDD - 6 Mois"</span>,
+      <span class="jk">"natureContrat"</span>: <span class="js">"Contrat travail"</span>,
+      <span class="jk">"nombrePostes"</span>: <span class="jn">2</span>,
+      <span class="jk">"alternance"</span>: <span class="jb">false</span>,</div>
+<div data-section="s-entreprise">      <span class="jk">"entreprise"</span>: {
+        <span class="jk">"nom"</span>: <span class="js">"Le Boulanger Austral"</span>,
+        <span class="jk">"description"</span>: <span class="js">"Boulangerie artisanale install&#xe9;e depuis 2018 &#xe0; Annecy"</span>,
+        <span class="jk">"logo"</span>: <span class="js">"https://boulanger-austral.net/logo.png"</span>,
+        <span class="jk">"url"</span>: <span class="js">"https://boulanger-austral.net"</span>,
+        <span class="jk">"entrepriseAdaptee"</span>: <span class="jb">false</span>
+      },</div>
+<div data-section="s-lieu">      <span class="jk">"lieuTravail"</span>: {
+        <span class="jk">"libelle"</span>: <span class="js">"74 - ANNECY"</span>,
+        <span class="jk">"latitude"</span>: <span class="jn">45.901584</span>,
+        <span class="jk">"longitude"</span>: <span class="jn">6.125296</span>,
+        <span class="jk">"codePostal"</span>: <span class="js">"74000"</span>,
+        <span class="jk">"commune"</span>: <span class="js">"74010"</span>
+      },</div>
+<div data-section="s-salaire">      <span class="jk">"salaire"</span>: {
+        <span class="jk">"libelle"</span>: <span class="js">"Mensuel de 1923.00 Euros sur 12 mois"</span>,
+        <span class="jk">"commentaire"</span>: <span class="js">"Selon exp&#xe9;rience"</span>,
+        <span class="jk">"complement1"</span>: <span class="js">"Prime de dimanche"</span>,
+        <span class="jk">"listeComplements"</span>: [
+          { <span class="jk">"code"</span>: <span class="js">"14"</span>, <span class="jk">"libelle"</span>: <span class="js">"Prime de dimanche"</span> }
+        ]
+      },</div>
+<div data-section="s-profil">      <span class="jk">"experienceExige"</span>: <span class="js">"S"</span>,
+      <span class="jk">"experienceLibelle"</span>: <span class="js">"1 An(s)"</span>,
+      <span class="jk">"qualificationCode"</span>: <span class="js">"6"</span>,
+      <span class="jk">"qualificationLibelle"</span>: <span class="js">"Employ&#xe9; qualifi&#xe9;"</span>,
+      <span class="jk">"competences"</span>: [
+        { <span class="jk">"code"</span>: <span class="js">"483320"</span>, <span class="jk">"libelle"</span>: <span class="js">"P&#xe9;trir manuellement ou m&#xe9;caniquement des p&#xe2;tes"</span>, <span class="jk">"exigence"</span>: <span class="js">"E"</span> },
+        { <span class="jk">"code"</span>: <span class="js">"120841"</span>, <span class="jk">"libelle"</span>: <span class="js">"Cuire des pi&#xe8;ces de viennoiserie"</span>, <span class="jk">"exigence"</span>: <span class="js">"E"</span> }
+      ],
+      <span class="jk">"formations"</span>: [
+        { <span class="jk">"codeFormation"</span>: <span class="js">"21538"</span>, <span class="jk">"domaineLibelle"</span>: <span class="js">"boulangerie"</span>, <span class="jk">"niveauLibelle"</span>: <span class="js">"CAP, BEP et &#xe9;quivalents"</span>, <span class="jk">"exigence"</span>: <span class="js">"E"</span> }
+      ],
+      <span class="jk">"qualitesProfessionnelles"</span>: [
+        { <span class="jk">"libelle"</span>: <span class="js">"Faire preuve d'autonomie"</span>, <span class="jk">"description"</span>: <span class="js">"Capacit&#xe9; &#xe0; prendre en charge son activit&#xe9; sans devoir &#xea;tre encadr&#xe9; de fa&#xe7;on continue."</span> },
+        { <span class="jk">"libelle"</span>: <span class="js">"Faire preuve de rigueur et de pr&#xe9;cision"</span>, <span class="jk">"description"</span>: <span class="js">"Capacit&#xe9; &#xe0; r&#xe9;aliser des t&#xe2;ches en suivant avec exactitude les r&#xe8;gles."</span> }
+      ],</div>
+<div data-section="s-conditions">      <span class="jk">"dureeTravailLibelle"</span>: <span class="js">"35H"</span>,
+      <span class="jk">"dureeTravailLibelleConverti"</span>: <span class="js">"Temps plein"</span>,
+      <span class="jk">"conditionExercice"</span>: <span class="js">"Travail de nuit"</span>,
+      <span class="jk">"deplacementCode"</span>: <span class="js">"1"</span>,
+      <span class="jk">"deplacementLibelle"</span>: <span class="js">"Jamais"</span>,
+      <span class="jk">"accessibleTH"</span>: <span class="jb">true</span>,
+      <span class="jk">"secteurActivite"</span>: <span class="js">"10"</span>,
+      <span class="jk">"secteurActiviteLibelle"</span>: <span class="js">"Boulangerie et boulangerie-p&#xe2;tisserie"</span>,
+      <span class="jk">"codeNAF"</span>: <span class="js">"10.71C"</span>,
+      <span class="jk">"contact"</span>: {
+        <span class="jk">"nom"</span>: <span class="js">"Etienne Dupont"</span>,
+        <span class="jk">"urlPostulation"</span>: <span class="js">"https://boulanger-austral.net/carrieres"</span>
+      },
+      <span class="jk">"origineOffre"</span>: {
+        <span class="jk">"origine"</span>: <span class="js">"1"</span>,
+        <span class="jk">"urlOrigine"</span>: <span class="js">"https://candidat.francetravail.fr/offres/recherche/detail/048KLTP"</span>
+      }
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-identite">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> L'offre</div>
+  <div class="ex-card">
+    <h4>Boulanger / Boulang&#xe8;re (H/F)</h4>
+    <p><span class="ex-tag tag-encours">CDD &#x2014; 6 mois</span> <span class="ex-tag tag-besoin">2 postes</span> Offre cr&#xe9;&#xe9;e le 1er mars 2026, derni&#xe8;re actualisation le 10 mars. Classe ROME D1102 &#xab; Boulangerie - viennoiserie &#xbb;.</p>
+  </div>
+</div>
+
+<div data-section="s-entreprise">
+  <div class="ex-title"><span class="ex-ico">&#x1F3E2;</span> Entreprise</div>
+  <div class="ex-card">
+    <h4>Le Boulanger Austral</h4>
+    <p>Boulangerie artisanale install&#xe9;e depuis 2018 &#xe0; Annecy. Logo et site web disponibles. Pas une entreprise adapt&#xe9;e.</p>
+  </div>
+</div>
+
+<div data-section="s-lieu">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CD;</span> Localisation</div>
+  <div class="ex-card">
+    <h4>74 &#x2014; Annecy</h4>
+    <p>Code postal 74000, commune INSEE 74010. Coordonn&#xe9;es GPS fournies (45.90, 6.12) pour int&#xe9;gration cartographique.</p>
+  </div>
+</div>
+
+<div data-section="s-salaire">
+  <div class="ex-title"><span class="ex-ico">&#x1F4B0;</span> R&#xe9;mun&#xe9;ration</div>
+  <div class="ex-card">
+    <h4>1 923 &#x20ac; / mois sur 12 mois</h4>
+    <p>Selon exp&#xe9;rience. Compl&#xe9;ment : prime de dimanche.</p>
+  </div>
+</div>
+
+<div data-section="s-profil">
+  <div class="ex-title"><span class="ex-ico">&#x1F393;</span> Profil recherch&#xe9;</div>
+  <div class="ex-card">
+    <h4>Employ&#xe9; qualifi&#xe9; &#x2014; 1 an d'exp&#xe9;rience souhait&#xe9;</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Comp&#xe9;tences exig&#xe9;es</strong> &#x2192; P&#xe9;trir des p&#xe2;tes, cuire des viennoiseries</div>
+      <div class="ex-item"><strong>Formation exig&#xe9;e</strong> &#x2192; CAP/BEP Boulangerie</div>
+      <div class="ex-item"><strong>Qualit&#xe9;s</strong> &#x2192; Autonomie, rigueur et pr&#xe9;cision</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-conditions">
+  <div class="ex-title"><span class="ex-ico">&#x2699;</span> Conditions</div>
+  <div class="ex-card">
+    <h4>Temps plein &#x2014; 35h &#x2014; travail de nuit</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>D&#xe9;placements</strong> &#x2192; Jamais</div>
+      <div class="ex-item"><strong>Accessibilit&#xe9; TH</strong> &#x2192; <span class="ex-tag tag-ok">Oui</span></div>
+      <div class="ex-item"><strong>Contact</strong> &#x2192; Etienne Dupont &#x2014; postulation en ligne</div>
+      <div class="ex-item"><strong>Origine</strong> &#x2192; France Travail (offre native)</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; Offres d'emploi v2 &#xb7; api.francetravail.io &#xb7; 18 endpoints &#xb7; 22 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

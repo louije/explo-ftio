@@ -1,0 +1,843 @@
+{
+  "openapi": "3.0.3",
+  "x-stoplight": {
+    "id": "3o0kok395pznr"
+  },
+  "info": {
+    "title": "Rendez-vous partenaire",
+    "description": "L'API Rendez-vous partenaire contient des données sur les rendez-vous d'un usager. Grâce à ses différentes ressources, l'API permet pour un usager donné de :\r\n- Créer un rendez-vous usager dans le système d'information France Travail. \r\n- Modifier un rendez-vous préalablement créé dans le système d'information France Travail. \r\n- Annuler un rendez-vous préalablement créé (ou modifié) dans le système d'information France Travail. \r\n- Récupérer la liste de l'ensemble des rendez-vous d'un usager dans le système d'information France Travail. \r\n\r\n**Scope :**`api_rendez-vous-partenairev1`, `gererRDV`,`profil_accedant`\r\n\r\n**Royaume :** `/agent`",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/rendez-vous-partenaire/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rendez-vous partenaire",
+      "description": "Ensemble de services gérant les rendez-vous des partenaires"
+    },
+    {
+      "name": "Rendez-vous usager",
+      "description": "Ensemble de services permettant l'obtention des rendez-vous d'un usager"
+    }
+  ],
+  "paths": {
+    "/rendez-vous": {
+      "put": {
+        "tags": [
+          "Rendez-vous partenaire"
+        ],
+        "summary": "Modifier un rendez-vous usager",
+        "description": "Permet la modification d'un rendez-vous connus du SI France Travail pour un usager .",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RendezVousPartenaire"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "OK, le RDV a bien été modifié"
+          },
+          "400": {
+            "description": "Erreur dans la requête"
+          },
+          "500": {
+            "description": "Erreur technique"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Rendez-vous partenaire"
+        ],
+        "summary": "Créer un rendez-vous usager",
+        "description": "Permet la création d'un rendez-vous connus du SI France Travail pour un usager .",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RendezVousPartenaire"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "OK, le RDV a bien été enregistré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReponseDepotRdvp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur dans la requête"
+          },
+          "500": {
+            "description": "Erreur technique"
+          }
+        }
+      }
+    },
+    "/rendez-vous-usager": {
+      "get": {
+        "tags": [
+          "Rendez-vous usager"
+        ],
+        "summary": "Retourner la liste des rendez-vous de l'usager",
+        "description": "Retourne la liste des rendez-vous à venir et passés de l'usager connus du SI France Travail. Par défaut, les rendez vous à venir sont tous renvoyés, ainsi que les rendez-vous passés depuis moins de 30 jours par rapport à la date de l'appel. Il est possible de borner une plage de renvoi des rendez-vous avec des dates pour limiter la liste de résultats.",
+        "parameters": [
+          {
+            "name": "date-debut",
+            "in": "query",
+            "description": "Indiquer la date de début de la plage au format dd-MM-yyyy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "10-11-2024"
+          },
+          {
+            "name": "date-fin",
+            "in": "query",
+            "description": "Indiquer la date de début de la plage au format dd-MM-yyyy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "10-12-2024"
+          },
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RendezVousUsager"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur dans la requête"
+          },
+          "500": {
+            "description": "Erreur technique"
+          }
+        }
+      }
+    },
+    "/rendez-vous/{id}": {
+      "delete": {
+        "tags": [
+          "Rendez-vous partenaire"
+        ],
+        "summary": "Annuler un rendez-vous usager",
+        "description": "Permet l'annulation d'un rendez-vous connus du SI France Travail pour un usager .",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "id unique du RDVP",
+              "example": "7aea9cbd-d98e-464a-b38a-17662f4a718a"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "OK, le RDV a bien été annulé"
+          },
+          "400": {
+            "description": "Erreur dans la requête"
+          },
+          "500": {
+            "description": "Erreur technique"
+          }
+        },
+        "x-stoplight": {
+          "id": "kulh4qmsg1s03"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Interlocuteur": {
+        "type": "object",
+        "properties": {
+          "civilite": {
+            "description": "Civilité",
+            "enum": [
+              "M",
+              "Mme",
+              "Mx"
+            ],
+            "type": "string",
+            "example": "M"
+          },
+          "email": {
+            "description": "Email de l'interlocuteur",
+            "type": "string",
+            "example": "adupont@metropole13.fr"
+          },
+          "nom": {
+            "description": "Nom de l'interlocuteur",
+            "type": "string",
+            "example": "DUPONT"
+          },
+          "organisme": {
+            "description": "Organisme auquel appartient l'interlocuteur",
+            "type": "string",
+            "example": "METROPOLE 13"
+          },
+          "prenom": {
+            "description": "Prénom de l'interlocuteur",
+            "type": "string",
+            "example": "Alexandre"
+          },
+          "service": {
+            "description": "Nom du service qui reçoit l'usager",
+            "type": "string",
+            "example": "Accueil Usager"
+          },
+          "telephone": {
+            "description": "Téléphone de l'interlocuteur",
+            "type": "string",
+            "example": "33643667788"
+          }
+        },
+        "x-stoplight": {
+          "id": "ij5if0qv1dvf4"
+        }
+      },
+      "Organisme": {
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "code de l'organisme qui effectue le RDV",
+            "enum": [
+              "IND",
+              "FT",
+              "CD",
+              "DCD",
+              "ML",
+              "CE"
+            ],
+            "type": "string",
+            "example": "FT"
+          },
+          "emailContact": {
+            "description": "Email de l'organisme à contacter pour gérer le rendez-vous (déplacer, annuler etc.)",
+            "type": "string",
+            "example": "contact.support@metropole13.fr"
+          },
+          "idStructure": {
+            "description": "code Aurore ou code Safir",
+            "type": "string",
+            "example": "HDF0032"
+          },
+          "libelleStructure": {
+            "description": "Libellé de la structure en lien avec le code SAFIR/AURORE",
+            "type": "string",
+            "example": "CD du Nord, MILO Nord Essonne"
+          },
+          "telephoneContact": {
+            "description": "Téléphone de l'organisme à contacter pour gérer le rendez-vous (déplacer, annuler etc.)",
+            "type": "string",
+            "example": "33643112233"
+          }
+        },
+        "x-stoplight": {
+          "id": "r02d3qcoy100l"
+        }
+      },
+      "RendezVousPartenaire": {
+        "required": [
+          "date",
+          "modaliteContact",
+          "motif",
+          "organisme",
+          "statut",
+          "typeReception"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Identifiant du rendez-vous côté Partenaire (à laisser null pour le POST, à renseigner pour le PUT)",
+            "type": "string",
+            "example": "POST, LAISSER A NULL. PUT, A VALORISER"
+          },
+          "adresse": {
+            "description": "Adresse du lieu de RDV",
+            "type": "string",
+            "example": "14 Avenue Foch 13004 Marseille"
+          },
+          "commentaire": {
+            "description": "Commentaire saisi par l'usager lors de sa prise de RDV",
+            "type": "string",
+            "example": "Bonjour, je vous sollicite pour m'aider à trouver un emploi."
+          },
+          "date": {
+            "format": "date-time",
+            "description": "Date de rendez-vous",
+            "type": "string",
+            "example": "2024-08-16T08:30:00.000Z"
+          },
+          "description": {
+            "description": "Description du rendez-vous",
+            "type": "string",
+            "example": "Rendez-vous d'accompagnement pour le retour à l'emploi."
+          },
+          "duree": {
+            "format": "int64",
+            "description": "Durée du rendez-vous en minutes",
+            "type": "number",
+            "example": 30
+          },
+          "information": {
+            "description": "Information à transmettre/transmise à l'usager",
+            "type": "string",
+            "example": "Veuillez apporter un CV à jour."
+          },
+          "initiateur": {
+            "description": "Personne effectuant la création / modification / annulation de rendez-vous",
+            "enum": [
+              "USAGER",
+              "PARTENAIRE"
+            ],
+            "type": "string",
+            "example": "PARTENAIRE"
+          },
+          "interlocuteur": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Interlocuteur"
+              },
+              {
+                "description": "Interlocuteur qui reçoit l’usager au rendez-vous"
+              }
+            ]
+          },
+          "libelleAdresse": {
+            "description": "Nom du lieu de RDV",
+            "type": "string",
+            "example": "Agence France Travail Belle de Mai"
+          },
+          "modaliteContact": {
+            "description": "Modalité de contact",
+            "enum": [
+              "VISIO",
+              "TELEPHONE",
+              "PHYSIQUE"
+            ],
+            "type": "string",
+            "example": "PHYSIQUE"
+          },
+          "motif": {
+            "description": "Motifs France Travail, dans le cas d'un motif Autre (AUT), c'est le champ theme qui sera affiché",
+            "enum": [
+              "AUT",
+              "ACC",
+              "ORI"
+            ],
+            "type": "string",
+            "example": "AUT"
+          },
+          "organisme": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Organisme"
+              },
+              {
+                "description": "Organisme qui émet le rendez-vous"
+              }
+            ]
+          },
+          "statut": {
+            "description": "Statut de présence au rendez-vous",
+            "enum": [
+              "PRIS",
+              "EFFECTUE",
+              "MODIFIE",
+              "ABSENT",
+              "ANNULE"
+            ],
+            "type": "string"
+          },
+          "telephoneContactUsager": {
+            "description": "Numéro de téléphone qui contactera l'usager pour le RDV (pour les rdv téléphoniques)",
+            "type": "string",
+            "example": "33443112233"
+          },
+          "theme": {
+            "description": "Thème du rendez-vous",
+            "type": "string",
+            "example": "Premier rendez-vous d'orientation RSA"
+          },
+          "typeReception": {
+            "description": "Type de réception (Individuel (IND) ou Collectif (COL))",
+            "enum": [
+              "IND",
+              "COL"
+            ],
+            "type": "string",
+            "example": "COL"
+          },
+          "urlVisio": {
+            "description": "URL d'accès à la visio-conférence",
+            "type": "string",
+            "example": "https://teams.app/12345678AZERTY"
+          }
+        }
+      },
+      "ReponseDepotRdvp": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Id unique du RDVP",
+            "type": "string",
+            "example": "7aea9cbd-d98e-464a-b38a-17662f4a718a",
+            "nullable": false
+          }
+        }
+      },
+      "AdresseRDVU": {
+        "type": "object",
+        "properties": {
+          "adresseLibre": {
+            "description": "Nom du lieu de RDV",
+            "maxLength": 255,
+            "type": "string",
+            "example": "Agence France Travail Belle de Mai"
+          },
+          "libelleAdresse": {
+            "description": "Adresse du lieu de RDV",
+            "maxLength": 512,
+            "type": "string",
+            "example": "14 Avenue Foch 13004 Marseille"
+          }
+        }
+      },
+      "HistoriqueEvenementRDVU": {
+        "type": "object",
+        "properties": {
+          "dateReceptionEvenement": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "typeAction": {
+            "type": "object"
+          }
+        }
+      },
+      "InterlocuteurRDVU": {
+        "type": "object",
+        "properties": {
+          "civilite": {
+            "enum": [
+              "M",
+              "MME",
+              "MX"
+            ],
+            "type": "string"
+          },
+          "email": {
+            "description": "Email de l'interlocuteur",
+            "maxLength": 255,
+            "type": "string",
+            "example": "adupont@metropole13.fr"
+          },
+          "nom": {
+            "description": "Nom de l'interlocuteur",
+            "maxLength": 255,
+            "type": "string",
+            "example": "Dupont"
+          },
+          "organisme": {
+            "description": "Organisme auquel appartient l'interlocuteur",
+            "maxLength": 255,
+            "type": "string",
+            "example": "METROPOLE 13"
+          },
+          "prenom": {
+            "description": "Prénom de l'interlocuteur",
+            "maxLength": 255,
+            "type": "string",
+            "example": "Alexandre"
+          },
+          "service": {
+            "description": "Nom du service qui reçoit l'usager",
+            "maxLength": 255,
+            "type": "string",
+            "example": "Accueil usagers"
+          },
+          "telephone": {
+            "description": "Téléphone de l'interlocuteur",
+            "maxLength": 36,
+            "type": "string",
+            "example": 331213456789
+          }
+        }
+      },
+      "OrganismeRDVU": {
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Enum du code de l'organisme qui effectue le RDV",
+            "enum": [
+              "IND",
+              "FT",
+              "CD",
+              "DCD",
+              "ML",
+              "CE"
+            ],
+            "type": "string"
+          },
+          "emailContact": {
+            "description": "Email de l'organisme à contacter pour gérer le rendez-vous (déplacer, annuler etc.)",
+            "maxLength": 255,
+            "type": "string",
+            "example": "contact.support@metropole13.fr"
+          },
+          "idStructure": {
+            "description": "Code Aurore ou autre",
+            "maxLength": 255,
+            "type": "string",
+            "example": "HDF0032"
+          },
+          "libelleStructure": {
+            "description": "Libellé de la structure en lien avec le code AURORE",
+            "maxLength": 255,
+            "type": "string",
+            "example": "CD du Nord, MILO Nord Essonne"
+          },
+          "telephoneContact": {
+            "description": "Téléphone de l'organisme à contacter pour gérer le rendez-vous (déplacer, annuler etc.)",
+            "maxLength": 36,
+            "type": "string"
+          }
+        }
+      },
+      "RendezVousUsager": {
+        "required": [
+          "date",
+          "duree",
+          "estEnConflit",
+          "idOrigine",
+          "modaliteContact",
+          "motif",
+          "organisme",
+          "statut",
+          "theme",
+          "typeReception"
+        ],
+        "type": "object",
+        "properties": {
+          "adresse": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdresseRDVU"
+              },
+              {
+                "description": "Adresse du rdv (si en physique))"
+              }
+            ]
+          },
+          "commentaireUsager": {
+            "description": "Info saisie par l'usager lors de sa prise de RDV",
+            "type": "string"
+          },
+          "date": {
+            "format": "yyyy-MM-ddTHH:mm:ss",
+            "description": "Date et heure du RDV",
+            "type": "string",
+            "example": "2023-12-26T10:30:00.000Z"
+          },
+          "dateAnnulation": {
+            "format": "yyyy-MM-ddTHH:mm:ss",
+            "description": "Date et heure à laquelle le RDV a été annulé (Le rdv est annulé si non null)",
+            "type": "string",
+            "example": "2023-12-26T10:30:00.000Z"
+          },
+          "description": {
+            "description": "Description du RDV",
+            "type": "string"
+          },
+          "duree": {
+            "format": "int64",
+            "description": "Durée du RDV en minutes",
+            "type": "integer"
+          },
+          "estEnConflit": {
+            "description": "Est à true lorsque plusieurs RDV de l'usager sont sur le même créneaux horaire",
+            "type": "boolean"
+          },
+          "historiqueEvenementList": {
+            "description": "La liste d'historique du RDV",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HistoriqueEvenementRDVU"
+            }
+          },
+          "idOrigine": {
+            "description": "Id unique du RDV dans l'application d'origine (AUDE, PRDVL...)",
+            "type": "string"
+          },
+          "informationUtile": {
+            "description": "Information à destination de l'usager, généralement renseignée par le conseiller",
+            "type": "string"
+          },
+          "initiateur": {
+            "description": "Précise qui est à l'origine du RDV parmi :",
+            "enum": [
+              "USAGER",
+              "CONSEILLER"
+            ],
+            "type": "string"
+          },
+          "interlocuteur": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InterlocuteurRDVU"
+              },
+              {
+                "description": "Interlocuteur qui est en charge de recevoir l’usager"
+              }
+            ]
+          },
+          "modaliteContact": {
+            "description": "Modalité de contact parmi les possibilités suivantes :",
+            "enum": [
+              "VISIO",
+              "TELEPHONE",
+              "PHYSIQUE"
+            ],
+            "type": "string"
+          },
+          "motif": {
+            "description": "Motifs France Travail",
+            "enum": [
+              "AUT",
+              "ACC",
+              "ORI"
+            ],
+            "type": "string"
+          },
+          "motifAnnulation": {
+            "description": "Motif de l'annulation",
+            "type": "string"
+          },
+          "organisme": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OrganismeRDVU"
+              },
+              {
+                "description": "Organisme émetteur du rdv"
+              }
+            ]
+          },
+          "statut": {
+            "description": "Statut de présence au rendez-vous",
+            "enum": [
+              "PRIS",
+              "EFFECTUE",
+              "MODIFIE",
+              "ABSENT",
+              "ANNULE"
+            ],
+            "type": "string"
+          },
+          "telephoneContactUsager": {
+            "description": "Numéro de téléphone qui contactera l'usager pour le RDV",
+            "maxLength": 36,
+            "type": "string",
+            "example": ""
+          },
+          "theme": {
+            "description": "Titre du RDV",
+            "type": "string"
+          },
+          "typeReception": {
+            "description": "Précise si le RDV est collectif ou individuel parmi :",
+            "enum": [
+              "IND",
+              "COL"
+            ],
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

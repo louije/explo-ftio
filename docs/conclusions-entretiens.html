@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conclusions Entretiens — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Conclusions d'entretiens</h1>
+  <div class="sub">Historique des entretiens réalisés entre un usager et ses conseillers</div>
+  <div class="sub-tech">Conclusions Entretiens v1.0.0 — 1 endpoint · 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/conclusions-entretiens/v1</div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: VUE ENCHASSEE                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0 stack" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Conclusions d'entretiens <span class="dto">ConclusionEntretienPartenaireDetailsDto[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">
+      Liste des conclusions d'entretiens réalisés entre l'usager et ses conseillers France Travail. Chaque élément décrit un entretien passé avec son type, sa modalité, le conseiller concerné et un commentaire de synthèse.
+      <div class="fi-tech"><code>GET /entretiens</code> — réponse complète</div>
+    </div>
+
+    <!-- Entretien — type et date -->
+    <div class="n l1-b" id="m-entretien">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Entretien — type et date <span class="dto">typeEntretien · libelleEntretien · dateEntretien</span></div>
+        <div class="card">Par enregistrement</div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Nature de l'entretien et quand il a eu lieu
+          <div class="fi-tech">
+            <code>typeEntretien</code> · <code>libelleEntretien</code> · <code>dateEntretien</code><br>
+            <span class="ev">ESI</span> Entretien de situation ·
+            <span class="ev">EDP</span> Entretien personnalisé ·
+            <span class="ev">CRL</span> Longue durée ·
+            <span class="ev">PE1</span> Tripartite PEC/CIE ·
+            <span class="ev">PE2</span> Suivi PEC/CIE ·
+            <span class="ev">PE3</span> Bilatéral sortie PEC/CIE ·
+            <span class="ev">PBI</span> Pré-bilan CRP ·
+            <span class="ev">ETP</span> Point d'étape ·
+            <span class="ev">PSP</span> Plan sécurisation pro ·
+            <span class="ev">CRP</span> Actualisation CRP ·
+            <span class="ev">BIL</span> Bilan CRP ·
+            <span class="ev">SEF</span> Suivi emploi/formation ·
+            <span class="ev">CPS</span> Conclusion psycho du travail ·
+            <span class="ev">CRE</span> Contrôle recherche emploi ·
+            <span class="ev">IND</span> Indemnisation ·
+            <span class="ev">DCE</span> Diagnostic croisé Cap emploi ·
+            <span class="ev">USA</span> Entretien usager ·
+            <span class="ev">PAK</span> Pack de démarrage ·
+            <span class="ev">EPK</span> PPAE pack différé ·
+            <span class="ev">EDA</span> 1er entretien d'accompagnement ·
+            <span class="ev">EDO</span> Entretien d'orientation
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modalité de contact -->
+    <div class="n l1-p" id="m-modalite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Modalité de contact <span class="dto">codeModaliteContact · libelleModalite</span></div>
+        <div class="card">Par enregistrement</div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Comment l'entretien s'est déroulé
+          <div class="fi-tech">
+            <code>codeModaliteContact</code> · <code>libelleModalite</code><br>
+            <span class="ev">I</span> Physique ·
+            <span class="ev">T</span> Téléphone ·
+            <span class="ev">V</span> Visio guichet ·
+            <span class="ev">W</span> Visio conférence ·
+            <span class="ev">F</span> Visio info ·
+            <span class="ev">C</span> Courriel ·
+            <span class="ev">R</span> Collectif physique ·
+            <span class="ev">B</span> Bilan en ligne
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conseiller et agence -->
+    <div class="n l1-n" id="m-conseiller">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Conseiller et agence <span class="dto">codeAgent · libelleAgent · codeAgence · libelleAgence</span></div>
+        <div class="card">Par enregistrement</div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Qui a réalisé l'entretien et où
+          <div class="fi-tech"><code>codeAgent</code> · <code>libelleAgent</code> · <code>codeAgence</code> · <code>libelleAgence</code></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commentaire -->
+    <div class="n l3" id="m-commentaire">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Commentaire <span class="dto">commentaire</span></div>
+        <div class="card">Par enregistrement</div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Synthèse libre saisie par le conseiller
+          <div class="fi-tech"><code>commentaire</code></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel nécessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>. Le jeton est volatile (~1 journée).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Conclusions d'entretiens <span class="dt-human">— Historique des entretiens d'un usager</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Liste les conclusions d'entretiens d'un usager</span><div class="ep-human">Récupérer l'historique complet des entretiens réalisés avec les conseillers</div><span class="ep-path">/entretiens</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Schéma <span class="dt-human">— Type de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ConclusionEntretienPartenaireDetailsDto</span> <span class="sc-desc">— Détail d'un entretien</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>1 endpoint</strong> · <strong>1 schéma</strong> — API en lecture seule, authentification Agent (/agent) avec jeton usager. Les en-têtes <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code> et <code>ft-jeton-usager</code> sont requis.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE — SIDE BY SIDE                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Fatima Benali</strong> — Fatima Benali est suivie par l'agence France Travail Amiens Gare depuis août 2024. Ses trois entretiens montrent la progression de son accompagnement : accueil initial, orientation, puis suivi personnalisé.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-entretien1"><span class="jc">// GET /entretiens</span>
+<span class="jc">// ── Headers obligatoires ──</span>
+<span class="jc">// ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+[
+  {
+    <span class="jk">"typeEntretien"</span>: <span class="js">"EDP"</span>,
+    <span class="jk">"libelleEntretien"</span>: <span class="js">"ENTRETIEN PERSONNALISE"</span>,
+    <span class="jk">"dateEntretien"</span>: <span class="js">"2025-03-02"</span>,
+    <span class="jk">"codeModaliteContact"</span>: <span class="js">"I"</span>,
+    <span class="jk">"libelleModalite"</span>: <span class="js">"ENTRETIEN INDIVIDUEL PHYSIQUE"</span>,
+    <span class="jk">"codeAgent"</span>: <span class="js">"AB1234"</span>,
+    <span class="jk">"libelleAgent"</span>: <span class="js">"DUBOIS JEAN"</span>,
+    <span class="jk">"codeAgence"</span>: <span class="js">"80492"</span>,
+    <span class="jk">"libelleAgence"</span>: <span class="js">"FRANCE TRAVAIL AMIENS GARE"</span>,
+    <span class="jk">"commentaire"</span>: <span class="js">"Bilan de situation complet. Fatima a validé son projet d'aide à domicile. Recherche active de formation ADVF. Point sur les freins mobilité résolus depuis obtention du permis."</span>
+  },</div>
+<div data-section="s-entretien2">  {
+    <span class="jk">"typeEntretien"</span>: <span class="js">"EDO"</span>,
+    <span class="jk">"libelleEntretien"</span>: <span class="js">"ENTRETIEN D'ORIENTATION"</span>,
+    <span class="jk">"dateEntretien"</span>: <span class="js">"2024-11-15"</span>,
+    <span class="jk">"codeModaliteContact"</span>: <span class="js">"T"</span>,
+    <span class="jk">"libelleModalite"</span>: <span class="js">"ENTRETIEN INDIVIDUEL TELEPHONI"</span>,
+    <span class="jk">"codeAgent"</span>: <span class="js">"AB1234"</span>,
+    <span class="jk">"libelleAgent"</span>: <span class="js">"DUBOIS JEAN"</span>,
+    <span class="jk">"codeAgence"</span>: <span class="js">"80492"</span>,
+    <span class="jk">"libelleAgence"</span>: <span class="js">"FRANCE TRAVAIL AMIENS GARE"</span>,
+    <span class="jk">"commentaire"</span>: <span class="js">"Orientation vers le secteur de l'aide à la personne. Fatima souhaite valoriser son expérience familiale. Présentation des formations ADVF disponibles sur le bassin amiénois."</span>
+  },</div>
+<div data-section="s-entretien3">  {
+    <span class="jk">"typeEntretien"</span>: <span class="js">"EDA"</span>,
+    <span class="jk">"libelleEntretien"</span>: <span class="js">"1ER ENTRETIEN D'ACCOMPAGNEMENT"</span>,
+    <span class="jk">"dateEntretien"</span>: <span class="js">"2024-08-02"</span>,
+    <span class="jk">"codeModaliteContact"</span>: <span class="js">"I"</span>,
+    <span class="jk">"libelleModalite"</span>: <span class="js">"ENTRETIEN INDIVIDUEL PHYSIQUE"</span>,
+    <span class="jk">"codeAgent"</span>: <span class="js">"CD5678"</span>,
+    <span class="jk">"libelleAgent"</span>: <span class="js">"MARTIN CLAIRE"</span>,
+    <span class="jk">"codeAgence"</span>: <span class="js">"80492"</span>,
+    <span class="jk">"libelleAgence"</span>: <span class="js">"FRANCE TRAVAIL AMIENS GARE"</span>,
+    <span class="jk">"commentaire"</span>: <span class="js">"Accueil initial. Inscription suite à fin de contrat CDD en restauration. Première évaluation des compétences et des souhaits professionnels. Fatima évoque un intérêt pour les métiers du soin."</span>
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-entretien1">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Entretien personnalisé</div>
+  <div class="ex-card">
+    <h4>Bilan de situation — 2 mars 2025</h4>
+    <p><span class="ex-tag tag-ok">Réalisé</span> Entretien en agence pour faire le point sur l'avancement du projet professionnel.</p>
+    <p>Fatima a validé son projet dans l'aide à domicile. Recherche active d'une formation ADVF. Les freins de mobilité sont levés depuis l'obtention du permis de conduire.</p>
+    <div class="ex-agent">Jean Dubois — France Travail Amiens Gare · En personne</div>
+  </div>
+</div>
+
+<div data-section="s-entretien2">
+  <div class="ex-title"><span class="ex-ico">&#x1F4DE;</span> Entretien d'orientation</div>
+  <div class="ex-card">
+    <h4>Orientation vers l'aide à la personne — 15 novembre 2024</h4>
+    <p><span class="ex-tag tag-ok">Réalisé</span> Entretien téléphonique pour explorer les pistes de reconversion.</p>
+    <p>Fatima souhaite valoriser son expérience familiale dans le secteur de l'aide à la personne. Présentation des formations ADVF disponibles sur le bassin amiénois.</p>
+    <div class="ex-agent">Jean Dubois — France Travail Amiens Gare · Par téléphone</div>
+  </div>
+</div>
+
+<div data-section="s-entretien3">
+  <div class="ex-title"><span class="ex-ico">&#x1F91D;</span> 1er entretien d'accompagnement</div>
+  <div class="ex-card">
+    <h4>Accueil initial — 2 août 2024</h4>
+    <p><span class="ex-tag tag-ok">Réalisé</span> Premier rendez-vous en agence après inscription suite à une fin de CDD en restauration.</p>
+    <p>Première évaluation des compétences et des souhaits professionnels. Fatima évoque un intérêt pour les métiers du soin et de l'accompagnement.</p>
+    <div class="ex-agent">Claire Martin — France Travail Amiens Gare · En personne</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Conclusions Entretiens v1.0.0 · api.francetravail.io · 1 endpoint · 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

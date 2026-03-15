@@ -1,0 +1,112 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Statut",
+    "description": "L’API Statut permet de déterminer si l'utilisateur connecté à votre application est un demandeur d'emploi ou non.",
+    "version": "1.0.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-statut/v1"
+    }
+  ],
+  "paths": {
+    "/statut": {
+      "get": {
+        "summary": "Récupère le statut de l'individu",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-statutv1",
+              "statut"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statut de l'individu retourné avec succès.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatutResponse",
+                  "type": "object",
+                  "properties": {
+                    "codeStatutIndividu": {
+                      "type": "string",
+                      "description": "Code du statut de l'individu",
+                      "enum": [
+                        "0",
+                        "1"
+                      ]
+                    },
+                    "libelleStatutIndividu": {
+                      "type": "string",
+                      "description": "Libellé correspondant au statut de l'individu"
+                    }
+                  },
+                  "required": [
+                    "codeStatutIndividu",
+                    "libelleStatutIndividu"
+                  ]
+                },
+                "examples": {
+                  "exemple": {
+                    "value": {
+                      "codeStatutIndividu": "0",
+                      "libelleStatutIndividu": "Non demandeur d'emploi"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StatutResponse": {
+        "type": "object",
+        "properties": {
+          "codeStatutIndividu": {
+            "type": "string",
+            "description": "Code du statut de l'individu. Valeurs possibles (code → libellé) : 0 → Non demandeur d'emploi, 1 → Demandeur d'emploi",
+            "enum": [
+              "0",
+              "1"
+            ]
+          },
+          "libelleStatutIndividu": {
+            "type": "string",
+            "description": "Libellé correspondant au statut de l'individu"
+          }
+        },
+        "required": [
+          "codeStatutIndividu",
+          "libelleStatutIndividu"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_NomAPIv1": "Obligatoire",
+              "MonScopeFonctionnel": "Obligatoire"
+            }
+          }
+        },
+         "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail" 
+       }
+    }
+  }
+}

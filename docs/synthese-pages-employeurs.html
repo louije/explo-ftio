@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synth&#xe8;se Pages Employeurs &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Synth&#xe8;se Pages Employeurs</h1>
+  <div class="sub">Recherche et consultation des pages employeurs publi&#xe9;es sur francetravail.fr (plus de 50 000 pages)</div>
+  <div class="sub-tech">Synth&#xe8;se pages employeurs v1 &#x2014; 4 endpoints &#xb7; 18 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/synthese-pages-employeurs/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;sultat de recherche <span class="dto">SinglePageSearchResult</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">R&#xe9;ponse pagin&#xe9;e contenant les pages employeurs correspondant aux crit&#xe8;res de recherche.
+      <div class="fi-tech"><code>totalResults</code> &#xb7; <code>totalPages</code> &#xb7; <code>pageEmployeurResults[]</code></div>
+    </div>
+
+    <div class="n l1-b stack" id="m-pages">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Pages employeur <span class="dto">pageEmployeurResults[] &#xb7; PageEmployeurResult</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Chaque r&#xe9;sultat contient une page employeur et son score de pertinence par rapport &#xe0; la recherche.
+          <div class="fi-tech"><code>pageEmployeur</code> &#x2014; <span class="at">@ PageEmployeur</span> &#xb7; <code>rechercheResult</code> &#x2014; <code>scoreTotal</code></div>
+        </div>
+
+        <div class="n l1-n" id="m-employeur-id">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Identification employeur <span class="dto">pageEmployeur &#xb7; PageEmployeur</span></div>
+            <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Identifiant SIREN ou SIRET de la page, nombre d'offres en cours, statut de gestion (automatique ou non) et URLs de la page.
+              <div class="fi-tech"><code>sirenOrSiret</code> &#xb7; <code>offresCount</code> &#xb7; <code>statutWrapper.auto</code> &#xb7; <code>urls[]</code> &#x2014; <code>urlPath</code> &#xb7; <code>actif</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l1-p" id="m-entete">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Ent&#xea;te de la page <span class="dto">page.entete &#xb7; Entete</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Contenu libre g&#xe9;r&#xe9; par l'employeur : nom de la page, phrase d'accroche, secteur d'activit&#xe9; NAF, image de couverture et statut du logo.
+              <div class="fi-tech"><code>pageName</code> &#xb7; <code>accroche</code> &#xb7; <code>naf</code> &#xb7; <code>imageCouverture</code> &#xb7; <code>logoUpdated</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2t" id="m-employeur-struct">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Employeur (SIREN) <span class="dto">employeur &#xb7; Employeur</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Pr&#xe9;sent quand la page est li&#xe9;e &#xe0; un SIREN (entreprise). Contient le SIREN, l'identifiant RCE et la liste des &#xe9;tablissements.
+              <div class="fi-tech"><code>siren</code> &#xb7; <code>idRCE</code> &#xb7; <code>etablissements[]</code> &#x2014; <span class="at">@ Etablissement</span></div>
+            </div>
+
+            <div class="n l3 stack" id="m-etablissements">
+              <div class="nh"><div class="dot"></div>
+                <div class="name">&#xc9;tablissements <span class="dto">etablissements[] &#xb7; Etablissement</span></div>
+                <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+              </div>
+              <div class="nb">
+                <div class="fi">Chaque &#xe9;tablissement avec son SIRET, son code NAF, son adresse postale et sa visibilit&#xe9; sur la page.
+                  <div class="fi-tech"><code>siret</code> &#xb7; <code>idRCE</code> &#xb7; <code>naf</code> &#xb7; <code>content.visibilite</code> &#xb7; <code>content.logoUpdated</code>
+                    <br><span class="at">@ Adresse</span> &#x2014; <code>complementAdresse</code> &#xb7; <code>numeroVoie</code> &#xb7; <code>extensionNumeroVoie</code> &#xb7; <code>libelleVoie</code> &#xb7; <code>codePostal</code> &#xb7; <code>libelleDistributionPostale</code></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="n l2c" id="m-etablissement-direct">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">&#xc9;tablissement (SIRET) <span class="dto">etablissement &#xb7; Etablissement</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Pr&#xe9;sent quand la page est li&#xe9;e directement &#xe0; un SIRET (&#xe9;tablissement unique). M&#xea;me structure que ci-dessus.
+              <div class="fi-tech"><code>siret</code> &#xb7; <code>idRCE</code> &#xb7; <code>naf</code> &#xb7; <code>adresse</code> &#xb7; <code>content</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Acc&#xe8;s public</strong> &#x2014; API accessible en <code>client_credentials</code> (OAuth2, royaume <code>/partenaire</code>). Scopes : <code>pages-employeurs-synthese</code> et <code>api_synthese-pages-employeursv1</code>. Aucun jeton usager requis.
+</div>
+
+<div class="note">
+  <strong>SIREN vs SIRET</strong> &#x2014; Une page employeur peut &#xea;tre li&#xe9;e soit &#xe0; un SIREN (entreprise enti&#xe8;re, avec plusieurs &#xe9;tablissements) soit &#xe0; un SIRET (&#xe9;tablissement unique). Le champ <code>sirenOrSiret</code> d&#xe9;termine lequel est pr&#xe9;sent. Si c'est un SIREN, le champ <code>employeur</code> est renseign&#xe9; ; si c'est un SIRET, c'est <code>etablissement</code>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Recherche <span class="dt-human">&#x2014; Recherche de pages employeurs</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher des pages employeurs</span><div class="ep-human">Recherche multicrit&#xe8;re pagin&#xe9;e (localisation, NAF, badges, offres en cours&#x2026;)</div><span class="ep-path">/page-employeur/recherche</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Mise en avant d'employeurs</span><div class="ep-human">Recherche filtr&#xe9;e pour mettre en avant les employeurs avec un contenu riche et des offres actives</div><span class="ep-path">/page-employeur/recherche/mise-en-avant</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Ressources m&#xe9;dia <span class="dt-human">&#x2014; Logos et images</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer un logo</span><div class="ep-human">Logo d'une entreprise ou d'un &#xe9;tablissement par ID RCE (format image)</div><span class="ep-path">/logo-employeur/{idRCE}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer une image</span><div class="ep-human">Image de couverture d'une page employeur (avec m&#xe9;tadonn&#xe9;es)</div><span class="ep-path">/widget/image/data/{idImage}</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">18 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Recherche</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SinglePageSearchResult</span> <span class="sc-desc">&#x2014; R&#xe9;sultat de recherche pagin&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PageEmployeurResult</span> <span class="sc-desc">&#x2014; R&#xe9;sultat avec score</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PageEmployeur</span> <span class="sc-desc">&#x2014; Page employeur compl&#xe8;te</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Employeur</span> <span class="sc-desc">&#x2014; Entreprise (SIREN)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Etablissement</span> <span class="sc-desc">&#x2014; &#xc9;tablissement (SIRET)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">EtablissementContent</span> <span class="sc-desc">&#x2014; Visibilit&#xe9; et logo</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Page</span> <span class="sc-desc">&#x2014; Contenu libre</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Entete</span> <span class="sc-desc">&#x2014; Ent&#xea;te de la page</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Adresse</span> <span class="sc-desc">&#x2014; Adresse postale</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">URL</span> <span class="sc-desc">&#x2014; URL de page employeur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">StatutWrapper</span> <span class="sc-desc">&#x2014; Statut de gestion</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">RechercheResult</span> <span class="sc-desc">&#x2014; Score de pertinence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ImageWidget</span> <span class="sc-desc">&#x2014; Image avec m&#xe9;tadonn&#xe9;es</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">RechercheParams</span> <span class="sc-desc">&#x2014; Filtres de recherche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">RechercheParams1</span> <span class="sc-desc">&#x2014; Filtres de mise en avant</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">TypeLogo</span> <span class="sc-desc">&#x2014; Enum type de logo</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">RecherchePageFailure</span> <span class="sc-desc">&#x2014; Erreur de recherche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Date</span> <span class="sc-desc">&#x2014; Format date ISO</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Recherche d'employeurs en Bretagne</strong> &#x2014; Un site partenaire recherche les pages employeurs du secteur agroalimentaire en Bretagne ayant au moins 5 offres actives, pour les mettre en avant dans son moteur de recherche.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /page-employeur/recherche</span>
+<span class="jc">// Content-Type: application/json</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// REQU&#xca;TE</span>
+{
+  <span class="jk">"where"</span>: <span class="js">"r53"</span>,
+  <span class="jk">"codesNaf"</span>: [<span class="js">"10"</span>],
+  <span class="jk">"offresOnly"</span>: <span class="jb">true</span>,
+  <span class="jk">"minOffres"</span>: <span class="jn">5</span>,
+  <span class="jk">"pageNumber"</span>: <span class="jn">1</span>,
+  <span class="jk">"pageMaxSize"</span>: <span class="jn">10</span>
+}</div>
+<div data-section="s-resultat"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// R&#xc9;PONSE &#x2014; HTTP 200</span>
+{
+  <span class="jk">"totalResults"</span>: <span class="jn">23</span>,
+  <span class="jk">"totalPages"</span>: <span class="jn">3</span>,
+  <span class="jk">"pageEmployeurResults"</span>: [
+    {
+      <span class="jk">"pageEmployeur"</span>: {
+        <span class="jk">"sirenOrSiret"</span>: <span class="js">"345678901"</span>,
+        <span class="jk">"offresCount"</span>: <span class="jn">12</span>,</div>
+<div data-section="s-entete">        <span class="jk">"page"</span>: {
+          <span class="jk">"entete"</span>: {
+            <span class="jk">"pageName"</span>: <span class="js">"Conserverie Le Marin Breton"</span>,
+            <span class="jk">"naf"</span>: <span class="js">"10.20Z"</span>,
+            <span class="jk">"accroche"</span>: <span class="js">"Depuis 1952, le go&#xfb;t de la mer en conserve"</span>,
+            <span class="jk">"imageCouverture"</span>: <span class="js">"4821-97653"</span>,
+            <span class="jk">"logoUpdated"</span>: <span class="jb">true</span>
+          },
+          <span class="jk">"showHidden"</span>: <span class="jb">false</span>
+        },</div>
+<div data-section="s-employeur">        <span class="jk">"employeur"</span>: {
+          <span class="jk">"siren"</span>: <span class="js">"345678901"</span>,
+          <span class="jk">"idRCE"</span>: <span class="js">"8742"</span>,
+          <span class="jk">"etablissements"</span>: [
+            {
+              <span class="jk">"siret"</span>: <span class="js">"34567890100028"</span>,
+              <span class="jk">"idRCE"</span>: <span class="js">"8743"</span>,
+              <span class="jk">"naf"</span>: <span class="js">"10.20Z"</span>,
+              <span class="jk">"adresse"</span>: {
+                <span class="jk">"numeroVoie"</span>: <span class="js">"12"</span>,
+                <span class="jk">"libelleVoie"</span>: <span class="js">"rue du Port"</span>,
+                <span class="jk">"codePostal"</span>: <span class="js">"29900"</span>,
+                <span class="jk">"libelleDistributionPostale"</span>: <span class="js">"Concarneau"</span>
+              },
+              <span class="jk">"content"</span>: {
+                <span class="jk">"visibilite"</span>: <span class="jb">true</span>,
+                <span class="jk">"logoUpdated"</span>: <span class="jb">false</span>
+              }
+            }
+          ]
+        },</div>
+<div data-section="s-meta">        <span class="jk">"urls"</span>: [
+          { <span class="jk">"urlPath"</span>: <span class="js">"conserverie-le-marin-breton-345678901"</span>, <span class="jk">"actif"</span>: <span class="jb">true</span> }
+        ],
+        <span class="jk">"statutWrapper"</span>: {
+          <span class="jk">"auto"</span>: <span class="jb">false</span>
+        }
+      },
+      <span class="jk">"rechercheResult"</span>: {
+        <span class="jk">"scoreTotal"</span>: <span class="jn">87.5</span>
+      }
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche</div>
+  <div class="ex-card">
+    <h4>Agroalimentaire en Bretagne</h4>
+    <p>Recherche par r&#xe9;gion (<code>r53</code> = Bretagne), filtr&#xe9;e sur les codes NAF commen&#xe7;ant par <code>10</code> (industries alimentaires). Seules les pages avec au moins 5 offres actives sont retourn&#xe9;es.</p>
+  </div>
+</div>
+
+<div data-section="s-resultat">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CA;</span> R&#xe9;sultats</div>
+  <div class="ex-card">
+    <h4>23 pages trouv&#xe9;es &#x2014; page 1/3</h4>
+    <p><span class="ex-tag tag-encours">12 offres actives</span> Premier r&#xe9;sultat : Conserverie Le Marin Breton, identifi&#xe9;e par le SIREN 345678901.</p>
+  </div>
+</div>
+
+<div data-section="s-entete">
+  <div class="ex-title"><span class="ex-ico">&#x1F3E2;</span> Page employeur</div>
+  <div class="ex-card">
+    <h4>Conserverie Le Marin Breton</h4>
+    <p>&#xab; Depuis 1952, le go&#xfb;t de la mer en conserve &#xbb;</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Secteur NAF</strong> &#x2192; 10.20Z (transformation et conservation de poissons)</div>
+      <div class="ex-item"><strong>Image de couverture</strong> &#x2192; ID <code>4821-97653</code> (r&#xe9;cup&#xe9;rable via <code>/widget/image/data/</code>)</div>
+      <div class="ex-item"><strong>Logo</strong> &#x2192; mis &#xe0; jour par l'employeur (r&#xe9;cup&#xe9;rable via <code>/logo-employeur/</code>)</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-employeur">
+  <div class="ex-title"><span class="ex-ico">&#x1F3ED;</span> &#xc9;tablissement</div>
+  <div class="ex-card">
+    <h4>12 rue du Port &#x2014; 29900 Concarneau</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>SIRET</strong> &#x2192; 34567890100028</div>
+      <div class="ex-item"><strong>Visibilit&#xe9;</strong> &#x2192; <span class="ex-tag tag-ok">Visible</span> sur la page employeur</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Une page li&#xe9;e &#xe0; un SIREN peut avoir plusieurs &#xe9;tablissements. Chacun peut &#xea;tre masqu&#xe9; individuellement (<code>visibilite: false</code>).</p>
+  </div>
+</div>
+
+<div data-section="s-meta">
+  <div class="ex-title"><span class="ex-ico">&#x1F517;</span> M&#xe9;tadonn&#xe9;es</div>
+  <div class="ex-card">
+    <h4>URL et statut</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>URL de la page</strong> &#x2192; <code>conserverie-le-marin-breton-345678901</code> (active)</div>
+      <div class="ex-item"><strong>Gestion</strong> &#x2192; page g&#xe9;r&#xe9;e par l'employeur (pas automatique)</div>
+      <div class="ex-item"><strong>Score de pertinence</strong> &#x2192; 87.5 / 100</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.3 &#x2014; Synth&#xe8;se pages employeurs v1 &#xb7; api.francetravail.io &#xb7; 4 endpoints &#xb7; 18 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statut Usager — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Statut usager</h1>
+  <div class="sub">Statut d'inscription, catégorie et situation au regard de l'emploi d'un demandeur</div>
+  <div class="sub-tech">Statut Usager v2.0 — 1 endpoint · 2 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/contrat-usager/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Contrat usager <span class="dto">ContratResponse</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-statut">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Statut d'inscription <span class="dto">m_contrat · Contrat</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Situation actuelle du demandeur d'emploi dans le système France Travail
+        <div class="fi-tech"><code>m_statut</code> · <code>m_date_effet_statut</code> · <span class="ev">Identifié|Inscrit|Cessé|Radié</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-duree">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Durée d'inscription</div>
+        <div class="card">3 compteurs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Nombre de mois d'inscription sur les 12, 24 et 36 derniers mois — mesure la durée du chômage
+        <div class="fi-tech"><code>m_duree_inscription_12</code> · <code>m_duree_inscription_24</code> · <code>m_duree_inscription_36</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-motif">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Motif et catégorie</div>
+        <div class="card">4 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Pourquoi l'usager est inscrit et dans quelle catégorie administrative
+        <div class="fi-tech"><code>m_motif_inscription_code</code> · <code>m_motif_inscription_lib</code> · <code>m_categ_inscription_code</code> · <code>m_categ_inscription_lib</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-c" id="m-situation">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Situation et clôture</div>
+        <div class="card">4 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Situation au regard de l'emploi et motif de sortie éventuel
+        <div class="fi-tech"><code>m_situation_reg_emp_code</code> · <code>m_situation_reg_emp_lib</code> · <code>m_motif_cloture_code</code> · <code>m_motif_cloture_lib</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-erreur">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Message d'erreur <span class="dto">m_messageErreur</span></div>
+        <div class="card">Facultatif <span class="card-tech">string · 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi-tech"><code>m_messageErreur</code> — renseigné uniquement en cas d'erreur fonctionnelle</div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel nécessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>. Le jeton est volatile (~1 journée).
+</div>
+
+<div class="note">Les noms de champs utilisent le préfixe <code>m_</code> (convention héritée du SI historique). Le champ <code>m_statut</code> reflète la situation administrative courante — un usager « Radié » n'est plus inscrit comme demandeur d'emploi.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Contrat Usager <span class="dt-human">— Statut d'inscription</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les données du contrat d'un usager</span><div class="ep-human">Lire le statut, la durée et la catégorie d'inscription d'un demandeur</div><span class="ep-path">/contrat</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">2 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ContratResponse</span> <span class="sc-desc">— Enveloppe de réponse</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Contrat</span> <span class="sc-desc">— Données du contrat usager</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Deux profils contrastés</strong> — Deux profils illustrent les extrêmes du statut : un demandeur d'emploi en inscription longue durée suite à un licenciement économique, et un usager radié après reprise d'emploi.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-inscrit"><span class="jc">// GET /contrat</span>
+<span class="jc">// ── Headers obligatoires ──</span>
+<span class="jc">// ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+<span class="jc">// ── Réponse — Usager inscrit ──</span>
+{
+  <span class="jk">"m_contrat"</span>: {
+    <span class="jk">"m_statut"</span>: <span class="js">"Inscrit"</span>,
+    <span class="jk">"m_date_effet_statut"</span>: <span class="js">"2023-06-28"</span>,
+    <span class="jk">"m_duree_inscription_12"</span>: <span class="jn">9</span>,
+    <span class="jk">"m_duree_inscription_24"</span>: <span class="jn">16</span>,
+    <span class="jk">"m_duree_inscription_36"</span>: <span class="jn">28</span>,
+    <span class="jk">"m_motif_inscription_code"</span>: <span class="js">"11"</span>,
+    <span class="jk">"m_motif_inscription_lib"</span>: <span class="js">"LICENCIEMENT ECONOMIQUE"</span>,
+    <span class="jk">"m_categ_inscription_code"</span>: <span class="js">"1"</span>,
+    <span class="jk">"m_categ_inscription_lib"</span>: <span class="js">"PERSONNE SANS EMPLOI DISPONIBLE DUREE INDETERMINEE PLEIN TPS"</span>,
+    <span class="jk">"m_situation_reg_emp_code"</span>: <span class="js">"ADR"</span>,
+    <span class="jk">"m_situation_reg_emp_lib"</span>: <span class="js">"AIDE DIFFERENTIELLE AU RECLASSEMENT"</span>,
+    <span class="jk">"m_motif_cloture_code"</span>: <span class="jnull">null</span>,
+    <span class="jk">"m_motif_cloture_lib"</span>: <span class="jnull">null</span>
+  },
+  <span class="jk">"m_messageErreur"</span>: <span class="jnull">null</span>
+}</div>
+<div data-section="s-radie"><span class="jc">// Usager radié</span>
+{
+  <span class="jk">"m_contrat"</span>: {
+    <span class="jk">"m_statut"</span>: <span class="js">"Radié"</span>,
+    <span class="jk">"m_date_effet_statut"</span>: <span class="js">"2025-09-22"</span>,
+    <span class="jk">"m_duree_inscription_12"</span>: <span class="jn">0</span>,
+    <span class="jk">"m_duree_inscription_24"</span>: <span class="jn">0</span>,
+    <span class="jk">"m_duree_inscription_36"</span>: <span class="jn">4</span>,
+    <span class="jk">"m_motif_inscription_code"</span>: <span class="js">"32"</span>,
+    <span class="jk">"m_motif_inscription_lib"</span>: <span class="js">"RUPTURE CONVENTIONNELLE DU CDI"</span>,
+    <span class="jk">"m_categ_inscription_code"</span>: <span class="js">"1"</span>,
+    <span class="jk">"m_categ_inscription_lib"</span>: <span class="js">"PERSONNE SANS EMPLOI DISPONIBLE DUREE INDETERMINEE PLEIN TPS"</span>,
+    <span class="jk">"m_situation_reg_emp_code"</span>: <span class="js">"SAN"</span>,
+    <span class="jk">"m_situation_reg_emp_lib"</span>: <span class="js">"SANS OBJET"</span>,
+    <span class="jk">"m_motif_cloture_code"</span>: <span class="js">"1"</span>,
+    <span class="jk">"m_motif_cloture_lib"</span>: <span class="js">"REPRISE D'EMPLOI"</span>
+  },
+  <span class="jk">"m_messageErreur"</span>: <span class="jnull">null</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-inscrit">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Usager inscrit — longue durée</div>
+  <div class="ex-card">
+    <h4>Demandeur d'emploi actif</h4>
+    <p>Statut <span class="ex-tag tag-encours">Inscrit</span> depuis le 28 juin 2023</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Durée d'inscription</strong> → 9 mois sur 12 · 16 mois sur 24 · 28 mois sur 36</div>
+      <div class="ex-item"><strong>Motif d'inscription</strong> → Licenciement économique (code 11)</div>
+      <div class="ex-item"><strong>Catégorie</strong> → Personne sans emploi disponible durée indéterminée plein temps (cat. 1)</div>
+      <div class="ex-item"><strong>Situation emploi</strong> → Aide différentielle au reclassement (ADR)</div>
+    </div>
+    <div class="ex-agent">Inscription longue durée — plus de 2 ans cumulés sur 3 ans</div>
+  </div>
+</div>
+
+<div data-section="s-radie">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Usager radié — reprise d'emploi</div>
+  <div class="ex-card">
+    <h4>Sortie positive</h4>
+    <p>Statut <span class="ex-tag tag-ok">Radié — reprise d'emploi</span> depuis le 22 septembre 2025</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Durée d'inscription</strong> → 0 mois sur 12 · 0 mois sur 24 · 4 mois sur 36</div>
+      <div class="ex-item"><strong>Motif d'inscription initial</strong> → Rupture conventionnelle du CDI (code 32)</div>
+      <div class="ex-item"><strong>Motif de clôture</strong> → Reprise d'emploi</div>
+      <div class="ex-item"><strong>Situation emploi</strong> → Sans objet</div>
+    </div>
+    <div class="ex-agent">Passage bref par France Travail — radiation pour motif positif</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — Statut Usager v2.0 · api.francetravail.io · 1 endpoint · 2 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

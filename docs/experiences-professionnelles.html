@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exp&#xe9;riences professionnelles &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Exp&#xe9;riences professionnelles</h1>
+  <div class="sub">Parcours professionnel d&#xe9;clar&#xe9; par l'usager dans son profil de comp&#xe9;tences sur francetravail.fr</div>
+  <div class="sub-tech">API Exp&#xe9;riences Professionnelles v1.0 &#x2014; 1 endpoint &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-experiences/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Exp&#xe9;riences professionnelles <span class="dto">Experience[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b stack" id="m-experience">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Exp&#xe9;rience <span class="dto">Experience</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+
+        <div class="n l1-p" id="m-intitule">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Intitul&#xe9; et entreprise</div>
+            <div class="card">2 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Poste occup&#xe9; et nom de l'entreprise, tels que d&#xe9;clar&#xe9;s par l'usager dans son profil de comp&#xe9;tences
+            <div class="fi-tech"><code>intitule</code> &#xb7; <code>entreprise</code></div>
+          </div></div>
+        </div>
+
+        <div class="n l1-n" id="m-dates">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">P&#xe9;riode <span class="dto">date</span></div>
+            <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            Dates de d&#xe9;but et de fin de l'exp&#xe9;rience. Si l'usager est encore en poste, seule la date de d&#xe9;but est renseign&#xe9;e.
+            <div class="fi-tech"><code>date.debut</code> &#xb7; <code>date.fin</code> &#xb7; format <code>date-time</code></div>
+          </div></div>
+        </div>
+
+        <div class="n l1-c" id="m-duree">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Dur&#xe9;e et statut</div>
+            <div class="card">2 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Dur&#xe9;e en mois de l'exp&#xe9;rience et indicateur de poste actuel &#x2014; un usager peut avoir plusieurs postes en cours simultan&#xe9;ment
+            <div class="fi-tech"><code>duree</code> (integer, mois) &#xb7; <code>enPoste</code> (boolean)</div>
+          </div></div>
+        </div>
+
+        <div class="n l3" id="m-lieu">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Lieu et contexte</div>
+            <div class="card">2 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Localisation de l'exp&#xe9;rience et indicateur France/&#xe9;tranger
+            <div class="fi-tech"><code>lieu</code> &#xb7; <code>etranger</code> (boolean &#x2014; <code>false</code> = France, <code>true</code> = &#xe9;tranger)</div>
+          </div></div>
+        </div>
+
+        <div class="n l3" id="m-description">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Description libre <span class="dto">description</span></div>
+            <div class="card">Facultatif <span class="card-tech">string &#xb7; 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi-tech"><code>description</code> &#x2014; texte libre d&#xe9;crivant les missions et r&#xe9;alisations</div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume PE Connect (OAuth utilisateur). L'usager se connecte avec son compte France Travail et autorise les scopes <code>api_peconnect-experiencesv1</code> et <code>pfcexperiences</code>. L'application acc&#xe8;de alors aux donn&#xe9;es de l'usager connect&#xe9; uniquement.
+</div>
+
+<div class="note">Les donn&#xe9;es proviennent du profil de comp&#xe9;tences saisi par l'usager lui-m&#xea;me sur francetravail.fr (onglet &#xab;&#xa0;parcours&#xa0;&#xbb;). Elles alimentent &#xe9;galement le syst&#xe8;me de rapprochement entre CV et offres d'emploi.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Exp&#xe9;riences <span class="dt-human">&#x2014; Parcours professionnel de l'usager</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer la liste des exp&#xe9;riences professionnelles</span><div class="ep-human">Lire toutes les exp&#xe9;riences d&#xe9;clar&#xe9;es par l'usager dans son profil de comp&#xe9;tences</div><span class="ep-path">/experiencesindividu</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Experience</span> <span class="sc-desc">&#x2014; Exp&#xe9;rience professionnelle d&#xe9;clar&#xe9;e</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Parcours d'une professionnelle de la restauration</strong> &#x2014; Sophie Lemaire a travaill&#xe9; dans la restauration avant de se reconvertir. Son profil de comp&#xe9;tences refl&#xe8;te trois exp&#xe9;riences : un poste actuel, un emploi termin&#xe9; et un engagement associatif.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-enposte"><span class="jc">// GET /experiencesindividu</span>
+<span class="jc">// &#x2500;&#x2500; OAuth PE Connect &#x2500;&#x2500;</span>
+<span class="jc">// Authorization: Bearer eyJhbGciOi...</span>
+<span class="jc">// Scopes: api_peconnect-experiencesv1, pfcexperiences</span>
+<span class="jc">// &#x2500;&#x2500; R&#xe9;ponse &#x2500;&#x2500;</span>
+[
+  {
+    <span class="jk">"intitule"</span>: <span class="js">"Responsable de salle"</span>,
+    <span class="jk">"entreprise"</span>: <span class="js">"Brasserie Le Comptoir"</span>,
+    <span class="jk">"description"</span>: <span class="js">"Gestion d'une &#xe9;quipe de 8 serveurs, service de 200 couverts midi et soir, relation fournisseurs"</span>,
+    <span class="jk">"date"</span>: {
+      <span class="jk">"debut"</span>: <span class="js">"2021-03-15T00:00:00+01:00"</span>
+    },
+    <span class="jk">"duree"</span>: <span class="jn">36</span>,
+    <span class="jk">"enPoste"</span>: <span class="jb">true</span>,
+    <span class="jk">"lieu"</span>: <span class="js">"Lyon"</span>,
+    <span class="jk">"etranger"</span>: <span class="jb">false</span>
+  },</div>
+<div data-section="s-terminee">  {
+    <span class="jk">"intitule"</span>: <span class="js">"Serveuse"</span>,
+    <span class="jk">"entreprise"</span>: <span class="js">"Hippopotamus"</span>,
+    <span class="jk">"description"</span>: <span class="js">"Service en salle, 150 couverts, accueil client&#xe8;le"</span>,
+    <span class="jk">"date"</span>: {
+      <span class="jk">"debut"</span>: <span class="js">"2017-09-01T00:00:00+02:00"</span>,
+      <span class="jk">"fin"</span>: <span class="js">"2021-02-28T00:00:00+01:00"</span>
+    },
+    <span class="jk">"duree"</span>: <span class="jn">42</span>,
+    <span class="jk">"enPoste"</span>: <span class="jb">false</span>,
+    <span class="jk">"lieu"</span>: <span class="js">"Villeurbanne"</span>,
+    <span class="jk">"etranger"</span>: <span class="jb">false</span>
+  },</div>
+<div data-section="s-associatif">  {
+    <span class="jk">"intitule"</span>: <span class="js">"B&#xe9;n&#xe9;volat associatif"</span>,
+    <span class="jk">"date"</span>: {
+      <span class="jk">"debut"</span>: <span class="js">"2015-01-01T00:00:00+01:00"</span>
+    },
+    <span class="jk">"duree"</span>: <span class="jn">108</span>,
+    <span class="jk">"enPoste"</span>: <span class="jb">true</span>,
+    <span class="jk">"etranger"</span>: <span class="jb">false</span>
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-enposte">
+  <div class="ex-title"><span class="ex-ico">&#x1F4BC;</span> Poste actuel &#x2014; responsable de salle</div>
+  <div class="ex-card">
+    <h4>Brasserie Le Comptoir, Lyon</h4>
+    <p>Statut <span class="ex-tag tag-encours">En poste</span> depuis mars 2021 (36 mois)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>R&#xf4;le</strong> &#x2192; Responsable de salle</div>
+      <div class="ex-item"><strong>Missions</strong> &#x2192; Gestion d'&#xe9;quipe (8 serveurs), 200 couverts, relation fournisseurs</div>
+      <div class="ex-item"><strong>Localisation</strong> &#x2192; France (Lyon)</div>
+    </div>
+    <div class="ex-agent">&#xc9;volution interne &#x2014; passage de serveuse &#xe0; responsable</div>
+  </div>
+</div>
+
+<div data-section="s-terminee">
+  <div class="ex-title"><span class="ex-ico">&#x1F4C4;</span> Exp&#xe9;rience termin&#xe9;e &#x2014; serveuse</div>
+  <div class="ex-card">
+    <h4>Hippopotamus, Villeurbanne</h4>
+    <p>Statut <span class="ex-tag tag-ok">Termin&#xe9;e</span> &#x2014; septembre 2017 &#xe0; f&#xe9;vrier 2021 (42 mois)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>R&#xf4;le</strong> &#x2192; Serveuse</div>
+      <div class="ex-item"><strong>Missions</strong> &#x2192; Service en salle, 150 couverts, accueil client&#xe8;le</div>
+      <div class="ex-item"><strong>Localisation</strong> &#x2192; France (Villeurbanne)</div>
+    </div>
+    <div class="ex-agent">3 ans et demi dans la restauration de cha&#xee;ne</div>
+  </div>
+</div>
+
+<div data-section="s-associatif">
+  <div class="ex-title"><span class="ex-ico">&#x1F91D;</span> Engagement associatif</div>
+  <div class="ex-card">
+    <h4>B&#xe9;n&#xe9;volat</h4>
+    <p>Statut <span class="ex-tag tag-encours">En cours</span> depuis janvier 2015 (108 mois)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Entreprise</strong> &#x2192; Non renseign&#xe9;e</div>
+      <div class="ex-item"><strong>Description</strong> &#x2192; Non renseign&#xe9;e</div>
+      <div class="ex-item"><strong>Localisation</strong> &#x2192; France</div>
+    </div>
+    <div class="ex-agent">Engagement long mais peu d&#xe9;taill&#xe9; &#x2014; champs facultatifs non remplis</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Exp&#xe9;riences Professionnelles v1.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

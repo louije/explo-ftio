@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prestations partenaires — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Prestations partenaires</h1>
+  <div class="sub">Programmation, suivi et résultats des prestations sous-traitées par France Travail à des organismes partenaires</div>
+  <div class="sub-tech">Gestion des prestations sous-traitées v1.0.0 — 20 endpoints · 40+ schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/partenaire-gerer-prestations/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note">
+  <strong>Qui fait quoi</strong> — <em>France Travail</em> prescrit les demandeurs (Candidature). Le <em>prestataire</em> les positionne sur des sessions, enregistre les présences, saisit les résultats et téléverse les livrables. Les commandes sont créées automatiquement lors du positionnement.
+</div>
+
+<div class="grid-2">
+
+<!-- LEFT: France Travail prescrit -->
+<div>
+<div class="n l0 stack" id="m-candidatures">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Candidatures — France Travail prescrit <span class="dto">GET · Candidature[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Un conseiller France Travail oriente un demandeur d'emploi vers une prestation. Le prestataire consulte ces candidatures et les traite.</div>
+
+    <div class="n l1-b" id="m-cand-individu">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Demandeur d'emploi <span class="dto">individu · Individu</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Identification du demandeur : nom, prénom, numéro France Travail, téléphone, email
+        <div class="fi-tech"><code>numeroFranceTravail</code> · <code>nom</code> · <code>prenom</code> · <code>civilite</code> · <code>telephone</code> · <code>mail</code> · <code>codeAssedic</code> · <code>codeBNI</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-cand-prescription">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Prescription <span class="dto">codeTypePrestation · codeRome · siteGestionnaire</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Type de prestation prescrite, code ROME visé, site prescripteur et gestionnaire
+        <div class="fi-tech"><code>codeTypePrestation</code> · <code>codeRome</code> · <code>numeroMarche</code> · <code>siteGestionnaire</code> · <code>siteRattachement</code> · <code>agentCreateur</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-c" id="m-cand-statut">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Statut <span class="dto">statut</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        État d'avancement de la candidature
+        <div class="fi-tech"><code>statut</code> · <code>dateCreation</code> · <code>dateActivation</code> · <code>dateRelance</code> · <code>commentaireTraitement</code>
+          <br><span class="ev">TR</span> En traitement · <span class="ev">AT</span> En attente · <span class="ev">EC</span> En cours · <span class="ev">EA</span> En attente suite · <span class="ev">AN</span> Annulée · <span class="ev">SS</span> Sans suite</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l0" id="m-sessions">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Sessions — le prestataire programme <span class="dto">GET · PUT · Session</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Le prestataire crée des sessions (dates, lieu, places) et y positionne les demandeurs reçus via les candidatures.</div>
+
+    <div class="n l1-b" id="m-session-type">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Type et thème <span class="dto">typePrestation · themeAtelier</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Type de prestation, thème et sous-thème d'atelier, nature de l'animation (interne/externe)
+        <div class="fi-tech"><code>typePrestation</code> · <code>themeAtelier</code> · <code>sousThemeAtelier</code> · <code>natureAnimation</code> · <code>codeEtatSession</code> · <code>origineSession</code>
+          <br><span class="ev">I</span> Interne · <span class="ev">E</span> Externe — <span class="ev">PL</span> Planifiée · <span class="ev">HC</span> Hors catalogue · <span class="ev">RC</span> Reconduite</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-session-planif">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Planification <span class="dto">dateDebut · dateLimite · duree</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Dates de début, fin prévue, limite de prescription, durée et nombre de places
+        <div class="fi-tech"><code>dateDebut</code> · <code>dateFinPrevue</code> · <code>dateLimite</code> · <code>duree</code> · <code>nbPlacePrevue</code> · <code>nbReelInscrits</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-session-lieu">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Lieu <span class="dto">adresse · Adresse</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Adresse de réalisation, possibilité webcam, type de lieu
+        <div class="fi-tech"><code>adresse</code> · <code>typeLieu</code> · <code>urlWebcam</code> · <code>modalitePremierRendezVous</code> · <code>enAgence</code>
+          <br><span class="ev">INTERNE</span> · <span class="ev">EXTERNE</span> · <span class="ev">WEBCAM</span></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- RIGHT: Le prestataire suit et saisit -->
+<div>
+<div class="n l0 stack" id="m-commandes">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Commandes — créées automatiquement <span class="dto">GET · POST · Commande[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une commande est créée quand un demandeur est positionné sur une session. Le prestataire la consulte, peut la suspendre ou la clôturer.</div>
+
+    <div class="n l1-b" id="m-cmd-id">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identifiants <span class="dto">identifiantCommande · numeroCommandeSRM</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Numéro de commande, référence SRM, DR de rattachement
+        <div class="fi-tech"><code>identifiantCommande</code> · <code>numeroCommandeSRM</code> · <code>numeroPrestationDePM</code> · <code>drDeLaPrestation</code> · <code>dateCreation</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-c" id="m-cmd-etat">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">État <span class="dto">statutCommandeCourant · statutMetierPrestaCourant</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Statut de la commande et statut métier de la prestation
+        <div class="fi-tech"><code>statutCommandeCourant</code> · <code>statutMetierPrestaCourant</code> · <code>dateReouverture</code> · <code>dateDerniereRelance</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l0 stack" id="m-rdv">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Rendez-vous — le prestataire saisit <span class="dto">PUT · POST · RendezVous[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Après la session, le prestataire enregistre la présence de chaque demandeur, saisit le résultat de la prestation et téléverse les livrables.</div>
+
+    <div class="n l1-n" id="m-rdv-presence">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Présence <span class="dto">statutPresence · precisionStatutPresence</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Statut de présence du demandeur au rendez-vous et commentaire éventuel
+        <div class="fi-tech"><code>statutPresence</code> · <code>precisionStatutPresence</code> · <code>commentaireStatutPresence</code> · <code>agentPresence</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-rdv-resultat">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Résultat <span class="dto">resultatRendezVous · ResultatRendezVous</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Résultat de la prestation, durée effective, décision et niveau de réfaction
+        <div class="fi-tech"><code>resultat</code> · <code>precisionResultat</code> · <code>dureePrestation</code> · <code>decisionSurResultat</code> · <code>niveauRefaction</code>
+          <br><span class="ev">I</span> Interrompu · <span class="ev">C</span> Complet · <span class="ev">M</span> Modifié — réfaction 0/1/2</div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-rdv-livrables">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Livrables <span class="dto">listePieceGED[] · PieceGED</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Documents attachés (livrables téléversés par le prestataire)
+        <div class="fi-tech"><code>listePieceGED</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+</div><!-- .grid-2 -->
+
+<div class="note">
+  <strong>Authentification</strong> — Royaume <code>/partenaire</code> (client credentials). Pas de jeton usager — le prestataire accède à sa propre programmation via son contrat de marché (<code>numeroMarche</code>).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Candidatures <span class="dt-human">— Orientation des demandeurs</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Rechercher des candidatures</span><div class="ep-human">Liste des candidatures selon critères (statut, date, ROME, marché…)</div><span class="ep-path">/candidature</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter une candidature</span><div class="ep-human">Détail d'une candidature</div><span class="ep-path">/candidature/{identifiantCandidature}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Traiter une candidature</span><div class="ep-human">Créer session et RDV à partir d'une candidature</div><span class="ep-path">/candidature/traitement</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Sessions <span class="dt-human">— Programmation</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Rechercher des sessions</span><div class="ep-human">Recherche multicritère (type, lieu, date, places…)</div><span class="ep-path">/session</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter une session</span><div class="ep-human">Détail d'une session</div><span class="ep-path">/session/{identifiantSession}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Commandes <span class="dt-human">— Suivi administratif</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter une commande</span><div class="ep-human">Détail d'une commande</div><span class="ep-path">/commande/{numCommande}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Clôturer des commandes</span><div class="ep-human">Clôture en masse par numéros</div><span class="ep-path">/commande/cloture</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Suspendre des commandes</span><div class="ep-human">Suspension en masse</div><span class="ep-path">/commande/suspension</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Soumettre au mandataire</span><div class="ep-human">Transmettre au mandataire</div><span class="ep-path">/commande/{numCommande}/soumission-mandataire</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Exporter des commandes</span><div class="ep-human">Export par marché (échues ou débloquées)</div><span class="ep-path">/export-commande</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Rendez-vous et présence <span class="dt-human">— Suivi terrain</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Modifier les présences</span><div class="ep-human">Mise à jour des statuts de présence</div><span class="ep-path">/rendez-vous/presence/liste</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Saisir un résultat</span><div class="ep-human">Enregistrer le résultat d'un RDV partenaire</div><span class="ep-path">/resultat/rendez-vous/partenaire</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Référentiels <span class="dt-human">— Données de référence</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lieux de réalisation</span><div class="ep-human">Sites externes de réalisation</div><span class="ep-path">/lieux-realisation/externe</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Types de lieu par poste</span><div class="ep-human">Référentiel postes/lieux</div><span class="ep-path">/poste-type-lieu</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Précisions de présence</span><div class="ep-human">Référentiel des précisions de statut</div><span class="ep-path">/precision-statut-presence</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Livrables attendus</span><div class="ep-human">Référentiel des pièces GED</div><span class="ep-path">/referentiel-pieceGED</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel résultats</span><div class="ep-human">Résultats possibles par type de prestation</div><span class="ep-path">/resultat</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Sous-précisions résultat</span><div class="ep-human">Détail des codes résultat</div><span class="ep-path">/sous-precision-resultat</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Statuts de présence</span><div class="ep-human">Référentiel des statuts de présence</div><span class="ep-path">/statut-presence</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Téléverser un livrable</span><div class="ep-human">Upload d'un document au format ECS</div><span class="ep-path">/pieceGED/ecs</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">40+ Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Enregistrement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Candidature</span> <span class="sc-desc">— Candidature prescrite</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Individu</span> <span class="sc-desc">— Demandeur d'emploi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Session</span> <span class="sc-desc">— Session de prestation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Commande</span> <span class="sc-desc">— Commande de prestation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">RendezVous</span> <span class="sc-desc">— Rendez-vous</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ResultatRendezVous</span> <span class="sc-desc">— Résultat saisi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">PieceGED</span> <span class="sc-desc">— Livrable</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Adresse</span> <span class="sc-desc">— Adresse du lieu</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Prestataire</span> <span class="sc-desc">— Organisme prestataire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">StatutPresence</span> <span class="sc-desc">— Statut de présence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Resultat</span> <span class="sc-desc">— Code résultat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypePrestation</span> <span class="sc-desc">— Type de prestation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">PrecisionStatutPresence</span> <span class="sc-desc">— Précision présence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ModificationListeStatutPresence</span> <span class="sc-desc">— Mise à jour présences</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">TraitementCandidature</span> <span class="sc-desc">— Traitement candidature</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>20 endpoints</strong> · <strong>40+ schémas</strong> — API complexe couvrant tout le cycle de vie des prestations sous-traitées.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Atelier Techniques de recherche d'emploi</strong> — Un prestataire à Bordeaux gère un atelier TRE. Il consulte ses candidatures, positionne un demandeur sur une session, puis saisit le résultat après la prestation.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-candidature"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// CANDIDATURE — GET /candidature?statutCandidature=TR</span>
+<span class="jc">//              &amp;numeroMarche=2024-NAQ-TRE-001</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+[{
+  <span class="jk">"identifiantCandidature"</span>: <span class="js">"CAND-2026-08741"</span>,
+  <span class="jk">"statut"</span>: <span class="js">"TR"</span>,
+  <span class="jk">"dateCreation"</span>: <span class="js">"2026-03-10T09:00:00"</span>,
+  <span class="jk">"codeTypePrestation"</span>: <span class="js">"TRE"</span>,
+  <span class="jk">"codeRome"</span>: <span class="js">"M1607"</span>,
+  <span class="jk">"numeroMarche"</span>: <span class="js">"2024-NAQ-TRE-001"</span>,
+  <span class="jk">"agentCreateur"</span>: <span class="js">"DUPONT.M"</span>,
+  <span class="jk">"siteGestionnaire"</span>: <span class="js">"NAQ0033"</span>,
+  <span class="jk">"individu"</span>: {
+    <span class="jk">"numeroFranceTravail"</span>: <span class="js">"23456789100"</span>,
+    <span class="jk">"nom"</span>: <span class="js">"MOREL"</span>,
+    <span class="jk">"prenom"</span>: <span class="js">"JULIEN"</span>,
+    <span class="jk">"civilite"</span>: <span class="js">"1"</span>,
+    <span class="jk">"telephone"</span>: <span class="js">"0612345678"</span>,
+    <span class="jk">"mail"</span>: <span class="js">"julien.morel@mail.fr"</span>
+  }
+}]</div>
+<div data-section="s-session"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// SESSION — GET /session/SES-2026-TRE-042</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+{
+  <span class="jk">"idSession"</span>: <span class="js">"SES-2026-TRE-042"</span>,
+  <span class="jk">"codeEtatSession"</span>: <span class="js">"OUVERTE"</span>,
+  <span class="jk">"natureAnimation"</span>: <span class="js">"E"</span>,
+  <span class="jk">"dateDebut"</span>: <span class="js">"2026-03-20T09:00:00"</span>,
+  <span class="jk">"dateFinPrevue"</span>: <span class="js">"2026-03-20T17:00:00"</span>,
+  <span class="jk">"nbPlacePrevue"</span>: <span class="jn">12</span>,
+  <span class="jk">"nbReelInscrits"</span>: <span class="jn">8</span>,
+  <span class="jk">"typePrestation"</span>: { <span class="jk">"code"</span>: <span class="js">"TRE"</span>, <span class="jk">"libelle"</span>: <span class="js">"Techniques de recherche d'emploi"</span> },
+  <span class="jk">"adresse"</span>: {
+    <span class="jk">"adresseLigne1"</span>: <span class="js">"ESPACE EMPLOI BORDEAUX NORD"</span>,
+    <span class="jk">"adresseLigne4"</span>: <span class="js">"12 Rue des Chartrons"</span>,
+    <span class="jk">"codePostal"</span>: <span class="js">"33300"</span>,
+    <span class="jk">"ville"</span>: <span class="js">"BORDEAUX"</span>
+  },
+  <span class="jk">"prestataire"</span>: { <span class="jk">"siret"</span>: <span class="js">"12345678900012"</span>, <span class="jk">"raisonSociale"</span>: <span class="js">"FORMA-EMPLOI SAS"</span> }
+}</div>
+<div data-section="s-resultat"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// RÉSULTAT — POST /resultat/rendez-vous/partenaire</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// Requête</span>
+{
+  <span class="jk">"numCommande"</span>: <span class="js">"CMD-2026-14523"</span>,
+  <span class="jk">"saisirResultatRendezVous"</span>: {
+    <span class="jk">"identifiantRendezVous"</span>: <span class="js">"RDV-2026-08741-01"</span>,
+    <span class="jk">"resultat"</span>: { <span class="jk">"code"</span>: <span class="js">"PST"</span>, <span class="jk">"libelle"</span>: <span class="js">"Prestation réalisée"</span> },
+    <span class="jk">"dureePrestation"</span>: <span class="jn">1</span>,
+    <span class="jk">"commentaireResultatRendezVous"</span>: <span class="js">"Participation active. CV retravaillé, simulation d'entretien effectuée."</span>
+  }
+}
+<span class="jc">// Réponse</span>
+{
+  <span class="jk">"identifiantResultatRendezVous"</span>: <span class="js">"RES-2026-31290"</span>,
+  <span class="jk">"dateCreation"</span>: <span class="js">"2026-03-20T17:30:00"</span>,
+  <span class="jk">"resultat"</span>: { <span class="jk">"code"</span>: <span class="js">"PST"</span>, <span class="jk">"libelle"</span>: <span class="js">"Prestation réalisée"</span> },
+  <span class="jk">"dureePrestation"</span>: <span class="jn">1</span>,
+  <span class="jk">"decisionSurResultat"</span>: <span class="js">"C"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-candidature">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Candidature</div>
+  <div class="ex-card">
+    <h4>GET /candidature — Candidatures en traitement</h4>
+    <p><span class="ex-tag tag-encours">En traitement</span> Julien Morel, prescrit par l'agent DUPONT.M, pour une prestation TRE (Techniques de recherche d'emploi) sur le code ROME M1607, dans le cadre du marché Nouvelle-Aquitaine.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Demandeur</strong> &#x2192; Julien Morel (n° 23456789100)</div>
+      <div class="ex-item"><strong>Prestation</strong> &#x2192; TRE / M1607</div>
+      <div class="ex-item"><strong>Marché</strong> &#x2192; 2024-NAQ-TRE-001</div>
+      <div class="ex-item"><strong>Site</strong> &#x2192; NAQ0033</div>
+    </div>
+    <div class="ex-agent">Statut TR (En traitement) — créée le 10 mars 2026 par agent DUPONT.M</div>
+  </div>
+</div>
+
+<div data-section="s-session">
+  <div class="ex-title"><span class="ex-ico">&#x1F3EB;</span> Session</div>
+  <div class="ex-card">
+    <h4>GET /session/SES-2026-TRE-042 — Atelier TRE</h4>
+    <p><span class="ex-tag tag-ok">Ouverte</span> Atelier Techniques de recherche d'emploi le 20 mars 2026, à l'Espace Emploi Bordeaux Nord, animé par FORMA-EMPLOI SAS. 8 inscrits sur 12 places prévues, animation externe.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Date</strong> &#x2192; 20 mars 2026, 9h00 – 17h00</div>
+      <div class="ex-item"><strong>Lieu</strong> &#x2192; 12 Rue des Chartrons, 33300 Bordeaux</div>
+      <div class="ex-item"><strong>Prestataire</strong> &#x2192; FORMA-EMPLOI SAS (SIRET 12345678900012)</div>
+      <div class="ex-item"><strong>Places</strong> &#x2192; 8 / 12 inscrits</div>
+      <div class="ex-item"><strong>Animation</strong> &#x2192; Externe (E)</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-resultat">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Résultat</div>
+  <div class="ex-card">
+    <h4>POST /resultat/rendez-vous/partenaire — Saisie du résultat</h4>
+    <p><span class="ex-tag tag-ok">Réalisée</span> Prestation réalisée (code PST), durée 1 jour. Participation active — CV retravaillé, simulation d'entretien effectuée. Décision sur résultat : C (Complet).</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Commande</strong> &#x2192; CMD-2026-14523</div>
+      <div class="ex-item"><strong>RDV</strong> &#x2192; RDV-2026-08741-01</div>
+      <div class="ex-item"><strong>Résultat</strong> &#x2192; PST (Prestation réalisée)</div>
+      <div class="ex-item"><strong>Durée</strong> &#x2192; 1 jour</div>
+      <div class="ex-item"><strong>Décision</strong> &#x2192; C (Complet)</div>
+    </div>
+    <div class="ex-agent">Résultat enregistré le 20 mars 2026 à 17h30 — identifiant RES-2026-31290</div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — Gestion des prestations sous-traitées v1.0.0 · api.francetravail.io · 20 endpoints · 40+ schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>March&#xe9; du travail &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>March&#xe9; du travail</h1>
+  <div class="sub">Statistiques sur les demandeurs d'emploi, les offres, les embauches, les tensions et la dynamique de l'emploi par territoire et m&#xe9;tier</div>
+  <div class="sub-tech">March&#xe9; du travail v1 &#x2014; 28 endpoints &#xb7; 30 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-offres-demandes-emploi</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-indicateur">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;ponse statistique <span class="dto">IndicateurRetour</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Enveloppe de r&#xe9;ponse commune &#xe0; tous les indicateurs statistiques. Identifie l'indicateur, le territoire et contient les valeurs ventil&#xe9;es par p&#xe9;riode.
+      <div class="fi-tech"><code>codeIndicateur</code> &#xb7; <code>codeFamille</code> &#xb7; <code>libIndicateur</code> &#xb7; <code>libTerritoire</code> &#xb7; <code>datMaj</code>
+        <br><span class="ev">DE_1</span> Demandeurs &#xb7; <span class="ev">DE_5</span> Nouveaux inscrits &#xb7; <span class="ev">OFF_1</span> Offres &#xb7; <span class="ev">EMB_1</span> Embauches &#xb7; <span class="ev">DYN_1</span> Dynamique &#xb7; <span class="ev">PERSP_2</span> Tensions &#xb7; <span class="ev">SAL_3</span> Salaires</div>
+    </div>
+
+    <div class="n l1-b stack" id="m-valeurs-periode">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Valeurs par p&#xe9;riode <span class="dto">listeValeursParPeriode[] &#xb7; ValeursParPeriode</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Chaque entr&#xe9;e repr&#xe9;sente une combinaison territoire &#xd7; activit&#xe9; &#xd7; nomenclature &#xd7; p&#xe9;riode. Contient la valeur principale (nombre, taux, montant ou rang) et des valeurs secondaires (pourcentages, taux compl&#xe9;mentaires).
+          <div class="fi-tech"><code>codeTypeTerritoire</code> &#xb7; <code>codeTerritoire</code> &#xb7; <code>libTerritoire</code>
+            <br><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libActivite</code>
+            <br><code>codeNomenclature</code> &#xb7; <code>libNomenclature</code>
+            <br><code>codeTypePeriode</code> &#xb7; <code>codePeriode</code> &#xb7; <code>libPeriode</code>
+            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleTaux</code> &#xb7; <code>valeurPrincipaleMontant</code> &#xb7; <code>valeurPrincipaleRang</code>
+            <br><code>valeurSecondaireNombre</code> &#xb7; <code>valeurSecondairePourcentage</code> &#xb7; <code>valeurSecondairePourcentage2</code> &#xb7; <code>valeurSecondaireTaux</code> &#xb7; <code>libPctParActivite</code></div>
+        </div>
+
+        <div class="n l2c stack" id="m-valeurs-caract">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Ventilation par caract&#xe9;ristique <span class="dto">listeValeurParCaract[] &#xb7; ValeursParCaracteristique</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">D&#xe9;tail par caract&#xe9;ristique (genre, tranche d'&#xe2;ge, anciennet&#xe9;, etc.). Chaque ligne donne le nombre, le pourcentage, et &#xe9;ventuellement un montant ou un taux.
+              <div class="fi-tech"><code>codeTypeCaract</code> &#xb7; <code>codeCaract</code> &#xb7; <code>libCaract</code> &#xb7; <code>nombre</code> &#xb7; <code>pourcentage</code> &#xb7; <code>montant</code> &#xb7; <code>taux</code>
+                <br><span class="ev">GENRE</span> H/F &#xb7; <span class="ev">TRANCHEAGE</span> &#xb7; <span class="ev">ANCIENNETE</span> &#xb7; <span class="ev">QUALIFICATION</span> &#xb7; <span class="ev">HANDICAP</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l3" id="m-critere">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Crit&#xe8;res de recherche <span class="dto">CritereIndicateurAvecNomenclature &#xb7; CritereIndicateurSansNomenclature</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Corps de la requ&#xea;te POST pour interroger un indicateur. Crit&#xe8;res obligatoires : territoire, activit&#xe9; et p&#xe9;riode. Crit&#xe8;res facultatifs : nomenclature, p&#xe9;riodes sp&#xe9;cifiques, caract&#xe9;ristiques de filtrage.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code> &#xb7; <code>codeTypeActivite</code> (<span class="ev">ROME|NAF|COMP</span>) &#xb7; <code>codeActivite</code>
+        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE|ANNEE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">CATCAND|ORIGINEOFF|DUREEEMP|TYPE_TENSION</span>)
+        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+
+<div class="n l1-n" id="m-ref-territoire">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;f&#xe9;rentiel territoire <span class="dto">Territoire &#xb7; TypeTerritoire</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Codes g&#xe9;ographiques : national, r&#xe9;gion, d&#xe9;partement, bassin d'emploi. Chaque territoire a un parent hi&#xe9;rarchique.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> &#xb7; <code>codeTerritoire</code> &#xb7; <code>libelleTerritoire</code> &#xb7; <code>codeTerritoireParent</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="n l1-n" id="m-ref-activite">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;f&#xe9;rentiel activit&#xe9; <span class="dto">Activite &#xb7; TypeActivite</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Codes m&#xe9;tier (ROME), secteur (NAF), comp&#xe9;tence et domaine professionnel (FAP).
+      <div class="fi-tech"><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libelleActivite</code> &#xb7; <code>attribut</code> (code NSF)</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique dans le royaume <code>/partenaire</code>. Acc&#xe8;s par <em>client credentials</em> uniquement (scope <code>offresetdemandesemploi</code>). Aucun contexte utilisateur requis.
+</div>
+
+<div class="note">
+  <strong>Structure commune</strong> &#x2014; Tous les indicateurs (DE_1, DE_5, OFF_1, EMB_1, DYN_1, PERSP_2, SAL_3) retournent le m&#xea;me objet <code>IndicateurRetour</code>. Seuls les champs renseign&#xe9;s changent selon l'indicateur (nombre, taux, montant ou rang). Les r&#xe9;f&#xe9;rentiels (territoire, activit&#xe9;, p&#xe9;riode, nomenclature, caract&#xe9;ristique) sont partag&#xe9;s et consultables via des endpoints GET d&#xe9;di&#xe9;s.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Indicateurs statistiques <span class="dt-human">&#x2014; Donn&#xe9;es de march&#xe9;</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats demandeurs inscrits (DE_1)</span><div class="ep-human">Nombre de demandeurs d'emploi par m&#xe9;tier et comp&#xe9;tence en fin de trimestre</div><span class="ep-path">/v1/indicateur/stat-demandeurs</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats nouveaux inscrits (DE_5)</span><div class="ep-human">Nombre de demandeurs nouvellement inscrits au trimestre et sur 12 mois</div><span class="ep-path">/v1/indicateur/stat-demandeurs-entrant</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats offres d'emploi (OFF_1)</span><div class="ep-human">Offres enregistr&#xe9;es par m&#xe9;tier, secteur et comp&#xe9;tence</div><span class="ep-path">/v1/indicateur/stat-offres</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats embauches (EMB_1)</span><div class="ep-human">Embauches par m&#xe9;tier et secteur avec dur&#xe9;e d'emploi</div><span class="ep-path">/v1/indicateur/stat-embauches</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Dynamique emploi (DYN_1)</span><div class="ep-human">Indicateur global de dynamique de l'emploi sur un territoire</div><span class="ep-path">/v1/indicateur/stat-dynamique-emploi</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Tensions recrutement (PERSP_2)</span><div class="ep-human">Difficult&#xe9;s de recrutement par m&#xe9;tier (indicateur de tension)</div><span class="ep-path">/v1/indicateur/stat-perspective-employeur</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Salaires en poste (SAL_3)</span><div class="ep-human">Montants des salaires par m&#xe9;tier et territoire</div><span class="ep-path">/v1/indicateur/salaire-rome-fap/{codeTypeTerritoire}/{codeTerritoire}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">R&#xe9;f&#xe9;rentiels <span class="dt-human">&#x2014; Donn&#xe9;es de r&#xe9;f&#xe9;rence</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Activit&#xe9;s</span><div class="ep-human">Consulter et lister les activit&#xe9;s (ROME, NAF&#x2026;)</div><span class="ep-path">/v1/referentiel/activite(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Territoires</span><div class="ep-human">Consulter et lister les territoires (r&#xe9;gion, d&#xe9;partement&#x2026;)</div><span class="ep-path">/v1/referentiel/territoire(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">P&#xe9;riodes</span><div class="ep-human">Consulter et lister les p&#xe9;riodes (trimestre, ann&#xe9;e)</div><span class="ep-path">/v1/referentiel/periode(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Nomenclatures</span><div class="ep-human">Consulter et lister les nomenclatures (cat&#xe9;gories, dur&#xe9;es&#x2026;)</div><span class="ep-path">/v1/referentiel/nomenclature(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Caract&#xe9;ristiques</span><div class="ep-human">Consulter et lister les caract&#xe9;ristiques (genre, &#xe2;ge&#x2026;)</div><span class="ep-path">/v1/referentiel/caracteristique(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Catalogue indicateurs</span><div class="ep-human">Lister les familles, indicateurs et leurs croisements disponibles</div><span class="ep-path">/v1/referentiel/details-indicateurs</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">30 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">IndicateurRetour</span> <span class="sc-desc">&#x2014; Enveloppe r&#xe9;ponse statistique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParPeriode</span> <span class="sc-desc">&#x2014; Valeurs d'un croisement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParCaracteristique</span> <span class="sc-desc">&#x2014; D&#xe9;tail par caract&#xe9;ristique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CritereIndicateurAvecNomenclature</span> <span class="sc-desc">&#x2014; Crit&#xe8;res avec nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CritereIndicateurSansNomenclature</span> <span class="sc-desc">&#x2014; Crit&#xe8;res sans nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Territoire</span> <span class="sc-desc">&#x2014; Code g&#xe9;ographique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeTerritoire</span> <span class="sc-desc">&#x2014; Type de territoire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Activite</span> <span class="sc-desc">&#x2014; Code m&#xe9;tier / secteur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeActivite</span> <span class="sc-desc">&#x2014; Type d'activit&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Periode</span> <span class="sc-desc">&#x2014; P&#xe9;riode temporelle</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypePeriode</span> <span class="sc-desc">&#x2014; Type de p&#xe9;riode</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Nomenclature</span> <span class="sc-desc">&#x2014; Valeur de nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeNomenclature</span> <span class="sc-desc">&#x2014; Type de nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Caracteristique</span> <span class="sc-desc">&#x2014; Caract&#xe9;ristique de filtrage</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeCaracteristique</span> <span class="sc-desc">&#x2014; Type de caract&#xe9;ristique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DetailIndicateur</span> <span class="sc-desc">&#x2014; D&#xe9;tail d'un indicateur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeValeur</span> <span class="sc-desc">&#x2014; Type de valeur retourn&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CroisementIndicateur</span> <span class="sc-desc">&#x2014; Croisement disponible</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CaracteristiqueIndicateur</span> <span class="sc-desc">&#x2014; Caract&#xe9;ristique d'indicateur</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Demandeurs d'emploi en &#xce;le-de-France</strong> &#x2014; Un partenaire interroge l'indicateur DE_1 pour conna&#xee;tre le nombre de demandeurs d'emploi inscrits sur le m&#xe9;tier &#xab; Am&#xe9;nagement et entretien des espaces verts &#xbb; (ROME A1203) en r&#xe9;gion &#xce;le-de-France, ventil&#xe9; par cat&#xe9;gorie de candidat et par genre.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /v1/indicateur/stat-demandeurs</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"codeTypeTerritoire"</span>: <span class="js">"REG"</span>,
+  <span class="jk">"codeTerritoire"</span>: <span class="js">"11"</span>,
+  <span class="jk">"codeTypeActivite"</span>: <span class="js">"ROME"</span>,
+  <span class="jk">"codeActivite"</span>: <span class="js">"A1203"</span>,
+  <span class="jk">"codeTypePeriode"</span>: <span class="js">"TRIMESTRE"</span>,
+  <span class="jk">"codeTypeNomenclature"</span>: <span class="js">"CATCAND"</span>,
+  <span class="jk">"dernierePeriode"</span>: <span class="jb">true</span>
+}</div>
+<div data-section="s-reponse"><span class="jc">// &#x2501;&#x2501; R&#xe9;ponse 200 OK &#x2501;&#x2501;</span>
+{
+  <span class="jk">"codeIndicateur"</span>: <span class="js">"DE_1"</span>,
+  <span class="jk">"codeFamille"</span>: <span class="js">"DEMANDEURS"</span>,
+  <span class="jk">"libIndicateur"</span>: <span class="js">"Nombre et % de DE par cat&#xe9;gories"</span>,
+  <span class="jk">"libTerritoire"</span>: <span class="js">"ILE-DE-FRANCE"</span>,
+  <span class="jk">"datMaj"</span>: <span class="js">"2026-01-15T08:00:00+01:00"</span>,
+  <span class="jk">"listeValeursParPeriode"</span>: [
+    {
+      <span class="jk">"codeTypeTerritoire"</span>: <span class="js">"REG"</span>,
+      <span class="jk">"codeTerritoire"</span>: <span class="js">"11"</span>,
+      <span class="jk">"libTerritoire"</span>: <span class="js">"ILE-DE-FRANCE"</span>,
+      <span class="jk">"codeTypeActivite"</span>: <span class="js">"ROME"</span>,
+      <span class="jk">"codeActivite"</span>: <span class="js">"A1203"</span>,
+      <span class="jk">"libActivite"</span>: <span class="js">"Am&#xe9;nagement et entretien des espaces verts"</span>,
+      <span class="jk">"codeNomenclature"</span>: <span class="js">"A"</span>,
+      <span class="jk">"libNomenclature"</span>: <span class="js">"Demandeurs d'Emploi de cat&#xe9;gorie A"</span>,
+      <span class="jk">"codeTypePeriode"</span>: <span class="js">"TRIMESTRE"</span>,
+      <span class="jk">"codePeriode"</span>: <span class="js">"2025T4"</span>,
+      <span class="jk">"libPeriode"</span>: <span class="js">"4&#xe8;me trimestre 2025"</span>,
+      <span class="jk">"valeurPrincipaleNom"</span>: <span class="js">"Nombre de demandeurs d'emploi"</span>,
+      <span class="jk">"valeurPrincipaleNombre"</span>: <span class="jn">3420</span>,</div>
+<div data-section="s-caracteristiques">      <span class="jk">"listeValeurParCaract"</span>: [
+        {
+          <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>,
+          <span class="jk">"codeCaract"</span>: <span class="js">"H"</span>,
+          <span class="jk">"libCaract"</span>: <span class="js">"Homme"</span>,
+          <span class="jk">"nombre"</span>: <span class="jn">2870</span>,
+          <span class="jk">"pourcentage"</span>: <span class="jn">83.9</span>
+        },
+        {
+          <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>,
+          <span class="jk">"codeCaract"</span>: <span class="js">"F"</span>,
+          <span class="jk">"libCaract"</span>: <span class="js">"Femme"</span>,
+          <span class="jk">"nombre"</span>: <span class="jn">550</span>,
+          <span class="jk">"pourcentage"</span>: <span class="jn">16.1</span>
+        }
+      ]
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Requ&#xea;te</div>
+  <div class="ex-card">
+    <h4>Demandeurs d'emploi &#x2014; Espaces verts en &#xce;le-de-France</h4>
+    <p>Indicateur DE_1 sur le m&#xe9;tier ROME A1203, r&#xe9;gion 11, dernier trimestre disponible, ventil&#xe9; par cat&#xe9;gorie de candidat (CATCAND).</p>
+  </div>
+</div>
+
+<div data-section="s-reponse">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CA;</span> R&#xe9;sultat</div>
+  <div class="ex-card">
+    <h4>Cat&#xe9;gorie A &#x2014; T4 2025</h4>
+    <p><span class="ex-tag tag-fort">3 420 demandeurs</span> inscrits en cat&#xe9;gorie A sur le m&#xe9;tier &#xab; Am&#xe9;nagement et entretien des espaces verts &#xbb; en &#xce;le-de-France au 4&#xe8;me trimestre 2025.</p>
+  </div>
+</div>
+
+<div data-section="s-caracteristiques">
+  <div class="ex-title"><span class="ex-ico">&#x1F465;</span> Ventilation</div>
+  <div class="ex-card">
+    <h4>R&#xe9;partition par genre</h4>
+    <p>M&#xe9;tier tr&#xe8;s masculin : les hommes repr&#xe9;sentent la grande majorit&#xe9; des demandeurs sur ce m&#xe9;tier.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Hommes</strong> &#x2192; 2 870 <span class="ex-tag tag-fort">83,9%</span></div>
+      <div class="ex-item"><strong>Femmes</strong> &#x2192; 550 <span class="ex-tag tag-faible">16,1%</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; March&#xe9; du travail v1 &#xb7; api.francetravail.io &#xb7; 28 endpoints &#xb7; 30 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

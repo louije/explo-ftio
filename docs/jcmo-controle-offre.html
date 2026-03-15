@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JCMO Contr&#xf4;le Offre &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Je Contr&#xf4;le Mon Offre</h1>
+  <div class="sub">V&#xe9;rification automatique de la l&#xe9;galit&#xe9; d'une offre d'emploi avant publication</div>
+  <div class="sub-tech">JCMO v1 &#x2014; 1 endpoint &#xb7; 4 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/jecontrolemonoffre/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Flux de contr&#xf4;le <span class="dto">Requ&#xea;te &#x2192; R&#xe9;ponse</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-n" id="m-requete">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Crit&#xe8;res de contr&#xf4;le <span class="dto">CriteresLegaliteOffreEmploi</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les trois champs textuels de l'offre soumis au contr&#xf4;le de l&#xe9;galit&#xe9; : l'intitul&#xe9; du poste, la description de l'offre et la pr&#xe9;sentation de l'entreprise. Chaque champ est analys&#xe9; pour d&#xe9;tecter des formulations probl&#xe9;matiques (discrimination, mentions ill&#xe9;gales, etc.).
+          <div class="fi-tech"><code>intitule_offre</code> (2&#x2013;300 car.) &#xb7; <code>description_offre</code> (max 3 900 car.) &#xb7; <code>description_entreprise</code> (max 500 car.)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-c" id="m-reponse-alertes">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">R&#xe9;ponse avec alertes <span class="dto">LegaliteOffreEmploi &#xb7; HTTP 200</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Quand des probl&#xe8;mes sont d&#xe9;tect&#xe9;s, l'API renvoie un code 200 avec la liste d&#xe9;taill&#xe9;e des alertes.
+          <div class="fi-tech"><code>alerteDetailList[]</code> &#x2014; <span class="at">@ AlerteDetailList</span></div>
+        </div>
+
+        <div class="n l2c stack" id="m-alertes">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">D&#xe9;tail des alertes <span class="dto">alerteDetailList[] &#xb7; AlerteDetailList</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Chaque alerte identifie le type de probl&#xe8;me, le th&#xe8;me concern&#xe9;, le nom de la r&#xe8;gle viol&#xe9;e, le d&#xe9;tail de l'infraction, la phrase fautive et le champ de l'offre concern&#xe9;.
+              <div class="fi-tech"><code>typeAlerte</code> &#xb7; <code>themeAlerte</code> &#xb7; <code>nomAlerte</code> &#xb7; <code>detailAlerte</code> &#xb7; <code>phraseAlerte</code> &#xb7; <code>champAlerte</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l2t" id="m-reponse-ok">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">R&#xe9;ponse sans alerte <span class="dto">LegaliteOffreEmpIoi &#xb7; HTTP 201</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Quand aucun probl&#xe8;me n'est d&#xe9;tect&#xe9;, l'API renvoie un code 201 avec un simple message de confirmation.
+          <div class="fi-tech"><code>message</code> &#x2014; ex. <span class="ev">"Aucune alerte identifi&#xe9;e"</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Acc&#xe8;s public</strong> &#x2014; API accessible en <code>client_credentials</code> (royaume <code>/partenaire</code>). Scopes : <code>api_jecontrolemonoffrev1</code> et <code>legaliteoffreemploi</code>. Aucun jeton usager requis. Les champs peuvent &#xea;tre envoy&#xe9;s en query string ou en body JSON.
+</div>
+
+<div class="note">
+  <strong>Codes HTTP</strong> &#x2014; <span class="ev">200</span> : alertes d&#xe9;tect&#xe9;es (probl&#xe8;mes trouv&#xe9;s). <span class="ev">201</span> : aucune alerte (offre conforme). <span class="ev">400</span> : erreur fonctionnelle. <span class="ev">401</span> : non autoris&#xe9;. <span class="ev">500</span> : erreur technique.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Contr&#xf4;le de l&#xe9;galit&#xe9; <span class="dt-human">&#x2014; V&#xe9;rification des offres d'emploi</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Contr&#xf4;ler la l&#xe9;galit&#xe9; d'une offre</span><div class="ep-human">Analyser l'intitul&#xe9;, la description et la pr&#xe9;sentation entreprise pour d&#xe9;tecter des mentions ill&#xe9;gales ou discriminatoires</div><span class="ep-path">/legaliteoffreemploi</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">4 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Entr&#xe9;e</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Sortie</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CriteresLegaliteOffreEmploi</span> <span class="sc-desc">&#x2014; Textes de l'offre &#xe0; contr&#xf4;ler</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">LegaliteOffreEmploi</span> <span class="sc-desc">&#x2014; R&#xe9;ponse avec alertes (200)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AlerteDetailList</span> <span class="sc-desc">&#x2014; D&#xe9;tail d'une alerte</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">LegaliteOffreEmpIoi</span> <span class="sc-desc">&#x2014; R&#xe9;ponse sans alerte (201)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Contr&#xf4;le d'une offre probl&#xe9;matique</strong> &#x2014; Un recruteur soumet une offre de &#xab; Secr&#xe9;taire &#xbb; dont la description contient une mention d'&#xe2;ge discriminatoire. L'API JCMO d&#xe9;tecte l'infraction et renvoie une alerte.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /legaliteoffreemploi</span>
+<span class="jc">// Content-Type: application/json</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// REQU&#xca;TE</span>
+{
+  <span class="jk">"intitule_offre"</span>: <span class="js">"Secr&#xe9;taire m&#xe9;dicale"</span>,
+  <span class="jk">"description_offre"</span>: <span class="js">"Cabinet m&#xe9;dical recherche une secr&#xe9;taire entre 25 et 35 ans, bonne pr&#xe9;sentation exig&#xe9;e. Exp&#xe9;rience en accueil patient souhait&#xe9;e."</span>,
+  <span class="jk">"description_entreprise"</span>: <span class="js">"Cabinet de m&#xe9;decine g&#xe9;n&#xe9;rale situ&#xe9; &#xe0; Lyon 3e, 3 praticiens."</span>
+}</div>
+<div data-section="s-reponse"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// R&#xc9;PONSE &#x2014; HTTP 200 (alertes d&#xe9;tect&#xe9;es)</span>
+{
+  <span class="jk">"alerteDetailList"</span>: [
+    {
+      <span class="jk">"typeAlerte"</span>: <span class="js">"DISCRIMINATION"</span>,
+      <span class="jk">"themeAlerte"</span>: <span class="js">"AGE"</span>,
+      <span class="jk">"nomAlerte"</span>: <span class="js">"Crit&#xe8;re d'&#xe2;ge"</span>,
+      <span class="jk">"detailAlerte"</span>: <span class="js">"L'offre mentionne un crit&#xe8;re d'&#xe2;ge, ce qui est interdit par l'article L1132-1 du Code du travail."</span>,
+      <span class="jk">"phraseAlerte"</span>: <span class="js">"entre 25 et 35 ans"</span>,
+      <span class="jk">"champAlerte"</span>: <span class="js">"description_offre"</span>
+    },
+    {
+      <span class="jk">"typeAlerte"</span>: <span class="js">"DISCRIMINATION"</span>,
+      <span class="jk">"themeAlerte"</span>: <span class="js">"APPARENCE_PHYSIQUE"</span>,
+      <span class="jk">"nomAlerte"</span>: <span class="js">"Apparence physique"</span>,
+      <span class="jk">"detailAlerte"</span>: <span class="js">"La mention de 'bonne pr&#xe9;sentation' peut constituer une discrimination li&#xe9;e &#xe0; l'apparence physique."</span>,
+      <span class="jk">"phraseAlerte"</span>: <span class="js">"bonne pr&#xe9;sentation exig&#xe9;e"</span>,
+      <span class="jk">"champAlerte"</span>: <span class="js">"description_offre"</span>
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">&#x1F4DD;</span> Offre soumise</div>
+  <div class="ex-card">
+    <h4>Secr&#xe9;taire m&#xe9;dicale &#x2014; Lyon 3e</h4>
+    <p>Le recruteur envoie trois champs : l'intitul&#xe9; du poste, la description de l'offre et la pr&#xe9;sentation du cabinet m&#xe9;dical. L'API analyse chaque champ ind&#xe9;pendamment.</p>
+    <div class="ex-agent">Les champs peuvent &#xea;tre envoy&#xe9;s en body JSON ou en query string.</div>
+  </div>
+</div>
+
+<div data-section="s-reponse">
+  <div class="ex-title"><span class="ex-ico">&#x26A0;</span> 2 alertes d&#xe9;tect&#xe9;es</div>
+  <div class="ex-card">
+    <h4>Discrimination identifi&#xe9;e</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><span class="ex-tag tag-fort">DISCRIMINATION</span> <strong>Crit&#xe8;re d'&#xe2;ge</strong> &#x2192; la phrase &#xab; entre 25 et 35 ans &#xbb; dans le champ <code>description_offre</code> viole l'article L1132-1 du Code du travail</div>
+      <div class="ex-item"><span class="ex-tag tag-moyen">DISCRIMINATION</span> <strong>Apparence physique</strong> &#x2192; la mention &#xab; bonne pr&#xe9;sentation exig&#xe9;e &#xbb; peut constituer une discrimination li&#xe9;e &#xe0; l'apparence</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Si aucun probl&#xe8;me n'avait &#xe9;t&#xe9; d&#xe9;tect&#xe9;, l'API aurait renvoy&#xe9; un HTTP 201 avec <code>{"message": "Aucune alerte identifi&#xe9;e"}</code>.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; Je Contr&#xf4;le Mon Offre v1 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 4 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

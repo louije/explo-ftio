@@ -1,0 +1,155 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Coordonnées",
+    "description": "L'API Coordonnées permet de restituer l'adresse postale de l'utilisateur connecté à votre application.",
+    "version": "1.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-coordonnees/v1"
+    }
+  ],
+  "paths": {
+    "/coordonnees": {
+      "get": {
+        "summary": "Récupérer les coordonnées de l'utilisateur",
+        "description": "L'API Coordonnées permet de restituer l'adresse postale de l'utilisateur connecté à votre application. L'utilisateur doit au préalable s'être identifié sur votre application avec son compte France Travail.",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-coordonneesv1",
+              "coordonnees"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordonnees"
+                },
+                "example": {
+                  "adresse1": "Complément Destinataire",
+                  "adresse2": "Complément Adresse",
+                  "adresse3": "Complément Distribution",
+                  "adresse4": "Voie",
+                  "codePostal": "44000",
+                  "codeINSEE": "44109",
+                  "libelleCommune": "NANTES",
+                  "codePays": "FR",
+                  "libellePays": "FRANCE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Coordonnees": {
+        "type": "object",
+        "properties": {
+          "adresse1": {
+            "type": "string",
+            "description": "Adresse - Complément destinataire",
+            "example": "Complément Destinataire"
+          },
+          "adresse2": {
+            "type": "string",
+            "description": "Adresse - Complément d'adresse",
+            "example": "Complément Adresse"
+          },
+          "adresse3": {
+            "type": "string",
+            "description": "Adresse - Complément de distribution",
+            "example": "Complément Distribution"
+          },
+          "adresse4": {
+            "type": "string",
+            "description": "Adresse - Voie",
+            "example": "Voie"
+          },
+          "codePostal": {
+            "type": "string",
+            "description": "Code postal de la commune",
+            "example": "44000"
+          },
+          "codeINSEE": {
+            "type": "string",
+            "description": "Code INSEE de la commune",
+            "example": "44109"
+          },
+          "libelleCommune": {
+            "type": "string",
+            "description": "Libellé de la commune",
+            "example": "NANTES"
+          },
+          "codePays": {
+            "type": "string",
+            "description": "Code du pays",
+            "example": "FR"
+          },
+          "libellePays": {
+            "type": "string",
+            "description": "Libellé du pays",
+            "example": "FRANCE"
+          },
+          "nom": {
+            "type": "string",
+            "description": "Nom"
+          },
+          "prenom": {
+            "type": "string",
+            "description": "Prénom"
+          },
+          "email": {
+            "type": "string",
+            "description": "email"
+          },
+          "telephone1": {
+            "type": "string",
+            "description": "téléphone 1"
+          },
+          "telephone2": {
+            "type": "string",
+            "description": "téléphone 2"
+          },
+          "statutValidationEmail": {
+            "type": "string",
+            "description": "Le statut validation email peut prendre les valeurs suivantes : V (validé), P (provisoire), I (invalide), E (erroné)"
+          }
+        },
+        "required": [
+          "nom",
+          "prenom",
+          "email",
+          "statutValidationEmail"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_peconnect-coordonneesv1": "Obligatoire",
+              "coordonnees": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

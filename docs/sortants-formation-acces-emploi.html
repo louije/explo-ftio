@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sortants de formation &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Sortants de formation et acc&#xe8;s &#xe0; l'emploi</h1>
+  <div class="sub">Statistiques sur les sorties de formation et l'acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi en cat&#xe9;gories A et B</div>
+  <div class="sub-tech">Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1 &#x2014; 22 endpoints &#xb7; 26 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-entrees-sorties-formations</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-indicateur">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;ponse statistique <span class="dto">IndicateurRetour</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Enveloppe de r&#xe9;ponse commune aux deux indicateurs. Identifie l'indicateur, le territoire et contient les valeurs ventil&#xe9;es par p&#xe9;riode.
+      <div class="fi-tech"><code>codeIndicateur</code> &#xb7; <code>codeFamille</code> &#xb7; <code>libIndicateur</code> &#xb7; <code>libTerritoire</code> &#xb7; <code>datMaj</code>
+        <br><span class="ev">ACC_2</span> Acc&#xe8;s &#xe0; l'emploi des sortants de formation &#xb7; <span class="ev">DE_3</span> Demandeurs sortants de formation</div>
+    </div>
+
+    <div class="n l1-b stack" id="m-valeurs-periode">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Valeurs par p&#xe9;riode <span class="dto">listeValeursParPeriode[] &#xb7; ValeursParPeriode</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Chaque entr&#xe9;e repr&#xe9;sente une combinaison territoire &#xd7; type de formation &#xd7; nomenclature &#xd7; p&#xe9;riode. Contient la valeur principale (nombre ou taux d'acc&#xe8;s) et des valeurs secondaires.
+          <div class="fi-tech"><code>codeTypeTerritoire</code> &#xb7; <code>codeTerritoire</code> &#xb7; <code>libTerritoire</code>
+            <br><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libActivite</code>
+            <br><code>codeNomenclature</code> &#xb7; <code>libNomenclature</code>
+            <br><code>codeTypePeriode</code> &#xb7; <code>codePeriode</code> &#xb7; <code>libPeriode</code>
+            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleTaux</code>
+            <br><code>valeurSecondaireNombre</code> &#xb7; <code>valeurSecondairePourcentage</code></div>
+        </div>
+
+        <div class="n l2c stack" id="m-valeurs-caract">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Ventilation par caract&#xe9;ristique <span class="dto">listeValeurParCaract[] &#xb7; ValeursParCaracteristique</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">D&#xe9;tail par caract&#xe9;ristique (genre, tranche d'&#xe2;ge, niveau de formation, etc.). Chaque ligne donne le nombre et le pourcentage.
+              <div class="fi-tech"><code>codeTypeCaract</code> &#xb7; <code>codeCaract</code> &#xb7; <code>libCaract</code> &#xb7; <code>nombre</code> &#xb7; <code>pourcentage</code> &#xb7; <code>taux</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l3" id="m-critere">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Crit&#xe8;res de recherche <span class="dto">CritereIndicateurAvecNomenclature &#xb7; CritereIndicateurSansNomenclature</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Corps de la requ&#xea;te POST. Crit&#xe8;res obligatoires : territoire, type de formation et p&#xe9;riode. Pour ACC_2 : la nomenclature (d&#xe9;lai d'acc&#xe8;s, dur&#xe9;e d'emploi) est &#xe9;galement requise. Pour DE_3 : pas de nomenclature.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code>
+        <br><code>codeTypeActivite</code> (<span class="ev">ROME|FORM14|FORM40</span>) &#xb7; <code>codeActivite</code>
+        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">ACCESEMP|DUREEEMP</span>)
+        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>listeCaracteristiques[]</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+
+<div class="n l1-n" id="m-ref-territoire">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;f&#xe9;rentiel territoire <span class="dto">Territoire &#xb7; TypeTerritoire</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Codes g&#xe9;ographiques : national, r&#xe9;gion, d&#xe9;partement.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> &#xb7; <code>codeTerritoire</code> &#xb7; <code>libelleTerritoire</code> &#xb7; <code>codeTerritoireParent</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="n l1-n" id="m-ref-activite">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;f&#xe9;rentiel activit&#xe9; <span class="dto">Activite &#xb7; TypeActivite</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Codes m&#xe9;tier (ROME) et types de formation (FORM14, FORM40).
+      <div class="fi-tech"><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libelleActivite</code></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique dans le royaume <code>/partenaire</code>. Acc&#xe8;s par <em>client credentials</em> uniquement (scope <code>accesemploiDEformes</code>). Aucun contexte utilisateur requis.
+</div>
+
+<div class="note">
+  <strong>Structure partag&#xe9;e</strong> &#x2014; Cette API partage le m&#xea;me cadre de r&#xe9;ponse (<code>IndicateurRetour</code> &#x2192; <code>ValeursParPeriode</code> &#x2192; <code>ValeursParCaracteristique</code>) que les API <a href="marche-travail.html">March&#xe9; du travail</a> et <a href="acces-emploi-demandeurs-emploi.html">Acc&#xe8;s &#xe0; l'emploi</a>. Les r&#xe9;f&#xe9;rentiels (territoire, activit&#xe9;, p&#xe9;riode, nomenclature, caract&#xe9;ristique) sont &#xe9;galement identiques.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Indicateurs statistiques <span class="dt-human">&#x2014; Formation et acc&#xe8;s &#xe0; l'emploi</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Acc&#xe8;s &#xe0; l'emploi des sortants de formation (ACC_2)</span><div class="ep-human">Taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois des demandeurs sortants de formation</div><span class="ep-path">/v1/indicateur/stat-acces-emploi-sorties-formation</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Demandeurs sortants de formation (DE_3)</span><div class="ep-human">Nombre de demandeurs sortants de formation par type et m&#xe9;tier</div><span class="ep-path">/v1/indicateur/stat-demandeurs-sorties-formation</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">R&#xe9;f&#xe9;rentiels <span class="dt-human">&#x2014; Donn&#xe9;es de r&#xe9;f&#xe9;rence</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Activit&#xe9;s</span><div class="ep-human">Consulter et lister les activit&#xe9;s (ROME, FORM14, FORM40)</div><span class="ep-path">/v1/referentiel/activite(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Territoires</span><div class="ep-human">Consulter et lister les territoires</div><span class="ep-path">/v1/referentiel/territoire(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">P&#xe9;riodes</span><div class="ep-human">Consulter et lister les p&#xe9;riodes</div><span class="ep-path">/v1/referentiel/periode(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Nomenclatures</span><div class="ep-human">Consulter et lister les nomenclatures (acc&#xe8;s emploi, dur&#xe9;e)</div><span class="ep-path">/v1/referentiel/nomenclature(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Caract&#xe9;ristiques</span><div class="ep-human">Consulter et lister les caract&#xe9;ristiques</div><span class="ep-path">/v1/referentiel/caracteristique(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Catalogue indicateurs</span><div class="ep-human">D&#xe9;tails des indicateurs et croisements disponibles</div><span class="ep-path">/v1/referentiel/details-indicateurs</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">26 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">IndicateurRetour</span> <span class="sc-desc">&#x2014; Enveloppe r&#xe9;ponse statistique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParPeriode</span> <span class="sc-desc">&#x2014; Valeurs d'un croisement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParCaracteristique</span> <span class="sc-desc">&#x2014; D&#xe9;tail par caract&#xe9;ristique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CritereIndicateurAvecNomenclature</span> <span class="sc-desc">&#x2014; Crit&#xe8;res avec nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CritereIndicateurSansNomenclature</span> <span class="sc-desc">&#x2014; Crit&#xe8;res sans nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Territoire</span> <span class="sc-desc">&#x2014; Code g&#xe9;ographique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeTerritoire</span> <span class="sc-desc">&#x2014; Type de territoire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Activite</span> <span class="sc-desc">&#x2014; Code m&#xe9;tier / formation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeActivite</span> <span class="sc-desc">&#x2014; Type d'activit&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Periode</span> <span class="sc-desc">&#x2014; P&#xe9;riode temporelle</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypePeriode</span> <span class="sc-desc">&#x2014; Type de p&#xe9;riode</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Nomenclature</span> <span class="sc-desc">&#x2014; Valeur de nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeNomenclature</span> <span class="sc-desc">&#x2014; Type de nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Caracteristique</span> <span class="sc-desc">&#x2014; Caract&#xe9;ristique de filtrage</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeCaracteristique</span> <span class="sc-desc">&#x2014; Type de caract&#xe9;ristique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DetailIndicateur</span> <span class="sc-desc">&#x2014; D&#xe9;tail d'un indicateur</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Sortants de formation en Nouvelle-Aquitaine</strong> &#x2014; Un organisme de formation interroge l'indicateur ACC_2 pour mesurer le taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois des demandeurs ayant suivi une formation en &#xab; Aides et soins aux personnes &#xbb; (FORM14 code 00101) en r&#xe9;gion Nouvelle-Aquitaine.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /v1/indicateur/stat-acces-emploi-sorties-formation</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"codeTypeTerritoire"</span>: <span class="js">"REG"</span>,
+  <span class="jk">"codeTerritoire"</span>: <span class="js">"75"</span>,
+  <span class="jk">"codeTypeActivite"</span>: <span class="js">"FORM14"</span>,
+  <span class="jk">"codeActivite"</span>: <span class="js">"00101"</span>,
+  <span class="jk">"codeTypePeriode"</span>: <span class="js">"TRIMESTRE"</span>,
+  <span class="jk">"codeTypeNomenclature"</span>: <span class="js">"ACCESEMP"</span>,
+  <span class="jk">"dernierePeriode"</span>: <span class="jb">true</span>
+}</div>
+<div data-section="s-reponse"><span class="jc">// &#x2501;&#x2501; R&#xe9;ponse 200 OK &#x2501;&#x2501;</span>
+{
+  <span class="jk">"codeIndicateur"</span>: <span class="js">"ACC_2"</span>,
+  <span class="jk">"codeFamille"</span>: <span class="js">"ACCESEMPLOI"</span>,
+  <span class="jk">"libIndicateur"</span>: <span class="js">"Acc&#xe8;s &#xe0; l'emploi des sortants de formation"</span>,
+  <span class="jk">"libTerritoire"</span>: <span class="js">"NOUVELLE-AQUITAINE"</span>,
+  <span class="jk">"datMaj"</span>: <span class="js">"2026-01-10T09:30:00+01:00"</span>,
+  <span class="jk">"listeValeursParPeriode"</span>: [
+    {
+      <span class="jk">"codeTypeTerritoire"</span>: <span class="js">"REG"</span>,
+      <span class="jk">"codeTerritoire"</span>: <span class="js">"75"</span>,
+      <span class="jk">"libTerritoire"</span>: <span class="js">"NOUVELLE-AQUITAINE"</span>,
+      <span class="jk">"codeTypeActivite"</span>: <span class="js">"FORM14"</span>,
+      <span class="jk">"codeActivite"</span>: <span class="js">"00101"</span>,
+      <span class="jk">"libActivite"</span>: <span class="js">"Aides et soins aux personnes"</span>,
+      <span class="jk">"codeNomenclature"</span>: <span class="js">"6M"</span>,
+      <span class="jk">"libNomenclature"</span>: <span class="js">"6 Mois"</span>,
+      <span class="jk">"codeTypePeriode"</span>: <span class="js">"TRIMESTRE"</span>,
+      <span class="jk">"codePeriode"</span>: <span class="js">"2025T3"</span>,
+      <span class="jk">"libPeriode"</span>: <span class="js">"3&#xe8;me trimestre 2025"</span>,
+      <span class="jk">"valeurPrincipaleNom"</span>: <span class="js">"Taux d'acc&#xe8;s &#xe0; l'emploi"</span>,
+      <span class="jk">"valeurPrincipaleTaux"</span>: <span class="jn">62.4</span>,
+      <span class="jk">"valeurSecondaireNombre"</span>: <span class="jn">845</span>,</div>
+<div data-section="s-caracteristiques">      <span class="jk">"listeValeurParCaract"</span>: [
+        {
+          <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>,
+          <span class="jk">"codeCaract"</span>: <span class="js">"F"</span>,
+          <span class="jk">"libCaract"</span>: <span class="js">"Femme"</span>,
+          <span class="jk">"nombre"</span>: <span class="jn">620</span>,
+          <span class="jk">"taux"</span>: <span class="jn">65.1</span>
+        },
+        {
+          <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>,
+          <span class="jk">"codeCaract"</span>: <span class="js">"H"</span>,
+          <span class="jk">"libCaract"</span>: <span class="js">"Homme"</span>,
+          <span class="jk">"nombre"</span>: <span class="jn">225</span>,
+          <span class="jk">"taux"</span>: <span class="jn">56.8</span>
+        }
+      ]
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Requ&#xea;te</div>
+  <div class="ex-card">
+    <h4>Acc&#xe8;s &#xe0; l'emploi &#x2014; Aides et soins aux personnes</h4>
+    <p>Indicateur ACC_2, formation FORM14 &#xab; 00101 &#xbb;, r&#xe9;gion Nouvelle-Aquitaine, dernier trimestre, nomenclature ACCESEMP (d&#xe9;lai d'acc&#xe8;s &#xe0; l'emploi).</p>
+  </div>
+</div>
+
+<div data-section="s-reponse">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CA;</span> R&#xe9;sultat</div>
+  <div class="ex-card">
+    <h4>Acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois &#x2014; T3 2025</h4>
+    <p><span class="ex-tag tag-ok">62,4%</span> des demandeurs sortants de formation &#xab; Aides et soins aux personnes &#xbb; ont acc&#xe9;d&#xe9; &#xe0; l'emploi dans les 6 mois suivant leur sortie de formation.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Effectif concern&#xe9;</strong> &#x2192; 845 sortants de formation sur la p&#xe9;riode</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-caracteristiques">
+  <div class="ex-title"><span class="ex-ico">&#x1F465;</span> Ventilation</div>
+  <div class="ex-card">
+    <h4>R&#xe9;partition par genre</h4>
+    <p>Domaine &#xe0; dominante f&#xe9;minine. Les femmes acc&#xe8;dent l&#xe9;g&#xe8;rement plus &#xe0; l'emploi apr&#xe8;s formation dans ce secteur.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Femmes</strong> &#x2192; 620 sortantes &#xb7; <span class="ex-tag tag-ok">taux 65,1%</span></div>
+      <div class="ex-item"><strong>Hommes</strong> &#x2192; 225 sortants &#xb7; <span class="ex-tag tag-moyen">taux 56,8%</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1 &#xb7; api.francetravail.io &#xb7; 22 endpoints &#xb7; 26 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

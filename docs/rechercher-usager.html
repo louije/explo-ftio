@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rechercher usager — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Rechercher usager</h1>
+  <div class="sub">Point d'entrée du réseau : identifie un demandeur d'emploi et produit le jeton d'accès à son dossier</div>
+  <div class="sub-tech">Rechercher usager v2.0 — 2 endpoints · 7 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rechercher-usager/v2</div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="grid-2">
+
+<!-- LEFT: Requête (input) -->
+<div class="n l0" id="m-requete">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Recherche usager <span class="dto">Requête POST</span></div>
+    <div class="card">2 méthodes de recherche</div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-c" id="m-headers">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identification de l'agent <span class="dto">Headers HTTP obligatoires</span></div>
+        <div class="card">3 headers requis</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Chaque appel doit identifier le conseiller ou le traitement batch à l'origine de la requête. Ces headers servent à la traçabilité : France Travail enregistre qui a consulté quel dossier. Le caractère <code>|</code> (pipe) est interdit dans les valeurs. Pour un traitement batch, renseigner un nom logique à la place du nom/prénom.
+        <div class="fi-tech">
+          <code>pa-nom-agent</code>* string — nom du conseiller (ex. <span class="ev">Martin</span>)<br>
+          <code>pa-prenom-agent</code>* string — prénom du conseiller (ex. <span class="ev">Henri</span>)<br>
+          <code>pa-identifiant-agent</code>* string — identifiant interne chez le partenaire (ex. <span class="ev">ML-AMI-0042</span>)
+        </div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-par-nir">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Par NIR + date de naissance <span class="dto">ParDateNaissanceEtNirDTO</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Recherche par le numéro de sécurité sociale et la date de naissance du demandeur. Les deux champs sont obligatoires.
+        <div class="fi-tech"><code>dateNaissance</code> string (AAAA-MM-JJ) · <code>nir</code> string (13 ou 15 chiffres)</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-par-ft">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Par numéro France Travail <span class="dto">ParNumeroFTDTO</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Recherche directe par le numéro France Travail de l'usager (anciennement identifiant Pôle emploi).
+        <div class="fi-tech"><code>numeroFranceTravail</code> string (11 chiffres)</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RIGHT: Réponse (output) -->
+<div class="n l0" id="m-resultat">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Résultat <span class="dto">ResultatDTO</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-identification">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identification <span class="dto">ResultatDTO</span></div>
+        <div class="card">Réponse succès (200)</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Le jeton usager crypté, clé d'accès à toutes les APIs du dossier. Valide une journée.
+        <div class="fi-tech">
+          <code>codeRetour</code> · <code>message</code> · <code>topIdentiteCertifiee</code> · <code>jetonUsager</code> · <code>numeroFranceTravail</code><br>
+          codeRetour → <span class="ev">S001</span> (trouvé) · <span class="ev">S002</span> (aucun) · <span class="ev">S003</span> (plusieurs)<br>
+          topIdentiteCertifiee → <span class="ev">O|N|null</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="n l1-c" id="m-erreurs">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Erreurs <span class="dto">Codes retour d'erreur</span></div>
+        <div class="card">4 réponses d'erreur</div>
+      </div>
+      <div class="nb"><div class="fi">
+        En cas d'échec, l'API renvoie un code et un message explicatif. Aucun jeton n'est produit.
+        <div class="fi-tech">
+          <span class="ev">R997</span> (validation) · <span class="ev">R001</span> (non autorisé) · <span class="ev">R002</span> (mauvaise structure) · <span class="ev">R998</span> (erreur service) · <span class="ev">R999</span> (indisponible)
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<div class="note">
+  <strong>Point d'entrée obligatoire</strong> — Cette API est le point d'entrée obligatoire pour accéder aux données usager. Le jeton produit est volatile (durée de vie ~1 journée) et doit être transmis en header <code>ft-jeton-usager</code> aux autres APIs (diagnostic, statut, informations administratives, entretiens, rendez-vous, métiers recherchés).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Recherche usager <span class="dt-human">— Identification d'un demandeur d'emploi</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher un usager par date de naissance et NIR</span><div class="ep-human">Identifier un demandeur par son numéro de sécurité sociale et sa date de naissance</div><span class="ep-path">/usagers/par-datenaissance-et-nir</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher un usager par numéro France Travail</span><div class="ep-human">Identifier un demandeur par son numéro France Travail</div><span class="ep-path">/usagers/par-numero-francetravail</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">7 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Requête</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Erreur / Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ParDateNaissanceEtNirDTO</span> <span class="sc-desc">— Recherche par NIR</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ParNumeroFTDTO</span> <span class="sc-desc">— Recherche par n° FT</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ResultatDTO</span> <span class="sc-desc">— Réponse succès</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat400DTO</span> <span class="sc-desc">— Erreur validation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat403DTO</span> <span class="sc-desc">— Accès non autorisé</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat500DTO</span> <span class="sc-desc">— Erreur service</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat503DTO</span> <span class="sc-desc">— Indisponible</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>2 endpoints</strong> · <strong>7 schémas</strong> — 2 en écriture (corps de requête), 1 en lecture (réponse succès), 4 en erreur (400, 403, 500, 503). Les deux endpoints partagent le même schéma de réponse <code>ResultatDTO</code> et les mêmes headers obligatoires : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Henri Martin, conseiller à la Mission Locale d'Amiens</strong> — Henri Martin, conseiller à la Mission Locale d'Amiens, doit consulter le dossier de Sophie Moreau. Il commence par rechercher l'usager pour obtenir un jeton d'accès. Il effectue deux recherches : d'abord par NIR et date de naissance, puis par numéro France Travail.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete-nir"><span class="jc">// POST /usagers/par-datenaissance-et-nir</span>
+<span class="jc">// ── Headers obligatoires ──</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+<span class="jc">// ── Corps de requête ──</span>
+{
+  <span class="jk">"dateNaissance"</span>: <span class="js">"1989-04-15"</span>,
+  <span class="jk">"nir"</span>: <span class="js">"2890475012045"</span>
+}</div>
+<div data-section="s-reponse-nir"><span class="jc">// Réponse 200 — Usager trouvé</span>
+{
+  <span class="jk">"codeRetour"</span>: <span class="js">"S001"</span>,
+  <span class="jk">"message"</span>: <span class="js">"Usager trouvé"</span>,
+  <span class="jk">"topIdentiteCertifiee"</span>: <span class="js">"O"</span>,
+  <span class="jk">"jetonUsager"</span>: <span class="js">"ewogICJ2ZXJzIiA6ICIwLjEiLAogICJ1dWlkIiA6ICJjOTE5YmY4Yy0yY2E5LTQ3MjYtYWEwMy1jNGE1ZTEyODI4ZDUiLAogICJleHBpcmUiIDogMTcyNjU4NjEyNjY0NywKICAidHlwZSIgOiAiL3BhcnRlbmFpcmUiLAogICJkYXRhIiA6ICI1MmEwOGU4YS1jMmFhLTRlODQtYTQ2NS1lMTIwZWU2YzQxM2UjQWtFRjZtSnRtRm9HOWlXS3pCbTdITmNKeVpVM2ZNc1dURHBhSktibUNSWkM3WWd5YVFWSzhwWkJCMWQ3aTc0dzhOamRja01URkFZR0xXWklEd3JYRVhDaE5XOUhIVU9fcDByTV9kajFKbFozdElBQURMUURTX2ZsUlBWMW1BdmtPbTl4WEFSQWoxQWFlQkJCdW9hQjhCNWJJVU8xTWhBMHE0Q3drMGhQS2ZrIgp9"</span>,
+  <span class="jk">"numeroFranceTravail"</span>: <span class="js">"10107641246"</span>
+}</div>
+<div data-section="s-requete-ft"><span class="jc">// POST /usagers/par-numero-francetravail</span>
+<span class="jc">// ── Mêmes headers obligatoires ──</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+{
+  <span class="jk">"numeroFranceTravail"</span>: <span class="js">"10107641246"</span>
+}</div>
+<div data-section="s-reponse-ft"><span class="jc">// Réponse 200 — Usager trouvé</span>
+{
+  <span class="jk">"codeRetour"</span>: <span class="js">"S001"</span>,
+  <span class="jk">"message"</span>: <span class="js">"Usager trouvé"</span>,
+  <span class="jk">"topIdentiteCertifiee"</span>: <span class="js">"O"</span>,
+  <span class="jk">"jetonUsager"</span>: <span class="js">"ewogICJ2ZXJzIiA6ICIwLjEiLAogICJ1dWlkIiA6ICJjOTE5YmY4Yy0yY2E5LTQ3MjYtYWEwMy1jNGE1ZTEyODI4ZDUiLAogICJleHBpcmUiIDogMTcyNjU4NjEyNjY0NywKICAidHlwZSIgOiAiL3BhcnRlbmFpcmUiLAogICJkYXRhIiA6ICI1MmEwOGU4YS1jMmFhLTRlODQtYTQ2NS1lMTIwZWU2YzQxM2UjQWtFRjZtSnRtRm9HOWlXS3pCbTdITmNKeVpVM2ZNc1dURHBhSktibUNSWkM3WWd5YVFWSzhwWkJCMWQ3aTc0dzhOamRja01URkFZR0xXWklEd3JYRVhDaE5XOUhIVU9fcDByTV9kajFKbFozdElBQURMUURTX2ZsUlBWMW1BdmtPbTl4WEFSQWoxQWFlQkJCdW9hQjhCNWJJVU8xTWhBMHE0Q3drMGhQS2ZrIgp9"</span>,
+  <span class="jk">"numeroFranceTravail"</span>: <span class="js">"10107641246"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete-nir">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche par NIR</div>
+  <div class="ex-card">
+    <h4>Identification par sécurité sociale</h4>
+    <p>Henri recherche Sophie Moreau à partir de son NIR (2890475012045) et de sa date de naissance (15 avril 1989). Ces deux informations figurent sur la carte Vitale de l'usager.</p>
+    <p>Les trois headers obligatoires identifient le conseiller qui consulte le dossier : son nom, son prénom et son identifiant interne chez le partenaire (<code>ML-AMI-0042</code>). France Travail enregistre ces informations pour la traçabilité des accès aux données personnelles.</p>
+  </div>
+</div>
+
+<div data-section="s-reponse-nir">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Résultat — Identification réussie</div>
+  <div class="ex-card">
+    <h4>Sophie Moreau identifiée</h4>
+    <p><span class="ex-tag tag-ok">S001 — Usager trouvé</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Identité certifiée</strong> → <span class="ex-tag tag-ok">O — Oui</span></div>
+      <div class="ex-item"><strong>Numéro France Travail</strong> → 10107641246</div>
+      <div class="ex-item"><strong>Jeton usager</strong> → <span class="ex-tag tag-encours">Produit (base64, ~400 car.)</span></div>
+    </div>
+    <p style="margin-top:10px;padding:8px 12px;background:#f0fdf4;border-radius:6px;color:#166534;font-size:0.84rem;">
+      <strong>Identité certifiée (O)</strong> signifie que l'identité de l'usager a été vérifiée et confirmée par France Travail. Si la valeur est <strong>N</strong>, l'identité n'a pas été certifiée — les données restent accessibles mais avec cette réserve.
+    </p>
+  </div>
+</div>
+
+<div data-section="s-requete-ft">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche par numéro France Travail</div>
+  <div class="ex-card">
+    <h4>Identification par numéro FT</h4>
+    <p>Deuxième méthode : Henri utilise directement le numéro France Travail de Sophie (10107641246), récupéré lors de la première recherche ou connu par le dossier papier.</p>
+    <p>Cette méthode est plus directe — un seul champ suffit.</p>
+  </div>
+</div>
+
+<div data-section="s-reponse-ft">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Résultat — Même jeton</div>
+  <div class="ex-card">
+    <h4>Même usager, même jeton</h4>
+    <p><span class="ex-tag tag-ok">S001 — Usager trouvé</span></p>
+    <p>Les deux méthodes produisent le même jeton pour le même usager. Le jeton peut ensuite être transmis en header <code>ft-jeton-usager</code> à toute API du réseau.</p>
+    <p style="margin-top:10px;padding:8px 12px;background:#fffbeb;border-radius:6px;color:#92400e;font-size:0.84rem;">
+      <strong>Cycle de vie du jeton :</strong> le jeton est volatile, valide environ une journée. Au-delà, il faut relancer une recherche pour en obtenir un nouveau. Le jeton ne contient aucune donnée personnelle en clair — c'est un identifiant crypté opaque.
+    </p>
+    <div class="ex-agent">Recherche effectuée par Henri Martin — Mission Locale d'Amiens</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Rechercher usager v2.0 · api.francetravail.io · 2 endpoints · 7 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROME 4.0 Fiches m&#xe9;tiers &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>ROME 4.0 &#x2014; Fiches m&#xe9;tiers</h1>
+  <div class="sub">Fiches descriptives des m&#xe9;tiers avec comp&#xe9;tences mobilis&#xe9;es et savoirs associ&#xe9;s</div>
+  <div class="sub-tech">ROME V4.0 - Fiches ROME v1 &#x2014; 3 endpoints &#xb7; 12 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rome-fiches-metiers/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Fiche m&#xe9;tier <span class="dto">FicheMetier</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Fiche descriptive d'un m&#xe9;tier ROME, avec le d&#xe9;tail des comp&#xe9;tences mobilis&#xe9;es (class&#xe9;es par enjeu) et des savoirs requis (class&#xe9;s par cat&#xe9;gorie).
+      <div class="fi-tech"><code>code</code> &#xb7; <code>obsolete</code> &#xb7; <code>dateFin</code></div>
+    </div>
+
+    <div class="n l1-b" id="m-metier">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">M&#xe9;tier <span class="dto">metier &#xb7; Metier</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Identification du m&#xe9;tier : code ROME (ex. M1805) et libell&#xe9; (ex. &#xab; &#xc9;tudes et d&#xe9;veloppement informatique &#xbb;)
+          <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n stack" id="m-groupes-competences">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Groupes de comp&#xe9;tences mobilis&#xe9;es <span class="dto">groupesCompetencesMobilisees[] &#xb7; GroupeCompetences</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Comp&#xe9;tences requises pour le m&#xe9;tier, regroup&#xe9;es par enjeu professionnel. Chaque groupe contient un enjeu et une liste de comp&#xe9;tences (macro-savoir-faire, macro-savoir-&#xea;tre, comp&#xe9;tences d&#xe9;taill&#xe9;es).
+        </div>
+
+        <div class="n l2c" id="m-enjeu">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Enjeu <span class="dto">enjeu &#xb7; Enjeu</span></div>
+            <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Grand enjeu de comp&#xe9;tence (ex. &#xab; Num&#xe9;rique &#xbb;, &#xab; Animation &#xbb;, &#xab; Fabrication &#xbb;)
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2t stack" id="m-competences">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Comp&#xe9;tences <span class="dto">competences[] &#xb7; Competence</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Comp&#xe9;tences rattach&#xe9;es &#xe0; cet enjeu. Peut &#xea;tre un macro-savoir-faire, un macro-savoir-&#xea;tre professionnel ou une comp&#xe9;tence d&#xe9;taill&#xe9;e.
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>type</code>
+                <br><span class="ev">MACRO-SAVOIR-FAIRE</span> &#xb7; <span class="ev">MACRO-SAVOIR-ETRE-PROFESSIONNEL</span> &#xb7; <span class="ev">COMPETENCE-DETAILLEE</span> &#xb7; <span class="ev">SAVOIR</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-p stack" id="m-groupes-savoirs">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Groupes de savoirs <span class="dto">groupesSavoirs[] &#xb7; GroupeSavoirs</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Connaissances th&#xe9;oriques et techniques requises pour le m&#xe9;tier, regroup&#xe9;es par cat&#xe9;gorie de savoirs.
+        </div>
+
+        <div class="n l3" id="m-categorie-savoirs">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Cat&#xe9;gorie de savoirs <span class="dto">categorieSavoirs &#xb7; CategorieSavoirs</span></div>
+            <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Domaine th&#xe9;matique du groupe de savoirs (ex. &#xab; V&#xe9;hicules &#xbb;, &#xab; Informatique &#xbb;)
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l3b stack" id="m-savoirs">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Savoirs <span class="dto">savoirs[] &#xb7; Savoir</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Connaissances individuelles de la cat&#xe9;gorie
+              <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>type</code>
+                <br><span class="ev">SAVOIR</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Lien avec les autres API ROME 4.0</strong> &#x2014; Les codes de comp&#xe9;tences et de savoirs correspondent aux m&#xea;mes codes dans l'API <a href="rome-4-0-competences.html">ROME 4.0 Comp&#xe9;tences</a>. Les fiches m&#xe9;tiers organisent ces comp&#xe9;tences par enjeu et ces savoirs par cat&#xe9;gorie, sp&#xe9;cifiquement pour chaque m&#xe9;tier.
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique, royaume <code>/partenaire</code> (client credentials). Scopes requis : <code>nomenclatureRome</code> + <code>api_rome-fiches-metiersv1</code>. Aucun jeton usager n&#xe9;cessaire.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Fiches m&#xe9;tier <span class="dt-human">&#x2014; Consultation des fiches ROME</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les fiches m&#xe9;tier</span><div class="ep-human">Toutes les fiches m&#xe9;tiers du r&#xe9;f&#xe9;rentiel ROME 4.0</div><span class="ep-path">/v1/fiches-rome/fiche-metier</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire une fiche m&#xe9;tier</span><div class="ep-human">D&#xe9;tail complet d'une fiche m&#xe9;tier par son code ROME</div><span class="ep-path">/v1/fiches-rome/fiche-metier/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Version <span class="dt-human">&#x2014; Version courante du r&#xe9;f&#xe9;rentiel ROME</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer la version actuelle du ROME</span><div class="ep-human">Num&#xe9;ro de version et date de derni&#xe8;re mise &#xe0; jour</div><span class="ep-path">/v1/fiches-rome/version</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">12 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel / Nomenclature</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">FicheMetier</span> <span class="sc-desc">&#x2014; Fiche descriptive d'un m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">GroupeCompetences</span> <span class="sc-desc">&#x2014; Comp&#xe9;tences group&#xe9;es par enjeu</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">GroupeSavoirs</span> <span class="sc-desc">&#x2014; Savoirs group&#xe9;s par cat&#xe9;gorie</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Metier</span> <span class="sc-desc">&#x2014; Identification du m&#xe9;tier (code + libell&#xe9;)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Competence</span> <span class="sc-desc">&#x2014; Type abstrait de comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CompetenceDetaillee</span> <span class="sc-desc">&#x2014; Comp&#xe9;tence d&#xe9;taill&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MacroSavoirFaire</span> <span class="sc-desc">&#x2014; Capacit&#xe9; pratique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MacroSavoirEtreProfessionnel</span> <span class="sc-desc">&#x2014; Qualit&#xe9; comportementale</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Savoir</span> <span class="sc-desc">&#x2014; Connaissance th&#xe9;orique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Enjeu</span> <span class="sc-desc">&#x2014; Enjeu de comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CategorieSavoirs</span> <span class="sc-desc">&#x2014; Cat&#xe9;gorie th&#xe9;matique des savoirs</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">VersionRome</span> <span class="sc-desc">&#x2014; Version du r&#xe9;f&#xe9;rentiel</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Fiche m&#xe9;tier M1805</strong> &#x2014; Un conseiller emploi consulte la fiche ROME du m&#xe9;tier &#xab; &#xc9;tudes et d&#xe9;veloppement informatique &#xbb; pour pr&#xe9;parer un entretien d'orientation avec un demandeur d'emploi souhaitant se reconvertir dans le num&#xe9;rique.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-fiche"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// GET /v1/fiches-rome/fiche-metier/M1805</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"code"</span>: <span class="js">"M1805"</span>,
+  <span class="jk">"obsolete"</span>: <span class="jb">false</span>,
+  <span class="jk">"metier"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"M1805"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"&#xc9;tudes et d&#xe9;veloppement informatique"</span>
+  },</div>
+<div data-section="s-competences">  <span class="jk">"groupesCompetencesMobilisees"</span>: [
+    {
+      <span class="jk">"enjeu"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"14"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Num&#xe9;rique"</span>
+      },
+      <span class="jk">"competences"</span>: [
+        {
+          <span class="jk">"type"</span>: <span class="js">"MACRO-SAVOIR-FAIRE"</span>,
+          <span class="jk">"code"</span>: <span class="js">"120542"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Programmer en langage informatique"</span>
+        },
+        {
+          <span class="jk">"type"</span>: <span class="js">"COMPETENCE-DETAILLEE"</span>,
+          <span class="jk">"code"</span>: <span class="js">"126360"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"D&#xe9;velopper des applications en Java"</span>
+        },
+        {
+          <span class="jk">"type"</span>: <span class="js">"COMPETENCE-DETAILLEE"</span>,
+          <span class="jk">"code"</span>: <span class="js">"126475"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"D&#xe9;velopper des applications en Python"</span>
+        }
+      ]
+    },
+    {
+      <span class="jk">"enjeu"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"3"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Organisation"</span>
+      },
+      <span class="jk">"competences"</span>: [
+        {
+          <span class="jk">"type"</span>: <span class="js">"MACRO-SAVOIR-ETRE-PROFESSIONNEL"</span>,
+          <span class="jk">"code"</span>: <span class="js">"100003"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Faire preuve de rigueur et de pr&#xe9;cision"</span>
+        },
+        {
+          <span class="jk">"type"</span>: <span class="js">"MACRO-SAVOIR-ETRE-PROFESSIONNEL"</span>,
+          <span class="jk">"code"</span>: <span class="js">"100012"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Travailler en &#xe9;quipe"</span>
+        }
+      ]
+    }
+  ],</div>
+<div data-section="s-savoirs">  <span class="jk">"groupesSavoirs"</span>: [
+    {
+      <span class="jk">"categorieSavoirs"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"14"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Informatique et t&#xe9;l&#xe9;communications"</span>
+      },
+      <span class="jk">"savoirs"</span>: [
+        {
+          <span class="jk">"type"</span>: <span class="js">"SAVOIR"</span>,
+          <span class="jk">"code"</span>: <span class="js">"101897"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Algorithme"</span>
+        },
+        {
+          <span class="jk">"type"</span>: <span class="js">"SAVOIR"</span>,
+          <span class="jk">"code"</span>: <span class="js">"100007"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Langages de programmation informatique"</span>
+        },
+        {
+          <span class="jk">"type"</span>: <span class="js">"SAVOIR"</span>,
+          <span class="jk">"code"</span>: <span class="js">"104820"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"M&#xe9;thodes agiles"</span>
+        }
+      ]
+    },
+    {
+      <span class="jk">"categorieSavoirs"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"8"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Langues"</span>
+      },
+      <span class="jk">"savoirs"</span>: [
+        {
+          <span class="jk">"type"</span>: <span class="js">"SAVOIR"</span>,
+          <span class="jk">"code"</span>: <span class="js">"100253"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Anglais technique"</span>
+        }
+      ]
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-fiche">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Fiche m&#xe9;tier</div>
+  <div class="ex-card">
+    <h4>M1805 &#x2014; &#xc9;tudes et d&#xe9;veloppement informatique</h4>
+    <p>Fiche ROME active du r&#xe9;f&#xe9;rentiel 4.0, d&#xe9;crivant les m&#xe9;tiers du d&#xe9;veloppement logiciel : d&#xe9;veloppeur, analyste-programmeur, ing&#xe9;nieur d'&#xe9;tudes, etc.</p>
+  </div>
+</div>
+
+<div data-section="s-competences">
+  <div class="ex-title"><span class="ex-ico">&#x1F3AF;</span> Comp&#xe9;tences mobilis&#xe9;es</div>
+  <div class="ex-card">
+    <h4>Enjeu : Num&#xe9;rique</h4>
+    <p>Comp&#xe9;tences techniques li&#xe9;es au d&#xe9;veloppement informatique :</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Programmer en langage informatique</strong> &#x2192; <span class="ex-tag tag-ok">Macro savoir-faire</span></div>
+      <div class="ex-item"><strong>D&#xe9;velopper des applications en Java</strong> &#x2192; <span class="ex-tag tag-encours">Comp&#xe9;tence d&#xe9;taill&#xe9;e</span></div>
+      <div class="ex-item"><strong>D&#xe9;velopper des applications en Python</strong> &#x2192; <span class="ex-tag tag-encours">Comp&#xe9;tence d&#xe9;taill&#xe9;e</span></div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h4>Enjeu : Organisation</h4>
+    <p>Qualit&#xe9;s comportementales attendues :</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Faire preuve de rigueur et de pr&#xe9;cision</strong> &#x2192; <span class="ex-tag tag-prio">Savoir-&#xea;tre</span></div>
+      <div class="ex-item"><strong>Travailler en &#xe9;quipe</strong> &#x2192; <span class="ex-tag tag-prio">Savoir-&#xea;tre</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-savoirs">
+  <div class="ex-title"><span class="ex-ico">&#x1F4DA;</span> Savoirs</div>
+  <div class="ex-card">
+    <h4>Informatique et t&#xe9;l&#xe9;communications</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Algorithme</strong> &#x2192; Connaissance fondamentale</div>
+      <div class="ex-item"><strong>Langages de programmation informatique</strong> &#x2192; Connaissance technique</div>
+      <div class="ex-item"><strong>M&#xe9;thodes agiles</strong> &#x2192; Connaissance m&#xe9;thodologique</div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h4>Langues</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Anglais technique</strong> &#x2192; Connaissance linguistique</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Les codes de comp&#xe9;tences et de savoirs sont les m&#xea;mes que dans le r&#xe9;f&#xe9;rentiel Comp&#xe9;tences (API <code>rome-competences</code>). La fiche m&#xe9;tier les organise par enjeu (comp&#xe9;tences) et par cat&#xe9;gorie (savoirs) pour chaque m&#xe9;tier sp&#xe9;cifique.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; ROME V4.0 - Fiches ROME v1 &#xb7; api.francetravail.io &#xb7; 3 endpoints &#xb7; 12 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

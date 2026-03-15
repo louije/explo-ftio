@@ -1,0 +1,293 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0",
+    "title": "Statut Usager",
+    "description": "Cette API permet de restituer le statut, la durée, le motif et la catégorie d’inscription ainsi que la situation au regard de l’emploi de l’usager",
+    "contact": {
+     "name": "Support francetravail.io",
+     "url": "https://francetravail.io/contact",
+    	"email": "contact@francetravail.fr"
+				}
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/contrat-usager/v2"
+    }
+  ],
+  "paths": {
+    "/contrat": {
+      "get": {
+        "summary": "Récupère les données du contrat d'un usager",
+        "description": "Ce service permet de restituer : le statut, la durée, le motif et la catégorie d’inscription ainsi que la situation au regard de l’emploi de l’usager.\r\n\r\nPour consommer cette API, il est nécessaire de récupérer le jeton usager au préalable via l'API \"Rechercher usager\".",
+        "operationId": "recupererContratV2",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne les données du contrat de l'usager.\n\n Ce code peut aussi renvoyer: \n\n  { message': **'Type de population non géré par l'API'**, \n\n 'stackTrace': null, 'codeErreur': 'ERT_200_FONCT', 'codeHttp': 200, 'entite': null, 'classeOrigine': null } ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ContratResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "m_contrat": {
+                        "m_statut": "Inscrit",
+                        "m_date_effet_statut": "2023-06-28",
+                        "m_duree_inscription_12": 9,
+                        "m_duree_inscription_24": 16,
+                        "m_duree_inscription_36": 28,
+                        "m_motif_inscription_code": "11",
+                        "m_motif_inscription_lib": "LICENCIEMENT ECONOMIQUE",
+                        "m_categ_inscription_code": "1",
+                        "m_categ_inscription_lib": "PERSONNE SANS EMPLOI DISPONIBLE DUREE INDETERMINEE PLEIN TPS",
+                        "m_situation_reg_emp_code": "ADR",
+                        "m_situation_reg_emp_lib": "AIDE DIFFERENTIELLE AU RECLASSEMENT",
+                        "m_motif_cloture_code": "MV",
+                        "m_motif_cloture_lib": "ABANDON ACTION AIDE A LA RECHERCHE D'UNE ACTIVITE SUPPRESSION DE 1 MOIS"
+                      },
+                      "m_messageErreur": "string"
+                    }
+                  },
+                  "Example 2": {
+                    "value": {
+                      "m_contrat": {
+                        "m_statut": "Radié",
+                        "m_date_effet_statut": "2025-09-22",
+                        "m_duree_inscription_12": 8,
+                        "m_duree_inscription_24": 8,
+                        "m_duree_inscription_36": 8,
+                        "m_motif_inscription_code": "32",
+                        "m_motif_inscription_lib": "RUPTURE CONVENTIONNELLE DU CDI  ",
+                        "m_categ_inscription_code": "3",
+                        "m_categ_inscription_lib": "PERSONNE SANS EMPLOI DISPONIBLE DUREE DETERMINEE OU SAISON",
+                        "m_situation_reg_emp_code": "SAN",
+                        "m_situation_reg_emp_lib": "SANS OBJET",
+                        "m_motif_cloture_code": "5",
+                        "m_motif_cloture_lib": "REFUS D'ACTION DE RECLASSEMENT"
+                      },
+                      "m_messageErreur": " "
+                    }
+                  },
+                  "Example 3": {
+                    "value": {
+                      "m_contrat": {
+                        "m_statut": "Identifié",
+                        "m_date_effet_statut": "2022-09-11",
+                        "m_duree_inscription_12": 9,
+                        "m_duree_inscription_24": 9,
+                        "m_duree_inscription_36": 9,
+                        "m_motif_inscription_code": "11",
+                        "m_motif_inscription_lib": "LICENCIEMENT ECONOMIQUE         ",
+                        "m_categ_inscription_code": "1",
+                        "m_categ_inscription_lib": "PERSONNE SANS EMPLOI DISPONIBLE DUREE INDETERMINEE PLEIN TPS",
+                        "m_situation_reg_emp_code": "SAN",
+                        "m_situation_reg_emp_lib": "SANS OBJET",
+                        "m_motif_cloture_code": "25",
+                        "m_motif_cloture_lib": "REPRISE D'EMPLOI PAR L'AGENCE SUR EMPLOI NON PRECISE"
+                      },
+                      "m_messageErreur": " "
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucune donnée n'a été trouvée."
+          },
+          "500": {
+            "description": "Une erreur technique est survenue."
+          }
+        },
+       "security":[
+         {
+          "authentification_agent-clientCredentials":[
+           "api_contrat-usagerv2",
+            "statutcontratusager",
+            "profil_accedant"
+          ]
+         },
+         {
+          "authentification_agent":[
+            "api_contrat-usagerv2",
+            "statutcontratusager",
+            "profil_accedant"
+           ]
+         }
+       ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-usager/v2",
+            "description": "PROD"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContratResponse": {
+        "type": "object",
+        "properties": {
+          "m_contrat": {
+            "$ref": "#/components/schemas/Contrat"
+          },
+          "m_messageErreur": {
+            "type": "string",
+            "description": "Message d'erreur alimenté en cas d'erreur."
+          }
+        }
+      },
+      "Contrat": {
+        "type": "object",
+        "properties": {
+          "m_statut": {
+            "type": "string",
+            "enum": [
+              "Identifié",
+              "Inscrit",
+              "Cessé",
+              "Radié"
+            ],
+            "description": "Statut du Demandeur d'emploi."
+          },
+          "m_date_effet_statut": {
+            "type": "string",
+            "description": "Date d'effet du statut DE au format \"AAAA-MM-JJ\".",
+            "example": "2012-06-28"
+          },
+          "m_duree_inscription_12": {
+            "type": "integer",
+            "description": "Durée d'inscription dans les 12 derniers mois.",
+            "example": "9"
+          },
+          "m_duree_inscription_24": {
+            "type": "integer",
+            "description": "Durée d'inscription dans les 24 derniers mois.",
+            "example": "16"
+          },
+          "m_duree_inscription_36": {
+            "type": "integer",
+            "description": "Durée d'inscription dans les 36 derniers mois.",
+            "example": "28"
+          },
+          "m_motif_inscription_code": {
+            "type": "string",
+            "description": "Code du motif d'inscription.",
+            "example": "11"
+          },
+          "m_motif_inscription_lib": {
+            "type": "string",
+            "description": "Libellé du motif d'inscription.",
+            "example": "LICENCIEMENT ECONOMIQUE"
+          },
+          "m_categ_inscription_code": {
+            "type": "string",
+            "description": "Code de la catégorie d'inscription",
+            "example": "1"
+          },
+          "m_categ_inscription_lib": {
+            "type": "string",
+            "description": "Libellé de la catégorie d'inscription.",
+            "example": "PERSONNE SANS EMPLOI DISPONIBLE DUREE INDETERMINEE PLEIN TPS"
+          },
+          "m_situation_reg_emp_code": {
+            "type": "string",
+            "description": "Code Situation au regard de l'emploi.",
+            "example": "ADR"
+          },
+          "m_situation_reg_emp_lib": {
+            "type": "string",
+            "description": "Libellé Situation au regard de l'emploi.",
+            "example": "AIDE DIFFERENTIELLE AU RECLASSEMENT"
+          },
+          "m_motif_cloture_code": {
+            "type": "string",
+            "description": "Code du motif de clôture.",
+            "example": "MV"
+          },
+          "m_motif_cloture_lib": {
+            "type": "string",
+            "description": "Libellé du motif de clôture.",
+            "example": "ABANDON ACTION AIDE A LA RECHERCHE D'UNE ACTIVITE SUPPRESSION DE 1 MOIS"
+          }
+        }
+      }
+    },
+          "securitySchemes":{
+         "authentification_agent":{
+            "type":"oauth2",
+            "description":"Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+            "flows":{
+               "authorizationCode":{
+                  "authorizationUrl":"https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+                  "scopes":{
+                     "api_contrat-usagerv2":"Obligatoire",
+                     "statutcontratusager":"Obligatoire",
+                     "profil_accedant": "Obligatoire"
+                  },
+                  "tokenUrl":"https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token"
+               }
+            }
+         },
+         "authentification_agent-clientCredentials":{
+            "type":"oauth2",
+            "description":"Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+            "flows":{
+               "clientCredentials":{
+                  "scopes":{
+                     "api_contrat-usagerv2":"Obligatoire",
+                     "statutcontratusager":"Obligatoire",
+                     "profil_accedant": "Obligatoire"
+                  },
+                  "tokenUrl":"https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent"
+               }
+            }
+         }
+      }
+  }
+}

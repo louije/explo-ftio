@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Expériences Professionnelles",
+    "description": "Cette API permet d'accéder aux expériences professionnelles saisies par un individu dans son profil de compétences sur francetravail.fr.",
+    "version": "1.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-experiences/v1"
+    }
+  ],
+  "paths": {
+    "/experiencesindividu": {
+      "get": {
+        "summary": "Récupérer la liste des expériences professionnelles",
+        "description": "Cette API vous permet d’accéder aux expériences saisies par un individu dans son profil de compétences sur francetravail.fr : fonction, nom de l’entreprise, périodes de travail etc. Ces données sont également utilisées pour le système de rapprochement entre les CV et les offres sur francetravail.fr. Cette ressource permet de récupérer la liste des expériences saisies dans son profil de compétences par un individu.",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-experiencesv1",
+              "pfcexperiences"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Experience"
+                  }
+                },
+                "examples": {
+                  "exemple1": {
+                    "value": [
+                      {
+                        "date": {
+                          "debut": "2018-02-01T00:00:00+01:00"
+                        },
+                        "description": "service de 150 couverts, encadrement d’une équipe de 5 personnes, augmentation de 5% du chiffre d’affaires",
+                        "duree": 5,
+                        "enPoste": true,
+                        "entreprise": "Hippopotamus",
+                        "etranger": false,
+                        "intitule": "serveur",
+                        "lieu": "Nantes"
+                      },
+                      {
+                        "date": {
+                          "debut": "2011-06-01T00:00:00+02:00"
+                        },
+                        "duree": 85,
+                        "enPoste": true,
+                        "etranger": false,
+                        "intitule": "Engagement associatif"
+                      },
+                      {
+                        "date": {
+                          "debut": "2014-01-01T00:00:00+01:00",
+                          "fin": "2015-01-01T00:00:00+01:00"
+                        },
+                        "description": "travail sur les chantiers",
+                        "duree": 13,
+                        "enPoste": false,
+                        "entreprise": "LABEYRIE",
+                        "etranger": false,
+                        "intitule": "Ouvrier spécialisé et manoeuvre",
+                        "lieu": "paris"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Experience": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "object",
+            "properties": {
+              "debut": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Date de début de l'expérience",
+                "example": "2014-01-01T00:00:00+01:00"
+              },
+              "fin": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Date de fin de l'expérience",
+                "example": "2017-02-01T00:00:00+01:00"
+              }
+            },
+            "description": "Dates de l'expérience si elles sont renseignées. Si l'expérience correspond à l'activité actuelle, alors seule la date de début est renseignée (le champ \"enPoste\" est valorisé à true dans ce cas là). Si l'expérience est terminée alors une date de fin est renseignée."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description de l'expérience si elle est renseignée.",
+            "example": "service de 150 couverts, encadrement d’une équipe de 5 personnes, augmentation de 5% du chiffre d’affaires"
+          },
+          "duree": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Durée exprimée en nombre de mois de l'expérience si elle est renseignée.",
+            "example": 5
+          },
+          "enPoste": {
+            "type": "boolean",
+            "description": "Booléen indiquant si l'expérience est toujours en cours. Remarque : un individu peut avoir plusieurs expériences en cours",
+            "example": true
+          },
+          "entreprise": {
+            "type": "string",
+            "description": "Nom de l'entreprise s'il est renseigné",
+            "example": "Hippopotamus"
+          },
+          "etranger": {
+            "type": "boolean",
+            "description": "Booléen indiquant si l'expérience s'est déroulée en France ou à l'étranger. false = expérience en France, true = expérience à l'étranger",
+            "example": false
+          },
+          "intitule": {
+            "type": "string",
+            "description": "Intitulé de l'expérience renseigné par l'individu dans son profil de compétences dans l'onglet \"parcours\".",
+            "example": "serveur"
+          },
+          "lieu": {
+            "type": "string",
+            "description": "Lieux de l'expérience s'il est renseigné",
+            "example": "Nantes"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_peconnect-experiencesv1": "Obligatoire",
+              "pfcexperiences": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

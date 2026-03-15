@@ -1,0 +1,209 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Formations Professionnelles",
+    "description": "API permettant de récupérer les formations et permis d'un individu depuis son profil de compétences.",
+    "version": "1.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-formations/v1"
+    }
+  ],
+  "paths": {
+    "/formations": {
+      "get": {
+        "summary": "Lister les formations",
+        "description": "Cette ressource permet de récupérer la liste des formations saisies dans son profil de compétences dans son parcours par un individu.",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-formationsv1",
+              "pfcformations"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Formation"
+                  }
+                },
+                "example": [
+                  {
+                    "anneeFin": 2013,
+                    "description": "Aprentissage de l'intégration et de la gestion des environnemnts",
+                    "diplomeObtenu": true,
+                    "domaine": {
+                      "code": "31082",
+                      "libelle": "Intégration informatique"
+                    },
+                    "etranger": true,
+                    "intitule": "dîplome ingénieur",
+                    "lieu": "Afrique du Sud",
+                    "niveau": {
+                      "code": "NV1",
+                      "libelle": "Bac+5 et plus ou équivalent"
+                    }
+                  },
+                  {
+                    "diplomeObtenu": false,
+                    "etranger": true,
+                    "intitule": "BAC",
+                    "niveau": {
+                      "code": "AFS",
+                      "libelle": "Aucune formation scolaire"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permis": {
+      "get": {
+        "summary": "Lister les permis",
+        "description": "Cette ressource permet de récupérer la liste des permis saisis dans son profil de compétences par un individu",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-formationsv1",
+              "pfcpermis"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Permis"
+                  }
+                },
+                "example": [
+                  {
+                    "code": "B",
+                    "libelle": "B - Véhicule léger"
+                  },
+                  {
+                    "code": "A2",
+                    "libelle": "A2 - Moto <= 600 cm3"
+                  },
+                  {
+                    "code": "B79",
+                    "libelle": "B mention 79.06 (= EB)"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Formation": {
+        "type": "object",
+        "properties": {
+          "anneeFin": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Année de fin de la formation si elle est renseignée."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description de la compétence si elle est renseignée par l'individu."
+          },
+          "diplomeObtenu": {
+            "type": "boolean",
+            "description": "Booléen indiquant si le diplôme a été renseigné comme obtenu par l'individu."
+          },
+          "domaine": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Code ROME du métier"
+              },
+              "libelle": {
+                "type": "string",
+                "description": "Libellé ROME du métier"
+              }
+            },
+            "description": "Éléments correspondant aux grands domaines professionnels correspondant au référentiel des métiers issus du ROME."
+          },
+          "etranger": {
+            "type": "boolean",
+            "description": "Booléen indiquant si la formation a été suivie en France ou à l'étranger\n\nfalse => expérience en France\ntrue => expérience à l'étranger"
+          },
+          "intitule": {
+            "type": "string",
+            "description": "Intitulé de la formation suivie."
+          },
+          "lieu": {
+            "type": "string",
+            "description": "Pays où s'est déroulée la formation"
+          },
+          "niveau": {
+            "type": "object",
+            "description": "Eléments relatifs aux niveaux : Code, Libellé - Liste des valeurs possibles au format code = libelle : AFS => Aucune formation scolaire, C12 => 2nd ou 1ère achevée, C3A => BEPC ou 3ème achevée, CFG => 4ème achevée, CP4 => Primaire à 4ème, NV1 => Bac+5 et plus ou équivalent, NV2 => Bac+3, Bac+4 ou équivalent, NV3 => Bac+2 ou équivalent, NV4 => Bac ou équivalent, NV5 => CAP, BEP ou équivalent",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Code du niveau de la formation"
+              },
+              "libelle": {
+                "type": "string",
+                "description": "Libellé du niveau de la formation"
+              }
+            }
+          }
+        }
+      },
+      "Permis": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code du permis.\n\nListe des valeurs possibles :\n\n[code] → [libelle]\nA         → A - Moto\nA1       → A1 - Motocyclette <= 125 cm3\nA2       → A2 - Moto <= 600 cm3\nAM      → AM - Cyclomoteur <= 50 cm3\nB          → B - Véhicule léger\nB1        → B1 - Quadricycle\nB79      → B mention 79.06 (= EB)\nB96      → B mention 96 - VL + remorque (PTAC < 4,25 T)\nBE        → BE - Véhicule léger + remorque (PTAC > 4,25 T)\nC          → C - Poids lourd\nC1        → C1 - Poids lourd < 7,5 T\nC1E      → C1E - Poids lourd < 7,5 T + remorque\nCE        → CE - Poids lourd + remorque (= EC)\nD          → D - Transport de personnes\nD1        → D1 - Transport de personnes <= 16 places\nD1E      → D1E - Transport de personnes <= 16 P + remorque\nDE        → DE - Transport de personnes + remorque (= ED)\nEB        → EB - Véhicule léger + remorque\nEC        → EC - Poids lourd + remorque\nED        → ED - Transport de personnes + remorque"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la langues associé au code ci-dessus"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_peconnect-formationsv1": "Obligatoire",
+              "pfcformations": "Obligatoire",
+              "pfcpermis": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

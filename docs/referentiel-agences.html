@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Référentiel des agences — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>R&#xe9;f&#xe9;rentiel des agences</h1>
+  <div class="sub">Annuaire des agences France Travail et points relais en France m&#xe9;tropolitaine et DROM</div>
+  <div class="sub-tech">API R&#xe9;f&#xe9;rentiel des Agences v1.0.0 &#x2014; 2 endpoints &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/referentielagences/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0 stack" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Agences <span class="dto">Agence[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-identite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identit&#xe9; et type <span class="dto">code &#xb7; type &#xb7; libelle</span></div>
+        <div class="card">Par agence</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Code AURORE, type d'agence (APE, APES&#x2026;), libell&#xe9; et libell&#xe9; &#xe9;tendu, SIRET
+        <div class="fi-tech"><code>code</code> &#xb7; <code>codeSafir</code> &#xb7; <code>libelle</code> &#xb7; <code>libelleEtendu</code> &#xb7; <code>type</code> &#xb7; <code>typeAccueil</code> &#xb7; <code>siret</code> &#xb7; <code>codeRegionINSEE</code> &#xb7; <code>dispositifADEDA</code>
+          <br><span class="ev">APE</span> Agence g&#xe9;n&#xe9;raliste &#xb7; <span class="ev">APES</span> Sp&#xe9;cialis&#xe9;e cadres
+          <br><span class="ev">1</span> Libre acc&#xe8;s &#xb7; <span class="ev">2</span> Sur rendez-vous &#xb7; <span class="ev">3</span> Les deux</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-adresse">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Adresse et localisation <span class="dto">adressePrincipale</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Adresse postale compl&#xe8;te (lignes 3 &#xe0; 6), commune d'implantation, coordonn&#xe9;es GPS
+        <div class="fi-tech"><code>ligne3</code> &#xb7; <code>ligne4</code> &#xb7; <code>ligne5</code> &#xb7; <code>ligne6</code> &#xb7; <code>bureauDistributeur</code> &#xb7; <code>communeImplantation</code> &#xb7; <code>gpsLat</code> &#xb7; <code>gpsLon</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-contact">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contact <span class="dto">contact</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Email et t&#xe9;l&#xe9;phone public de l'agence
+        <div class="fi-tech"><code>email</code> &#xb7; <code>telephonePublic</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l2t stack" id="m-horaires">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Horaires d'ouverture <span class="dto">horaires[] &#xb7; Horaire</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Horaires par jour de la semaine, distinguant accueil libre et sur rendez-vous. Indique si l'agence est ferm&#xe9;e ou ouverte en continu le midi.
+        <div class="fi-tech"><code>jour</code> &#xb7; <code>ouvertureMatin</code> &#xb7; <code>fermetureMatin</code> &#xb7; <code>ouvertureApresMidi</code> &#xb7; <code>fermetureApresMidi</code> &#xb7; <code>horaireFerme</code> &#xb7; <code>horaireEnContinu</code>
+          <br><span class="ev">1</span> Lundi &#xb7; <span class="ev">2</span> Mardi &#xb7; <span class="ev">3</span> Mercredi &#xb7; <span class="ev">4</span> Jeudi &#xb7; <span class="ev">5</span> Vendredi</div>
+      </div></div>
+    </div>
+
+    <div class="n l3 stack" id="m-zones">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Zones de comp&#xe9;tence <span class="dto">zoneCompetences[]</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Liste des communes (codes INSEE) couvertes par l'agence. Retourn&#xe9; uniquement si le param&#xe8;tre <code>zonecompetence=true</code> est pass&#xe9;.
+        <div class="fi-tech"><code>communeInsee</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  Cette API est dans le royaume <code>/partenaire</code> (client credentials). Aucun jeton usager n'est n&#xe9;cessaire. Le param&#xe8;tre <code>horaire=true</code> active le retour des horaires, <code>zonecompetence=true</code> active les zones de comp&#xe9;tence.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">R&#xe9;f&#xe9;rentiel des agences <span class="dt-human">&#x2014; Annuaire</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Rechercher des agences</span><div class="ep-human">Trouver des agences par commune ou code INSEE</div><span class="ep-path">/agences</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Consulter une agence</span><div class="ep-human">D&#xe9;tail d'une agence par son code AURORE</div><span class="ep-path">/agences/{code}</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Agence</span> <span class="sc-desc">&#x2014; Agence France Travail</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>2 endpoints</strong> &#xb7; <strong>1 sch&#xe9;ma</strong> &#x2014; API en lecture seule, authentifi&#xe9;e par client credentials (realm partenaire).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>L'agence France Travail de Poitiers-Gare</strong> &#x2014; Un d&#xe9;veloppeur cherche les agences de Poitiers pour afficher leurs coordonn&#xe9;es et horaires dans une application partenaire.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-identite"><span class="jc">// GET /agences?commune=poitiers&amp;horaire=true</span>
+[
+  {
+    <span class="jk">"code"</span>: <span class="js">"NAQ0165"</span>,
+    <span class="jk">"codeSafir"</span>: <span class="js">"86009"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"POITIERS-GARE"</span>,
+    <span class="jk">"libelleEtendu"</span>: <span class="js">"Agence France Travail POITIERS-GARE"</span>,
+    <span class="jk">"type"</span>: <span class="js">"APE"</span>,
+    <span class="jk">"typeAccueil"</span>: <span class="js">"3"</span>,
+    <span class="jk">"codeRegionINSEE"</span>: <span class="js">"75"</span>,
+    <span class="jk">"dispositifADEDA"</span>: <span class="jb">true</span>,
+    <span class="jk">"contact"</span>: {
+      <span class="jk">"email"</span>: <span class="js">"ape.86009@francetravail.fr"</span>,
+      <span class="jk">"telephonePublic"</span>: <span class="js">"39-49"</span>
+    },
+    <span class="jk">"siret"</span>: <span class="js">"13000548124836"</span>,
+    <span class="jk">"adressePrincipale"</span>: {
+      <span class="jk">"ligne4"</span>: <span class="js">"60 BD DU GRAND CERF"</span>,
+      <span class="jk">"ligne5"</span>: <span class="js">"CS 60379"</span>,
+      <span class="jk">"ligne6"</span>: <span class="js">"86009 POITIERS CEDEX"</span>,
+      <span class="jk">"communeImplantation"</span>: <span class="js">"86194"</span>,
+      <span class="jk">"gpsLat"</span>: <span class="jn">46.582977</span>,
+      <span class="jk">"gpsLon"</span>: <span class="jn">0.334514</span>
+    },</div>
+<div data-section="s-horaires">    <span class="jk">"horaires"</span>: [
+      { <span class="jk">"jour"</span>: <span class="js">"1"</span>, <span class="jk">"ouvertureMatin"</span>: <span class="js">"8:30"</span>, <span class="jk">"fermetureMatin"</span>: <span class="js">"12:30"</span>, <span class="jk">"ouvertureApresMidi"</span>: <span class="js">"13:30"</span>, <span class="jk">"fermetureApresMidi"</span>: <span class="js">"16:30"</span>, <span class="jk">"horaireFerme"</span>: <span class="js">"N"</span>, <span class="jk">"horaireEnContinu"</span>: <span class="js">"N"</span> },
+      { <span class="jk">"jour"</span>: <span class="js">"2"</span>, <span class="jk">"ouvertureMatin"</span>: <span class="js">"8:30"</span>, <span class="jk">"fermetureMatin"</span>: <span class="js">"12:30"</span>, <span class="jk">"ouvertureApresMidi"</span>: <span class="js">"13:30"</span>, <span class="jk">"fermetureApresMidi"</span>: <span class="js">"16:30"</span>, <span class="jk">"horaireFerme"</span>: <span class="js">"N"</span>, <span class="jk">"horaireEnContinu"</span>: <span class="js">"N"</span> },
+      { <span class="jk">"jour"</span>: <span class="js">"3"</span>, <span class="jk">"ouvertureMatin"</span>: <span class="js">"8:30"</span>, <span class="jk">"fermetureMatin"</span>: <span class="js">"12:30"</span>, <span class="jk">"horaireFerme"</span>: <span class="js">"N"</span>, <span class="jk">"horaireEnContinu"</span>: <span class="js">"N"</span> },
+      { <span class="jk">"jour"</span>: <span class="js">"4"</span>, <span class="jk">"ouvertureMatin"</span>: <span class="js">"8:30"</span>, <span class="jk">"fermetureMatin"</span>: <span class="js">"12:30"</span>, <span class="jk">"ouvertureApresMidi"</span>: <span class="js">"13:30"</span>, <span class="jk">"fermetureApresMidi"</span>: <span class="js">"16:30"</span>, <span class="jk">"horaireFerme"</span>: <span class="js">"N"</span>, <span class="jk">"horaireEnContinu"</span>: <span class="js">"N"</span> },
+      { <span class="jk">"jour"</span>: <span class="js">"5"</span>, <span class="jk">"ouvertureMatin"</span>: <span class="js">"8:30"</span>, <span class="jk">"fermetureMatin"</span>: <span class="js">"12:30"</span>, <span class="jk">"ouvertureApresMidi"</span>: <span class="js">"13:30"</span>, <span class="jk">"fermetureApresMidi"</span>: <span class="js">"16:30"</span>, <span class="jk">"horaireFerme"</span>: <span class="js">"N"</span>, <span class="jk">"horaireEnContinu"</span>: <span class="js">"N"</span> }
+    ]
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-identite">
+  <div class="ex-title"><span class="ex-ico">&#x1F3E2;</span> Agence</div>
+  <div class="ex-card">
+    <h4>POITIERS-GARE</h4>
+    <p>Agence g&#xe9;n&#xe9;raliste <span class="ex-tag tag-ok">APE</span> &#x2014; libre acc&#xe8;s + rendez-vous (type 3)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Code AURORE</strong> &#x2192; NAQ0165 &#xb7; Safir 86009</div>
+      <div class="ex-item"><strong>SIRET</strong> &#x2192; 13000548124836</div>
+      <div class="ex-item"><strong>Dispositif ADEDA</strong> &#x2192; <span class="ex-tag tag-ok">Oui</span></div>
+      <div class="ex-item"><strong>Contact</strong> &#x2192; ape.86009@francetravail.fr &#xb7; 39-49</div>
+      <div class="ex-item"><strong>Adresse</strong> &#x2192; 60 BD DU GRAND CERF &#x2014; CS 60379 &#x2014; 86009 POITIERS CEDEX</div>
+      <div class="ex-item"><strong>GPS</strong> &#x2192; 46.582977, 0.334514</div>
+    </div>
+    <div class="ex-agent">R&#xe9;gion INSEE 75 (Nouvelle-Aquitaine) &#xb7; Commune d'implantation 86194</div>
+  </div>
+</div>
+
+<div data-section="s-horaires">
+  <div class="ex-title"><span class="ex-ico">&#x1F553;</span> Horaires</div>
+  <div class="ex-card">
+    <h4>Ouverture du lundi au vendredi</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Lundi</strong> &#x2192; 8h30&#x2013;12h30 &#xb7; 13h30&#x2013;16h30</div>
+      <div class="ex-item"><strong>Mardi</strong> &#x2192; 8h30&#x2013;12h30 &#xb7; 13h30&#x2013;16h30</div>
+      <div class="ex-item"><strong>Mercredi</strong> &#x2192; 8h30&#x2013;12h30 &#xb7; <span class="ex-tag tag-encours">ferm&#xe9; l'apr&#xe8;s-midi</span></div>
+      <div class="ex-item"><strong>Jeudi</strong> &#x2192; 8h30&#x2013;12h30 &#xb7; 13h30&#x2013;16h30</div>
+      <div class="ex-item"><strong>Vendredi</strong> &#x2192; 8h30&#x2013;12h30 &#xb7; 13h30&#x2013;16h30</div>
+    </div>
+    <div class="ex-agent">Pause m&#xe9;ridienne sauf le mercredi (ferm&#xe9; l'apr&#xe8;s-midi) &#xb7; Aucun jour en continu</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API R&#xe9;f&#xe9;rentiel des Agences v1.0.0 &#xb7; api.francetravail.io &#xb7; 2 endpoints &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

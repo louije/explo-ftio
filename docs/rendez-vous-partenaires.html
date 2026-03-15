@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rendez-vous partenaire — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Rendez-vous partenaire</h1>
+  <div class="sub">Gestion des rendez-vous entre usagers et partenaires du réseau pour l'emploi</div>
+  <div class="sub-tech">Rendez-vous partenaire v1.0.0 — 4 endpoints · 9 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rendez-vous-partenaire/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="grid-2">
+
+<!-- LEFT: Lecture (RendezVousUsager) -->
+<div>
+<div class="n l0 stack" id="m-rdvu">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Lecture — agenda complet <span class="dto">GET → RendezVousUsager[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Retourne <strong>tous</strong> les RDV de l'usager — y compris ceux créés par France Travail, les Missions Locales, Cap Emploi, etc. Le partenaire voit l'agenda complet mais ne peut modifier que ses propres RDV.</div>
+
+    <div class="n l1-b" id="m-rdvu-planif">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Planification <span class="dto">date · duree · theme…</span></div>
+        <div class="card">GET /rendez-vous-usager</div>
+      </div>
+      <div class="nb">
+        <div class="fi">Quand et comment se déroule le rendez-vous
+          <div class="fi-tech"><code>date</code> · <code>duree</code> · <code>theme</code> · <code>description</code> · <code>modaliteContact</code> · <code>typeReception</code> ·
+            <span class="ev">VISIO|TELEPHONE|PHYSIQUE</span> · <span class="ev">IND|COL</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-rdvu-interloc">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Interlocuteur <span class="dto">interlocuteur · InterlocuteurRDVU</span></div>
+        <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Qui reçoit l'usager au rendez-vous
+          <div class="fi-tech"><code>civilite</code> <span class="ev">M|MME|MX</span> · <code>nom</code> · <code>prenom</code> · <code>email</code> · <code>telephone</code> · <code>organisme</code> · <code>service</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n" id="m-rdvu-org">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Organisme <span class="dto">organisme · OrganismeRDVU</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Structure qui émet le rendez-vous
+          <div class="fi-tech"><code>code</code> <span class="ev">IND|FT|CD|DCD|ML|CE</span> · <code>idStructure</code> · <code>libelleStructure</code> · <code>emailContact</code> · <code>telephoneContact</code>
+            <br><span style="font-size:.58rem;color:var(--text-light);">IND=Individu · FT=France Travail · CD=Conseil Départemental · DCD=Délégataire CD · ML=Mission Locale · CE=Cap Emploi</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-c" id="m-rdvu-suivi">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Suivi <span class="dto">statut · estEnConflit…</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">État du rendez-vous et traçabilité
+          <div class="fi-tech"><code>statut</code> <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ANNULE</span> · <code>estEnConflit</code> · <code>initiateur</code> <span class="ev">USAGER|CONSEILLER</span> · <code>dateAnnulation</code> · <code>motifAnnulation</code> · <code>idOrigine</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3" id="m-rdvu-adresse">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Adresse <span class="dto">adresse · AdresseRDVU</span></div>
+        <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Lieu physique du rendez-vous
+          <div class="fi-tech"><code>adresseLibre</code> · <code>libelleAdresse</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l2t stack" id="m-rdvu-histo">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Historique <span class="dto">historiqueEvenementList[] · HistoriqueEvenementRDVU</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Événements passés sur ce rendez-vous
+          <div class="fi-tech"><code>dateReceptionEvenement</code> · <code>typeAction</code></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- RIGHT: Écriture (RendezVousPartenaire) -->
+<div>
+<div class="n l0" id="m-rdvp">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Écriture — RDV du partenaire <span class="dto">POST/PUT → RendezVousPartenaire</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Corps de requête pour créer (POST) ou modifier (PUT) un RDV. Le partenaire ne gère que les RDV qu'il a créés. Le POST retourne un <code>id</code> à conserver pour les PUT et DELETE ultérieurs.</div>
+
+    <div class="n l1-b" id="m-rdvp-planif">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Planification <span class="dto">date · duree · theme…</span></div>
+        <div class="card">POST · PUT /rendez-vous</div>
+      </div>
+      <div class="nb">
+        <div class="fi">Date, durée, thème, motif, modalité et type de réception du rendez-vous. Les champs obligatoires sont marqués ci-dessous.
+          <div class="fi-tech"><code>date</code>* · <code>duree</code> · <code>theme</code> · <code>description</code> · <code>modaliteContact</code>* <span class="ev">VISIO|TELEPHONE|PHYSIQUE</span> · <code>motif</code>* <span class="ev">AUT|ACC|ORI</span> · <code>statut</code>* <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ANNULE</span> · <code>typeReception</code>* <span class="ev">IND|COL</span> · <code>initiateur</code> <span class="ev">USAGER|PARTENAIRE</span>
+            <br><span style="font-size:.58rem;color:var(--text-light);">* champs obligatoires — AUT=Autre · ACC=Accompagnement · ORI=Orientation</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-rdvp-interloc">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Interlocuteur <span class="dto">interlocuteur · Interlocuteur</span></div>
+        <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Personne qui reçoit l'usager
+          <div class="fi-tech"><code>civilite</code> <span class="ev">M|Mme|Mx</span> · <code>nom</code> · <code>prenom</code> · <code>email</code> · <code>telephone</code> · <code>organisme</code> · <code>service</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n" id="m-rdvp-org">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Organisme <span class="dto">organisme · Organisme</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Structure partenaire qui émet le rendez-vous — champ obligatoire
+          <div class="fi-tech"><code>code</code>* <span class="ev">IND|FT|CD|DCD|ML|CE</span> · <code>idStructure</code> · <code>libelleStructure</code> · <code>emailContact</code> · <code>telephoneContact</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3" id="m-rdvp-infos">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Informations complémentaires <span class="dto">commentaire · information…</span></div>
+        <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Détails pratiques transmis à l'usager
+          <div class="fi-tech"><code>commentaire</code> · <code>information</code> · <code>adresse</code> · <code>libelleAdresse</code> · <code>urlVisio</code> · <code>telephoneContactUsager</code></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+</div><!-- .grid-2 -->
+
+<div class="note">
+  <strong>Prérequis : jeton usager</strong> — Tous les endpoints de cette API exigent le header <code>ft-jeton-usager</code>, obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>. Le jeton est volatile (~1 journée). Les trois headers d'identification agent (<code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>) sont également requis sur chaque appel.
+</div>
+
+<div class="note">
+  <strong>Correspondance écriture → lecture</strong> — Certains champs sont renommés ou restructurés quand on relit un RDV :
+  <div style="margin-top:8px;font-size:0.78rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 12px;">
+    <span style="font-weight:600;color:var(--text-light);font-size:.68rem;">Concept</span>
+    <span style="font-weight:600;color:var(--text-light);font-size:.68rem;">POST/PUT (Partenaire)</span>
+    <span style="font-weight:600;color:var(--text-light);font-size:.68rem;">GET (Usager)</span>
+
+    <span>Identifiant</span>
+    <code style="font-size:.72rem;">id</code>
+    <code style="font-size:.72rem;">idOrigine</code>
+
+    <span>Initiateur</span>
+    <code style="font-size:.72rem;">USAGER | PARTENAIRE</code>
+    <code style="font-size:.72rem;">USAGER | CONSEILLER</code>
+
+    <span>Civilité</span>
+    <code style="font-size:.72rem;">M | Mme | Mx</code>
+    <code style="font-size:.72rem;">M | MME | MX</code>
+
+    <span>Adresse</span>
+    <span style="font-size:.72rem;">champs plats (<code>adresse</code>, <code>libelleAdresse</code>)</span>
+    <span style="font-size:.72rem;">objet <code>AdresseRDVU</code></span>
+
+    <span>Infos</span>
+    <span style="font-size:.72rem;"><code>information</code></span>
+    <span style="font-size:.72rem;"><code>informationUtile</code></span>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Rendez-vous partenaire <span class="dt-human">— Gestion CRUD par le partenaire</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Créer un rendez-vous usager</span><div class="ep-human">Enregistrer un nouveau rendez-vous dans le SI France Travail</div><span class="ep-path">/rendez-vous</span></div></div>
+    <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Modifier un rendez-vous usager</span><div class="ep-human">Mettre à jour un rendez-vous préalablement créé</div><span class="ep-path">/rendez-vous</span></div></div>
+    <div class="ep-row"><span class="ep-method m-delete">DELETE</span><div><span class="ep-desc">Annuler un rendez-vous usager</span><div class="ep-human">Annuler un rendez-vous créé par le partenaire</div><span class="ep-path">/rendez-vous/{id}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Rendez-vous usager <span class="dt-human">— Consultation de l'agenda</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Retourner la liste des rendez-vous de l'usager</span><div class="ep-human">Consulter tous les RDV à venir et passés de l'usager</div><span class="ep-path">/rendez-vous-usager</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">9 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Enregistrement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">RendezVousUsager</span> <span class="sc-desc">— RDV en lecture</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">InterlocuteurRDVU</span> <span class="sc-desc">— Interlocuteur (lecture)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OrganismeRDVU</span> <span class="sc-desc">— Organisme (lecture)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AdresseRDVU</span> <span class="sc-desc">— Adresse du RDV</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">HistoriqueEvenementRDVU</span> <span class="sc-desc">— Historique événement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">RendezVousPartenaire</span> <span class="sc-desc">— RDV en écriture</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Interlocuteur</span> <span class="sc-desc">— Interlocuteur (écriture)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Organisme</span> <span class="sc-desc">— Organisme (écriture)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">ReponseDepotRdvp</span> <span class="sc-desc">— Réponse création</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Karine Petit, suivie par la Mission Locale Nord Marseille</strong> — Sophie Martel, conseillère RSA, crée un rendez-vous d'accompagnement pour Karine via l'API (<strong>écriture</strong>). Elle consulte ensuite l'agenda complet de Karine (<strong>lecture</strong>) et retrouve son RDV aux côtés de ceux créés par France Travail et Cap Emploi.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-write"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// ÉCRITURE — POST /rendez-vous</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// Headers:</span>
+<span class="jc">//   ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">//   pa-nom-agent:          Martel</span>
+<span class="jc">//   pa-prenom-agent:       Sophie</span>
+<span class="jc">//   pa-identifiant-agent:  ML13N-0087</span>
+{
+  <span class="jk">"date"</span>: <span class="js">"2026-03-25T09:30:00.000Z"</span>,
+  <span class="jk">"duree"</span>: <span class="jn">45</span>,
+  <span class="jk">"theme"</span>: <span class="js">"Point d'étape accompagnement RSA"</span>,
+  <span class="jk">"description"</span>: <span class="js">"Suivi trimestriel dans le cadre de l'accompagnement RSA"</span>,
+  <span class="jk">"modaliteContact"</span>: <span class="js">"PHYSIQUE"</span>,
+  <span class="jk">"motif"</span>: <span class="js">"ACC"</span>,
+  <span class="jk">"statut"</span>: <span class="js">"PRIS"</span>,
+  <span class="jk">"typeReception"</span>: <span class="js">"IND"</span>,
+  <span class="jk">"initiateur"</span>: <span class="js">"PARTENAIRE"</span>,
+  <span class="jk">"interlocuteur"</span>: {
+    <span class="jk">"civilite"</span>: <span class="js">"Mme"</span>,
+    <span class="jk">"nom"</span>: <span class="js">"Martel"</span>,
+    <span class="jk">"prenom"</span>: <span class="js">"Sophie"</span>,
+    <span class="jk">"email"</span>: <span class="js">"s.martel@mlnordmarseille.fr"</span>,
+    <span class="jk">"telephone"</span>: <span class="js">"33491654321"</span>,
+    <span class="jk">"organisme"</span>: <span class="js">"Mission Locale Nord Marseille"</span>,
+    <span class="jk">"service"</span>: <span class="js">"Accompagnement RSA"</span>
+  },
+  <span class="jk">"organisme"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"ML"</span>,
+    <span class="jk">"idStructure"</span>: <span class="js">"ML13N042"</span>,
+    <span class="jk">"libelleStructure"</span>: <span class="js">"Mission Locale Nord Marseille"</span>,
+    <span class="jk">"emailContact"</span>: <span class="js">"contact@mlnordmarseille.fr"</span>,
+    <span class="jk">"telephoneContact"</span>: <span class="js">"33491654300"</span>
+  },
+  <span class="jk">"adresse"</span>: <span class="js">"42 Boulevard de la Libération 13001 Marseille"</span>,
+  <span class="jk">"libelleAdresse"</span>: <span class="js">"Mission Locale Nord Marseille"</span>,
+  <span class="jk">"information"</span>: <span class="js">"Apporter CV à jour et justificatifs de recherche"</span>
+}</div>
+<div data-section="s-write-resp"><span class="jc">// Réponse 202 — RDV créé</span>
+{
+  <span class="jk">"id"</span>: <span class="js">"7aea9cbd-d98e-464a-b38a-17662f4a718a"</span>
+}</div>
+<div data-section="s-read"><span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// LECTURE — GET /rendez-vous-usager</span>
+<span class="jc">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="jc">// Le même RDV, relu via RendezVousUsager :</span>
+[
+  {
+    <span class="jk">"date"</span>: <span class="js">"2026-03-25T09:30:00.000Z"</span>,
+    <span class="jk">"duree"</span>: <span class="jn">45</span>,
+    <span class="jk">"theme"</span>: <span class="js">"Point d'étape accompagnement RSA"</span>,
+    <span class="jk">"modaliteContact"</span>: <span class="js">"PHYSIQUE"</span>,
+    <span class="jk">"motif"</span>: <span class="js">"ACC"</span>,
+    <span class="jk">"typeReception"</span>: <span class="js">"IND"</span>,
+    <span class="jk">"statut"</span>: <span class="js">"PRIS"</span>,
+    <span class="jk">"estEnConflit"</span>: <span class="jb">false</span>,
+    <span class="jk">"initiateur"</span>: <span class="js">"CONSEILLER"</span>,          <span class="jc">// ← PARTENAIRE → CONSEILLER</span>
+    <span class="jk">"idOrigine"</span>: <span class="js">"7aea9cbd-d98e-464a-b38a-17662f4a718a"</span>,  <span class="jc">// ← id → idOrigine</span>
+    <span class="jk">"interlocuteur"</span>: {
+      <span class="jk">"civilite"</span>: <span class="js">"MME"</span>,              <span class="jc">// ← Mme → MME</span>
+      <span class="jk">"nom"</span>: <span class="js">"Martel"</span>,
+      <span class="jk">"prenom"</span>: <span class="js">"Sophie"</span>,
+      <span class="jk">"email"</span>: <span class="js">"s.martel@mlnordmarseille.fr"</span>,
+      <span class="jk">"organisme"</span>: <span class="js">"Mission Locale Nord Marseille"</span>,
+      <span class="jk">"service"</span>: <span class="js">"Accompagnement RSA"</span>
+    },
+    <span class="jk">"organisme"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"ML"</span>,
+      <span class="jk">"idStructure"</span>: <span class="js">"ML13N042"</span>,
+      <span class="jk">"libelleStructure"</span>: <span class="js">"Mission Locale Nord Marseille"</span>
+    },
+    <span class="jk">"adresse"</span>: {                         <span class="jc">// ← champs plats → objet AdresseRDVU</span>
+      <span class="jk">"adresseLibre"</span>: <span class="js">"Mission Locale Nord Marseille"</span>,
+      <span class="jk">"libelleAdresse"</span>: <span class="js">"42 Boulevard de la Libération 13001 Marseille"</span>
+    },
+    <span class="jk">"informationUtile"</span>: <span class="js">"Apporter CV à jour et justificatifs de recherche"</span>,  <span class="jc">// ← information → informationUtile</span>
+    <span class="jk">"historiqueEvenementList"</span>: [
+      { <span class="jk">"dateReceptionEvenement"</span>: <span class="js">"2026-03-10T14:22:00.000Z"</span>, <span class="jk">"typeAction"</span>: <span class="js">"CREATION"</span> }
+    ]
+  },</div>
+<div data-section="s-rdv-ft">  {
+    <span class="jc">// Un autre RDV, créé par France Travail (pas par le partenaire)</span>
+    <span class="jk">"date"</span>: <span class="js">"2026-02-18T14:00:00.000Z"</span>,
+    <span class="jk">"duree"</span>: <span class="jn">30</span>,
+    <span class="jk">"theme"</span>: <span class="js">"Orientation professionnelle"</span>,
+    <span class="jk">"modaliteContact"</span>: <span class="js">"TELEPHONE"</span>,
+    <span class="jk">"motif"</span>: <span class="js">"ORI"</span>,
+    <span class="jk">"typeReception"</span>: <span class="js">"IND"</span>,
+    <span class="jk">"statut"</span>: <span class="js">"EFFECTUE"</span>,
+    <span class="jk">"estEnConflit"</span>: <span class="jb">false</span>,
+    <span class="jk">"initiateur"</span>: <span class="js">"CONSEILLER"</span>,
+    <span class="jk">"idOrigine"</span>: <span class="js">"FT-PRDVL-2026-12845"</span>,
+    <span class="jk">"interlocuteur"</span>: {
+      <span class="jk">"civilite"</span>: <span class="js">"M"</span>,
+      <span class="jk">"nom"</span>: <span class="js">"Dubois"</span>,
+      <span class="jk">"prenom"</span>: <span class="js">"Marc"</span>,
+      <span class="jk">"organisme"</span>: <span class="js">"France Travail"</span>,
+      <span class="jk">"service"</span>: <span class="js">"Orientation et conseil"</span>
+    },
+    <span class="jk">"organisme"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"FT"</span>,
+      <span class="jk">"idStructure"</span>: <span class="js">"PAC50013"</span>,
+      <span class="jk">"libelleStructure"</span>: <span class="js">"France Travail Marseille Joliette"</span>
+    },
+    <span class="jk">"historiqueEvenementList"</span>: [
+      { <span class="jk">"dateReceptionEvenement"</span>: <span class="js">"2026-02-10T09:15:00.000Z"</span>, <span class="jk">"typeAction"</span>: <span class="js">"CREATION"</span> },
+      { <span class="jk">"dateReceptionEvenement"</span>: <span class="js">"2026-02-18T14:35:00.000Z"</span>, <span class="jk">"typeAction"</span>: <span class="js">"REALISATION"</span> }
+    ]
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-write">
+  <div class="ex-title"><span class="ex-ico">&#x270F;&#xFE0F;</span> Écriture — Créer un rendez-vous</div>
+  <div class="ex-card">
+    <h4>POST /rendez-vous — Point d'étape RSA</h4>
+    <p><span class="ex-tag tag-encours">Écriture</span> Sophie Martel, conseillère à la Mission Locale Nord Marseille, crée un rendez-vous d'accompagnement RSA pour Karine Petit.</p>
+    <p>Le corps utilise le schéma <strong>RendezVousPartenaire</strong> : les champs obligatoires sont <code>date</code>, <code>modaliteContact</code>, <code>motif</code>, <code>statut</code>, <code>typeReception</code> et <code>organisme.code</code>. L'adresse est un champ texte plat (pas un objet). L'initiateur est <code>PARTENAIRE</code> (pas <code>CONSEILLER</code>). La civilité est <code>Mme</code> (pas <code>MME</code>).</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Motif</strong> → ACC (Accompagnement)</div>
+      <div class="ex-item"><strong>Modalité</strong> → Physique · Individuel</div>
+      <div class="ex-item"><strong>Organisme</strong> → ML (Mission Locale)</div>
+    </div>
+    <div class="ex-agent">Headers requis : jeton usager + identification de Sophie Martel (ML13N-0087)</div>
+  </div>
+</div>
+
+<div data-section="s-write-resp">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Réponse 202 — RDV accepté</div>
+  <div class="ex-card">
+    <h4>ReponseDepotRdvp</h4>
+    <p>France Travail retourne l'<code>id</code> unique du rendez-vous (<code>7aea9cbd-...</code>). Cet identifiant est à conserver pour les opérations PUT (modifier) et DELETE (annuler).</p>
+  </div>
+</div>
+
+<div data-section="s-read">
+  <div class="ex-title"><span class="ex-ico">&#x1F4D6;</span> Lecture — Le même RDV relu</div>
+  <div class="ex-card">
+    <h4>GET /rendez-vous-usager — RendezVousUsager</h4>
+    <p><span class="ex-tag tag-ok">Lecture</span> En relisant l'agenda de Karine, le même rendez-vous apparaît mais sous le schéma <strong>RendezVousUsager</strong>. Les commentaires dans le JSON montrent les transformations :</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>id → idOrigine</strong> — le même UUID, renommé</div>
+      <div class="ex-item"><strong>PARTENAIRE → CONSEILLER</strong> — l'initiateur est normalisé</div>
+      <div class="ex-item"><strong>Mme → MME</strong> — la civilité est mise en majuscules</div>
+      <div class="ex-item"><strong>champs plats → objet AdresseRDVU</strong> — l'adresse est restructurée</div>
+      <div class="ex-item"><strong>information → informationUtile</strong> — le champ est renommé</div>
+      <div class="ex-item"><strong>+ estEnConflit, historiqueEvenementList</strong> — ajoutés par France Travail</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-rdv-ft">
+  <div class="ex-title"><span class="ex-ico">&#x1F4C5;</span> Autre RDV — créé par France Travail</div>
+  <div class="ex-card">
+    <h4>Orientation professionnelle</h4>
+    <p><span class="ex-tag tag-ok">Effectué</span> Entretien téléphonique avec Marc Dubois, 30 min, le 18 février 2026.</p>
+    <p>Ce RDV a été créé par France Travail (pas par le partenaire). Il apparaît dans l'agenda en lecture mais le partenaire ne peut ni le modifier ni l'annuler — seuls ses propres RDV sont accessibles en écriture.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Organisme</strong> → FT (France Travail Marseille Joliette)</div>
+      <div class="ex-item"><strong>Statut</strong> → EFFECTUE (2 événements dans l'historique)</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Rendez-vous partenaire v1.0.0 · api.francetravail.io · 4 endpoints · 9 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

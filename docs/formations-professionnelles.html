@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formations professionnelles &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Formations professionnelles</h1>
+  <div class="sub">Formations suivies et permis d&#xe9;tenus par l'usager, tels que d&#xe9;clar&#xe9;s dans son profil de comp&#xe9;tences</div>
+  <div class="sub-tech">API Formations Professionnelles v1.0 &#x2014; 2 endpoints &#xb7; 2 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-formations/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Profil formation <span class="dto">Formation[] + Permis[]</span></div>
+    <div class="card">2 ressources</div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b stack" id="m-formation">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Formation <span class="dto">Formation</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb">
+
+        <div class="n l1-p" id="m-diplome">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Intitul&#xe9; et dipl&#xf4;me</div>
+            <div class="card">3 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Nom de la formation et indicateur d'obtention du dipl&#xf4;me, tels que renseign&#xe9;s par l'usager
+            <div class="fi-tech"><code>intitule</code> &#xb7; <code>diplomeObtenu</code> (boolean) &#xb7; <code>description</code></div>
+          </div></div>
+        </div>
+
+        <div class="n l1-n" id="m-niveau">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Niveau et domaine</div>
+            <div class="card">2 objets</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Niveau de qualification (r&#xe9;f&#xe9;rentiel national) et domaine professionnel (r&#xe9;f&#xe9;rentiel ROME)
+            <div class="fi-tech"><code>niveau.code</code> &#xb7; <code>niveau.libelle</code> &#xb7; <span class="ev">AFS|C12|C3A|CFG|CP4|NV1|NV2|NV3|NV4|NV5</span></div>
+            <div class="fi-tech"><code>domaine.code</code> &#xb7; <code>domaine.libelle</code> &#xb7; codes ROME</div>
+          </div></div>
+        </div>
+
+        <div class="n l3" id="m-lieu-formation">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Lieu et p&#xe9;riode</div>
+            <div class="card">3 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Ann&#xe9;e de fin, localisation et indicateur France/&#xe9;tranger
+            <div class="fi-tech"><code>anneeFin</code> (integer) &#xb7; <code>lieu</code> &#xb7; <code>etranger</code> (boolean)</div>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-c stack" id="m-permis">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Permis <span class="dto">Permis</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Permis de conduire d&#xe9;tenus par l'usager &#x2014; cat&#xe9;gories du permis fran&#xe7;ais (A, B, C, D et leurs d&#xe9;clinaisons)
+        <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <span class="ev">A|A1|A2|AM|B|B1|B79|B96|BE|C|C1|C1E|CE|D|D1|D1E|DE|EB|EC|ED</span></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume PE Connect (OAuth utilisateur). L'usager se connecte avec son compte France Travail et autorise les scopes <code>api_peconnect-formationsv1</code>, <code>pfcformations</code> (formations) et <code>pfcpermis</code> (permis). L'application acc&#xe8;de aux donn&#xe9;es de l'usager connect&#xe9; uniquement.
+</div>
+
+<div class="note">Les niveaux de qualification suivent une &#xe9;chelle nationale : <code>NV1</code> = Bac+5 et plus, <code>NV5</code> = CAP/BEP, <code>AFS</code> = aucune formation scolaire. Le domaine utilise le r&#xe9;f&#xe9;rentiel ROME (R&#xe9;pertoire Op&#xe9;rationnel des M&#xe9;tiers et des Emplois).</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Formations et permis <span class="dt-human">&#x2014; Parcours de formation de l'usager</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les formations</span><div class="ep-human">R&#xe9;cup&#xe9;rer toutes les formations d&#xe9;clar&#xe9;es dans le profil de comp&#xe9;tences</div><span class="ep-path">/formations</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les permis</span><div class="ep-human">R&#xe9;cup&#xe9;rer tous les permis de conduire d&#xe9;clar&#xe9;s par l'usager</div><span class="ep-path">/permis</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">2 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Formation</span> <span class="sc-desc">&#x2014; Formation suivie par l'usager</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Permis</span> <span class="sc-desc">&#x2014; Permis de conduire d&#xe9;tenu</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Parcours de formation d'un technicien en reconversion</strong> &#x2014; Karim Belhaj a suivi un BTS en maintenance industrielle, puis une licence professionnelle en informatique. Il d&#xe9;tient &#xe9;galement deux permis de conduire. Son profil illustre un parcours de reconversion classique.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-licence"><span class="jc">// GET /formations</span>
+<span class="jc">// &#x2500;&#x2500; OAuth PE Connect &#x2500;&#x2500;</span>
+<span class="jc">// Authorization: Bearer eyJhbGciOi...</span>
+<span class="jc">// Scopes: api_peconnect-formationsv1, pfcformations</span>
+<span class="jc">// &#x2500;&#x2500; R&#xe9;ponse &#x2500;&#x2500;</span>
+[
+  {
+    <span class="jk">"intitule"</span>: <span class="js">"Licence pro Administration des syst&#xe8;mes et r&#xe9;seaux"</span>,
+    <span class="jk">"description"</span>: <span class="js">"Formation en alternance, administration Linux et Windows Server, virtualisation"</span>,
+    <span class="jk">"diplomeObtenu"</span>: <span class="jb">true</span>,
+    <span class="jk">"anneeFin"</span>: <span class="jn">2022</span>,
+    <span class="jk">"niveau"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"NV2"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Bac+3, Bac+4 ou &#xe9;quivalent"</span>
+    },
+    <span class="jk">"domaine"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"31082"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Int&#xe9;gration informatique"</span>
+    },
+    <span class="jk">"lieu"</span>: <span class="js">"Grenoble"</span>,
+    <span class="jk">"etranger"</span>: <span class="jb">false</span>
+  },</div>
+<div data-section="s-bts">  {
+    <span class="jk">"intitule"</span>: <span class="js">"BTS Maintenance industrielle"</span>,
+    <span class="jk">"diplomeObtenu"</span>: <span class="jb">true</span>,
+    <span class="jk">"anneeFin"</span>: <span class="jn">2018</span>,
+    <span class="jk">"niveau"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"NV3"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Bac+2 ou &#xe9;quivalent"</span>
+    },
+    <span class="jk">"domaine"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"31624"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Maintenance industrielle"</span>
+    },
+    <span class="jk">"lieu"</span>: <span class="js">"Lyon"</span>,
+    <span class="jk">"etranger"</span>: <span class="jb">false</span>
+  }
+]</div>
+<div data-section="s-permis"><span class="jc">// GET /permis</span>
+<span class="jc">// Scopes: api_peconnect-formationsv1, pfcpermis</span>
+[
+  {
+    <span class="jk">"code"</span>: <span class="js">"B"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"B - V&#xe9;hicule l&#xe9;ger"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"A2"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"A2 - Moto &lt;= 600 cm3"</span>
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-licence">
+  <div class="ex-title"><span class="ex-ico">&#x1F393;</span> Formation r&#xe9;cente &#x2014; licence pro informatique</div>
+  <div class="ex-card">
+    <h4>Licence pro Administration des syst&#xe8;mes et r&#xe9;seaux</h4>
+    <p>Dipl&#xf4;me <span class="ex-tag tag-ok">Obtenu</span> en 2022 &#x2014; niveau Bac+3 (NV2)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Domaine ROME</strong> &#x2192; Int&#xe9;gration informatique (31082)</div>
+      <div class="ex-item"><strong>Contenu</strong> &#x2192; Administration Linux/Windows, virtualisation, alternance</div>
+      <div class="ex-item"><strong>Lieu</strong> &#x2192; Grenoble (France)</div>
+    </div>
+    <div class="ex-agent">Reconversion de la maintenance industrielle vers l'informatique</div>
+  </div>
+</div>
+
+<div data-section="s-bts">
+  <div class="ex-title"><span class="ex-ico">&#x1F4D6;</span> Formation ant&#xe9;rieure &#x2014; BTS maintenance</div>
+  <div class="ex-card">
+    <h4>BTS Maintenance industrielle</h4>
+    <p>Dipl&#xf4;me <span class="ex-tag tag-ok">Obtenu</span> en 2018 &#x2014; niveau Bac+2 (NV3)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Domaine ROME</strong> &#x2192; Maintenance industrielle (31624)</div>
+      <div class="ex-item"><strong>Lieu</strong> &#x2192; Lyon (France)</div>
+    </div>
+    <div class="ex-agent">Formation initiale avant reconversion</div>
+  </div>
+</div>
+
+<div data-section="s-permis">
+  <div class="ex-title"><span class="ex-ico">&#x1F697;</span> Permis de conduire</div>
+  <div class="ex-card">
+    <h4>2 permis d&#xe9;clar&#xe9;s</h4>
+    <p>Permis <span class="ex-tag tag-ok">B</span> (v&#xe9;hicule l&#xe9;ger) et <span class="ex-tag tag-ok">A2</span> (moto &#x2264; 600 cm&#xb3;)</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Permis B</strong> &#x2192; V&#xe9;hicule l&#xe9;ger &#x2014; indispensable pour de nombreux postes</div>
+      <div class="ex-item"><strong>Permis A2</strong> &#x2192; Moto &#x2264; 600 cm&#xb3;</div>
+    </div>
+    <div class="ex-agent">Le permis B est souvent exig&#xe9; dans les offres d'emploi en zone rurale ou p&#xe9;riurbaine</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Formations Professionnelles v1.0 &#xb7; api.francetravail.io &#xb7; 2 endpoints &#xb7; 2 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

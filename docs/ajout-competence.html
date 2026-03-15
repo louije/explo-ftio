@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajout de Comp&#xe9;tence &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Ajout de comp&#xe9;tence</h1>
+  <div class="sub">Enregistrer des comp&#xe9;tences ROME dans le portefeuille de comp&#xe9;tences de l'usager</div>
+  <div class="sub-tech">API Ajout de Comp&#xe9;tence v1.0.0 &#x2014; 1 endpoint &#xb7; 2 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-gestion-profilcompetences/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Requ&#xea;te d'enregistrement <span class="dto">RequestBody</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-n stack" id="m-competences">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Comp&#xe9;tences &#xe0; enregistrer <span class="dto">competences</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Liste des comp&#xe9;tences ROME &#xe0; ajouter au portefeuille de l'usager. Chaque &#xe9;l&#xe9;ment contient un code du r&#xe9;f&#xe9;rentiel ROME 4.0.
+        <div class="fi-tech"><code>codeRome</code> &#x2014; string, obligatoire &#xb7; ex. <span class="ev">100684</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-b" id="m-origine">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Origine <span class="dto">origine</span></div>
+        <div class="card">Obligatoire <span class="card-tech">string &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Identifiant de l'application ou du partenaire &#xe0; l'origine de l'ajout de comp&#xe9;tences
+        <div class="fi-tech"><code>origine</code> &#x2014; string, obligatoire &#xb7; ex. <span class="ev">ORGACP</span></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l0" id="m-erreur" style="margin-top:16px;">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;ponse partielle (206) <span class="dto">PartialErrorResponse</span></div>
+    <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-c stack" id="m-erreurs">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Comp&#xe9;tences en erreur <span class="dto">competencesEnErreur</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Liste des comp&#xe9;tences qui n'ont pas pu &#xea;tre enregistr&#xe9;es, avec le code ROME concern&#xe9; et la raison de l'&#xe9;chec
+        <div class="fi-tech"><code>codeRome</code> &#xb7; <code>raison</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume PE Connect (OAuth individu). L'usager doit s'&#xea;tre identifi&#xe9; via le bouton &#xab;&#xa0;Se connecter avec France Travail&#xa0;&#xbb;. Scopes requis : <code>portefeuillecompetencesW</code> et <code>api_peconnect-gestion-profilcompetencesv1</code>.
+</div>
+
+<div class="note">
+  Les codes ROME proviennent du r&#xe9;f&#xe9;rentiel ROME 4.0. Un code invalide ou d&#xe9;j&#xe0; pr&#xe9;sent dans le portefeuille peut g&#xe9;n&#xe9;rer une r&#xe9;ponse 206 avec le d&#xe9;tail des erreurs. Un succ&#xe8;s complet retourne un 204 sans corps de r&#xe9;ponse.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Gestion du portefeuille de comp&#xe9;tences <span class="dt-human">&#x2014; Enregistrement de comp&#xe9;tences ROME</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistrer des comp&#xe9;tences</span><div class="ep-human">Ajouter un lot de comp&#xe9;tences ROME au portefeuille de l'usager connect&#xe9;</div><span class="ep-path">/competences/enregistrer</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">2 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#a3a3a3;"></span> Erreur / Utilitaire</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">RequestBody</span> <span class="sc-desc">&#x2014; Lot de comp&#xe9;tences &#xe0; enregistrer</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">PartialErrorResponse</span> <span class="sc-desc">&#x2014; D&#xe9;tail des comp&#xe9;tences en erreur (206)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Enrichissement du portefeuille</strong> &#x2014; Sophie, d&#xe9;veloppeuse web en reconversion, utilise une application partenaire qui identifie trois comp&#xe9;tences ROME &#xe0; ajouter &#xe0; son profil. L'une des comp&#xe9;tences est d&#xe9;j&#xe0; pr&#xe9;sente dans son portefeuille.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// POST /competences/enregistrer</span>
+<span class="jc">// Authorization: Bearer &lt;token PE Connect&gt;</span>
+<span class="jc">// Content-Type: application/json</span>
+{
+  <span class="jk">"competences"</span>: [
+    { <span class="jk">"codeRome"</span>: <span class="js">"100684"</span> },
+    { <span class="jk">"codeRome"</span>: <span class="js">"100712"</span> },
+    { <span class="jk">"codeRome"</span>: <span class="js">"100455"</span> }
+  ],
+  <span class="jk">"origine"</span>: <span class="js">"ORGACP"</span>
+}</div>
+<div data-section="s-succes"><span class="jc">// &#x2192; R&#xe9;ponse 204 No Content</span>
+<span class="jc">// Toutes les comp&#xe9;tences ont &#xe9;t&#xe9; enregistr&#xe9;es</span>
+<span class="jc">// (pas de corps de r&#xe9;ponse)</span></div>
+<div data-section="s-partiel"><span class="jc">// &#x2192; R&#xe9;ponse 206 Partial Content</span>
+<span class="jc">// Une comp&#xe9;tence n'a pas pu &#xea;tre ajout&#xe9;e</span>
+{
+  <span class="jk">"competencesEnErreur"</span>: [
+    {
+      <span class="jk">"codeRome"</span>: <span class="js">"100455"</span>,
+      <span class="jk">"raison"</span>: <span class="js">"Comp&#xe9;tence d&#xe9;j&#xe0; pr&#xe9;sente dans le portefeuille"</span>
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">&#x1F4E4;</span> Requ&#xea;te d'ajout</div>
+  <div class="ex-card">
+    <h4>3 comp&#xe9;tences soumises</h4>
+    <p>L'application partenaire <span class="ex-tag tag-encours">ORGACP</span> envoie un lot de 3 codes ROME &#xe0; ajouter au portefeuille de Sophie.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>100684</strong> &#x2192; Comp&#xe9;tence en d&#xe9;veloppement web</div>
+      <div class="ex-item"><strong>100712</strong> &#x2192; Comp&#xe9;tence en int&#xe9;gration</div>
+      <div class="ex-item"><strong>100455</strong> &#x2192; Comp&#xe9;tence en gestion de projet</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-succes">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Succ&#xe8;s complet (204)</div>
+  <div class="ex-card">
+    <h4>Toutes les comp&#xe9;tences accept&#xe9;es</h4>
+    <p>Le serveur retourne <span class="ex-tag tag-ok">204 No Content</span> &#x2014; les 3 comp&#xe9;tences ont &#xe9;t&#xe9; ajout&#xe9;es au portefeuille.</p>
+    <div class="ex-agent">Aucun corps de r&#xe9;ponse &#x2014; l'absence de contenu signifie que tout s'est bien pass&#xe9;</div>
+  </div>
+</div>
+
+<div data-section="s-partiel">
+  <div class="ex-title"><span class="ex-ico">&#x26A0;&#xFE0F;</span> Succ&#xe8;s partiel (206)</div>
+  <div class="ex-card">
+    <h4>2 comp&#xe9;tences accept&#xe9;es, 1 rejet&#xe9;e</h4>
+    <p>Le serveur retourne <span class="ex-tag tag-moyen">206 Partial Content</span> avec le d&#xe9;tail des erreurs.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>100455</strong> &#x2192; <span class="ex-tag tag-besoin">D&#xe9;j&#xe0; pr&#xe9;sente</span> dans le portefeuille</div>
+    </div>
+    <div class="ex-agent">Les comp&#xe9;tences 100684 et 100712 ont bien &#xe9;t&#xe9; ajout&#xe9;es malgr&#xe9; l'erreur sur la troisi&#xe8;me</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Ajout de Comp&#xe9;tence v1.0.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 2 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

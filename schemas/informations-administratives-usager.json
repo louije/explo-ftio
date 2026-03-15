@@ -1,0 +1,344 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.2.0",
+    "title": "Informations administratives usager",
+    "description": "Cette API permet de récupérer les données d'un usager (état civil, adresses, email, téléphones et numéro France Travail) \n\n**Scopes :** `api_informations-administrativesv1`,`informationsadministrativesusager`,`profil_accedant` \n\n **Royaume :** `/agent`"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/informations-administratives/v1"
+    }
+  ],
+  "paths": {
+    "/usager": {
+      "get": {
+        "tags": [
+          "Informations administratives usager"
+        ],
+        "summary": "Récupère l'état civil et les coordonnées d'un usager",
+        "description": "Récupération des données d'état civil et de coordonnées à partir d'un jeton usager.",
+        "operationId": "recupererDonneesParIdRci",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national chiffré (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsagerResource"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucun individu trouvé"
+          },
+          "400": {
+            "description": "Mauvaise requête",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonneesErreur"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur interne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonneesErreur"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/informations-administratives/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UsagerResource": {
+        "type": "object",
+        "properties": {
+          "numeroFranceTravail" : {
+            "type": "string",
+            "description": "Numéro France Travail",
+            "example": "12345678900"
+          },
+          "adresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdresseResource"
+            }
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailResource"
+            }
+          },
+          "etatCivil": {
+            "$ref": "#/components/schemas/EtatCivilResource"
+          },
+          "telephones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TelephoneResource"
+            }
+          }
+        }
+      },
+      "AdresseResource": {
+        "type": "object",
+        "properties": {
+          "codeInseeCommune": {
+            "description": "Code INSEE de la commune issu des référentiels ARENO",
+            "example":"69389",
+            "type": "string"
+          },
+          "codePostal": {
+            "description": "Code postal",
+            "example": "69009",
+            "type": "string"
+          },
+          "complementAdresse": {
+            "description": "Complément d’identification du point géographique : Entrée, tour, bâtiment, immeuble, résidence, zone industrielle",
+            "example": "Résidence Les Tilleuls",
+            "type": "string"
+          },
+          "complementDestinataire": {
+            "description": "Complément d’identification du destinataire ou point de remise à l’intérieur du bâtiment : N° appartement, boite aux lettres, étage, couloir",
+            "example": "Escalier C",
+            "type": "string"
+          },
+          "complementDistribution": {
+            "description": "Mentions spéciales de distribution : Boite Postale, Tri Spécial, Arrivée",
+            "example": "BP 14",
+            "type": "string"
+          },
+          "libelleCommune": {
+            "description": "Commune",
+            "example": "LYON",
+            "type": "string"
+          },
+          "libellePays": {
+            "description": "Pays",
+            "example": "FRANCE",
+            "type": "string"
+          },
+          "numeroTypeLibelleVoie": {
+            "description": "Numéro, type et libellé de la voie",
+            "example": "93 Rue Marietton",
+            "type": "string"
+          },
+          "indicateurResidentQPV": {
+            "description": "Indique si l'adresse est dans un Quartier Prioritaire de la Ville (AT : En attente, IN : Indéterminé, NT : Non traité, NQ : Ne réside pas QPV, QP : Réside QPV)",
+            "example": "NQ",
+            "type": "string"
+          }
+        }
+      },
+      "EmailResource": {
+        "type": "object",
+        "properties": {
+          "adresseEmail": {
+            "type": "string",
+            "description": "Adresse email",
+            "example": "john.doe@francetravail.fr"
+          }
+        }
+      },
+      "EtatCivilResource": {
+        "type": "object",
+        "properties": {
+          "civilite": {
+            "description": "Civilité",
+            "example": "M.",
+            "type": "string"
+          },
+          "dateNaissance": {
+            "description": "Date de naissance",
+            "example": "1998-07-11",
+            "type": "string"
+          },
+          "nir": {
+            "description": "Numéro d'Inscription au Répertoire",
+            "example": "1041174010081",
+            "type": "string"
+          },
+          "nom": {
+            "description": "Nom",
+            "example": "DOE",
+            "type": "string"
+          },
+          "nomCorrespondance": {
+            "description": "Nom de correspondance",
+            "example": "DOE",
+            "type": "string"
+          },
+          "prenom": {
+            "description": "Prénom",
+            "example": "JOHN",
+            "type": "string"
+          },
+          "prenomCorrespondance": {
+            "description": "Prénom de correspondance",
+            "example": "JOHN",
+            "type": "string"
+          }
+        }
+      },
+      "TelephoneResource": {
+        "type": "object",
+        "properties": {
+          "numeroTelephone": {
+            "type": "string",
+            "description": "Numéro de téléphone",
+            "example": "0972723949"
+          }
+        }
+      },
+      "DonneesErreur": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code erreur",
+            "example": "Non déterminé"
+          },
+          "erreur": {
+            "type": "string",
+            "description": "Libellé erreur",
+            "example": "L'idRci ne peut pas être vide"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 EARLY_HINTS",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ],
+            "description": "Status Http",
+            "example": "BAD_REQUEST"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Date",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

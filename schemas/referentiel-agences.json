@@ -1,0 +1,330 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Référentiel des Agences",
+    "description": "Cette API permet de trouver les agences et points relais France Travail en France (métropole et DROM).",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/referentielagences/v1"
+    }
+  ],
+  "paths": {
+    "/agences": {
+      "get": {
+        "summary": "Rechercher des agences",
+        "description": "Recherche des agences France Travail par commune.",
+        "parameters": [
+          {
+            "name": "horaire",
+            "in": "query",
+            "description": "Booléen permettant de remonter les horaires (Par défaut à faux si non renseigné)",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": "true"
+          },
+          {
+            "name": "zonecompetence",
+            "in": "query",
+            "description": "Booléen permettant de remonter les zones de compétence (Par défaut à faux si non renseigné).",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": "true"
+          },
+          {
+            "name": "commune",
+            "in": "query",
+            "description": "Permet de filtrer les résultats. Saisie partielle possible (département). Remonte les agences dont la communeImplantation de l'adresse principale commence par le paramètre ou dont la zone de compétence contient la commune INSEE saisie.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "67"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des agences.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Agence"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_referentielagencesv1",
+              "organisationpe"
+            ]
+          }
+        ]
+      }
+    },
+    "/agences/{code}": {
+      "get": {
+        "summary": "Consulter les détails d'une agence",
+        "description": "Consulte les détails d'une agence France Travail.",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Codification de type « XXXNNNN ». Codification sur 7 positions. A passer directement dans l’URI",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ARA0021"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails d'une agence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agence"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_referentielagencesv1",
+              "organisationpe"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Agence": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Le code AURORE de l'agence.",
+            "example": "NAQ0165"
+          },
+          "codeSafir": {
+            "type": "string",
+            "description": "Code Safir de l'agence."
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'agence.",
+            "example": "POITIERS-GARE"
+          },
+          "libelleEtendu": {
+            "type": "string",
+            "description": "Libellé étendu de l'agence."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type d'agence: peut désigner une agence généraliste (APE) ou une agence spécialisée dans l'accueil de certains publics tels que les Cadres (APES). De nouveaux types pourraient être ajoutés dans le futur.",
+            "example": "APE"
+          },
+          "typeAccueil": {
+            "type": "string",
+            "description": "Type d’accueil proposé par l’agence. Valeurs possibles (code →  libellé) : 1 → Site d’accueil en libre-service, 2 → Site d’accueil sur RDV, 3 → Site d’accueil en libre-service et sur RDV",
+            "example": "3"
+          },
+          "codeRegionINSEE": {
+            "type": "string",
+            "description": "Code Insee de la région à laquelle l’unité est rattachée.",
+            "example": "75"
+          },
+          "dispositifADEDA": {
+            "type": "boolean",
+            "description": "Indique si l'agence est équipe d'un dispositif ADEDA / BIM permettant l'accueil des sourds et déficients auditifs",
+            "example": "true"
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "Adresse mail de l'agence.",
+                "example": "ape.86009@pole-emploi.fr"
+              },
+              "telephonePublic": {
+                "type": "string",
+                "description": "Numéro de téléphone public.",
+                "example": "39-49"
+              }
+            }
+          },
+          "siret": {
+            "type": "string",
+            "description": "SIRET de l'agence."
+          },
+          "adressePrincipale": {
+            "type": "object",
+            "properties": {
+              "ligne3": {
+                "type": "string",
+                "description": "Complément d'identification du point géographique : entrée, tour, bâtiment, immeuble, résidence, zone industrielle",
+                "example": "Immeuble XX"
+              },
+              "ligne4": {
+                "type": "string",
+                "description": "Numéro et libellé de la voie.",
+                "example": "60 BD DU GRAND CERF"
+              },
+              "ligne5": {
+                "type": "string",
+                "description": "Mentions spéciales de distribution : Boite postale, tri spécial, ….",
+                "example": "CS 60379"
+              },
+              "ligne6": {
+                "type": "string",
+                "description": "Code postal et bureau distributeur ou code cedex et bureau distributeur",
+                "example": "86009 POITIERS CEDEX"
+              },
+              "bureauDistributeur": {
+                "type": "string",
+                "description": "Bureau distributeur.",
+                "example": "86009"
+              },
+              "communeImplantation": {
+                "type": "string",
+                "description": "Commune d'implantation.",
+                "example": "86194"
+              },
+              "gpsLat": {
+                "type": "number",
+                "format": "double",
+                "description": "Coordonnée GPS en latitude.",
+                "example": "46.582977"
+              },
+              "gpsLon": {
+                "type": "number",
+                "format": "double",
+                "description": "Coordonnée GPS en longitude.",
+                "example": "0.334514"
+              }
+            }
+          },
+          "horaires": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "jour": {
+                  "type": "string",
+                  "description": "Liste de 5 jours : 1 = lundi, 2 = mardi, 3 = mercredi, 4 = jeudi, 5=vendredi",
+                  "example": "1"
+                },
+                "ouvertureMatin": {
+                  "type": "string",
+                  "description": "Heure d’ouverture de l’agence plage 1.",
+                  "example": "8:30"
+                },
+                "fermetureMatin": {
+                  "type": "string",
+                  "description": "Heure de fermeture de l’agence plage 1.",
+                  "example": "12:30"
+                },
+                "ouvertureApresMidi": {
+                  "type": "string",
+                  "description": "Heure d’ouverture de l’agence plage 2.Si l’agence ne ferme pas le midi, cette donnée n’est pas renseignée."
+                },
+                "fermetureApresMidi": {
+                  "type": "string",
+                  "description": "Heure de fermeture de l’agence plage 2.Si l’agence ne ferme pas le midi, cette donnée n’est pas renseignée."
+                },
+                "horaireFerme": {
+                  "type": "string",
+                  "description": "Indique si l'agence est fermée ce jour-là (O/N).",
+                  "example": "N"
+                },
+                "horaireEnContinu": {
+                  "type": "string",
+                  "description": "Indique si l'agence est ouverte en continu le midi (O/N).",
+                  "example": "N"
+                },
+                "ouvertureMatinRDV": {
+                  "type": "string",
+                  "description": "Heure d’ouverture de l’agence pour les RDV plage 1"
+                },
+                "fermetureMatinRDV": {
+                  "type": "string",
+                  "description": "Heure de fermeture de l’agence pour les RDV plage 1"
+                },
+                "ouvertureApresMidiRDV": {
+                  "type": "string",
+                  "description": "Heure d’ouverture de l’agence pour les RDV plage 2.Si l’agence ne ferme pas le midi, cette donnée n’est pas renseignée.",
+                  "example": "12:30"
+                },
+                "fermetureApresMidiRDV": {
+                  "type": "string",
+                  "description": "Heure de fermeture de l’agence pour les RDV plage 2.Si l’agence ne ferme pas le midi, cette donnée n’est pas renseignée.",
+                  "example": "16:30"
+                },
+                "horaireFermeRDV": {
+                  "type": "string",
+                  "description": "Indique si l'agence est fermée ce jour-là pour les RDV (O/N).",
+                  "example": "N"
+                },
+                "horaireEnContinuRDV": {
+                  "type": "string",
+                  "description": "Indique si l'agence est ouverte en continu le midi pour les RDV (O/N).",
+                  "example": "N"
+                }
+              }
+            }
+          },
+          "zoneCompetences": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "communeInsee": {
+                  "type": "string",
+                  "description": "Code Insee de la commune.",
+                  "example": "86027"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "api_referentielagencesv1": "Obligatoire",
+              "organisationpe": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

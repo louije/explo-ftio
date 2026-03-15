@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romeo &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Romeo</h1>
+  <div class="sub">Algorithme IA pour rapprocher un texte libre des appellations m&#xe9;tier et comp&#xe9;tences du r&#xe9;f&#xe9;rentiel ROME</div>
+  <div class="sub-tech">Romeo v2.0 &#x2014; 4 endpoints &#xb7; 14 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/romeo/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-prediction-metier">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Pr&#xe9;diction m&#xe9;tier <span class="dto">PredictionAppellation</span></div>
+    <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">R&#xe9;sultat de pr&#xe9;diction pour un intitul&#xe9; de m&#xe9;tier envoy&#xe9; en texte libre. L'IA retourne l'intitul&#xe9; d'origine, un identifiant de tra&#xe7;abilit&#xe9; et les appellations ROME les plus proches.
+      <div class="fi-tech"><code>uuidInference</code> &#xb7; <code>identifiant</code> &#xb7; <code>intitule</code> &#xb7; <code>contexte</code></div>
+    </div>
+
+    <div class="n l1-n stack" id="m-metiers-rome">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Appellations ROME pr&#xe9;dites <span class="dto">metiersRome[] &#xb7; AppellationRome</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Appellations m&#xe9;tier du ROME class&#xe9;es par score de confiance de l'IA. Chaque r&#xe9;sultat inclut le code et le libell&#xe9; de l'appellation, la fiche ROME parente, et un score entre 0 et 1.
+          <div class="fi-tech"><code>libelleAppellation</code> &#xb7; <code>codeAppellation</code> &#xb7; <code>libelleRome</code> &#xb7; <code>codeRome</code> &#xb7; <code>scorePrediction</code></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l0" id="m-prediction-competence">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Pr&#xe9;diction comp&#xe9;tence <span class="dto">PredictionCompetence</span></div>
+    <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">R&#xe9;sultat de pr&#xe9;diction pour une comp&#xe9;tence envoy&#xe9;e en texte libre. L'IA retourne les savoirs et savoir-faire du ROME les plus proches.
+      <div class="fi-tech"><code>uuidInference</code> &#xb7; <code>identifiant</code> &#xb7; <code>intitule</code></div>
+    </div>
+
+    <div class="n l1-p stack" id="m-competences-rome">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Comp&#xe9;tences ROME pr&#xe9;dites <span class="dto">competencesRome[] &#xb7; CompetenceRome</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array &#xb7; 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Savoirs ou savoir-faire du ROME class&#xe9;s par score de confiance. Le type pr&#xe9;cise s'il s'agit d'un savoir, d'une comp&#xe9;tence d&#xe9;taill&#xe9;e ou d'une macro-comp&#xe9;tence.
+          <div class="fi-tech"><code>libelleCompetence</code> &#xb7; <code>codeCompetence</code> &#xb7; <code>typeCompetence</code> &#xb7; <code>scorePrediction</code>
+            <br><span class="ev">COMPETENCE-DETAILLEE</span> &#xb7; <span class="ev">MACRO-SAVOIR-FAIRE</span> &#xb7; <span class="ev">SAVOIR</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l3" id="m-requete">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Requ&#xea;te d'entr&#xe9;e <span class="dto">AppellationDTO &#xb7; CompetenceDTO</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Corps de la requ&#xea;te POST. Contient une liste de textes libres &#xe0; pr&#xe9;dire (max 20 pour les m&#xe9;tiers) et des options de configuration : nom de l'appelant, nombre de r&#xe9;sultats souhait&#xe9;s, seuil de score minimum.
+      <div class="fi-tech"><code>appellations[]</code> / <code>competences[]</code> &#x2014; <code>intitule</code> &#xb7; <code>identifiant</code> &#xb7; <code>contexte</code>
+        <br><code>options</code> &#x2014; <code>nomAppelant</code> &#xb7; <code>nbResultats</code> (1&#x2013;25, d&#xe9;faut 5) &#xb7; <code>seuilScorePrediction</code> (0&#x2013;1)</div>
+    </div>
+  </div>
+</div>
+
+<div class="n l3" id="m-feedback">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Feedback de performance <span class="dto">PerformanceAppellationDTO &#xb7; PerformanceCompetenceDTO</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Retour d'exp&#xe9;rience pour am&#xe9;liorer le mod&#xe8;le IA. L'appelant indique si la pr&#xe9;diction &#xe9;tait correcte et, le cas &#xe9;ch&#xe9;ant, le code qu'il aurait pr&#xe9;f&#xe9;r&#xe9;.
+      <div class="fi-tech"><code>uuidInference</code> &#xb7; <code>bonnePrediction</code> (<span class="ev">true|false</span>) &#xb7; <code>codeAppellation</code> / <code>codeCompetence</code>
+        <br><code>optionsSupervision</code> &#x2014; <code>nomAppelant</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique dans le royaume <code>/partenaire</code>. Acc&#xe8;s par <em>client credentials</em> uniquement (scope <code>api_romeov2</code>). Aucun contexte utilisateur requis.
+</div>
+
+<div class="note">
+  <strong>Flux</strong> &#x2014; Texte libre &#x2192; <code>POST /predictionMetiers</code> ou <code>/predictionCompetences</code> &#x2192; r&#xe9;ponse avec pr&#xe9;dictions class&#xe9;es par score de confiance &#x2192; <code>POST /performancePrediction*</code> pour renvoyer un feedback.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Appellation <span class="dt-human">&#x2014; Pr&#xe9;dictions sur les m&#xe9;tiers</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Pr&#xe9;diction des appellations m&#xe9;tier du ROME</span><div class="ep-human">Rapprocher un texte libre d'une appellation m&#xe9;tier ROME</div><span class="ep-path">/predictionMetiers</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Feedback am&#xe9;lioration mod&#xe8;le IA (m&#xe9;tiers)</span><div class="ep-human">Renvoyer si la pr&#xe9;diction m&#xe9;tier &#xe9;tait correcte</div><span class="ep-path">/performancePredictionMetiers</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Competence <span class="dt-human">&#x2014; Pr&#xe9;dictions sur les comp&#xe9;tences</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Pr&#xe9;diction des savoirs / savoir-faire du ROME</span><div class="ep-human">Rapprocher un texte libre d'un savoir ou savoir-faire ROME</div><span class="ep-path">/predictionCompetences</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Feedback am&#xe9;lioration mod&#xe8;le IA (comp&#xe9;tences)</span><div class="ep-human">Renvoyer si la pr&#xe9;diction comp&#xe9;tence &#xe9;tait correcte</div><span class="ep-path">/performancePredictionCompetences</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">14 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PredictionAppellation</span> <span class="sc-desc">&#x2014; Pr&#xe9;diction m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AppellationRome</span> <span class="sc-desc">&#x2014; Appellation ROME pr&#xe9;dite</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PredictionCompetence</span> <span class="sc-desc">&#x2014; Pr&#xe9;diction comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">CompetenceRome</span> <span class="sc-desc">&#x2014; Comp&#xe9;tence ROME pr&#xe9;dite</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ExceptionPerformanceAppellation</span> <span class="sc-desc">&#x2014; Retour feedback m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ExceptionPerformanceCompetence</span> <span class="sc-desc">&#x2014; Retour feedback comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">AppellationDTO</span> <span class="sc-desc">&#x2014; Requ&#xea;te pr&#xe9;diction m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Appellation</span> <span class="sc-desc">&#x2014; Intitul&#xe9; m&#xe9;tier &#xe0; pr&#xe9;dire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CompetenceDTO</span> <span class="sc-desc">&#x2014; Requ&#xea;te pr&#xe9;diction comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Competence</span> <span class="sc-desc">&#x2014; Intitul&#xe9; comp&#xe9;tence &#xe0; pr&#xe9;dire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Options</span> <span class="sc-desc">&#x2014; Param&#xe8;tres de pr&#xe9;diction</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">PerformanceAppellationDTO</span> <span class="sc-desc">&#x2014; Feedback m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">PerformanceCompetenceDTO</span> <span class="sc-desc">&#x2014; Feedback comp&#xe9;tence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">OptionsSupervision</span> <span class="sc-desc">&#x2014; Identification appelant</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Analyse d'un CV</strong> &#x2014; Un outil de parsing de CV extrait deux exp&#xe9;riences professionnelles et une comp&#xe9;tence. Il les envoie &#xe0; Romeo pour obtenir les codes ROME correspondants.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete-metier"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /predictionMetiers</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"appellations"</span>: [
+    {
+      <span class="jk">"intitule"</span>: <span class="js">"P&#xe2;tissi&#xe8;re en restaurant gastronomique"</span>,
+      <span class="jk">"identifiant"</span>: <span class="js">"exp-001"</span>,
+      <span class="jk">"contexte"</span>: <span class="js">"H&#xf4;tellerie-restauration haut de gamme"</span>
+    },
+    {
+      <span class="jk">"intitule"</span>: <span class="js">"Responsable qualit&#xe9; en agroalimentaire"</span>,
+      <span class="jk">"identifiant"</span>: <span class="js">"exp-002"</span>
+    }
+  ],
+  <span class="jk">"options"</span>: {
+    <span class="jk">"nomAppelant"</span>: <span class="js">"mon-outil-cv"</span>,
+    <span class="jk">"nbResultats"</span>: <span class="jn">3</span>,
+    <span class="jk">"seuilScorePrediction"</span>: <span class="jn">0.5</span>
+  }
+}</div>
+<div data-section="s-reponse-metier"><span class="jc">// &#x2501;&#x2501; R&#xe9;ponse 200 OK &#x2501;&#x2501;</span>
+[
+  {
+    <span class="jk">"uuidInference"</span>: <span class="js">"a7c3e1f0-4d2b-48a9-b5c6-9e8f7a6b5c4d"</span>,
+    <span class="jk">"identifiant"</span>: <span class="js">"exp-001"</span>,
+    <span class="jk">"intitule"</span>: <span class="js">"P&#xe2;tissi&#xe8;re en restaurant gastronomique"</span>,
+    <span class="jk">"contexte"</span>: <span class="js">"H&#xf4;tellerie-restauration haut de gamme"</span>,
+    <span class="jk">"metiersRome"</span>: [
+      {
+        <span class="jk">"libelleAppellation"</span>: <span class="js">"P&#xe2;tissier / P&#xe2;tissi&#xe8;re de restaurant"</span>,
+        <span class="jk">"codeAppellation"</span>: <span class="js">"18821"</span>,
+        <span class="jk">"libelleRome"</span>: <span class="js">"P&#xe2;tisserie, confiserie, chocolaterie et glacerie"</span>,
+        <span class="jk">"codeRome"</span>: <span class="js">"D1104"</span>,
+        <span class="jk">"scorePrediction"</span>: <span class="jn">0.91</span>
+      },
+      {
+        <span class="jk">"libelleAppellation"</span>: <span class="js">"Chef p&#xe2;tissier / Chef p&#xe2;tissi&#xe8;re"</span>,
+        <span class="jk">"codeAppellation"</span>: <span class="js">"11950"</span>,
+        <span class="jk">"libelleRome"</span>: <span class="js">"P&#xe2;tisserie, confiserie, chocolaterie et glacerie"</span>,
+        <span class="jk">"codeRome"</span>: <span class="js">"D1104"</span>,
+        <span class="jk">"scorePrediction"</span>: <span class="jn">0.84</span>
+      }
+    ]
+  },
+  {
+    <span class="jk">"uuidInference"</span>: <span class="js">"b8d4f2e1-5e3c-49ba-c6d7-0f9g8b7c6d5e"</span>,
+    <span class="jk">"identifiant"</span>: <span class="js">"exp-002"</span>,
+    <span class="jk">"intitule"</span>: <span class="js">"Responsable qualit&#xe9; en agroalimentaire"</span>,
+    <span class="jk">"metiersRome"</span>: [
+      {
+        <span class="jk">"libelleAppellation"</span>: <span class="js">"Responsable qualit&#xe9; en industrie alimentaire"</span>,
+        <span class="jk">"codeAppellation"</span>: <span class="js">"38820"</span>,
+        <span class="jk">"libelleRome"</span>: <span class="js">"Management et ing&#xe9;nierie qualit&#xe9; industrielle"</span>,
+        <span class="jk">"codeRome"</span>: <span class="js">"H1502"</span>,
+        <span class="jk">"scorePrediction"</span>: <span class="jn">0.88</span>
+      }
+    ]
+  }
+]</div>
+<div data-section="s-feedback"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// POST /performancePredictionMetiers</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"performanceAppellation"</span>: [
+    {
+      <span class="jk">"uuidInference"</span>: <span class="js">"a7c3e1f0-4d2b-48a9-b5c6-9e8f7a6b5c4d"</span>,
+      <span class="jk">"bonnePrediction"</span>: <span class="jb">true</span>,
+      <span class="jk">"codeAppellation"</span>: <span class="js">"18821"</span>
+    }
+  ],
+  <span class="jk">"optionsSupervision"</span>: {
+    <span class="jk">"nomAppelant"</span>: <span class="js">"mon-outil-cv"</span>
+  }
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete-metier">
+  <div class="ex-title"><span class="ex-ico">&#x1F4E4;</span> Requ&#xea;te</div>
+  <div class="ex-card">
+    <h4>Deux exp&#xe9;riences &#xe0; identifier</h4>
+    <p>L'outil envoie deux intitul&#xe9;s de poste extraits d'un CV. Le premier est pr&#xe9;cis&#xe9; avec un contexte (h&#xf4;tellerie haut de gamme) pour affiner la pr&#xe9;diction.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>exp-001</strong> &#x2192; &#xab; P&#xe2;tissi&#xe8;re en restaurant gastronomique &#xbb; + contexte</div>
+      <div class="ex-item"><strong>exp-002</strong> &#x2192; &#xab; Responsable qualit&#xe9; en agroalimentaire &#xbb;</div>
+    </div>
+    <div class="ex-agent">Options : 3 r&#xe9;sultats max, seuil de confiance &#xe0; 0.5</div>
+  </div>
+</div>
+
+<div data-section="s-reponse-metier">
+  <div class="ex-title"><span class="ex-ico">&#x1F3AF;</span> Pr&#xe9;dictions</div>
+  <div class="ex-card">
+    <h4>exp-001 &#x2014; P&#xe2;tissi&#xe8;re</h4>
+    <p>L'IA identifie clairement le domaine p&#xe2;tisserie avec un score de <span class="ex-tag tag-ok">0.91</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>P&#xe2;tissier / P&#xe2;tissi&#xe8;re de restaurant</strong> &#x2192; D1104 &#xb7; <span class="ex-tag tag-ok">0.91</span></div>
+      <div class="ex-item"><strong>Chef p&#xe2;tissier / Chef p&#xe2;tissi&#xe8;re</strong> &#x2192; D1104 &#xb7; <span class="ex-tag tag-moyen">0.84</span></div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h4>exp-002 &#x2014; Responsable qualit&#xe9;</h4>
+    <p>Un seul r&#xe9;sultat au-dessus du seuil, directement dans le domaine management qualit&#xe9;.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Resp. qualit&#xe9; industrie alimentaire</strong> &#x2192; H1502 &#xb7; <span class="ex-tag tag-ok">0.88</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-feedback">
+  <div class="ex-title"><span class="ex-ico">&#x1F4AC;</span> Feedback</div>
+  <div class="ex-card">
+    <h4>Am&#xe9;lioration du mod&#xe8;le</h4>
+    <p>L'outil confirme que la premi&#xe8;re pr&#xe9;diction &#xe9;tait correcte (<span class="ex-tag tag-ok">bonnePrediction: true</span>) et pr&#xe9;cise le code appellation retenu. Ce retour alimente l'apprentissage du mod&#xe8;le.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.3 &#x2014; Romeo v2.0 &#xb7; api.francetravail.io &#xb7; 4 endpoints &#xb7; 14 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+{
+  "openapi": "3.0.3",
+  "x-stoplight": {
+    "id": "fjfc840jfedgg"
+  },
+  "info": {
+    "title": "Métiers recherchés, projets d'évolution et projets de création, reprise et franchise d'entreprise",
+    "version": "1.0.40",
+    "description": "Cette API permet de récupérer :\r\n- la liste des métiers recherchés par l'usager,\r\n- les projets d'évolution professionnelle souhaités par l'usager\r\n- et les projets de création, reprise ou franchise d'entreprise de l'usager\r\n \r\n Les données retournées proviennent du profil de compétences de l'usager au sein du SI de France Travail. Il est alimenté par son conseiller ou par l'usager lui-même.\r\n\r\n **Scopes :** `api_metiers-projets-entreprisesv2`,`ciblepro` ,`profil_accedant`\r\n\r\n **Royaume :** `/agent`"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/metiers-projets-entreprises/v2"
+    }
+  ],
+  "paths": {
+    "/metiers-recherches": {
+      "get": {
+        "tags": [
+          "Métiers recherchés et projets d'évolution professionnelle"
+        ],
+        "summary": "Récupérer les métiers recherchés et projets d'évolution professionnelle",
+        "description": "Récupère les métiers recherchés par l'usager et ses projets d'évolution professionnelle contenu dans son profil de compétences. \r\n\r\nIls sont constitués d'une appellation issue de référentiel Rome, de la mobilité de recherche de l'emploi et d'autres éléments permettant de préciser les critères de recherche.",
+        "operationId": "recupererMetiersRecherchesV2",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci).\n\nPour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\nAttention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne la liste des métiers recherchés et des projets d'évolution professionnelle d'un usager du Profil de Compétences",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/metierRecherche"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "L'individu ne possède pas de métiers recherchés"
+          },
+          "500": {
+            "description": "Une erreur technique est survenue"
+          }
+        },
+        "security": [],
+        "x-stoplight": {
+          "id": "5ziden2svxoyr"
+        }
+      }
+    },
+    "/projets-cref": {
+      "get": {
+        "tags": [
+          "Projets de création, reprise et franchise d'entreprise"
+        ],
+        "summary": "Récupérer les projets de création, reprise et franchise d'entreprise",
+        "description": "Récupère les projets de création, reprise ou franchise d'entreprise renseignés dans le profil de compétences de l'usager. \r\n\r\nIls peuvent indiquer le type de projet souhaité (création, reprise et/ou franchise), une appelation issue du réferentiel Rome indiquant quel métier est concerné, un titre d'activité et la mobilité liée au projet.",
+        "operationId": "recupererProjetsV2",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**\n\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne la liste des projets CREF de l'usager du Profil de Compétences",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/projetCref"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "L'individu ne possède pas de projets CREF"
+          },
+          "500": {
+            "description": "Une erreur technique est survenue"
+          }
+        },
+        "security": [],
+        "x-stoplight": {
+          "id": "0yu46w1fedzv7"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "appellation": {
+        "description": "Appellation ROME du métier qui fait l'objet d'une recherche, d'un projet d'évolution ou de création, reprise ou franchise d'entreprise de l'usager du Profil de Compétences",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code de l'appellation",
+            "type": "string",
+            "example": "19431"
+          },
+          "libelle": {
+            "description": "Libellé de l'appellation",
+            "type": "string",
+            "example": "Sexeur / Sexeuse de volailles"
+          }
+        },
+        "x-stoplight": {
+          "id": "13bbssngil7uh"
+        }
+      },
+      "contrat": {
+        "description": "Types de contrat souhaités par l'usager du Profil de compétences",
+        "type": "object",
+        "properties": {
+          "critereOre": {
+            "description": "Indique si ce type de contrat fait partie de l'Offre Raisonnable d'Emploi (ORE) de l'usager du Profil de compétences",
+            "type": "boolean"
+          },
+          "priorite": {
+            "format": "int32",
+            "description": "Indique la priorité de ce type de contrat par rapport aux autres. 0 correspondant à la priorité la plus importante",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/typeContrat"
+              },
+              {
+                "description": "Détail dans \"TypeContratDto\""
+              }
+            ]
+          }
+        },
+        "x-stoplight": {
+          "id": "tkw7ol5qwz936"
+        }
+      },
+      "dureeExperience": {
+        "description": "Détaille l'expérience concernant le métier recherché, le projet d'évolution ou de création, reprise ou franchise d'entreprise de l'usager du Profil de compétence",
+        "type": "object",
+        "properties": {
+          "unite": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/uniteDureeExperience"
+              },
+              {
+                "description": "Détail dans \"UniteDureeExperienceDto\""
+              }
+            ]
+          },
+          "valeur": {
+            "format": "int32",
+            "description": "Valeur de temps de l'expérience",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "x-stoplight": {
+          "id": "rjvgxbuqnpiqi"
+        }
+      },
+      "dureeHebdomadaire": {
+        "description": "Informations sur le temps de travail souhaité par l'usager du Profil de compétence",
+        "type": "object",
+        "properties": {
+          "critereOre": {
+            "description": "Indicateur si la durée de travail hebdomadaire est un critère d'Offre Raisonnable d'Emploi (ORE)",
+            "type": "boolean"
+          },
+          "tempsTravail": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/uniteTempsTravail"
+              },
+              {
+                "description": "Détail dans \"UniteTempsTravailDto\""
+              }
+            ]
+          }
+        },
+        "x-stoplight": {
+          "id": "stlc2nl7xicab"
+        }
+      },
+      "lieu": {
+        "description": "Informations géographiques d'une mobilité",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code du lieu (code INSEE)",
+            "type": "string",
+            "example": "33318"
+          },
+          "Libelle": {
+            "description": "Libellé du lieu (nom d'une commune, d'un pays, ...)",
+            "type": "string",
+            "example": "Pessac"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/typeLieu"
+              },
+              {
+                "description": "Détail dans \"TypeLieuDto\""
+              }
+            ]
+          }
+        },
+        "x-stoplight": {
+          "id": "6ir0eii2dge9z"
+        }
+      },
+      "metierRecherche": {
+        "description": "Contient les informations sur les métiers recherchés et les projets d'évolutions professionnelles de l'usager du Profil de compétences",
+        "type": "object",
+        "properties": {
+          "appellation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/appellation"
+              },
+              {
+                "description": "Détail dans \"AppellationDto\""
+              }
+            ]
+          },
+          "contrats": {
+            "description": "Détail dans \"ContratDto\"",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/contrat"
+            }
+          },
+          "dateValidationPasseportEmploi": {
+            "format": "date",
+            "description": "Date de validation du passeport emploi (non renseignée aujourd'hui, en cours de déploiement)",
+            "type": "string"
+          },
+          "dureeExperience": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/dureeExperience"
+              },
+              {
+                "description": "Détail dans \"DureeExperienceDto\""
+              }
+            ]
+          },
+          "dureesHebdomadaires": {
+            "description": "Détail dans \"DureeHebdomadaireDto\"",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/dureeHebdomadaire"
+            }
+          },
+          "identifiant": {
+            "description": "Identifiant chiffré du métier recherché ou du projet métier",
+            "type": "string",
+            "example": "12345"
+          },
+          "mobiliteHabitation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/mobiliteHabitation"
+              },
+              {
+                "description": "Détail dans \"MobiliteHabitationDto\""
+              }
+            ]
+          },
+          "mobilites": {
+            "description": "Détail dans \"MobiliteDto\"",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/mobilite"
+            }
+          },
+          "mrs": {
+            "description": "Indique si le recrutement pour ce métier se fera par la Méthode de Recrutement par Simulation (MRS)",
+            "type": "boolean"
+          },
+          "passeportEmploi": {
+            "description": "Donnée non renseignée aujourd'hui, en cours de déploiement",
+            "type": "boolean"
+          },
+          "rome": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/rome"
+              },
+              {
+                "description": "Détail dans \"RomeDto\""
+              }
+            ]
+          },
+          "salaire": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/salaire"
+              },
+              {
+                "description": "Détail dans \"SalaireDto\""
+              }
+            ]
+          },
+          "typologieEmploi": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/typologieEmploi"
+              },
+              {
+                "description": "Détail dans \"TypologieEmploiDto\""
+              }
+            ]
+          }
+        },
+        "x-stoplight": {
+          "id": "v24emj5mab7ax"
+        }
+      },
+      "mobilite": {
+        "description": "Mobilité géographique choisie pour une recherche, d'un projet d'évolution ou de création, reprise ou franchise d'entreprise de l'usager du Profil de Compétences",
+        "type": "object",
+        "properties": {
+          "lieu": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/lieu"
+              },
+              {
+                "description": "Détail dans \"LieuDto\""
+              }
+            ]
+          },
+          "mobilitePrioritaire": {
+            "description": "Indique si la mobilité est déclarée prioritaire par l'usager",
+            "type": "boolean",
+            "nullable": true
+          },
+          "rayon": {
+            "format": "int32",
+            "description": "Rayon autour de la mobilité souhaité par le demandeur d'emploi lorsque le lieu est une commune (type \"5\")",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "unite": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/uniteLieu"
+              },
+              {
+                "description": "Détail dans \"UniteMobiliteDto\""
+              }
+            ]
+          }
+        },
+        "x-stoplight": {
+          "id": "h6a8sdvlny80w"
+        }
+      },
+      "mobiliteHabitation": {
+        "description": "Informations sur la mobilité autour du lieu de résidence de l'usager du Profil de compétences",
+        "type": "object",
+        "properties": {
+          "mobilitePrioritaire": {
+            "description": "Indique si la mobilité est déclarée prioritaire par l'usager",
+            "type": "boolean",
+            "nullable": true
+          },
+          "unite": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/uniteLieu"
+              },
+              {
+                "description": "Détail dans \"UniteMobiliteDto\""
+              }
+            ]
+          },
+          "valeur": {
+            "format": "int64",
+            "description": "Rayon autour du lieu de résidence souhaité par le demandeur d'emploi",
+            "maximum": 1,
+            "minimum": -1,
+            "type": "integer"
+          }
+        },
+        "x-stoplight": {
+          "id": "2jr059yzc45gh"
+        }
+      },
+      "projetCref": {
+        "description": "Contient les informations sur les projets de création, reprise et franchise d'entreprise de l'usager du Profil de compétences",
+        "type": "object",
+        "properties": {
+          "appellation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/appellation"
+              },
+              {
+                "description": "Détail dans \"AppellationDto\""
+              }
+            ]
+          },
+          "identifiant": {
+            "description": "Identifiant chiffré du projet CREF",
+            "type": "string"
+          },
+          "mobiliteHabitation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/mobiliteHabitation"
+              },
+              {
+                "description": "Détail dans \"MobiliteHabitationDto\""
+              }
+            ]
+          },
+          "mobilites": {
+            "description": "Détail dans \"MobiliteDto\"",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/mobilite"
+            }
+          },
+          "rome": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/rome"
+              },
+              {
+                "description": "Détail dans \"RomeDto\""
+              }
+            ]
+          },
+          "typeCrefCreation": {
+            "description": "Indique s'il s'agit d'un projet de création d'entreprise",
+            "type": "boolean"
+          },
+          "typeCrefFranchise": {
+            "description": "Indique s'il s'agit d'un projet de franchise d'entreprise",
+            "type": "boolean"
+          },
+          "typeCrefReprise": {
+            "description": "Indique s'il s'agit d'un projet de reprise d'entreprise",
+            "type": "boolean"
+          }
+        },
+        "x-stoplight": {
+          "id": "mvpykwxdpmao6"
+        }
+      },
+      "rome": {
+        "description": "Informations du référentiel ROME concernant le métier lié à une recherche, d'un projet d'évolution ou de création, reprise ou franchise d'entreprise de l'usager du Profil de Compétences",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code du référentiel ROME",
+            "type": "string",
+            "example": "A1403"
+          },
+          "libellé": {
+            "description": "Libellé du référentiel ROME",
+            "type": "string",
+            "example": "Aide d'élevage agricole"
+          }
+        },
+        "x-stoplight": {
+          "id": "fjo38sbqwi72z"
+        }
+      },
+      "salaire": {
+        "description": "Informations sur le salaire souhaité par l'usager du Profil de compétence",
+        "type": "object",
+        "properties": {
+          "libelle": {
+            "description": "Libellé indiquant l'échelle du montant",
+            "enum": [
+              "Annuel",
+              "Mensuel",
+              "Cachet",
+              "Horaire",
+              "Autre"
+            ],
+            "type": "string",
+            "example": "Horaire"
+          },
+          "remuneration": {
+            "format": "double",
+            "description": "Valeur de la rémunération souhaitée (en euros brut)",
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "x-stoplight": {
+          "id": "qzpezyd24vgxl"
+        }
+      },
+      "typeContrat": {
+        "description": "Type du contrat souhaité par l'usager du Profil de compétence",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code du type de contrat",
+            "enum": [
+              "CDI",
+              "CDD",
+              "DIN",
+              "MIS",
+              "SAI",
+              "LIB",
+              "CCE",
+              "FS",
+              "E2",
+              "PS"
+            ],
+            "type": "string",
+            "example": "CDI"
+          },
+          "libelle": {
+            "description": "Libellé du type de contrat",
+            "enum": [
+              "CDI",
+              "CDD",
+              "CDI intérimaire",
+              "Mission intérimaire",
+              "Saisonnier",
+              "Profession libérale",
+              "Profession commerciale",
+              "Contrat de professionnalisation",
+              "Contrat d'apprentissage",
+              "Portage salarial"
+            ],
+            "type": "string",
+            "example": "CDI"
+          },
+          "libelleLong": {
+            "description": "Libellé long du type de contrat",
+            "enum": [
+              "Contrat à durée indéterminée",
+              "Contrat à durée déterminée",
+              "CDI intérimaire",
+              "Mission intérimaire",
+              "Contrat travail saisonnier",
+              "Profession libérale",
+              "Profession commerciale",
+              "Contrat de professionnalisation",
+              "Contrat d'apprentissage",
+              "Portage salarial"
+            ],
+            "type": "string",
+            "example": "Contrat à durée indéterminée"
+          }
+        },
+        "x-stoplight": {
+          "id": "x6zj8plc94yos"
+        }
+      },
+      "typeLieu": {
+        "description": "Type du lieu",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code du type de lieu",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "type": "string",
+            "example": "5"
+          },
+          "libelle": {
+            "description": "Libelle du type de lieu",
+            "enum": [
+              "Pays",
+              "Continent",
+              "Région",
+              "Département",
+              "Commune"
+            ],
+            "type": "string",
+            "example": "Commune"
+          }
+        },
+        "x-stoplight": {
+          "id": "ij056xpwfmew8"
+        }
+      },
+      "typologieEmploi": {
+        "description": "Typologie de l'emploi, indique s'il s'agit d'un métier recherché ou d'un projet d'évolution professionnelle",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code de la typologie emploi",
+            "enum": [
+              "MR",
+              "PM",
+              "EF"
+            ],
+            "type": "string",
+            "example": "MR"
+          },
+          "libelle": {
+            "description": "Libellé de la typologie emploi",
+            "enum": [
+              "Métier Recherché",
+              "Projet de Métier",
+              "Création ou Reprise d'Entreprise ou de Franchiseaire"
+            ],
+            "type": "string",
+            "example": "Métier Recherché"
+          }
+        },
+        "x-stoplight": {
+          "id": "tgnupza53as99"
+        }
+      },
+      "uniteDureeExperience": {
+        "description": "Échelle de la valeur de temps sur l'expérience",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code de l'unité de durée d'expérience",
+            "enum": [
+              "AN",
+              "MO"
+            ],
+            "type": "string",
+            "example": "AN"
+          },
+          "libelle": {
+            "description": "Libelle de l'unité de durée d'expérience",
+            "enum": [
+              "An(s)",
+              "Mois"
+            ],
+            "type": "string",
+            "example": "An(s)"
+          }
+        },
+        "x-stoplight": {
+          "id": "662mmqd39rzys"
+        }
+      },
+      "uniteLieu": {
+        "description": "Informations complétant le rayon",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code de l'unité",
+            "enum": [
+              "KM",
+              "H",
+              "MN"
+            ],
+            "type": "string",
+            "example": "KM"
+          },
+          "libelle": {
+            "description": "Libelle de l'unité",
+            "enum": [
+              "Kilomètres",
+              "Heures",
+              "Minutes"
+            ],
+            "type": "string",
+            "example": "Kilomètres"
+          }
+        },
+        "x-stoplight": {
+          "id": "q9t5ginkq2byi"
+        }
+      },
+      "uniteTempsTravail": {
+        "description": "Précisions sur le temps de travail souhaité",
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Code de l'unité de temps de travail",
+            "enum": [
+              "1",
+              "2"
+            ],
+            "type": "string",
+            "example": "1"
+          },
+          "libelle": {
+            "description": "Libellé de l'unité de temps de travail",
+            "enum": [
+              "temps plein",
+              "temps partiel"
+            ],
+            "type": "string",
+            "example": "temps plein"
+          },
+          "max": {
+            "format": "int32",
+            "description": "Temps de travail max en heure(s) par semaine (renseigné en cas de temps partiel)",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "nullable": true
+          },
+          "min": {
+            "format": "int32",
+            "description": "Temps de travail min en heure(s) par semaine (renseigné en cas de temps partiel)",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "x-stoplight": {
+          "id": "e1gasj7eb89tp"
+        }
+      }
+    },
+    "securitySchemes": {}
+  }
+}

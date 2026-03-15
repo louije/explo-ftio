@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date de naissance &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Date de naissance</h1>
+  <div class="sub">Date de naissance de l&#x2019;utilisateur connect&#xe9;, dans le cadre de la portabilit&#xe9; des donn&#xe9;es personnelles</div>
+  <div class="sub-tech">API Date de Naissance v1.0 &#x2014; 1 endpoint &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-datenaissance/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Date de naissance <span class="dto">DateDeNaissance</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-p" id="m-date">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Date de naissance <span class="dto">dateDeNaissance</span></div>
+        <div class="card">Obligatoire <span class="card-tech">date-time &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Date de naissance saisie par l&#x2019;individu sur francetravail.fr, au format ISO 8601
+        <div class="fi-tech"><code>dateDeNaissance</code> &#xb7; format <code>YYYY-MM-DDTHH:MM:SS+HH:MM</code> &#x2014; requis</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/individu</code> (PE Connect). L&#x2019;utilisateur doit s&#x2019;&#xea;tre authentifi&#xe9; via France Travail Connect avec les scopes <code>api_peconnect-datenaissancev1</code> et <code>datenaissance</code>. L&#x2019;application acc&#xe8;de aux donn&#xe9;es de l&#x2019;utilisateur connect&#xe9; &#x2014; aucun header agent n&#x2019;est n&#xe9;cessaire.
+</div>
+
+<div class="note">Cette API fait partie du dispositif de portabilit&#xe9; des donn&#xe9;es personnelles. Elle retourne un seul champ &#x2014; c&#x2019;est l&#x2019;API la plus simple du catalogue France Travail. La date inclut un fuseau horaire (g&#xe9;n&#xe9;ralement <code>+01:00</code> pour la France).</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">&#xc9;tat civil <span class="dt-human">&#x2014; Date de naissance de l&#x2019;utilisateur</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer la date de naissance</span><div class="ep-human">Lire la date de naissance de l&#x2019;individu authentifi&#xe9;</div><span class="ep-path">/etat-civil</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DateDeNaissance</span> <span class="sc-desc">&#x2014; Date de naissance au format ISO 8601</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Portabilit&#xe9; des donn&#xe9;es</strong> &#x2014; Un utilisateur connect&#xe9; &#xe0; une application partenaire r&#xe9;cup&#xe8;re sa date de naissance dans le cadre de la portabilit&#xe9; de ses donn&#xe9;es personnelles France Travail.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-naissance"><span class="jc">// GET /etat-civil</span>
+<span class="jc">// Auth: Bearer token via France Travail Connect</span>
+<span class="jc">// Scopes: api_peconnect-datenaissancev1, datenaissance</span>
+{
+  <span class="jk">"dateDeNaissance"</span>: <span class="js">"1987-04-15T00:00:00+01:00"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-naissance">
+  <div class="ex-title"><span class="ex-ico">&#x1F382;</span> Date de naissance</div>
+  <div class="ex-card">
+    <h4>15 avril 1987</h4>
+    <p>Date de naissance d&#xe9;clar&#xe9;e par l&#x2019;utilisateur sur francetravail.fr</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Format brut</strong> &#x2192; 1987-04-15T00:00:00+01:00</div>
+      <div class="ex-item"><strong>Fuseau horaire</strong> &#x2192; +01:00 (heure de Paris)</div>
+    </div>
+    <div class="ex-agent">La partie heure est toujours &#xe0; minuit &#x2014; seule la date calendaire est significative</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Date de Naissance v1.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coordonn&#xe9;es &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Coordonn&#xe9;es</h1>
+  <div class="sub">Adresse postale, t&#xe9;l&#xe9;phones et email de l&#x2019;utilisateur connect&#xe9;</div>
+  <div class="sub-tech">API Coordonn&#xe9;es v1.0 &#x2014; 1 endpoint &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-coordonnees/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Coordonn&#xe9;es <span class="dto">Coordonnees</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-identite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identit&#xe9;</div>
+        <div class="card">2 champs obligatoires</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Nom et pr&#xe9;nom de l&#x2019;utilisateur tels que d&#xe9;clar&#xe9;s sur son compte France Travail
+        <div class="fi-tech"><code>nom</code> &#xb7; <code>prenom</code> &#x2014; requis</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-adresse">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Adresse postale</div>
+        <div class="card">9 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Adresse structur&#xe9;e en 4 lignes normalis&#xe9;es (destinataire, compl&#xe9;ment, distribution, voie), compl&#xe9;t&#xe9;e par le code postal, le code INSEE, la commune et le pays
+        <div class="fi-tech"><code>adresse1</code> &#xb7; <code>adresse2</code> &#xb7; <code>adresse3</code> &#xb7; <code>adresse4</code> &#xb7; <code>codePostal</code> &#xb7; <code>codeINSEE</code> &#xb7; <code>libelleCommune</code> &#xb7; <code>codePays</code> &#xb7; <code>libellePays</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-p" id="m-contact">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contact</div>
+        <div class="card">3 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Email (obligatoire) et jusqu&#x2019;&#xe0; deux num&#xe9;ros de t&#xe9;l&#xe9;phone
+        <div class="fi-tech"><code>email</code> (requis) &#xb7; <code>telephone1</code> &#xb7; <code>telephone2</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-validation">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Statut de validation email <span class="dto">statutValidationEmail</span></div>
+        <div class="card">Obligatoire <span class="card-tech">string &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Indique si l&#x2019;adresse email a &#xe9;t&#xe9; v&#xe9;rifi&#xe9;e par l&#x2019;utilisateur
+        <div class="fi-tech"><code>statutValidationEmail</code> &#xb7; <span class="ev">V (valid&#xe9;)|P (provisoire)|I (invalide)|E (erron&#xe9;)</span></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/individu</code> (PE Connect). L&#x2019;utilisateur doit s&#x2019;&#xea;tre authentifi&#xe9; via France Travail Connect avec les scopes <code>api_peconnect-coordonneesv1</code> et <code>coordonnees</code>. L&#x2019;application acc&#xe8;de aux donn&#xe9;es de l&#x2019;utilisateur connect&#xe9; &#x2014; aucun header agent n&#x2019;est n&#xe9;cessaire.
+</div>
+
+<div class="note">Les champs <code>adresse1</code> &#xe0; <code>adresse4</code> suivent la norme postale fran&#xe7;aise : destinataire, compl&#xe9;ment d&#x2019;adresse, compl&#xe9;ment de distribution, voie. Tous les champs d&#x2019;adresse sont facultatifs &#x2014; seuls <code>nom</code>, <code>prenom</code>, <code>email</code> et <code>statutValidationEmail</code> sont garantis.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Coordonn&#xe9;es <span class="dt-human">&#x2014; Adresse et contact de l&#x2019;utilisateur</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer les coordonn&#xe9;es de l&#x2019;utilisateur</span><div class="ep-human">Lire l&#x2019;adresse postale, l&#x2019;email et les t&#xe9;l&#xe9;phones du demandeur connect&#xe9;</div><span class="ep-path">/coordonnees</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Coordonnees</span> <span class="sc-desc">&#x2014; Adresse, email, t&#xe9;l&#xe9;phones et identit&#xe9;</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Coordonn&#xe9;es compl&#xe8;tes</strong> &#x2014; Un demandeur d&#x2019;emploi nantais r&#xe9;cup&#xe8;re ses coordonn&#xe9;es via une application partenaire. La r&#xe9;ponse regroupe identit&#xe9;, adresse postale et moyens de contact.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-coordonnees"><span class="jc">// GET /coordonnees</span>
+<span class="jc">// Auth: Bearer token via France Travail Connect</span>
+<span class="jc">// Scopes: api_peconnect-coordonneesv1, coordonnees</span>
+{
+  <span class="jk">"nom"</span>: <span class="js">"LEMOINE"</span>,
+  <span class="jk">"prenom"</span>: <span class="js">"Claire"</span>,
+  <span class="jk">"adresse1"</span>: <span class="jnull">null</span>,
+  <span class="jk">"adresse2"</span>: <span class="js">"B&#xe2;timent C, Entr&#xe9;e 2"</span>,
+  <span class="jk">"adresse3"</span>: <span class="jnull">null</span>,
+  <span class="jk">"adresse4"</span>: <span class="js">"12 rue des Olivettes"</span>,
+  <span class="jk">"codePostal"</span>: <span class="js">"44000"</span>,
+  <span class="jk">"codeINSEE"</span>: <span class="js">"44109"</span>,
+  <span class="jk">"libelleCommune"</span>: <span class="js">"NANTES"</span>,
+  <span class="jk">"codePays"</span>: <span class="js">"FR"</span>,
+  <span class="jk">"libellePays"</span>: <span class="js">"FRANCE"</span>,
+  <span class="jk">"email"</span>: <span class="js">"claire.lemoine@email.fr"</span>,
+  <span class="jk">"telephone1"</span>: <span class="js">"0612345678"</span>,
+  <span class="jk">"telephone2"</span>: <span class="jnull">null</span>,
+  <span class="jk">"statutValidationEmail"</span>: <span class="js">"V"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-coordonnees">
+  <div class="ex-title"><span class="ex-ico">&#x1F4EC;</span> Coordonn&#xe9;es de Claire Lemoine</div>
+  <div class="ex-card">
+    <h4>Adresse postale</h4>
+    <p>12 rue des Olivettes, B&#xe2;timent C Entr&#xe9;e 2 &#x2014; 44000 Nantes, France</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Code INSEE</strong> &#x2192; 44109 (Nantes)</div>
+      <div class="ex-item"><strong>Email</strong> &#x2192; claire.lemoine@email.fr <span class="ex-tag tag-ok">Valid&#xe9;</span></div>
+      <div class="ex-item"><strong>T&#xe9;l&#xe9;phone</strong> &#x2192; 06 12 34 56 78</div>
+    </div>
+    <div class="ex-agent">Adresse compl&#xe8;te avec email v&#xe9;rifi&#xe9; &#x2014; tous les champs facultatifs d&#x2019;adresse ne sont pas forc&#xe9;ment renseign&#xe9;s</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Coordonn&#xe9;es v1.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

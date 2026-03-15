@@ -1,0 +1,511 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API PE Connect - Métiers Recherchés",
+    "description": "Cette ressource fait remonter les activités professionnelles recherchées (salariées ou non-salariées) par un individu et renseignées au sein du profil de compétences de son espace personnel sur pole-emploi.fr.\n\nDeux métiers recherchés du profil au maximum seront remontés par cette API. Le métier peut être une « reprise » d’entreprise ou un projet d’adhésion à une « franchise ».\n\nPour chacun de ces métiers, les ressources suivantes seront exposées :\n- Intitulé du métier (code ROME, code appellation et libellé de l’appellation)\n- Expérience (en années ou en mois)\n- Lieu d’habitation et mobilité (trajet accepté en minutes, en heures, en kilomètres)\n- Lieux de travail acceptés\n- Salaire (brut minimum accepté en euros, unité (horaire/mensuel/annuel, cachet))\n- Types de contrats souhaités\n- Temps de travail souhaité (temps plein/temps partiel)\n\nExemple d’usage : un job board pourra afficher des offres correspondant à la recherche d’emploi contenue dans le profil de compétences de l’individu.\n\nCette API fait partie de l’ensemble des API mises à disposition dans le cadre de l’utilisation du dispositif de portabilité de Pôle emploi des données personnelles d'un individu.\n\nPour pouvoir l'exploiter, l'utilisateur doit au préalable s'être identifié sur l’application ou le site web avec son compte Pôle emploi grâce au bouton « Se connecter avec France Travail » (API France Travail Connect).",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-metiersrecherches/v1"
+    }
+  ],
+  "paths": {
+    "/metiersrecherches": {
+      "get": {
+        "tags": [
+          "Métiers Recherchés"
+        ],
+        "summary": "Lister les métiers recherchés par un individu",
+        "description": "Retourne les métiers recherchés par l'individu, avec leurs caractéristiques (expérience, mobilité, contrats, salaire, etc.).",
+        "responses": {
+          "200": {
+            "description": "Liste des métiers recherchés par l'individu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MetierRecherche"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "value": [
+                      {
+                        "appellation": {
+                          "libelle": "Comédien / Comédienne",
+                          "code": "12724"
+                        },
+                        "contrats": [
+                          {
+                            "critereOre": false,
+                            "priorite": 1,
+                            "type": {
+                              "code": "CDI",
+                              "libelle": "CDI",
+                              "libelleLong": "Contrat à durée indéterminée"
+                            }
+                          },
+                          {
+                            "critereOre": false,
+                            "priorite": 3,
+                            "type": {
+                              "code": "DIN",
+                              "libelle": "CDI Intérimaire",
+                              "libelleLong": "CDI Intérimaire"
+                            }
+                          },
+                          {
+                            "critereOre": true,
+                            "priorite": 2,
+                            "type": {
+                              "code": "CDD",
+                              "libelle": "CDD",
+                              "libelleLong": "Contrat à durée déterminée"
+                            }
+                          }
+                        ],
+                        "dureeExperience": {
+                          "valeur": 2,
+                          "unite": {
+                            "code": "AN",
+                            "libelle": "An(s)"
+                          }
+                        },
+                        "dureesHebdo": [
+                          {
+                            "critereOre": true,
+                            "tempsTravail": {
+                              "code": "1",
+                              "libelle": "temps plein"
+                            }
+                          },
+                          {
+                            "critereOre": false,
+                            "tempsTravail": {
+                              "code": "2",
+                              "libelle": "temps partiel",
+                              "max": 35,
+                              "min": 10
+                            }
+                          }
+                        ],
+                        "mobiliteHabitation": {
+                          "valeur": 27,
+                          "unite": {
+                            "code": "KM"
+                          }
+                        },
+                        "mobilites": [
+                          {
+                            "rayon": 0,
+                            "lieu": {
+                              "code": "32",
+                              "libelle": "Hauts-de-France",
+                              "type": {
+                                "code": "3",
+                                "libelle": "Région"
+                              }
+                            },
+                            "unite": {
+                              "code": "KM",
+                              "libelle": "Kilomètres"
+                            }
+                          },
+                          {
+                            "rayon": 0,
+                            "lieu": {
+                              "code": "59220",
+                              "codeDepartement": "59",
+                              "codePostal": "59155",
+                              "libelle": "FACHES THUMESNIL",
+                              "type": {
+                                "code": "5",
+                                "libelle": "Commune"
+                              }
+                            },
+                            "unite": {
+                              "code": "KM",
+                              "libelle": "Kilomètres"
+                            }
+                          }
+                        ],
+                        "rome": {
+                          "libelle": "Art dramatique",
+                          "code": "L1203"
+                        },
+                        "salaire": {
+                          "remuneration": 95,
+                          "libelle": "Cachet",
+                          "code": "C"
+                        },
+                        "typologieEmploi": {
+                          "libelle": "Métier Recherché",
+                          "code": "MR"
+                        }
+                      },
+                      {
+                        "appellation": {
+                          "libelle": "Maître-chien / Maîtresse-chien d'avalanche",
+                          "code": "16320"
+                        },
+                        "mobilites": [
+                          {
+                            "rayon": 0,
+                            "lieu": {
+                              "code": "33",
+                              "libelle": "Gironde",
+                              "type": {
+                                "code": "4",
+                                "libelle": "Département"
+                              }
+                            },
+                            "unite": {
+                              "code": "KM",
+                              "libelle": "Kilomètres"
+                            }
+                          }
+                        ],
+                        "rome": {
+                          "libelle": "Sécurité civile et secours",
+                          "code": "K1705"
+                        },
+                        "typeCrefFranchise": true,
+                        "typeCrefReprise": true,
+                        "typologieEmploi": {
+                          "libelle": "Création ou Reprise d'Entreprise ou de Franchiseaire",
+                          "code": "EF"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé (jeton invalide ou scope manquant)"
+          },
+          "403": {
+            "description": "Accès refusé"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-metiersrecherchesv1",
+              "cpmetiers"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-metiersrecherches/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "scopes": {
+              "api_peconnect-metiersrecherchesv1": "Obligatoire",
+              "cpmetiers": "Obligatoire"
+            },
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "MetierRecherche": {
+        "type": "object",
+        "properties": {
+          "appellation": {
+            "$ref": "#/components/schemas/Appellation"
+          },
+          "contrats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contrat"
+            }
+          },
+          "dureeExperience": {
+            "$ref": "#/components/schemas/DureeExperience"
+          },
+          "dureesHebdo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DureeHebdo"
+            }
+          },
+          "mobiliteHabitation": {
+            "$ref": "#/components/schemas/MobiliteHabitation"
+          },
+          "mobilites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Mobilite"
+            }
+          },
+          "rome": {
+            "$ref": "#/components/schemas/Rome"
+          },
+          "salaire": {
+            "$ref": "#/components/schemas/Salaire"
+          },
+          "typologieEmploi": {
+            "$ref": "#/components/schemas/TypologieEmploi"
+          },
+          "typeCrefFranchise": {
+            "type": "boolean",
+            "description": "Indique si le CREF concerne une franchise"
+          },
+          "typeCrefReprise": {
+            "type": "boolean",
+            "description": "Indique si le CREF concerne une reprise"
+          },
+          "typeCrefCreation": {
+            "type": "boolean",
+            "description": "Indique si le CREF concerne une création"
+          }
+        }
+      },
+      "Appellation": {
+        "type": "object",
+        "properties": {
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'appellation précise du référentiel ROME"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code de l'appellation précise du référentiel ROME"
+          }
+        }
+      },
+      "Contrat": {
+        "type": "object",
+        "properties": {
+          "critereOre": {
+            "type": "boolean",
+            "description": "Critère ORE"
+          },
+          "priorite": {
+            "type": "integer",
+            "description": "Critère recherché en priorité"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TypeContrat"
+          }
+        }
+      },
+      "TypeContrat": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code du type de contrat"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du type de contrat"
+          },
+          "libelleLong": {
+            "type": "string",
+            "description": "Libellé long du type de contrat"
+          }
+        }
+      },
+      "DureeExperience": {
+        "type": "object",
+        "properties": {
+          "valeur": {
+            "type": "integer",
+            "description": "Valeur de l'expérience"
+          },
+          "unite": {
+            "$ref": "#/components/schemas/UniteExperience"
+          }
+        }
+      },
+      "UniteExperience": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code de l'unité d'expérience"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'unité d'expérience"
+          }
+        }
+      },
+      "DureeHebdo": {
+        "type": "object",
+        "properties": {
+          "critereOre": {
+            "type": "boolean",
+            "description": "Critère ORE"
+          },
+          "tempsTravail": {
+            "$ref": "#/components/schemas/TempsTravail"
+          }
+        }
+      },
+      "TempsTravail": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code du temps de travail"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du temps de travail"
+          },
+          "max": {
+            "type": "integer",
+            "description": "Temps de travail maximum (en heures)"
+          },
+          "min": {
+            "type": "integer",
+            "description": "Temps de travail minimum (en heures)"
+          }
+        }
+      },
+      "MobiliteHabitation": {
+        "type": "object",
+        "properties": {
+          "valeur": {
+            "type": "integer",
+            "description": "Valeur du rayon de mobilité autour du lieu d'habitation"
+          },
+          "unite": {
+            "$ref": "#/components/schemas/UniteMobilite"
+          }
+        }
+      },
+      "UniteMobilite": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code de l'unité de mobilité"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'unité de mobilité"
+          }
+        }
+      },
+      "Mobilite": {
+        "type": "object",
+        "properties": {
+          "rayon": {
+            "type": "integer",
+            "description": "Rayon autour du lieu"
+          },
+          "lieu": {
+            "$ref": "#/components/schemas/Lieu"
+          },
+          "unite": {
+            "$ref": "#/components/schemas/UniteMobilite"
+          }
+        }
+      },
+      "Lieu": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code du lieu"
+          },
+          "codeDepartement": {
+            "type": "string",
+            "description": "Code du département"
+          },
+          "codePostal": {
+            "type": "string",
+            "description": "Code postal"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du lieu"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TypeLieu"
+          }
+        }
+      },
+      "TypeLieu": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code du type de lieu"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du type de lieu"
+          }
+        }
+      },
+      "Rome": {
+        "type": "object",
+        "properties": {
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la famille ROME"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code de la famille ROME"
+          }
+        }
+      },
+      "Salaire": {
+        "type": "object",
+        "properties": {
+          "remuneration": {
+            "type": "number",
+            "description": "Montant de la rémunération",
+            "format": "double"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la rémunération"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code de la rémunération"
+          }
+        }
+      },
+      "TypologieEmploi": {
+        "type": "object",
+        "properties": {
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la typologie d'emploi"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code de la typologie d'emploi"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statut &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Statut</h1>
+  <div class="sub">D&#xe9;termine si l&#x2019;utilisateur connect&#xe9; est demandeur d&#x2019;emploi ou non</div>
+  <div class="sub-tech">API Statut v1.0.0 &#x2014; 1 endpoint &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-statut/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Statut individu <span class="dto">StatutResponse</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-code">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Code statut <span class="dto">codeStatutIndividu</span></div>
+        <div class="card">Obligatoire <span class="card-tech">string &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Code num&#xe9;rique indiquant si l&#x2019;utilisateur est inscrit comme demandeur d&#x2019;emploi
+        <div class="fi-tech"><code>codeStatutIndividu</code> &#xb7; <span class="ev">0 (non DE)|1 (DE)</span> &#x2014; requis</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-libelle">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Libell&#xe9; statut <span class="dto">libelleStatutIndividu</span></div>
+        <div class="card">Obligatoire <span class="card-tech">string &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Libell&#xe9; en clair du statut &#x2014; traduction humaine du code
+        <div class="fi-tech"><code>libelleStatutIndividu</code> &#xb7; <span class="ev">Non demandeur d&#x2019;emploi|Demandeur d&#x2019;emploi</span> &#x2014; requis</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/individu</code> (PE Connect). L&#x2019;utilisateur doit s&#x2019;&#xea;tre authentifi&#xe9; via France Travail Connect avec les scopes <code>api_peconnect-statutv1</code> et <code>statut</code>. L&#x2019;application acc&#xe8;de aux donn&#xe9;es de l&#x2019;utilisateur connect&#xe9; &#x2014; aucun header agent n&#x2019;est n&#xe9;cessaire.
+</div>
+
+<div class="note">Cette API r&#xe9;pond &#xe0; une question binaire : l&#x2019;utilisateur est-il inscrit comme demandeur d&#x2019;emploi ? Le code <code>0</code> signifie non inscrit, le code <code>1</code> signifie inscrit. C&#x2019;est l&#x2019;une des APIs les plus simples du catalogue, souvent utilis&#xe9;e pour adapter le parcours utilisateur d&#x2019;une application partenaire.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Statut <span class="dt-human">&#x2014; Statut demandeur d&#x2019;emploi</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe8;re le statut de l&#x2019;individu</span><div class="ep-human">V&#xe9;rifier si l&#x2019;utilisateur connect&#xe9; est demandeur d&#x2019;emploi</div><span class="ep-path">/statut</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">StatutResponse</span> <span class="sc-desc">&#x2014; Code et libell&#xe9; du statut demandeur d&#x2019;emploi</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Deux cas de figure</strong> &#x2014; L&#x2019;API retourne un r&#xe9;sultat binaire. Voici les deux r&#xe9;ponses possibles : un utilisateur inscrit comme demandeur d&#x2019;emploi, et un utilisateur qui ne l&#x2019;est pas.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-de"><span class="jc">// GET /statut</span>
+<span class="jc">// Auth: Bearer token via France Travail Connect</span>
+<span class="jc">// Scopes: api_peconnect-statutv1, statut</span>
+<span class="jc">// &#x2500;&#x2500; R&#xe9;ponse &#x2014; Demandeur d&#x2019;emploi &#x2500;&#x2500;</span>
+{
+  <span class="jk">"codeStatutIndividu"</span>: <span class="js">"1"</span>,
+  <span class="jk">"libelleStatutIndividu"</span>: <span class="js">"Demandeur d'emploi"</span>
+}</div>
+<div data-section="s-non-de"><span class="jc">// &#x2500;&#x2500; R&#xe9;ponse &#x2014; Non demandeur d&#x2019;emploi &#x2500;&#x2500;</span>
+{
+  <span class="jk">"codeStatutIndividu"</span>: <span class="js">"0"</span>,
+  <span class="jk">"libelleStatutIndividu"</span>: <span class="js">"Non demandeur d'emploi"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-de">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Demandeur d&#x2019;emploi</div>
+  <div class="ex-card">
+    <h4>Utilisateur inscrit</h4>
+    <p>Statut <span class="ex-tag tag-encours">Demandeur d&#x2019;emploi</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Code</strong> &#x2192; 1</div>
+      <div class="ex-item"><strong>Signification</strong> &#x2192; L&#x2019;utilisateur est actuellement inscrit comme demandeur d&#x2019;emploi aupr&#xe8;s de France Travail</div>
+    </div>
+    <div class="ex-agent">L&#x2019;application peut proposer les services r&#xe9;serv&#xe9;s aux demandeurs d&#x2019;emploi</div>
+  </div>
+</div>
+
+<div data-section="s-non-de">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Non demandeur d&#x2019;emploi</div>
+  <div class="ex-card">
+    <h4>Utilisateur non inscrit</h4>
+    <p>Statut <span class="ex-tag tag-ok">Non demandeur d&#x2019;emploi</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Code</strong> &#x2192; 0</div>
+      <div class="ex-item"><strong>Signification</strong> &#x2192; L&#x2019;utilisateur n&#x2019;est pas inscrit comme demandeur d&#x2019;emploi &#x2014; il poss&#xe8;de un compte France Travail mais n&#x2019;a pas de dossier actif</div>
+    </div>
+    <div class="ex-agent">Parcours utilisateur standard &#x2014; pas d&#x2019;acc&#xe8;s aux services sp&#xe9;cifiques DE</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; API Statut v1.0.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

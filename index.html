@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue des API France Travail</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs/style.css">
+<link rel="stylesheet" href="catalogue.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>API France Travail</h1>
+  <div class="sub">Catalogue, recherche et index croisé des schémas OpenAPI</div>
+  <div class="sub-tech">francetravail.io &mdash; 29 APIs &middot; <span id="total-endpoints"></span> endpoints &middot; <span id="total-schemas"></span> schémas</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setView('cards')">Catalogue</button>
+    <button class="tb" onclick="setView('cross')">Concepts partagés</button>
+  </div>
+</div>
+
+<div id="cards-controls">
+  <div class="cat-search">
+    <input type="text" id="search" placeholder="Rechercher une API, un endpoint, un schéma…" autocomplete="off">
+    <div class="cat-search-meta" id="search-meta">29 APIs</div>
+  </div>
+
+  <div class="cat-filters" id="filters"></div>
+</div>
+
+<div class="view active" id="v-cards">
+  <div class="cat-grid" id="api-grid"></div>
+</div>
+
+<div class="view" id="v-cross"></div>
+
+<footer>
+  29 schémas OpenAPI &mdash; francetravail.io &mdash; données extraites automatiquement des fichiers OpenAPI
+</footer>
+
+</div>
+
+<script src="catalogue-data.js"></script>
+<script src="catalogue.js"></script>
+</body>
+</html>

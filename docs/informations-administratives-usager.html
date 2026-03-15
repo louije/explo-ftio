@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informations administratives usager — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Informations administratives usager</h1>
+  <div class="sub">État civil, adresse, email et téléphone d'un demandeur d'emploi</div>
+  <div class="sub-tech">Informations administratives usager v1.2.0 — 1 endpoint · 6 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/informations-administratives/v1</div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: VUE ENCHASSEE                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Usager <span class="dto">UsagerResource</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <!-- État civil -->
+    <div class="n l1-p" id="m-etatcivil">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">État civil — identité officielle <span class="dto">etatCivil · EtatCivilResource</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Identité de l'usager telle qu'enregistrée dans le SI France Travail
+        <div class="fi-tech"><code>civilite</code> · <code>nom</code> · <code>prenom</code> · <code>nomCorrespondance</code> · <code>prenomCorrespondance</code> · <code>dateNaissance</code> · <code>nir</code></div>
+      </div></div>
+    </div>
+
+    <!-- Adresses -->
+    <div class="n l1-b stack" id="m-adresses">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Adresses <span class="dto">adresses[] · AdresseResource</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Adresse(s) postale(s) de l'usager, avec indication QPV (Quartier Prioritaire de la Ville)
+          <div class="fi-tech"><code>numeroTypeLibelleVoie</code> · <code>complementDestinataire</code> · <code>complementAdresse</code> · <code>complementDistribution</code> · <code>codePostal</code> · <code>libelleCommune</code> · <code>codeInseeCommune</code> · <code>libellePays</code> · <code>indicateurResidentQPV</code></div>
+        </div>
+        <div class="fi" style="margin-top:6px;">
+          <span class="ev">AT</span> En attente · <span class="ev">IN</span> Indéterminé · <span class="ev">NT</span> Non traité · <span class="ev">NQ</span> Ne réside pas QPV · <span class="ev">QP</span> Réside QPV
+        </div>
+      </div>
+    </div>
+
+    <!-- Coordonnées de contact -->
+    <div class="n l1-n" id="m-contact">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Coordonnées de contact</div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="grid-2">
+          <div class="n l3 stack" id="m-emails">
+            <div class="nh"><div class="dot"></div>
+              <div class="name">Emails <span class="dto">emails[] · EmailResource</span></div>
+              <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+            </div>
+            <div class="nb"><div class="fi">
+              Adresse(s) email de l'usager
+              <div class="fi-tech"><code>adresseEmail</code></div>
+            </div></div>
+          </div>
+          <div class="n l3 stack" id="m-telephones">
+            <div class="nh"><div class="dot"></div>
+              <div class="name">Téléphones <span class="dto">telephones[] · TelephoneResource</span></div>
+              <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+            </div>
+            <div class="nb"><div class="fi">
+              Numéro(s) de téléphone de l'usager
+              <div class="fi-tech"><code>numeroTelephone</code></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Numéro France Travail -->
+    <div class="n l3" id="m-numft">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Numéro France Travail <span class="dto">numeroFranceTravail</span></div>
+        <div class="card">Unique <span class="card-tech">string · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Identifiant unique du demandeur d'emploi dans le système France Travail
+        <div class="fi-tech"><code>numeroFranceTravail</code> — identifiant unique dans le système</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note"><strong>Prérequis</strong> — Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel nécessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>. Le jeton est volatile (~1 journée).</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Informations administratives usager <span class="dt-human">— Données d'identité et de contact</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère l'état civil et les coordonnées d'un usager</span><div class="ep-human">Lire l'identité, l'adresse et les coordonnées d'un demandeur d'emploi</div><span class="ep-path">/usager</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">6 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">UsagerResource</span> <span class="sc-desc">— Réponse complète</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">EtatCivilResource</span> <span class="sc-desc">— Identité officielle</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AdresseResource</span> <span class="sc-desc">— Adresse postale</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">EmailResource</span> <span class="sc-desc">— Adresse email</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">TelephoneResource</span> <span class="sc-desc">— Numéro de téléphone</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">DonneesErreur</span> <span class="sc-desc">— Réponse d'erreur</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>1 endpoint</strong> · <strong>6 schémas</strong> — 5 en lecture (consultation), 1 divers (DonneesErreur pour les réponses 400/500). API en lecture seule, authentifiée par jeton usager.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE — SIDE BY SIDE                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Données fictives mais réalistes</strong> — Nadia Belkacem est inscrite à France Travail Lyon 9ème. Ses informations administratives montrent son état civil, son adresse dans le 9ème arrondissement, et ses coordonnées de contact.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-etatcivil"><span class="jc">// GET /usager</span>
+<span class="jc">// ── Headers obligatoires ──</span>
+<span class="jc">// ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+{
+  <span class="jk">"numeroFranceTravail"</span>: <span class="js">"12345678900"</span>,
+  <span class="jk">"etatCivil"</span>: {
+    <span class="jk">"civilite"</span>: <span class="js">"Mme"</span>,
+    <span class="jk">"nom"</span>: <span class="js">"BELKACEM"</span>,
+    <span class="jk">"prenom"</span>: <span class="js">"NADIA"</span>,
+    <span class="jk">"nomCorrespondance"</span>: <span class="js">"BELKACEM"</span>,
+    <span class="jk">"prenomCorrespondance"</span>: <span class="js">"Nadia"</span>,
+    <span class="jk">"dateNaissance"</span>: <span class="js">"1991-03-22"</span>,
+    <span class="jk">"nir"</span>: <span class="js">"2910369123456"</span>
+  },</div>
+<div data-section="s-adresse">  <span class="jk">"adresses"</span>: [
+    {
+      <span class="jk">"numeroTypeLibelleVoie"</span>: <span class="js">"93 Rue Marietton"</span>,
+      <span class="jk">"complementAdresse"</span>: <span class="js">"Résidence Les Tilleuls"</span>,
+      <span class="jk">"complementDestinataire"</span>: <span class="js">"Escalier C"</span>,
+      <span class="jk">"codePostal"</span>: <span class="js">"69009"</span>,
+      <span class="jk">"libelleCommune"</span>: <span class="js">"LYON"</span>,
+      <span class="jk">"codeInseeCommune"</span>: <span class="js">"69389"</span>,
+      <span class="jk">"libellePays"</span>: <span class="js">"FRANCE"</span>,
+      <span class="jk">"indicateurResidentQPV"</span>: <span class="js">"NQ"</span>
+    }
+  ],</div>
+<div data-section="s-contact">  <span class="jk">"emails"</span>: [
+    { <span class="jk">"adresseEmail"</span>: <span class="js">"nadia.belkacem@gmail.com"</span> }
+  ],
+  <span class="jk">"telephones"</span>: [
+    { <span class="jk">"numeroTelephone"</span>: <span class="js">"0645123789"</span> }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-etatcivil">
+  <div class="ex-title"><span class="ex-ico">&#x1F464;</span> État civil</div>
+  <div class="ex-card">
+    <h4>Nadia Belkacem</h4>
+    <p>Mme BELKACEM Nadia, née le 22 mars 1991 <span class="ex-tag tag-ok">Identité vérifiée</span></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Nom de correspondance</strong> → BELKACEM Nadia</div>
+      <div class="ex-item"><strong>NIR</strong> → 2 91 03 69 123 456</div>
+      <div class="ex-item"><strong>N° France Travail</strong> → 12345678900</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-adresse">
+  <div class="ex-title"><span class="ex-ico">&#x1F3E0;</span> Adresse</div>
+  <div class="ex-card">
+    <h4>93 Rue Marietton — Lyon 9ème</h4>
+    <p>Résidence Les Tilleuls, Escalier C</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Code postal</strong> → 69009 LYON</div>
+      <div class="ex-item"><strong>Code INSEE</strong> → 69389</div>
+      <div class="ex-item"><strong>Pays</strong> → FRANCE</div>
+      <div class="ex-item"><strong>Quartier prioritaire (QPV)</strong> → <span class="ex-tag tag-ok">Ne réside pas en QPV</span></div>
+    </div>
+    <div class="ex-agent">Indicateur QPV : NQ — l'usager ne réside pas dans un Quartier Prioritaire de la Ville</div>
+  </div>
+</div>
+
+<div data-section="s-contact">
+  <div class="ex-title"><span class="ex-ico">&#x1F4DE;</span> Coordonnées de contact</div>
+  <div class="ex-card">
+    <h4>Email et téléphone</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Email</strong> → nadia.belkacem@gmail.com <span class="ex-tag tag-ok">Renseigné</span></div>
+      <div class="ex-item"><strong>Téléphone</strong> → 06 45 12 37 89 <span class="ex-tag tag-ok">Renseigné</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — Informations administratives usager v1.2.0 · api.francetravail.io · 1 endpoint · 6 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

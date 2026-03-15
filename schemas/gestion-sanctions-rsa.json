@@ -1,0 +1,1848 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.1",
+    "title": "Gestion des sanctions RSA",
+    "description": "Cette API met à disposition les propositions sur les sanctions des bénéficiaires du RSA accompagnés par France Travail, afin de statuer sur ces dernières propositions. <br>Elle permet également de transmettre des décisions de sanctions RSA pour un bénéficiaire RSA non accompagné par France Travail (dans un 1er temps uniquement les décisions portant sur des natures de manquements communes au code du travail et code de l'action sociale et des familles) et de demander la radiation de la liste des demandeurs d'emploi quand une sanction RSA l'implique. <br>Elle dispose de quatre ressources : \r\n\r\n1) Une ressource permettant de récupérer le détail d’un manquement et conséquence de sanction associés, pour un bRSA accompagné par France Travail\r\n\r\n2) Une ressource permettant d’agir sur la conséquence de sanction concernée en fonction de l’action à réaliser (selon le code activité sanction) :<br><ul><li>Choisir d’instruire une proposition de suspension du RSA (accepter ou refuser) - Code activité ACT366</li><li>Décider de la suite à donner à une proposition de suspension du RSA (accepter, refuser ou mettre à jour la proposition) - Code activité ACT367</li><li> Décider de la suite à donner à une proposition de levée de suspension du RSA (accepter ou refuser la proposition) - Code activité ACT369</li><li>Décider de la suite à donner à une proposition de suppression du RSA (accepter, refuser ou mettre à jour la proposition) - Code activité ACT370</li><li> Décider d'annuler une décision de sanction RSA (non lié à une activité)</li></ul></br>\r\n\r\n3) Une ressource permettant de transmettre une décision de sanction RSA pour un bRSA non accompagné par France Travail\r\n\r\n4) Une ressource permettant de demander la radiation de la liste des DE suite à une décision de sanction RSA\r\n\r\n",
+    
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/gestion-sanctions-rsa/v1"
+    }
+  ],
+  "paths": {
+    "/detailManquement": {
+      "get": {
+        "tags": [
+          "Détail d'un manquement et d'une proposition de sanction RSA"
+        ],
+        "summary": "Restituer le détail d'un manquement",
+        "description": "Restitue le détail d'un manquement à partir d'un identifiant de conséquence de sanction qui lui est liée.",
+        "operationId": "lireDetailSanctionRsa",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46-PwRS4DcGVVjfsmaevPSln"
+            }
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "identifiantSanction",
+            "in": "query",
+            "description": "Identifiant unique de la conséquence de sanction récupéré via l'API 'Gestion Activités Opérationnelles'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1048"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conséquence de sanction trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailManquement"
+                },
+                "examples": {
+                  "Exemple 1 - Manquement aux obligations du contrat d'engagement - Allocataire FT & RSA - Proposition suspension RSA à instruire": {
+                    "value": {
+                      "consequencesSanction": [
+                        {
+                          "codeInitiateur": "FT",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "evenements": [
+                            {
+                              "commentaireEvenement": "susp rsa 100% 1 mois - double allocataire ARE et RSA",
+                              "dateEvenement": "2025-03-21T21:57:38+01:00",
+                              "identifiantEvenement": "8a19b1eb-d829-438e-bca7-8c177fecca79",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-21T21:56:48+01:00",
+                              "identifiantEvenement": "8da229a3-052e-4aaf-bc4d-44a3ce0819a9",
+                              "typeEvenement": "PROP_SANCTION"
+                            }
+                          ],
+                          "idConsequenceSanction": "2486",
+                          "modaliteProposee": "P",
+                          "montantPropose": 100,
+                          "typeConsequenceSanction": "SUSP_RSA"
+                        },
+                        {
+                          "codeInitiateur": "FT",
+                          "dateDebutApplication": "2025-03-21T21:57:36+01:00",
+                          "dateFinApplication": "2025-04-20T21:57:36+02:00",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "dureeValidee": 1,
+                          "evenements": [
+                            {
+                              "dateEvenement": "2025-03-21T21:57:38+01:00",
+                              "identifiantEvenement": "0cf4886c-641e-497e-8be2-5c08b498b753",
+                              "typeEvenement": "VALID_SANCTION"
+                            },
+                            {
+                              "commentaireEvenement": "susp FT 100% 1 mois",
+                              "dateEvenement": "2025-03-21T21:57:38+01:00",
+                              "identifiantEvenement": "2577adab-3fc9-45d3-9a6e-b1371b1ff077",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-21T21:56:48+01:00",
+                              "identifiantEvenement": "9729b216-9e0c-473a-909b-4a5a9771e875",
+                              "typeEvenement": "PROP_SANCTION"
+                            }
+                          ],
+                          "idConsequenceSanction": "2485",
+                          "modaliteProposee": "P",
+                          "modaliteValidee": "P",
+                          "montantPropose": 100,
+                          "montantValide": 100,
+                          "typeConsequenceSanction": "SUSP_FT"
+                        }
+                      ],
+                      "dateAvertissement": "2025-02-19T00:00:00+01:00",
+                      "dateManquement": "2024-09-30T00:00:00+02:00",
+                      "faisceauIndices": [
+                        {
+                          "attributs": [
+                            {
+                              "codeAttribut": "ARDV_TYPE_RDV",
+                              "valeurAttribut": "N3"
+                            },
+                            {
+                              "codeAttribut": "ARDV_DATE_RDV",
+                              "valeurAttribut": "20240904"
+                            }
+                          ],
+                          "dateConstatDefaut": "2024-09-30T00:00:00+02:00",
+                          "natureDefaut": "N23"
+                        }
+                      ],
+                      "familleManquement": "F01",
+                      "identifiantManquement": "6050",
+                      "justificationDecisionSanction": "Absence à 2 RDV avec le conseiller ",
+                      "demarcheRemobilisation": "effectuer 10 candidatures, être présent à la prochaine convocation du 3/04"
+                    }
+                  },
+                  "Exemple 2 - Manquement refus d'élaborer ou d'actualiser le contrat d'engagement (CE) - Proposition suspension RSA à instruire": {
+                    "value": {
+                      "individu": {
+                        "numeroFranceTravail": "12345678910"
+                      },
+                      "consequencesSanction": [
+                        {
+                          "codeInitiateur": "FT",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "evenements": [
+                            {
+                              "dateEvenement": "2025-03-15T13:54:54+01:00",
+                              "identifiantEvenement": "21304a08-a702-46d9-a9da-bd811b0530ef",
+                              "typeEvenement": "PROP_SANCTION"
+                            },
+                            {
+                              "commentaireEvenement": "susp RSA 60% 1 mois",
+                              "dateEvenement": "2025-03-15T13:55:20+01:00",
+                              "identifiantEvenement": "a6604e6c-50e0-48ff-bbe2-6c189a88b512",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            }
+                          ],
+                          "idConsequenceSanction": "2381",
+                          "modaliteProposee": "P",
+                          "montantPropose": 60,
+                          "typeConsequenceSanction": "SUSP_RSA"
+                        }
+                      ],
+                      "dateAvertissement": "2025-03-15T00:00:00+01:00",
+                      "dateManquement": "2025-03-15T13:53:43+01:00",
+                      "faisceauIndices": [],
+                      "familleManquement": "F03",
+                      "identifiantManquement": "44202",
+                      "justificationDecisionSanction": "Refus de signature le 3/03/25"
+                    }
+                  },
+                  "Exemple 3 - Manquement refus d'élaborer ou d'actualiser le CE - Proposition suspension RSA à traiter": {
+                    "value": {
+                      "individu": {
+                        "numeroFranceTravail": "12345678910"
+                      },
+                      "consequencesSanction": [
+                        {
+                          "codeInitiateur": "FT",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "evenements": [
+                            {
+                              "dateEvenement": "2025-03-15T13:54:54+01:00",
+                              "identifiantEvenement": "21304a08-a702-46d9-a9da-bd811b0530ef",
+                              "typeEvenement": "PROP_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T14:09:20+01:00",
+                              "identifiantEvenement": "3ba3902a-afc0-4481-acd4-727f83a25d47",
+                              "typeEvenement": "SAISIE_SANCTION"
+                            },
+                            {
+                              "commentaireEvenement": "susp RSA 60% 1 mois",
+                              "dateEvenement": "2025-03-15T13:55:20+01:00",
+                              "identifiantEvenement": "a6604e6c-50e0-48ff-bbe2-6c189a88b512",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            }
+                          ],
+                          "idConsequenceSanction": "2381",
+                          "modaliteProposee": "P",
+                          "montantPropose": 60,
+                          "typeConsequenceSanction": "SUSP_RSA"
+                        }
+                      ],
+                      "dateAvertissement": "2025-03-15T00:00:00+01:00",
+                      "dateManquement": "2025-03-15T13:53:43+01:00",
+                      "faisceauIndices": [],
+                      "familleManquement": "F03",
+                      "identifiantManquement": "44202",
+                      "justificationDecisionSanction": "Refus de signature le 3/03/25"
+                    }
+                  },
+                  "Exemple 4 - Manquement refus d'élaborer ou d'actualiser le CE - Proposition levée suspension RSA à traiter": {
+                    "value": {
+                      "individu": {
+                        "numeroFranceTravail": "12345678910"
+                      },
+                      "consequencesSanction": [
+                        {
+                          "codeInitiateur": "FT",
+                          "dateRemobilisation": "2025-03-15T01:00:00+01:00",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "dureeValidee": 1,
+                          "evenements": [
+                            {
+                              "dateEvenement": "2025-03-15T14:11:32+01:00",
+                              "identifiantEvenement": "7cfd9a58-0b9a-48b6-ad22-fa30b19b56ef",
+                              "motif": "VALIDATION_CD",
+                              "typeEvenement": "VALID_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T13:54:54+01:00",
+                              "identifiantEvenement": "21304a08-a702-46d9-a9da-bd811b0530ef",
+                              "typeEvenement": "PROP_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T14:09:20+01:00",
+                              "identifiantEvenement": "3ba3902a-afc0-4481-acd4-727f83a25d47",
+                              "typeEvenement": "SAISIE_SANCTION"
+                            },
+                            {
+                              "commentaireEvenement": "susp RSA 60% 1 mois",
+                              "dateEvenement": "2025-03-15T13:55:20+01:00",
+                              "identifiantEvenement": "a6604e6c-50e0-48ff-bbe2-6c189a88b512",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T14:12:09+01:00",
+                              "identifiantEvenement": "21109f89-3417-441e-8f29-59fbca3d7811",
+                              "typeEvenement": "PROP_LEVEE_SUSP"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T14:12:28+01:00",
+                              "identifiantEvenement": "987b7f36-4330-4a4a-b246-53a2289e9cfa",
+                              "typeEvenement": "ACCORD_FT_LEVEE_SUSP"
+                            },
+                            {
+                              "dateEvenement": "2025-03-15T14:12:35+01:00",
+                              "identifiantEvenement": "cfa8a1d0-5a32-4dea-b956-ea6b75678807",
+                              "typeEvenement": "SAISIE_LEVEE_SUSP"
+                            }
+                          ],
+                          "idConsequenceSanction": "2381",
+                          "modaliteProposee": "P",
+                          "modaliteValidee": "P",
+                          "montantPropose": 60,
+                          "montantValide": 60,
+                          "typeConsequenceSanction": "SUSP_RSA",
+                          "justifDecisionRemobilisation": "Signature du contrat d'engagement le 15/03/25"
+                        }
+                      ],
+                      "dateAvertissement": "2025-03-15T00:00:00+01:00",
+                      "dateManquement": "2025-03-15T13:53:43+01:00",
+                      "faisceauIndices": [],
+                      "familleManquement": "F03",
+                      "identifiantManquement": "44202",
+                      "justificationDecisionSanction": "Refus de signature du contrat d'engagement le 3/03/25"
+                    }
+                  },
+                  "Exemple 5 - Manquement refus d'élaborer ou d'actualiser le CE - Proposition suppression RSA à traiter": {
+                    "value": {
+                      "individu": {
+                        "numeroFranceTravail": "12345678910"
+                      },
+                      "consequencesSanction": [
+                        {
+                          "codeInitiateur": "FT",
+                          "delegation": false,
+                          "dureeProposee": 1,
+                          "evenements": [
+                            {
+                              "dateEvenement": "2025-03-15T13:54:54+01:00",
+                              "identifiantEvenement": "21304a08-a702-46d9-a9da-bd811b0530ef",
+                              "typeEvenement": "PROP_SANCTION"
+                            },
+                            {
+                              "commentaireEvenement": "suppr RSA 60% 1 mois",
+                              "dateEvenement": "2025-03-15T13:55:20+01:00",
+                              "identifiantEvenement": "a6604e6c-50e0-48ff-bbe2-6c189a88b512",
+                              "typeEvenement": "ACCORD_FT_SANCTION"
+                            }
+                          ],
+                          "idConsequenceSanction": "2381",
+                          "modaliteProposee": "P",
+                          "montantPropose": 60,
+                          "typeConsequenceSanction": "SUPPR_RSA"
+                        }
+                      ],
+                      "dateAvertissement": "2025-03-15T00:00:00+01:00",
+                      "dateManquement": "2025-03-15T13:53:43+01:00",
+                      "faisceauIndices": [],
+                      "familleManquement": "F03",
+                      "identifiantManquement": "44202",
+                      "justificationDecisionSanction": "2nd Refus de signature le 3/03/25"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucune conséquence de sanction trouvée "
+          },
+          "400": {
+            "description": "Les contrôles sur les paramètres transmis ne sont pas satisfaits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErreurDetailManquement"
+                },
+                "examples": {
+                  "Erreur R010 - Identifiant Consequence Sanction obligatoire": {
+                    "value": {
+                      "codeErreur": "R010",
+                      "message": "Identifiant Consequence Sanction obligatoire"
+                    }
+                  },
+                  "Erreur R011 - Identifiant Consequence Sanction invalide": {
+                    "value": {
+                      "codeErreur": "R011",
+                      "message": "Identifiant Consequence Sanction invalide"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Accès à la ressource non autorisé"
+          },
+          "500": {
+            "description": "Erreur technique - service indisponible"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_gestion-sanctions-rsav1",
+              "gestiondesmanquements",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_gestion-sanctions-rsav1",
+              "gestiondesmanquements",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/gestion-sanctions-rsa/v1"
+          }
+        ]
+      }
+    },
+    "/evenementSanctionRSA": {
+      "post": {
+        "tags": [
+          "Publication d'un événement sur une conséquence de sanction RSA"
+        ],
+        "summary": "Transmettre un événement sur une conséquence de sanction RSA",
+        "description": "Cette ressource permet d’agir sur une conséquence de sanction RSA (via la publication d'un événement approprié) en fonction de l’action à réaliser :<br><ul><li>ACT366: Choisir d’instruire une proposition de suspension du RSA (accepter ou refuser) <br><b>Important : Sauf nouvelle consigne, nous vous invitons à ne pas refuser d'instruire une proposition de suspension RSA (i.e. ne pas transmettre l'événement REFUS_SAISIE_SANCTION), car cela valide automatiquement la proposition au titre d'une reprise de compétences France Travail</b></li></bR><li>ACT367: Décider de la suite à donner à une proposition de suspension du RSA (accepter, refuser ou mettre à jour la proposition)</li><li>ACT369: Décider de la suite à donner à une proposition de levée de suspension du RSA (accepter ou refuser la proposition)</li><li>ACT370: Décider de la suite à donner à une proposition de suppression du RSA (accepter, refuser ou mettre à jour la proposition)</li><li> Décider d'annuler une décision de sanction RSA (non lié à une activité)",
+        "operationId": "traiterSanctionRsa",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46-PwRS4DcGVVjfsmaevPSln"
+            }
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/TraitementSanctionRsa"
+              },
+              "examples": {
+                "Choix d'instruire une proposition de  suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "SAISIE_SANCTION",
+                      "dateEvenement": "2025-03-12"
+                    }
+                  }
+                },
+                "Choix de ne pas instruire une proposition de suspension RSA (NE PAS UTILISER)": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "REFUS_SAISIE_SANCTION",
+                      "dateEvenement": "2025-03-12"
+                    }
+                  }
+                },
+                "Proposition suspension RSA à traiter - décision de sanction suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "VALID_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "Validation de la proposition de suspension RSA de 50% pour 2 mois"
+                    },
+                    "typeConsequenceSanctionValide": "SUSP_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 50,
+                    "dureeValidee": 2
+                  }
+                },
+                "Proposition suspension RSA à traiter - refus de sanction suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "REFUS_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "Décision de ne pas sanctionner, redynamisation à envisager"
+                    }
+                  }
+                },
+                "Proposition suppression RSA à traiter - décision de sanction suppression RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "VALID_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "décision de sanction de type suppression RSA de 50% pour 2 mois versus 100% 2 mois proposés"
+                    },
+                    "typeConsequenceSanctionValide": "SUPPR_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 50,
+                    "dureeValidee": 2
+                  }
+                },
+                "Proposition suppression RSA à traiter - décision de sanction suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "VALID_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "décision de sanction de type suspension RSA de 50% pour 2 mois en lieu d'une suppression proposée"
+                    },
+                    "typeConsequenceSanctionValide": "SUSP_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 50,
+                    "dureeValidee": 2
+                  }
+                },
+                "Proposition suppression RSA à traiter - refus de sanction suppression RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "REFUS_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "Choix de ne pas sanctionner"
+                    }
+                  }
+                },
+                "Proposition levée suspension RSA à traiter - décision de levée suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "VALID_LEVEE_SUSP",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "Validation de la proposition de levée de suspension suite à signature du contrat d'engagement"
+                    }
+                  }
+                },
+                "Proposition levée suspension RSA à traiter - décision de ne pas lever la suspension RSA": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "REFUS_LEVEE_SUSP",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "remobilisation insuffisante"
+                    }
+                  }
+                },
+                "Demande d'annulation de sanction": {
+                  "value": {
+                    "identifiantConsequenceSanction": "1243",
+                    "evenement": {
+                      "typeEvenement": "ANNULATION_SANCTION",
+                      "dateEvenement": "2025-03-12",
+                      "commentaireEvenement": "Annulation suite à recours du DE le 28/02/25",
+                      "motifEvenement": "RECOURS"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Demande traitée. Si codeSortie=C001, publication de l'événement effectuée. Si codeSortie=C999, l'événement n'a pas été pris en compte car incompatible avec le dernier événement connu pour la conséquence de sanction concernée ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetourTraitementRsaOTD"
+                },
+                "examples": {
+                  "Evénement pris en compte": {
+                    "value": {
+                      "codeSortie": "C001"
+                    }
+                  },
+                  "Evénement incompatible avec le dernier événement connu": {
+                    "value": {
+                      "codeSortie": "C999"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucune conséquence de sanction trouvée "
+          },
+          "400": {
+            "description": "Les contrôles sur les paramètres transmis ne sont pas satisfaits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErreurTraitementSanctionRsa"
+                },
+                "examples": {
+                  "Erreur R010 - Identifiant conséquence sanction obligatoire": {
+                    "value": {
+                      "codeErreur": "R010",
+                      "message": "Identifiant Consequence Sanction obligatoire"
+                    }
+                  },
+                  "Erreur R011 - Identifiant conséquence sanction invalide": {
+                    "value": {
+                      "codeErreur": "R011",
+                      "message": "Identifiant Consequence Sanction invalide, format donnée non respecté"
+                    }
+                  },
+                  "Erreur R020 - Type événement obligatoire": {
+                    "value": {
+                      "codeErreur": "R020",
+                      "message": "Type evenement obligatoire"
+                    }
+                  },
+                  "Erreur R021 - Type événement invalide": {
+                    "value": {
+                      "codeErreur": "R021",
+                      "message": "Type evenement invalide, non présent au référentiel ou non transmissible"
+                    }
+                  },
+                  "Erreur R030 - Date événement obligatoire": {
+                    "value": {
+                      "codeErreur": "R030",
+                      "message": "Date evenement obligatoire"
+                    }
+                  },
+                  "Erreur R031 - Date événement invalide": {
+                    "value": {
+                      "codeErreur": "R031",
+                      "message": "Date evenement erronée, format YYYY-MM-DD non respecté ou date non présente au calendrier"
+                    }
+                  },
+                  "Erreur R040 - Commentaire événement invalide": {
+                    "value": {
+                      "codeErreur": "R040",
+                      "message": "CommentaireEvenement invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R050 - Type conséquence sanction obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R050",
+                      "message": "Type consequence sanction obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R051 - Type conséquence sanction invalide": {
+                    "value": {
+                      "codeErreur": "R051",
+                      "message": "Type conséquence sanction invalide, seules valeurs acceptées sont SUSP_RSA et SUPPR_RSA"
+                    }
+                  },
+                  "Erreur R060 - Montant obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R060",
+                      "message": "Montant obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R061 - Montant invalide": {
+                    "value": {
+                      "codeErreur": "R061",
+                      "message": "Montant invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R062 - Modalité incorrecte": {
+                    "value": {
+                      "codeErreur": "R062",
+                      "message": "Modalité de décision validée incorrecte, doit être 'P' pour pourcentage, 'M' pour montant, ou vide pour une levée de suspension"
+                    }
+                  },
+                  "Erreur R063 - Modalité obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R063",
+                      "message": "Modalité de décision validée obligatoire pour le type d'événement transmis et si le « montantValide » est transmis"
+                    }
+                  },
+                  "Erreur R064 - Montant invalide pour le type de manquement": {
+                    "value": {
+                      "codeErreur": "R064",
+                      "message": "Montant invalide pour le type de manquement concerné"
+                    }
+                  },
+                  "Erreur R070 - Durée obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R070",
+                      "message": "Durée obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R071 - Durée invalide": {
+                    "value": {
+                      "codeErreur": "R071",
+                      "message": "Durée invalide, format non respecté"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Accès à la ressource non autorisé"
+          },
+          "500": {
+            "description": "Erreur technique - service indisponible"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_gestion-sanctions-rsav1",
+              "gestiondesmanquements",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_gestion-sanctions-rsav1",
+              "gestiondesmanquements",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/gestion-sanctions-rsa/v1"
+          }
+        ]
+      }
+    },
+    "/decisionSanctionRSAPartenaire": {
+      "post": {
+        "tags": [
+          "Transmission d'une décision de sanction RSA pour un bRSA accompagné par un partenaire"
+        ],
+        "summary": "Transmettre une décision de sanction RSA pour un bRSA accompagné par un partenaire",
+        "description": "Cette ressource permet de transmettre une décision de sanction RSA pour un bRSA accompagné par un CD/CAF, afin notamment de demander la radiation de la liste des demandeurs d'emploi si la décision de sanction RSA l'implique. <br>\n Aussi, à date, cette ressource considère les sanctions RSA de type **suspension ou suppression**, pour les natures de manquement suivantes: <br>\n - Refus d'élaborer le contrat d'engagement <br>\n - Refus d'actualiser le contrat d'engagement <br>\n - Manquement aux obligations du contrat d'engagement <br>\n - Refus à deux reprises d'une offre raisonnable d'emploi",
+        "operationId": "traiterDecisionSanctionRSA",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46-PwRS4DcGVVjfsmaevPSln"
+            }
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionSanctionRsa"
+              },
+              "examples": {
+                "Transmission d'une décision de suppression RSA faisant suite à un manquement aux obligations du CE": {
+                  "value": {
+                    "dateNotificationDecisionSanction": "2026-02-03",
+                    "natureManquement": "N61",
+                    "rangManquement": "R2",
+                    "dateManquement": "2026-01-03",
+                    "typeSanctionValide": "SUPPR_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 100,
+                    "dureeValidee": 4,
+                    "justificationDecisionSanction": "2nd rang, pas de remobilisation suite à la première décision de sanction du  1er septembre 2025"
+                  }
+                },
+                "Transmission d'une décision de suppression RSA faisant suite à un manquement refus d'élaborer ou actualiser le CE (cas refus d'élaborer)": {
+                  "value": {
+                    "dateNotificationDecisionSanction": "2026-02-03",
+                    "natureManquement": "N63",
+                    "rangManquement": "R2",
+                    "dateManquement": "2026-01-03",
+                    "typeSanctionValide": "SUPPR_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 100,
+                    "dureeValidee": 4,
+                    "justificationDecisionSanction": "2nd rang, absence à la nouvelle convocation du 3 janvier pour signer le contrat."
+                  }
+                },
+                "Transmission d'une décision de suppression RSA faisant suite à un manquement refus d'élaborer ou actualiser le CE (cas refus d'actualiser)": {
+                  "value": {
+                    "dateNotificationDecisionSanction": "2026-02-03",
+                    "natureManquement": "N64",
+                    "rangManquement": "R2",
+                    "dateManquement": "2026-01-03",
+                    "typeSanctionValide": "SUPPR_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 100,
+                    "dureeValidee": 4,
+                    "justificationDecisionSanction": "2nd rang, absence à la nouvelle convocation du 3 janvier pour actualiser le contrat."
+                  }
+                },
+                "Transmission d'une décision de suspension RSA faisant suite à un manquement aux obligations du CE dans le contexte d'un refus d'Offre Raisonnable d'Emploi (ORE)": {
+                  "value": {
+                    "dateNotificationDecisionSanction": "2026-02-03",
+                    "natureManquement": "N65",
+                    "rangManquement": "R1",
+                    "dateManquement": "2026-01-03",
+                    "typeSanctionValide": "SUSP_RSA",
+                    "modaliteDecisionValidee": "P",
+                    "montantValide": 50,
+                    "dureeValidee": 2,
+                    "justificationDecisionSanction": "2ème refus d'ORE le 3 janvier 2026"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Demande traitée. Si codeSortie=C001, enregistrement de la décision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetourDecisionSanctionRSA"
+                },
+                "examples": {
+                  "Evénement pris en compte": {
+                    "value": {
+                      "codeSortie": "C001",
+                      "identifiantConsequenceSanction": "5069",
+                      "identifiantManquement": "51225",
+                      "message": "Sanction partenaire créée et prise en compte par France Travail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucune conséquence de sanction trouvée "
+          },
+          "400": {
+            "description": "Les contrôles sur les paramètres transmis ne sont pas satisfaits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErreurDecisionSanctionRsa"
+                },
+                "examples": {
+                  "Erreur R032 - Date de notification de la décision de sanction obligatoire": {
+                    "value": {
+                      "codeErreur": "R032",
+                      "message": "dateNotificationDecisionSanction obligatoire"
+                    }
+                  },
+                  "Erreur R033 - Date de notification de la décision de sanction invalide": {
+                    "value": {
+                      "codeErreur": "R033",
+                      "message": "dateNotificationDecisionSanction invalide"
+                    }
+                  },
+                  "Erreur R041 - Commentaire JustificationDecisionSanction invalide": {
+                    "value": {
+                      "codeErreur": "R041",
+                      "message": "Commentaire invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R052 - Type conséquence sanction obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R052",
+                      "message": "Type consequence sanction obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R053 - Type conséquence sanction invalide": {
+                    "value": {
+                      "codeErreur": "R053",
+                      "message": "Type conséquence sanction invalide, seules valeurs acceptées sont SUSP_RSA et SUPPR_RSA"
+                    }
+                  },
+                  "Erreur R060 - Montant obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R060",
+                      "message": "Montant obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R061 - Montant invalide": {
+                    "value": {
+                      "codeErreur": "R061",
+                      "message": "Montant invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R062 - Modalité incorrecte": {
+                    "value": {
+                      "codeErreur": "R062",
+                      "message": "Modalité de décision validée incorrecte, doit être 'P' pour pourcentage, 'M' pour montant, ou vide pour une levée de suspension"
+                    }
+                  },
+                  "Erreur R063 - Modalité obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R063",
+                      "message": "Modalité de décision validée obligatoire pour le type d'événement transmis et si le « montantValide » est transmis"
+                    }
+                  },
+                  "Erreur R064 - Montant invalide pour le type de manquement": {
+                    "value": {
+                      "codeErreur": "R064",
+                      "message": "Montant invalide pour le type de manquement concerné"
+                    }
+                  },
+                  "Erreur R070 - Durée obligatoire pour le type d'événement transmis": {
+                    "value": {
+                      "codeErreur": "R070",
+                      "message": "Durée obligatoire pour le type d'événement transmis"
+                    }
+                  },
+                  "Erreur R071 - Durée invalide": {
+                    "value": {
+                      "codeErreur": "R071",
+                      "message": "Durée invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R080 - Nature de manquement obligatoire": {
+                    "value": {
+                      "codeErreur": "R080",
+                      "message": "natureManquement obligatoire"
+                    }
+                  },
+                  "Erreur R081 - Nature de manquement invalide": {
+                    "value": {
+                      "codeErreur": "R081",
+                      "message": "natureManquement invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R082 - Rang de manquement invalide": {
+                    "value": {
+                      "codeErreur": "R082",
+                      "message": "rangManquement invalide, format non respecté"
+                    }
+                  },
+                  "Erreur R090 - Date de manquement obligatoire": {
+                    "value": {
+                      "codeErreur": "R090",
+                      "message": "dateManquement obligatoire"
+                    }
+                  },
+                  "Erreur R091 - Date de manquement invalide": {
+                    "value": {
+                      "codeErreur": "R091",
+                      "message": "dateManquement invalide, format non respecté"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Accès à la ressource non autorisé"
+          },
+          "500": {
+            "description": "Erreur technique - service indisponible"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_gestion-sanctions-rsav1",
+              "profil_accedant",
+              "decisionSanctionPartenaire"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_gestion-sanctions-rsav1",
+              "profil_accedant",
+              "decisionSanctionPartenaire"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/gestion-sanctions-rsa/v1"
+          }
+        ]
+      }
+    },
+    "/demandeRadiation": {
+      "post": {
+        "tags": [
+          "Transmission d'une demande de radiation de la liste des DE pour un bRSA"
+        ],
+        "summary": "Transmettre une demande de radiation de la liste des DE pour un bRSA",
+        "description": "Cette ressource permet de transmettre une demande de radiation de la liste des DE pour un bRSA, qu'il soit accompagné par France Travail ou par un partenaire en précisant l'identifiant de la sanction RSA, en rapport avec cette demande. \n\n Une demande de radiation peut être émise immédiatement suite à une transmission d'une décision de sanction impliquant un bRSA. Et pour être validée, elle doit respecter la règlementation en vigueur à savoir: \n\n  - Pour le manquement constaté de type **Refus d'élaborer ou d’actualiser le contrat d’engagement**, la demande de radiation de la liste des DE pour une période de 4 mois fait suite à une décision de suppression RSA de 100% pendant 4 mois. \n\n  - Pour le manquement constaté de type **Manquement aux obligations énoncées dans le contrat d’engagement**, la demande de radiation de la liste des DE pour une période de 4 mois fait suite à une décision de suppression RSA de 100% pendant 4 mois. \n\n  - Pour le manquement constaté de type **Refus à deux reprises d’une ORE au titre du manquement aux obligations du contrat d’engagement**, suite à une décision de suspension ou suppression de RSA de 1 à 4 mois, alors la radiation de la liste des DE pour la même durée que la sanction peut s'appliquer.",
+        "operationId": "demandeRadiation",
+        "parameters": [
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46-PwRS4DcGVVjfsmaevPSln"
+            }
+          },
+          {
+            "name": "pa-nom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "name": "pa-prenom-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "name": "pa-identifiant-agent",
+            "in": "header",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/DemandeRadiation"
+              },
+              "examples": {
+                "Transmission d'une demande de radiation suite à un manquement aux obligations du CE": {
+                  "value": {
+                    "identifiantConsequenceSanction": "5069",
+                    "justificationDemandeRadiation": "demande de radiation suite à suppression du RSA à 100% pendant 4 mois au titre d'un second manquement aux obligations du Contrat d'Engagement (CE)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Demande traitée. Si codeSortie=C000, la demande de radiation a bien été créée. Si codeSortie=C001/C002/C003/C004, pas de demande de radiation créée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetourDemandeRadiation"
+                },
+                "examples": {
+                  "Demande de radiation créée": {
+                    "value": {
+                      "codeSortie": "C000",
+                      "idConsequenceSanctionCree": "5070",
+                      "message": "Demande de radiation créée"
+                    }
+                  },
+                  "Demande de radiation non créée car le demandeur d'emploi est déjà radié pour sanction": {
+                    "value": {
+                      "codeSortie": "C001",
+                      "message": "Demande de radiation non créée car le DE est déjà en statut radié suite à sanction"
+                    }
+                  },
+                  "Demande de radiation non créée car non conforme aux cas d'usages réglementaires": {
+                    "value": {
+                      "codeSortie": "C002",
+                      "message": "Demande de radiation non créée car non conforme aux cas d'usages"
+                    }
+                  },
+                  "Demande de radiation non créée car l'identifiantConsequenceSanction n'est pas rattaché au demandeur d'emploi": {
+                    "value": {
+                      "codeSortie": "C003",
+                      "message": "Demande de radiation non créée car l’identifiantConsequenceSanction n’est pas rattaché au demandeur d’emploi"
+                    }
+                  },
+                  "Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction RSA": {
+                    "value": {
+                      "codeSortie": "C004",
+                      "message": "Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction financière"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Aucune conséquence de sanction trouvée "
+          },
+          "400": {
+            "description": "Les contrôles sur les paramètres transmis ne sont pas satisfaits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErreurDemandeRadiation"
+                },
+                "examples": {
+                  "Erreur R012 - Identifiant conséquence sanction obligatoire": {
+                    "value": {
+                      "codeErreur": "R012",
+                      "message": "Identifiant Consequence Sanction obligatoire"
+                    }
+                  },
+                  "Erreur R013 - Identifiant conséquence sanction invalide": {
+                    "value": {
+                      "codeErreur": "R013",
+                      "message": "Identifiant Consequence Sanction invalide, format donnée non respecté"
+                    }
+                  },
+                  "Erreur R100 - Justification de la demande de radiation invalide": {
+                    "value": {
+                      "codeErreur": "R100",
+                      "message": "Justification de la demande de radiation invalide, format non respecté"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Accès à la ressource non autorisé"
+          },
+          "500": {
+            "description": "Erreur technique - service indisponible"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_gestion-sanctions-rsav1",
+              "profil_accedant",
+              "demandeRadiation"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_gestion-sanctions-rsav1",
+              "profil_accedant",
+              "demandeRadiation"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/gestion-sanctions-rsa/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_agent": {
+        "type": "oauth2",
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+            "scopes": {
+              "api_gestion-sanctions-rsav1": "Obligatoire",
+              "gestiondesmanquements": "Obligatoire",
+              "profil_accedant": "Obligatoire",
+              "decisionSanctionPartenaire": "Obligatoire",
+              "demandeRadiation": "Obligatoire"
+            },
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token"
+          }
+        }
+      },
+      "authentification_agent-clientCredentials": {
+        "type": "oauth2",
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+        "flows": {
+          "clientCredentials": {
+            "scopes": {
+              "api_gestion-sanctions-rsav1": "Obligatoire",
+              "gestiondesmanquements": "Obligatoire",
+              "profil_accedant": "Obligatoire",
+              "decisionSanctionPartenaire": "Obligatoire",
+              "demandeRadiation": "Obligatoire"
+            },
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "DetailManquement": {
+        "type": "object",
+        "properties": {
+          "individu": {
+            "$ref": "#/components/schemas/Individu"
+          },
+          "identifiantManquement": {
+            "type": "string",
+            "description": "Identifiant du manquement associé à la conséquence de sanction passée en paramètre",
+            "example": "805"
+          },
+          "familleManquement": {
+            "type": "string",
+            "description": "La famille du manquement concerné \r\n\r\nCode |Valeur \r\n---------|----------\r\nF01\t|Manquements aux obligations énoncées dans le contrat d'engagement\r\nF03\t|Refus d'élaborer ou d'actualiser le contrat d'engagement\r\nF04\t|Second refus d’une offre raisonnable d’emploi\r\n\r\n",
+            "example": "F03"
+          },
+          "dateManquement": {
+            "type": "string",
+            "description": "La date du manquement concerné",
+            "format": "date-time",
+            "example": "2024-11-17T00:00:00+01:00"
+          },
+          "dateAvertissement": {
+            "type": "string",
+            "description": "Date de l'avertissement",
+            "format": "date-time",
+            "example": "2024-11-18T00:00:00+01:00"
+          },
+          "faisceauIndices": {
+            "type": "array",
+            "description": "Liste des faisceaux d'indices ayant mené au constat du manquement",
+            "items": {
+              "$ref": "#/components/schemas/FaisceauIndice"
+            }
+          },
+          "justificationDecisionSanction": {
+            "type": "string",
+            "description": "Justification de la proposition de sanction - 4000 caractères max.",
+            "example": "Absence à deux rendez-vous avec le conseiller référent"
+          },
+          "demarcheRemobilisation": {
+            "type": "string",
+            "description": "Pour un manquement aux obligations du contrat d'engagement, et dans le cadre d'une proposition de suspension, liste des démarches de remobilisation à réaliser par le demandeur d'emploi pour envisager la levée de suspension - 4000 caractères max.",
+            "example": "Mettre à jour et publier son CV en ligne, réaliser 10 candidatures"
+          },
+          "consequencesSanction": {
+            "type": "array",
+            "description": "Listes des conséquences de sanction liées au manquement",
+            "items": {
+              "$ref": "#/components/schemas/DetailSanction"
+            }
+          }
+        }
+      },
+      "Individu": {
+        "type": "object",
+        "properties": {
+          "numeroFranceTravail": {
+            "type": "string",
+            "description": "Numéro France Travail de l'usager",
+            "example": "12345678910"
+          }
+        }
+      },
+      "FaisceauIndice": {
+        "type": "object",
+        "description": "Liste des faisceaux d'indices ayant mené au constat du manquement",
+        "properties": {
+          "natureDefaut": {
+            "type": "string",
+            "description": "La nature du défaut constaté",
+            "example": "N23"
+          },
+          "dateConstatDefaut": {
+            "type": "string",
+            "description": "Date de constat du défaut",
+            "format": "date-time",
+            "example": "2024-11-18T00:00:00+01:00"
+          },
+          "attributs": {
+            "type": "array",
+            "description": "Liste des attributs du défaut",
+            "items": {
+              "$ref": "#/components/schemas/DetailAttribut"
+            }
+          }
+        }
+      },
+      "DetailAttribut": {
+        "type": "object",
+        "description": "Liste des attributs du défaut",
+        "properties": {
+          "codeAttribut": {
+            "type": "string",
+            "description": "Code de l'attribut du défaut\r\n\r\nCode | Valeur\r\n---------|----------\r\nARDV_IDENTIFIANT_RDV\t|Identifiant du rendez-vous\r\nARDV_DATE_EDITION_CONVOCATION\t|Date d’édition de la convocation\r\nARDV_DATE_RDV\t|Date du rendez-vous\r\nARDV_TYPE_RDV\t|Type de rendez-vous\r\nARDV_DATE_JALON\t|Date de jalon\r\nARDV_N_CONTACT\t|Numéro Contact\r\nARDV_IDENTIFIANT_GED\t|Identifiant GED pièce justificative\r\nPRESTA_DATE_ENTRETIEN\t|Date d’entretien\r\nPRESTA_TYPE_PRESTA\t|Type de prestation\r\nPRESTA_ACTION_DECLENCHEE\t|Action déclenchée\r\nPRESTA_REF_OBJET_PRESTATION\t|Référence Prestation\r\nPRESTA_ID_GUPI\t|Identifiant GUPI\r\nFORM_INFO_ABS_FORMATION\t|Organisme formation informé de l’absence\r\nFORM_ID_PLAN_FORMATION\t|Identifiant du plan de formation\r\nFORM_ID_STAGE\t|Identifiant du stage\r\nFORM_MOTIF_ABS_FORMATION\t|Motif d’absence à formation",
+            "example": "ARDV_TYPE_RDV (Type de Rendez-vous)"
+          },
+          "valeurAttribut": {
+            "type": "string",
+            "description": "Valeur de l'attribut du défaut \r\n\r\nAttribut ARDV_TYPE_RDV \n Valeur | Libellé\r\n---------|----------\r\nN3\t|ENTRETIEN PERSONNALISE\r\nS1\t|RENDEZ-VOUS EN LIGNE\r\n\r\nAttribut FORM_MOTIF_ABS_FORMATION \n Valeur | Libellé\r\n---------|----------\r\n03\t|Retour à l'emploi \r\n04\t|Création / Reprise d'entreprise\r\n05\t|Retenu(e) sur autre formation\r\n06\t|Abandon du projet de formation\r\n07\t|Arrêt maladie / Congé maternité ou paternité\r\n08\t|Raison matérielle (mobilité, déménagement, finances)\r\n09\t|Autre\r\n10\t|Absence ou abandon non justifié par le Demandeur d'Emploi\r\n\r\nAttribut PRESTA_TYPE_PRESTA (liste non exhaustive) \n Valeur | Libellé\r\n---------|----------\r\nUES\t|UN EMPLOI STABLE\r\nC11\t|CONCEVOIR UN CV PERCUTANT\r\nM10\t|L'OFFRE DE SERVICE DE LA MODALITE SUI\r\nZ20\t|#TOM - RECRUTEMENT\r\nAP3\t|ACTIV'PROJET\r\nVS2\t|VALORISER SON IMAGE PRO\r\nM12\t|DES METIERS QUI RECRUTENT, ON EST LA POUR VOUS\r\nGCO\t|PREPA COMPETENCES\r\nC08\t|FAIRE LE POINT SUR MES COMPETENCES\r\nM06\t|METTRE A JOUR ET VALORISER VOTRE CV EN LIGNE\r\nC14\t|CONVAINCRE EN ENTRETIEN D'EMBAUCHE\r\nC05\t|DECOUVRIR ET M'APPROPRIER LES SERVICES DE FRANCE TRAVAIL\r\nEMD\t|TOUTES LES CLES POUR MON EMPLOI DURABLE\r\nZ21\t|#TOM - DECOUVERTE METIERS-SECTEURS\r\nPES\t|PARCOURS EMPLOI SANTE\r\nC09\t|ORGANISER EFFICACEMENT MA RECHERCHE D'EMPLOI\r\nEME\t|ACTIV'CREA - EMERGENCE\r\nC07\t|MOBILISER MES SERVICES NUMERIQUES FRANCE TRAVAIL\r\nC17\t|STRUCTURER MON PROJET DE CREATION D'ENTREPRISE\r\nM13\t|TROUVER ET PREPARER SON IMMERSION\r\nC16\t|M'IMAGINER CREATEUR D'ENTREPRISE\r\nM11\t|LE NUMERIQUE POUR TOUS",
+            "example": "N3 (Entretien personnalisé)"
+          }
+        }
+      },
+      "DetailSanction": {
+        "type": "object",
+        "description": "Liste des conséquences de sanction",
+        "properties": {
+          "idConsequenceSanction": {
+            "type": "string",
+            "description": "Identifiant de la conséquence de sanction",
+            "example": "680"
+          },
+          "typeConsequenceSanction": {
+            "type": "string",
+            "description": "Type de conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nRAPPEL_A_ORDRE\t|Rappel à l’ordre - notification de 1er manquement pour DE non indémnisé\r\nSUSP_RSA\t|Suspension RSA (Revenu de solidarité active)\r\nSUPPR_RSA\t|Suppression RSA (Revenu de solidarité active)\r\nSUSP_FT\t|Suspension allocations France Travail\r\nSUPPR_FT\t|Suppression allocations France Travail\r\nSUPPR_FT_DEF\t|Suppression allocations France Travail définitive\r\nRADIATION\t|Radiation de la liste des DE",
+            "example": "SUSP_RSA"
+          },
+          "delegation": {
+            "type": "boolean",
+            "description": "Indique si France Travail a la délégation sur les décisions de suspension/levée de suspension à la date de la proposition de sanction",
+            "example": false
+          },
+          "codeInitiateur": {
+            "type": "string",
+            "description": "Code initiateur de la conséquence de sanction (Toujours FT à date)",
+            "example": "FT"
+          },
+          "modaliteProposee": {
+            "type": "string",
+            "enum": [
+              "P",
+              "M"
+            ],
+            "description": "Modalité proposeée de la conséquence de sanction (P pour pourcentage, M pour Montant en €)",
+            "example": "P"
+          },
+          "montantPropose": {
+            "type": "integer",
+            "description": "Montant proposé de la conséquence de sanction",
+            "example": 10
+          },
+          "dureeProposee": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "Durée proposée de la conséquence de sanction (en mois)",
+            "example": 2
+          },
+          "modaliteValidee": {
+            "type": "string",
+            "enum": [
+              "P",
+              "M"
+            ],
+            "description": "Modalite validée de la conséquence de sanction (P pour pourcentage, M pour Montant en €)",
+            "example": "P"
+          },
+          "montantValide": {
+            "type": "integer",
+            "description": "Montant validé de la conséquence de sanction",
+            "example": 10
+          },
+          "dureeValidee": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "Durée validée de la conséquence de sanction (en mois)",
+            "example": 2
+          },
+          "dateDebutApplication": {
+            "type": "string",
+            "description": "Date de début d'application de la conséquence de sanction",
+            "format": "date-time",
+            "example": "2024-12-13T01:00:00+01:00"
+          },
+          "dateFinApplication": {
+            "type": "string",
+            "description": "Date de fin d'application de la conséquence de sanction",
+            "format": "date-time",
+            "example": "2026-12-13T01:00:00+01:00"
+          },
+          "dateRemobilisation": {
+            "type": "string",
+            "description": "Date de demande de remobilisation",
+            "format": "date-time",
+            "example": "2025-12-13T01:00:00+01:00"
+          },
+          "justifDecisionRemobilisation": {
+            "type": "string",
+            "description": "Justification de la proposition de suite à donner à une demande de remobilisation - 4000 caractères acceptés",
+            "example": "Effectuer 10 candidatures, être présent à la prochaine convocation FT"
+          },
+          "dateLeveeApplication": {
+            "type": "string",
+            "description": "Date de levée d'application de la conséquence de sanction",
+            "format": "date-time",
+            "example": "2025-01-01T01:00:00+01:00"
+          },
+          "evenements": {
+            "type": "array",
+            "description": "Liste des événements associés à la conséquence de sanction",
+            "items": {
+              "$ref": "#/components/schemas/DetailEvenementSanction"
+            }
+          }
+        }
+      },
+      "DetailEvenementSanction": {
+        "type": "object",
+        "description": "Liste des événements associés à la conséquence de sanction",
+        "properties": {
+          "identifiantEvenement": {
+            "type": "string",
+            "description": "Identifiant unique de l'évènement conséquence de sanction",
+            "example": "d84b80a4-e9b3-458d-a7cb-37ec325774cc"
+          },
+          "typeEvenement": {
+            "type": "string",
+            "description": "Type de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nANNULATION_SANCTION\t|Annulation d’une sanction (suite recours / erreur saisie…)\r\nPROP_SANCTION\t|Proposition de sanction / initialisation de la sanction\r\nACCORD_FT_SANCTION\t|Accord sanction par le manager France Travail\r\nVALID_SANCTION\t|Décision de sanction\r\nREFUS_SANCTION\t|Sanction refusée\r\nSAISIE_SANCTION\t|Choix d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement) \r\nREFUS_SAISIE_SANCTION\t|Refus d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement)\r\nPROP_LEVEE_SUSP\t|Proposition de levée de suspension\r\nACCORD_FT_LEVEE_SUSP\t|Accord levée de suspension par le manager France Travail\r\nVALID_LEVEE_SUSP\t|Décision de levée de suspension v=\r\nREFUS_LEVEE_SUSP\t|Refus de levée de suspension\r\n",
+            "example": "VALID_SANCTION"
+          },
+          "dateEvenement": {
+            "type": "string",
+            "description": "Date de l'évènement portant sur la conséquence de sanction",
+            "format": "date-time",
+            "example": "2025-01-24T18:08:25+01:00"
+          },
+          "motif": {
+            "type": "string",
+            "description": "Motif de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nAUTRE\t|Autre motif (sanction prononcée CD ou CAF)\r\nRECOURS\t|Annulation suite à recours (sanction prononcée CD ou CAF)\r\nDROIT_ERREUR\t|Droit à l'erreur (sanction prononcée CD ou CAF)\r\nDELEGATION_FT\t|Validation au titre de la délégation FT\r\nDELAI_SAISIE_DEPASSE\t|Délai d'instruction CD dépassé\r\nREFUS_SAISIE\t|Refus d'instruction par le CD\r\nVALIDATION_CD\t|Décision de sanction par le CD\r\nREFUS_CD\t|Proposition de sanction refusée par le CD\r\nREFUS_ELD\t|Proposition de sanction refusée par le manager France Travail\r\nRECENTRALISATION_RSA_OUTREMER\t|Proposition de sanction à traiter CAF Outremer recentralisation du RSA\r\nVALIDATION_CAF\t| Décision de sanction par la CAF\r\nREFUS_CAF\t| Proposition de sanction refusée par la CAF\r\nABANDON_RECOURS_FT\t|Annulation de la décision de sanction suite à réclamation FT (sanction prononcée FT)\r\nMEDIATEUR\t|Annulation de la décision suite préconisation médiateur (sanction prononcée FT)\r\nTRIBUNAL_ADM\t|Annulation suite décision tribunal administratif (sanction prononcée FT)\r\nANNU_SANCTION\t|Annulation suite erreur décision sanction (sanction prononcée FT)\r\nANNU_RECOURS\t|Annulation suite erreur décision recours (sanction prononcée FT)",
+            "example": "REFUS_SAISIE"
+          },
+          "commentaireEvenement": {
+            "type": "string",
+            "description": "Commentaire facultatif associé à l'événement portant sur la conséquence de sanction - 4000 caractères max.",
+            "example": "Suspension rsa 100% 1 mois - double allocataire ARE et RSA"
+          }
+        }
+      },
+      "ErreurDetailManquement": {
+        "type": "object",
+        "properties": {
+          "codeErreur": {
+            "type": "string",
+            "enum": [
+              "R010",
+              "R011"
+            ],
+            "description": "Code Erreur suite à la demande de récupération du détail d'un manquement parmi: R010 (Identifiant Consequence Sanction obligatoire), R011 (Identifiant conséquence de sanction invalide)",
+            "example": "R010"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message précisant l'état du traitement de la demande",
+            "example": "Identifiant Consequence Sanction obligatoire"
+          }
+        }
+      },
+      "TraitementSanctionRsa": {
+        "type": "object",
+        "properties": {
+          "identifiantConsequenceSanction": {
+            "type": "string",
+            "description": "Identifiant unique de la conséquence de sanction",
+            "example": "1243"
+          },
+          "evenement": {
+            "$ref": "#/components/schemas/Evenement"
+          },
+          "typeConsequenceSanctionValide": {
+            "type": "string",
+            "enum": [
+              "SUSP_RSA",
+              "SUPPR_RSA"
+            ],
+            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION ou ANNULATION_SANCTION, précision sur le type de sanction validé parmi SUSP_RSA ou SUPPR_RSA",
+            "example": "SUSP_RSA"
+          },
+          "modaliteDecisionValidee": {
+            "type": "string",
+            "enum": [
+              "P",
+              "M"
+            ],
+            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION, précision sur la modalité de sanction validée parmi P (pourcentage) ou M (montant en €)",
+            "example": "P"
+          },
+          "montantValide": {
+            "type": "integer",
+            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION, précision sur le montant/taux de sanction validée. Pour un taux, doit être compris entre 30 et 100",
+            "example": 50
+          },
+          "dureeValidee": {
+            "type": "integer",
+            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION, précision sur la durée de sanction validée, en mois",
+           "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "example": 2
+          }
+        },
+        "required": [
+          "identifiantConsequenceSanction"
+        ]
+      },
+      "Evenement": {
+        "type": "object",
+        "properties": {
+          "typeEvenement": {
+            "type": "string",
+            "enum": [
+              "SAISIE_SANCTION",
+              "REFUS_SAISIE_SANCTION",
+              "VALID_SANCTION",
+              "REFUS_SANCTION",
+              "VALID_LEVEE_SUSP",
+              "REFUS_LEVEE_SUSP",
+              "ANNULATION_SANCTION"
+            ],
+            "description": "Type d'événement de sanction à transmettre",
+            "example": "VALID_SANCTION"
+          },
+          "dateEvenement": {
+            "type": "string",
+            "description": "Date de l'événement portant sur la conséquence de sanction",
+            "example": "2025-03-12"
+          },
+          "commentaireEvenement": {
+            "type": "string",
+            "description": "Commentaire facultatif si souhait de préciser l'événement - 4000 caractères acceptés",
+            "example": "Validation de la proposition de suspension RSA de 50% pour 2 mois"
+          },
+          "motifEvenement": {
+            "type": "string",
+            "enum": [
+              "DROIT_ERREUR",
+              "RECOURS",
+              "AUTRE"
+            ],
+            "description": "Motif précisant l'événement ANNULATION_SANCTION, obligatoire pour une annulation de sanction",
+            "example": "RECOURS"
+          }
+        },
+        "required": [
+          "typeEvenement",
+          "dateEvenement"
+        ]
+      },
+      "RetourTraitementRsaOTD": {
+        "type": "object",
+        "properties": {
+          "codeSortie": {
+            "type": "string",
+            "enum": [
+              "C001",
+              "C999"
+            ],
+            "description": "Code retour suite à la demande de mise à jour de la conséquence de sanction RSA parmi C001 - Evénement publié OK, C999 - Evénement incompatible avec les événements connus pour la conséquence de sanction",
+            "example": "C001"
+          }
+        },
+        "x-examples": {
+          "C001 - MAJ OK - Evénement publié sans erreur": {
+            "codeSortie": "C001"
+          },
+          "C999 - MAJ KO - Evénement incompatible avec dernier événement connu": {
+            "codeSortie": "C999"
+          }
+        }
+      },
+      "ErreurTraitementSanctionRsa": {
+        "type": "object",
+        "properties": {
+          "codeErreur": {
+            "type": "string",
+            "enum": [
+              "R010",
+              "R011",
+              "R020",
+              "R021",
+              "R030",
+              "R031",
+              "R040",
+              "R050",
+              "R051",
+              "R060",
+              "R061",
+              "R062",
+              "R063",
+              "R064",
+              "R070",
+              "R071"
+            ],
+            "description": "Code Erreur suite à la demande de mise à jour de la conséquence de sanction RSA parmi: R010 (Identifiant Consequence Sanction obligatoire), R011 (Identifiant conséquence de sanction invalide), R020 (type événement obligatoire), R021 (type événement invalide), R030 (date événement obligatoire), R031 (date événement erronée), R040 (commentaire evénement invalide, RO50 (type de conséquence de sanction obligatoire pour le type d'événement transmis), R051 (type de conséquence de sanction invalide), R060 (montant obligatoire pour le type d'événement transmis), R061 (montant invalide), R062 (modalité validée incorrecte), R063 (modalité validée obligatoire pour le type d'événement transmis), R064 (montant invalide pour le type d'événement transmis), R070 (durée obligatoire pour le type d'événement transmis), R071 (durée validée invalide)",
+            "example": "R010"
+          }
+        }
+      },
+      "DecisionSanctionRsa": {
+        "type": "object",
+        "properties": {
+          "dateNotificationDecisionSanction": {
+            "type": "string",
+            "description": "Date de la décision de sanction au format AAAA-MM-JJ",
+            "example": "2026-02-03"
+          },
+          "natureManquement": {
+            "type": "string",
+            "enum": [
+              "N61",
+              "N63",
+              "N64",
+              "N65"
+            ],
+            "description": "Obligatoire, permet de connaître la nature du manquement à l'origine de la décision N61 pour un manquements aux obligations du contrat d'engagement, N63 pour un manquement refus d'élaborer le contrat d'engagement, N64 pour un manquement refus d'actualiser le contrat d'engagement, N65 pour un manquements aux obligations du contrat d'engagement dans le contexte d'un refus de deux offres raisonnables d'emploi",
+            "example": "N61"
+          },
+          "rangManquement": {
+            "type": "string",
+            "enum": [
+              "R1",
+              "R2"
+            ],
+            "description": "Rang/itération du manquement R1 pour un 1er manquement sanctionné, R2 pour un second ou plus",
+            "example": "R2"
+          },
+           "dateManquement": {
+            "type": "string",
+            "description": "Date du manquement constaté par le partenaire",
+            "example": "2025-03-12"
+          },
+          "typeSanctionValide": {
+            "type": "string",
+            "enum": [
+              "SUSP_RSA",
+              "SUPPR_RSA"
+            ],
+            "description": "Obligatoire parmi SUSP_RSA pour une suspension du RSA ou SUPPR_RSA pour une suppression du RSA",
+            "example": "SUSP_RSA"
+          },
+          "modaliteDecisionValidee": {
+            "type": "string",
+            "enum": [
+              "P",
+              "M"
+            ],
+            "description": "Obligatoire, précision sur la modalité de sanction décidée parmi P (pourcentage) ou M (montant en €)",
+            "example": "P"
+          },
+          "montantValide": {
+            "type": "integer",
+            "description": "Obligatoire, précision sur le montant/taux de sanction. Pour un taux, doit être compris entre 30 et 100.",
+            "example": 50
+          },
+          "dureeValidee": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "Obligatoire, précision sur la durée de sanction en mois, doit être comprise entre 1 et 4.",
+            "example": 2
+        },
+         "justificationDecisionSanction": {
+            "type": "string",
+            "description": "Justification de la décision de sanction partenaire - 4000 caractères max.",
+            "example": "2nd rang, pas de remobilisation suite à la première décision de sanction du  1er septembre 2025"
+           }
+        },
+        "required": [
+          "dateNotificationDecisionSanction",
+          "natureManquement",
+          "typeSanctionValide",
+          "modaliteDecisionValidee",
+          "montantValide",
+          "dureeValidee",
+          "dateManquement"
+        ]
+      },
+      "RetourDecisionSanctionRSA": {
+        "type": "object",
+        "properties": {
+          "codeSortie": {
+            "type": "string",
+            "enum": [
+              "C001"
+            ],
+            "description": "Code retour suite à la demande d'enregistrement d'une sanction partenaire : C001-Sanction partenaire créée ,",
+            "example": "C001"
+          },
+          "identifiantConsequenceSanction": {
+            "type": "string",
+            "description": "Identifiant de la conséquence de sanction enregistré dans le système",
+            "example": "5069"
+          },
+          "identifiantManquement": {
+            "type": "string",
+            "description": "Identifiant du manquement enregistré dans le système",
+            "example": "51225"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message précisant l'état du traitement de la demande",
+            "example": "Sanction partenaire créée et prise en compte par France Travail"
+          }
+        }
+      },
+      "ErreurDecisionSanctionRsa": {
+        "type": "object",
+        "properties": {
+          "codeErreur": {
+            "type": "string",
+            "enum": [
+              "R032",
+              "R033",
+              "R041",
+              "R052",
+              "R053",
+              "R060",
+              "R061",
+              "R062",
+              "R063",
+              "R064",
+              "R070",
+              "R071",
+              "R080",
+              "R081",
+              "R082",
+              "R090",
+              "R091"
+            ],
+            "description": "Code Erreur suite à la transmission d'une décision de sanction RSA parmi: R032 (dateNotificationDecisionSanction obligatoire), R033 (dateNotificationDecisionSanction invalide), R041 (Commentaire invalide), RO52 (type de conséquence de sanction obligatoire pour le type d'événement transmis), R053 (type de conséquence de sanction invalide), R060 (montant obligatoire pour le type d'événement transmis), R061 (montant invalide), R062 (modalité validée incorrecte), R063 (modalité validée obligatoire pour le type d'événement transmis), R064 (montant invalide pour le type d'événement transmis), R070 (durée obligatoire pour le type d'événement transmis), R071 (durée validée invalide), R080 (nature manquement obligatoire), R081 (nature manquement invalide), R082 (rang manquement invalide), R090 (date manquement obligatoire), R091 (date manquement invalide)",
+            "example": "R071"
+          }
+        }
+      },
+      "DemandeRadiation": {
+        "type": "object",
+        "properties": {
+          "identifiantConsequenceSanction": {
+            "type": "string",
+            "description": "Identifiant de la conséquence de sanction RSA enregistré dans le système France Travail",
+            "example": "1243"
+          },
+          "justificationDemandeRadiation": {
+            "type": "string",
+            "description": "Justification de la demande de radiation de la liste des demandeurs d'emploi - 4000 caractères acceptés",
+            "example": "Suspension rsa 100% 4 mois"
+          }
+        },
+        "required": [
+          "identifiantConsequenceSanction"
+        ]
+      },
+      "RetourDemandeRadiation": {
+        "type": "object",
+        "properties": {
+          "codeSortie": {
+            "type": "string",
+            "enum": [
+              "C000",
+              "C001",
+              "C002",
+              "C003",
+              "C004"
+            ],
+            "description": "Code retour suite à la demande de radiation de la liste des demandeurs d'emploi",
+            "example": "C000"
+          },
+          "idConsequenceSanctionCree": {
+            "type": "string",
+            "description": "Identifiant de la conséquence de sanction enregistré dans le système France Travail",
+            "example": "5069"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message précisant l'état du traitement de la demande",
+            "example": "Sanction partenaire créée et prise en compte par France Travail"
+          }
+        }
+      },
+      "ErreurDemandeRadiation": {
+        "type": "object",
+        "properties": {
+          "codeErreur": {
+            "type": "string",
+            "enum": [
+              "R012",
+              "R013",
+              "R100"
+            ],
+            "description": "Code Erreur suite à la demande de radiation parmi R012 (Identifiant Conséquence Sanction obligatoire), R013 (Identifiant Conséquence Sanction invalide), R100 (justificationDemandeRadiation invalide)",
+            "example": "R012"
+          }
+        }
+      }
+    }
+  }
+}

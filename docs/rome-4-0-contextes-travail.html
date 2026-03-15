@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROME 4.0 Contextes de travail &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>ROME 4.0 &#x2014; Contextes de travail</h1>
+  <div class="sub">R&#xe9;f&#xe9;rentiel des environnements, conditions et situations dans lesquels s'exerce un m&#xe9;tier</div>
+  <div class="sub-tech">ROME V4.0 - Situations de travail v1 &#x2014; 3 endpoints &#xb7; 2 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rome-contextes-travail/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Contexte de travail <span class="dto">ContexteTravail</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Un &#xe9;l&#xe9;ment d&#xe9;crivant l'environnement dans lequel s'exerce un m&#xe9;tier : conditions physiques, horaires, lieux, statut, public, ou type de structure. Chaque contexte appartient &#xe0; une cat&#xe9;gorie et poss&#xe8;de un code unique.
+      <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>categorie</code></div>
+    </div>
+
+    <div class="grid-2">
+
+      <div class="n l1-c" id="m-conditions">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Conditions de travail <span class="dto">CONDITIONS_TRAVAIL</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">Risques professionnels et conditions physiques d'exercice : travail en hauteur, exposition au bruit, port de charges, etc.</div>
+        </div>
+      </div>
+
+      <div class="n l1-b" id="m-horaires">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Horaires et dur&#xe9;e <span class="dto">HORAIRE_ET_DUREE_TRAVAIL</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">Organisation temporelle : travail de nuit, horaires d&#xe9;cal&#xe9;s, temps partiel, saisonnier, etc.</div>
+        </div>
+      </div>
+
+      <div class="n l1-n" id="m-lieux">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Lieux et d&#xe9;placements <span class="dto">LIEU_ET_DEPLACEMENT</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">O&#xf9; s'exerce le travail et mobilit&#xe9; requise : d&#xe9;placements fr&#xe9;quents, t&#xe9;l&#xe9;travail, chantier, etc.</div>
+        </div>
+      </div>
+
+      <div class="n l1-p" id="m-statut">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Statut d'emploi <span class="dto">STATUT_EMPLOI</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">Forme juridique du contrat : CDI, CDD, int&#xe9;rim, ind&#xe9;pendant, fonctionnaire, etc.</div>
+        </div>
+      </div>
+
+      <div class="n l2d" id="m-beneficiaire">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Publics sp&#xe9;cifiques <span class="dto">TYPE_BENEFICIAIRE</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">Types de publics concern&#xe9;s par le m&#xe9;tier : enfants, personnes &#xe2;g&#xe9;es, personnes en situation de handicap, etc.</div>
+        </div>
+      </div>
+
+      <div class="n l2t" id="m-structure">
+        <div class="nh"><div class="dot"></div>
+          <div class="name">Types de structure <span class="dto">TYPE_STRUCTURE_ACCUEIL</span></div>
+        </div>
+        <div class="nb">
+          <div class="fi">Nature de l'organisme employeur : association, collectivit&#xe9;, entreprise priv&#xe9;e, &#xe9;tablissement de sant&#xe9;, etc.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Structure</strong> &#x2014; Le r&#xe9;f&#xe9;rentiel est plat : chaque contexte de travail est un objet simple avec un code, un libell&#xe9; et une cat&#xe9;gorie (enum &#xe0; 6 valeurs). Les cat&#xe9;gories ci-dessus illustrent les 6 rubriques du r&#xe9;f&#xe9;rentiel.
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> &#x2014; API publique, royaume <code>/partenaire</code> (client credentials). Scopes requis : <code>nomenclatureRome</code> + <code>api_rome-contextes-travailv1</code>. Aucun jeton usager n&#xe9;cessaire.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Contextes de travail <span class="dt-human">&#x2014; Consultation du r&#xe9;f&#xe9;rentiel</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les contextes de travail</span><div class="ep-human">Tous les contextes de travail du r&#xe9;f&#xe9;rentiel ROME 4.0</div><span class="ep-path">/v1/situations-travail/contexte-travail</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire un contexte de travail</span><div class="ep-human">D&#xe9;tail d'un contexte de travail par son code</div><span class="ep-path">/v1/situations-travail/contexte-travail/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Version <span class="dt-human">&#x2014; Version courante du r&#xe9;f&#xe9;rentiel ROME</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer la version actuelle du ROME</span><div class="ep-human">Num&#xe9;ro de version et date de derni&#xe8;re mise &#xe0; jour</div><span class="ep-path">/v1/situations-travail/version</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">2 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel / Nomenclature</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ContexteTravail</span> <span class="sc-desc">&#x2014; Contexte de travail (code, libell&#xe9;, cat&#xe9;gorie)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">VersionRome</span> <span class="sc-desc">&#x2014; Version du r&#xe9;f&#xe9;rentiel</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Consultation des contextes de travail</strong> &#x2014; Un portail emploi enrichit ses offres avec les conditions d'exercice du m&#xe9;tier. Il interroge l'API pour r&#xe9;cup&#xe9;rer la liste compl&#xe8;te des contextes de travail.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-liste"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// GET /v1/situations-travail/contexte-travail</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+[
+  {
+    <span class="jk">"code"</span>: <span class="js">"403091"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"En club sportif"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"CONDITIONS_TRAVAIL"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"400183"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Travail en hauteur"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"CONDITIONS_TRAVAIL"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"401050"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Travail de nuit"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"HORAIRE_ET_DUREE_TRAVAIL"</span>
+  },</div>
+<div data-section="s-suite">  {
+    <span class="jk">"code"</span>: <span class="js">"401189"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"D&#xe9;placements professionnels"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"LIEU_ET_DEPLACEMENT"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"400820"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Travailleur ind&#xe9;pendant"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"STATUT_EMPLOI"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"400657"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Personnes en situation de handicap"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"TYPE_BENEFICIAIRE"</span>
+  },
+  {
+    <span class="jk">"code"</span>: <span class="js">"400390"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Association"</span>,
+    <span class="jk">"categorie"</span>: <span class="js">"TYPE_STRUCTURE_ACCUEIL"</span>
+  }
+  <span class="jc">// ... (suite du r&#xe9;f&#xe9;rentiel)</span>
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-liste">
+  <div class="ex-title"><span class="ex-ico">&#x1F3ED;</span> Conditions et horaires</div>
+  <div class="ex-card">
+    <h4>Contextes de travail &#x2014; extrait du r&#xe9;f&#xe9;rentiel</h4>
+    <p>Chaque entr&#xe9;e est un triplet simple : code, libell&#xe9;, cat&#xe9;gorie. Les cat&#xe9;gories d&#xe9;crivent les grandes dimensions du contexte de travail.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>En club sportif</strong> &#x2192; <span class="ex-tag tag-besoin">CONDITIONS_TRAVAIL</span></div>
+      <div class="ex-item"><strong>Travail en hauteur</strong> &#x2192; <span class="ex-tag tag-oui">CONDITIONS_TRAVAIL</span></div>
+      <div class="ex-item"><strong>Travail de nuit</strong> &#x2192; <span class="ex-tag tag-encours">HORAIRE_ET_DUREE_TRAVAIL</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-suite">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CD;</span> Lieux, statuts et structures</div>
+  <div class="ex-card">
+    <h4>Autres dimensions du r&#xe9;f&#xe9;rentiel</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>D&#xe9;placements professionnels</strong> &#x2192; <span class="ex-tag tag-faible">LIEU_ET_DEPLACEMENT</span></div>
+      <div class="ex-item"><strong>Travailleur ind&#xe9;pendant</strong> &#x2192; <span class="ex-tag tag-prio">STATUT_EMPLOI</span></div>
+      <div class="ex-item"><strong>Personnes en situation de handicap</strong> &#x2192; <span class="ex-tag tag-moyen">TYPE_BENEFICIAIRE</span></div>
+      <div class="ex-item"><strong>Association</strong> &#x2192; <span class="ex-tag tag-ok">TYPE_STRUCTURE_ACCUEIL</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Le r&#xe9;f&#xe9;rentiel complet contient plusieurs centaines de contextes r&#xe9;partis dans les 6 cat&#xe9;gories. Chaque contexte peut &#xea;tre rattach&#xe9; &#xe0; une fiche m&#xe9;tier via l'API Fiches m&#xe9;tiers.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; ROME V4.0 - Situations de travail v1 &#xb7; api.francetravail.io &#xb7; 3 endpoints &#xb7; 2 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

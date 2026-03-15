@@ -1,0 +1,178 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Je Contrôle Mon Offre - JCMO",
+    "description": "Récupération d'une liste d'appellations métier à partir d'un intitulé et d'un contexte. \r\n\r\n **Scopes :** `api_jecontrolemonoffrev1`,`legaliteoffreemploi` \r\n\r\n **Royaume :** `/partenaire`",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/jecontrolemonoffre"
+    }
+  ],
+  "tags": [
+    {
+      "name": "legaliteoffreemploiREST"
+    }
+  ],
+  "paths": {
+    "/v1/legaliteoffreemploi": {
+      "post": {
+        "tags": [
+          "legaliteoffreemploiREST"
+        ],
+        "description": "return Response (Legalite offre emploi) throws ErreurRestSLDNG",
+        "operationId": "recupererLegaliteOffreEmploi",
+        "parameters": [
+          {
+            "name": "intitule_offre",
+            "in": "query",
+            "description": "Intitulé de l'offre d'emploi à contrôler, chaîne de 2 à 300 caractère max",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description_offre",
+            "in": "query",
+            "description": "Description de l'offre d'emploi à contrôler, chaîne de 3 900 caractère max",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description_entreprise",
+            "in": "query",
+            "description": "Intitulé de l'offre d'emploi à contrôler, chaîne de 500 caractère max",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriteresLegaliteOffreEmploi"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Alerte(s) identifiée(s)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegaliteOffreEmploi"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegaliteOffreEmploi"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Aucune alerte identifiée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegaliteOffreEmpIoi"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegaliteOffreEmpIoi"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur fonctionnelle",
+            "content": {}
+          },
+          "401": {
+            "description": "HTTP 401 Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Une erreur technique est survenue",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "criteresLegaliteOffreEmploi"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlerteDetailList": {
+        "type": "object",
+        "properties": {
+          "typeAlerte": {
+            "type": "string"
+          },
+          "themeAlerte": {
+            "type": "string"
+          },
+          "nomAlerte": {
+            "type": "string"
+          },
+          "detailAlerte": {
+            "type": "string"
+          },
+          "phraseAlerte": {
+            "type": "string"
+          },
+          "champAlerte": {
+            "type": "string"
+          }
+        }
+      },
+      "CriteresLegaliteOffreEmploi": {
+        "type": "object",
+        "properties": {
+          "intitule_offre": {
+            "type": "string"
+          },
+          "description_offre": {
+            "type": "string"
+          },
+          "description_entreprise": {
+            "type": "string"
+          }
+        }
+      },
+      "LegaliteOffreEmploi": {
+        "type": "object",
+        "properties": {
+          "alerteDetailList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlerteDetailList"
+            }
+          }
+        }
+      },
+      "LegaliteOffreEmpIoi": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Aucune alerte identifiée"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "jsonWebToken": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

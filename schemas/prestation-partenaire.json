@@ -1,0 +1,5350 @@
+{
+   "openapi":"3.0.3",
+   "info":{
+      "title":"Gestion des prestations sous-traitées",
+      "description":"Cette API permet à un partenaire authentifié, associé à un marché de prestation (titulaire, cotraitant, ou prestataire), d’accéder à sa programmation et d’en effectuer le suivi.\r\n\r\n",
+      "version":"1.0.0",
+      "contact":{
+         "name":"Support francetravail.io",
+         "url":"https://francetravail.io/contact",
+         "email":"contact@francetravail.fr"
+      }
+   },
+   "servers":[
+      {
+         "url":"https://api.francetravail.io/partenaire/partenaire-gerer-prestations/v1"
+      }
+   ],
+   "tags":[
+      {
+         "name":"Candidature"
+      },
+      {
+         "name":"Commande"
+      },
+      {
+         "name":"Export Commande"
+      },
+      {
+         "name":"PieceGED"
+      },
+      {
+         "name":"PosteTypeLieu"
+      },
+      {
+         "name":"PrecisionStatutPresence"
+      },
+      {
+         "name":"ReferentielPieceGED"
+      },
+      {
+         "name":"RendezVous"
+      },
+      {
+         "name":"Resultat"
+      },
+      {
+         "name":"ResultatRendezVous"
+      },
+      {
+         "name":"Session"
+      },
+      {
+         "name":"SousPrecisionResultat"
+      },
+      {
+         "name":"StatutPresence"
+      },
+      {
+         "name":"Lieu Realisation"
+      }
+   ],
+   "paths":{
+      "/candidature":{
+         "get":{
+            "tags":[
+               "Candidature"
+            ],
+            "summary":"Rechercher des candidatures",
+            "parameters":[
+               {
+                  "name":"avecRelance",
+                  "in":"query",
+                  "example":true,
+                  "description":"préciser si vous souhaitez recevoir les candidatures avec relance (true) sinon (false)",
+                  "schema":{
+                     "type":"boolean"
+                  }
+               },
+               {
+                  "name":"codeAssedic",
+                  "in":"query",
+                  "description":"Code régional du bénéficiaire de la candidature",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"032"
+               },
+               {
+                  "name":"codeBNI",
+                  "in":"query",
+                  "description":"Code BNI chiffré du bénéficiaire de la candidature",
+                  "schema":{
+                     "format":"int64",
+                     "type":"integer"
+                  },
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               {
+                  "name":"codeCommune",
+                  "in":"query",
+                  "description":"Code de la commune",
+                  "example":67000,
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeRome",
+                  "description":"code ROME",
+                  "in":"query",
+                  "example":"D1101",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "description":"liste des codes de type de prestation",
+                  "in":"query",
+                  "example":"UES",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  }
+               },
+               {
+                  "name":"dateDebutCreation",
+                  "in":"query",
+                  "description":"Borne inférieure pour la recherche par date de création de candidature",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"2022-10-26T13:30:00"
+               },
+               {
+                  "name":"dateFinCreation",
+                  "in":"query",
+                  "description":"Borne supérieure pour la recherche par date de création de candidature",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"2022-10-26T13:30:00"
+               },
+               {
+                  "name":"dateRecherche",
+                  "in":"query",
+                  "description":"Date de recherche",
+                  "example":"2022-10-26T13:30:00",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"idGide",
+                  "in":"query",
+                  "description":"Identifiant GIDE du bénéficiaire de la candidature",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"1234567A"
+               },
+               {
+                  "name":"identifiantCandidature",
+                  "in":"query",
+                  "description":"Identifiant chiffré de la candidature à rechercher",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               {
+                  "name":"inclureSansPrestataire",
+                  "description":"indique si on veut les candidatures sans prestataire positionné",
+                  "example":true,
+                  "in":"query",
+                  "schema":{
+                     "type":"boolean"
+                  }
+               },
+               {
+                  "name":"numeroMarche",
+                  "in":"query",
+                  "description":"Numéro de marché de la candidature",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"14178"
+               },
+               {
+                  "name":"page",
+                  "in":"query",
+                  "description":"Index de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"1"
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Liste des champs de la candidature à remonter",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"codeTypePrestation,numeroMarche,prestataire.etablissement,sitePrescripteur,motifCandidatureSansSuite,individu.commune"
+               },
+               {
+                  "name":"siret",
+                  "description":"SIRET du prestataire traitant la candidature",
+                  "example":12312312312312,
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"siretConseiller",
+                  "description":"SIRET du prestataire traitant conseiller",
+                  "example":12312312312312,
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"siteConnexion",
+                  "description":"site de connexion",
+                  "example":56117,
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"statutCandidature",
+                  "in":"query",
+                  "description":"Statut de la candidature: 'TR' pour les candidatures traitées, 'AN' pour les candidatures annulées, 'AT' pour les candidatures à traiter, 'SS' pour les candidatures sans suite, 'EC' pour les candidatures en cours, 'EA' pour les candidatures en attente",
+                  "schema":{
+                     "enum":[
+                        "TR",
+                        "AN",
+                        "AT",
+                        "SS",
+                        "EC",
+                        "EA"
+                     ]
+                  },
+                  "example":"AT"
+               },
+               {
+                  "name":"taillePage",
+                  "in":"query",
+                  "description":"Taille de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"30"
+               },
+               {
+                  "name":"typeDE",
+                  "description":"code du type de public de demandeur d'emploi: PRIORITAIRE, DE_REINSCRIT, DE_EN_COURS PERMITTENT, DE_SUIVI, DE_SORTIE_FORM, DE_NOUV_INSCRIT, DE_GUIDE, AUTONOME",
+                  "example":"DE_SUIVI",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Candidature"
+                           }
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/candidature/traitement":{
+         "put":{
+            "tags":[
+               "Candidature"
+            ],
+            "summary":"Créer une session et un rendez-vous en base à partir d'une candidature",
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/TraitementCandidature"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/RendezVous"
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad request"
+               },
+               "404":{
+                  "description":"Not found"
+               }
+            }
+         }
+      },
+      "/candidature/{identifiantCandidature}":{
+         "get":{
+            "tags":[
+               "Candidature"
+            ],
+            "summary":"Récupère une candidature à partir de son identifiant",
+            "parameters":[
+               {
+                  "name":"identifiantCandidature",
+                  "in":"path",
+                  "description":"Identifiant de la candidature à récupérer",
+                  "required":true,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"1234567"
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Liste des données de la candidature à remonter",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"codeTypePrestation,numeroMarche,prestataire.etablissement,sitePrescripteur,motifCandidatureSansSuite,individu.commune"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/Candidature"
+                        }
+                     }
+                  }
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/commande/cloture":{
+         "post":{
+            "tags":[
+               "Commande"
+            ],
+            "summary":"Clôturer une liste de commande",
+            "description":"Clôturer une liste de commande",
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/EntreeListeNumeroCommande"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "204":{
+                  "description":"No Content"
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/commande/suspension":{
+         "post":{
+            "tags":[
+               "Commande"
+            ],
+            "summary":"Suspendre une liste de commande",
+            "description":"Suspendre une liste de commande",
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/EntreeListeNumeroCommande"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "204":{
+                  "description":"No Content"
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/commande/{numCommande}":{
+         "get":{
+            "tags":[
+               "Commande"
+            ],
+            "summary":"Lire une commande par son numéro de commande",
+            "parameters":[
+               {
+                  "name":"numCommande",
+                  "in":"path",
+                  "required":true,
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/Commande"
+                        }
+                     }
+                  }
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/commande/{numCommande}/soumission-mandataire":{
+         "post":{
+            "tags":[
+               "Commande"
+            ],
+            "summary":"Soumettre une commande au mandataire",
+            "description":"Soumettre une commande au mandataire",
+            "parameters":[
+               {
+                  "name":"numCommande",
+                  "in":"path",
+                  "description":"Numéro de commande",
+                  "required":true,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"SPAP3D0001"
+               }
+            ],
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/SaisirResultatRendezVous"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "204":{
+                  "description":"No Content"
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/export-commande":{
+         "get":{
+            "tags":[
+               "Export Commande"
+            ],
+            "summary":"Exporter des commandes",
+            "parameters":[
+               {
+                  "name":"numeroMarche",
+                  "description":"Numéro du marché de recherche",
+                  "example":"14119",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"page",
+                  "in":"query",
+                  "description":"Index de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"1"
+               },
+               {
+                  "name":"siret",
+                  "description":"SIRET du prestataire animateur de la commande",
+                  "example":"12312312312312",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"taillePage",
+                  "in":"query",
+                  "description":"Taille de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"30"
+               },
+               {
+                  "name":"typeExport",
+                  "description":"Type d'export: ECHUE pour les commandes échues, DEBLOQUEE_SEMAP pour les commandes débloquées par SEMAP et qu'il est possible de facturer à France Travail",
+                  "example":"ECHUE",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Commande"
+                           }
+                        }
+                     }
+                  }
+               },
+               "206":{
+                  "description":"Partial Content",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Commande"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/lieux-realisation/externe":{
+         "get":{
+            "tags":[
+               "Lieu Realisation"
+            ],
+            "summary":"Rechercher des lieux de réalisation",
+            "description":"permet de récupérer les lieux de réalisation d'un prestation associé à un marché.",
+            "parameters":[
+               {
+                  "name":"dateValidite",
+                  "example":"2024-11-23",
+                  "in":"query",
+                  "description":"Date de validité",
+                  "schema":{
+                     "format":"yyyy-MM-dd"
+                  }
+               },
+               {
+                  "name":"numeroMarche",
+                  "example":"14119",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "description":"Numéro de marché"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/LieuRealisation"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/pieceGED/ecs":{
+         "post":{
+            "tags":[
+               "PieceGED"
+            ],
+            "summary":"mettre en ligne un livrable sur ECS",
+            "description":"mettre en ligne un livrable sur ECS",
+            "requestBody":{
+               "content":{
+                  "multipart/form-data":{
+                     "schema":{
+                        "type":"object",
+                        "properties":{
+                           "fichier":{
+                              "$ref":"#/components/schemas/InputStream"
+                           },
+                           "document":{
+                              "$ref":"#/components/schemas/InputPart"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/PieceGED"
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/poste-type-lieu":{
+         "get":{
+            "tags":[
+               "PosteTypeLieu"
+            ],
+            "summary":"Rechercher de type de lieu par poste de marché",
+            "description":"Permet de déterminer le type de lieux disponibles pour un marché.",
+            "parameters":[
+               {
+                  "name":"dateDebutPeriodeMarche",
+                  "in":"query",
+                  "description":"Borne inférieure de la date de recherche de période de marché",
+                  "example":"2022-10-26T13:30:00",
+                  "schema":{
+                     "format":"yyyy-MM-dd"
+                  }
+               },
+               {
+                  "name":"dateFinPeriodeMarche",
+                  "in":"query",
+                  "description":"Borne supérieure de la date de recherche de période de marché",
+                  "example":"2022-10-26T13:30:00",
+                  "schema":{
+                     "format":"yyyy-MM-dd"
+                  }
+               },
+               {
+                  "name":"numeroMarche",
+                  "description":"Numéro de marché",
+                  "example":"14119",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/PosteTypeLieu"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/precision-statut-presence":{
+         "get":{
+            "tags":[
+               "PrecisionStatutPresence"
+            ],
+            "summary":"Rechercher des précisions de statuts de presence",
+            "description":"Remonte le réferentiel des précisions de statuts de présence",
+            "parameters":[
+               {
+                  "name":"codeStatutPresence",
+                  "in":"query",
+                  "description":"Code du statut de présence",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"P"
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "in":"query",
+                  "description":"Code de type de prestation",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AP3"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/PrecisionStatutPresence"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-pieceGED":{
+         "get":{
+            "tags":[
+               "ReferentielPieceGED"
+            ],
+            "summary":"Rechercher le référentiel des livrables",
+            "description":"Rechercher le référentiel des livrables",
+            "parameters":[
+               {
+                  "name":"codeNatureAnimation",
+                  "in":"query",
+                  "description":"Code de la nature d'animation: I pour interne, E pour externe",
+                  "schema":{
+                     "enum":[
+                        "I",
+                        "E"
+                     ]
+                  },
+                  "example":"I"
+               },
+               {
+                  "name":"codeResultat",
+                  "in":"query",
+                  "description":"Code du résultat quel est associé le livrable",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"PCA"
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "in":"query",
+                  "description":"Code du type de prestation",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AP3"
+               },
+               {
+                  "name":"realiteVirtuelle",
+                  "in":"query",
+                  "description":"Indique si le livrable est pour une session en réalité virtuelle (true) ou non",
+                  "schema":{
+                     "type":"boolean"
+                  },
+                  "example":"true"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/ReferentielPieceGED"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/resultat":{
+         "get":{
+            "tags":[
+               "Resultat"
+            ],
+            "summary":"Recherche les résultats du référentiel",
+            "parameters":[
+               {
+                  "name":"codeModuleThematique",
+                  "in":"query",
+                  "description":"Code du module thématique, seuls les résultats associés à ce module seront renvoyés",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"R01"
+               },
+               {
+                  "name":"codeResultat",
+                  "in":"query",
+                  "description":"Code du résultat",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NAD"
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "in":"query",
+                  "description":"Code du type de prestation",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AP3"
+               },
+               {
+                  "name":"dateRecherche",
+                  "in":"query",
+                  "description":"Date de recherche au format yyyy-MM-dd, seuls les résultats actifs à cette date seront renvoyés",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"2025-01-24"
+               },
+               {
+                  "name":"exclusivitePE",
+                  "in":"query",
+                  "description":"Indique si le résultat est exclutif à France Travail (true) ou non",
+                  "schema":{
+                     "type":"boolean"
+                  },
+                  "example":"true"
+               },
+               {
+                  "name":"natureAnimation",
+                  "in":"query",
+                  "description":"valeurs autorisées: INTERNE,EXTERNE",
+                  "schema":{
+                     "enum":[
+                        "INTERNE",
+                        "EXTERNE"
+                     ]
+                  },
+                  "example":"INTERNE"
+               },
+               {
+                  "name":"premierJalon",
+                  "in":"query",
+                  "description":"Indique si le résulata est un résultat de premier jalon (true) ou non",
+                  "schema":{
+                     "type":"boolean"
+                  },
+                  "example":"true"
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Indique les données en sortie du service",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"listePrecisionResultat.listeSousPrecisionResultat"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Resultat"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/rendez-vous/presence/liste":{
+         "put":{
+            "tags":[
+               "RendezVous"
+            ],
+            "summary":"Modifie une liste de présence d'un rendez-vous",
+            "description":"Modifie une liste de présence d'un rendez-vous",
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/ModificationListeStatutPresence"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/RendezVous"
+                           }
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/resultat/rendez-vous/partenaire":{
+         "post":{
+            "tags":[
+               "ResultatRendezVous"
+            ],
+            "summary":"Saisir un resultat d'un rendez-vous depuis un organisme partenaire.",
+            "description":"Saisir un resultat d'un rendez-vous depuis un organisme partenaire.",
+            "parameters":[
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Indique les données renvoyées en sortie de service",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"identifiantRendezVous,resultat,precisionResultat,sousPrecisionResultat"
+               }
+            ],
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/EntreeSaisirResultatRendezVous"
+                     }
+                  }
+               }
+            },
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/ResultatRendezVous"
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/session":{
+         "get":{
+            "tags":[
+               "Session"
+            ],
+            "summary":"Rechercher des sessions",
+            "description":"Rechercher des sessions",
+            "parameters":[
+               {
+                  "name":"adresse",
+                  "in":"query",
+                  "description":"Concaténation du numéro de voie, complément de voie, type de voie et nom de voie de l'adresse de recherche",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"5B route de Bach"
+               },
+               {
+                  "name":"avecPlacesVacantes",
+                  "description":"Permet de rechercher des sessions avec des places libres (true) ou non",
+                  "example":"true",
+                  "in":"query",
+                  "schema":{
+                     "type":"boolean"
+                  }
+               },
+               {
+                  "name":"codeDomaineProfessionnel",
+                  "description":"Permet de rechercher des sessions sur un domaine professionnel",
+                  "example":"A12",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeEtatSession",
+                  "description":"Permet de rechercher des sessions selon le code d'état: AFI, APM, DIS, ECH, SUP, VAL, VIC",
+                  "example":"AVU",
+                  "in":"query",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  }
+               },
+               {
+                  "name":"codeGrandDomaine",
+                  "description":"Permet de rechercher des sessions sur un grand domaine",
+                  "example":"D",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeInsee",
+                  "in":"query",
+                  "description":"Code INSEE de la commune de recherche",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  },
+                  "example":"67000"
+               },
+               {
+                  "name":"codeOffreDune",
+                  "description":"Code d'offre DUNE",
+                  "example":"D12N1AE",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codePostal",
+                  "in":"query",
+                  "description":"Code postal de l'adresse de la commune recherche",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"67116"
+               },
+               {
+                  "name":"codeRome",
+                  "description":"Permet de recherche sur un code ROME",
+                  "example":"D1121",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeSousThemeAtelier",
+                  "description":"Permet de rechercher des sessions sur un sous-thème",
+                  "example":"M01",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeThemeAtelier",
+                  "description":"Permet de rechercher des sessions sur un thème",
+                  "example":"R01",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "description":"Permet de rechercher des sessions sur un code de type de prestation",
+                  "example":"AP3",
+                  "in":"query",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  }
+               },
+               {
+                  "name":"codeTypePublic",
+                  "description":"Permet de rechercher des sessions sur un type de public",
+                  "example":"10",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"colonneTri",
+                  "in":"query",
+                  "description":"Nom de l'attribut sur lequel on veut trier les résultats",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"dateDebut"
+               },
+               {
+                  "name":"complementAdresse",
+                  "in":"query",
+                  "description":"Complément d'adresse",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"2e étage"
+               },
+               {
+                  "name":"dateDebutRecherche",
+                  "description":"Borne inférieure de recherche sur la date de début de session",
+                  "example":"2025-01-24",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"dateFinRecherche",
+                  "description":"Borne supérieure de recherche sur la date de début de session",
+                  "example":"2025-01-24",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"dateLimitePrescription",
+                  "description":"Date limite de prescription",
+                  "example":"2025-01-24",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"dateMaxMarcheEchu",
+                  "in":"query",
+                  "description":"Borne supérieure de la date de fin du marché au format yyyy-MM-dd",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"2025-03-25"
+               },
+               {
+                  "name":"diffuseeAutoInscription",
+                  "description":"Rechercher des sessions diffusées en auto-inscription (true)",
+                  "example":"true",
+                  "in":"query",
+                  "schema":{
+                     "type":"boolean"
+                  }
+               },
+               {
+                  "name":"identifiantLieu",
+                  "in":"query",
+                  "description":"Identifiant chiffré du lieu",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               {
+                  "name":"infoCollective",
+                  "description":"Rechercher des sessions du type information collective (true) ou non",
+                  "example":"true",
+                  "in":"query",
+                  "schema":{
+                     "type":"boolean"
+                  }
+               },
+               {
+                  "name":"libelleLieu",
+                  "in":"query",
+                  "description":"Libellé du lieu",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Building Formation INC"
+               },
+               {
+                  "name":"lieuWebcam",
+                  "in":"query",
+                  "description":"Indique si l'on veut les sessions par webcam (true) ou non",
+                  "schema":{
+                     "type":"boolean"
+                  },
+                  "example":"true"
+               },
+               {
+                  "name":"modalitePremierRendezVous",
+                  "description":"Permet de rechercher des sessions avec une modalité de premier rendez-vous: WEBCAM ou PHYSIQUE",
+                  "example":"WEBCAM",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               },
+               {
+                  "name":"numeroMarco",
+                  "in":"query",
+                  "description":"Numéro de marché auquel la session est liée",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"14114"
+               },
+               {
+                  "name":"ordreTri",
+                  "in":"query",
+                  "description":"Ordre de tri: ASCENDING = croissant, DESCENDING = décroissant",
+                  "schema":{
+                     "enum":[
+                        "ASCENDING",
+                        "DESCENDING"
+                     ]
+                  },
+                  "example":"ASCENDING"
+               },
+               {
+                  "name":"origineSession",
+                  "description":"Permet de rechercher des sessions ayant une origine particulière: HC pour hors-calendrier, PL pour planification, RC pour commande de régularisation",
+                  "example":"PL",
+                  "in":"query",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  }
+               },
+               {
+                  "name":"page",
+                  "in":"query",
+                  "description":"Index de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"1"
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Liste des données des sessions souhaitées en réponse",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"typePrestation,listeRendezVous.statutPresence,listeRendezVous.individu,listeRendezVous.commande,listeRendezVous.resultatRendezVous,listeRendezVous.resultatRendezVous.resultat,prestataire,codeEtatSession,prestataire.etablissement.siret, commande,listeRendezVous.sitePrescripteur"
+               },
+               {
+                  "name":"siretPrestataireRecherche",
+                  "in":"query",
+                  "description":"Siret du prestataire animateur de la session",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"12312312312312"
+               },
+               {
+                  "name":"site",
+                  "description":"Site de la session",
+                  "example":"59140",
+                  "in":"query",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "type":"string"
+                     }
+                  }
+               },
+               {
+                  "name":"taillePage",
+                  "in":"query",
+                  "description":"Taille de la page de résultats",
+                  "schema":{
+                     "format":"int32",
+                     "type":"integer"
+                  },
+                  "example":"30"
+               },
+               {
+                  "name":"typeLieu",
+                  "in":"query",
+                  "description":"Type de lieu: INTERNE pour les lieux internes, EXTERNE pour les lieux externes, AUTRE pour les lieux autres, WEBCAM pour 100% à distance",
+                  "schema":{
+                     "enum":[
+                        "INTERNE",
+                        "EXTERNE",
+                        "AUTRE",
+                        "WEBCAM"
+                     ]
+                  },
+                  "example":"INTERNE"
+               },
+               {
+                  "name":"typeThemeAtelier",
+                  "description":"Type de thème atelier: THA pour les thèmes atelier (ATE), MTH pour les modules thématiques (ATL, ATC, ATR, etc...)",
+                  "example":"MTH",
+                  "in":"query",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Session"
+                           }
+                        }
+                     }
+                  }
+               },
+               "206":{
+                  "description":"Partial Content",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/Session"
+                           }
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/session/{identifiantSession}":{
+         "get":{
+            "tags":[
+               "Session"
+            ],
+            "summary":"Lire session",
+            "description":"Lire une session à partir de son identifiant",
+            "parameters":[
+               {
+                  "name":"identifiantSession",
+                  "in":"path",
+                  "description":"Identifiant de la session à récupérer",
+                  "required":true,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"1234567"
+               },
+               {
+                  "name":"select",
+                  "in":"query",
+                  "description":"Liste des données de session souhaitées en réponse",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"typePrestation,listeRendezVous.statutPresence,listeRendezVous.individu,listeRendezVous.commande,listeRendezVous.resultatRendezVous,listeRendezVous.resultatRendezVous.resultat,prestataire,codeEtatSession,prestataire.etablissement.siret, commande,listeRendezVous.sitePrescripteur"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "$ref":"#/components/schemas/Session"
+                        }
+                     }
+                  }
+               },
+               "401":{
+                  "description":"Unauthorized"
+               },
+               "404":{
+                  "description":"Not Found"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/sous-precision-resultat":{
+         "get":{
+            "tags":[
+               "SousPrecisionResultat"
+            ],
+            "summary":"Rechercher des sous-précisions de résultat",
+            "description":"Remonte le réferentiel des sous-précisions de résultat",
+            "parameters":[
+               {
+                  "name":"codePrecisionResultat",
+                  "in":"query",
+                  "description":"Code de précision de résultat",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"PRC"
+               },
+               {
+                  "name":"codeResultat",
+                  "in":"query",
+                  "description":"Code du résultat",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AUT"
+               },
+               {
+                  "name":"codeTypePrestation",
+                  "in":"query",
+                  "description":"Code du type de prestation",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AP3"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/SousPrecisionResultat"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      },
+      "/statut-presence":{
+         "get":{
+            "tags":[
+               "StatutPresence"
+            ],
+            "summary":"Rechercher des statuts de presence",
+            "description":"Remonte le référentiel des statuts de présence",
+            "parameters":[
+               {
+                  "name":"codeTypePrestation",
+                  "in":"query",
+                  "description":"Code du type de prestation",
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"AP3"
+               },
+               {
+                  "name":"dateEffet",
+                  "in":"query",
+                  "description":"Si ce critère est défini (format dd/MM/yyyy), sera retournée : la liste des statuts actifs à la date renseignée",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/StatutPresence"
+                           }
+                        }
+                     }
+                  }
+               },
+               "400":{
+                  "description":"Bad Request"
+               }
+            },
+            "security":[
+               {
+                  "authentification_partenaire":[
+                     "api_partenaire-gerer-prestationsv1",
+                     "prestationPartenaire"
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "components":{
+      "schemas":{
+         "ActiviteCandidature":{
+            "type":"object",
+            "properties":{
+               "identifiantActivite":{
+                  "description":"Identifiant chiffré de l'activité OGR",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantActiviteCandidature":{
+                  "description":"Identifiant chiffré de l'activité",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantCandidature":{
+                  "description":"Identifiant chiffré de la candidature",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316",
+                  "type":"string"
+               },
+               "natureActivite":{
+                  "description":"Code de la nature de l'activité OGR",
+                  "type":"string",
+                  "example":"B"
+               }
+            }
+         },
+         "Adhesion":{
+            "type":"object",
+            "properties":{
+               "codeAdhesion":{
+                  "description":"Code adhésion bénéficaire",
+                  "type":"string",
+                  "example":"K"
+               },
+               "commentaire":{
+                  "description":"commentaire associé à l'adhésion bénéficiaires",
+                  "type":"boolean",
+                  "example":"Absent pour cause de déménagement"
+               },
+               "dateDebut":{
+                  "format":"date-time",
+                  "description":"date debut",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFin":{
+                  "format":"date-time",
+                  "description":"date fin",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "libelle":{
+                  "description":"libelle adhésion bénéficaire",
+                  "type":"string",
+                  "example":"Présent non intéressé par la prestation"
+               }
+            }
+         },
+         "Adresse":{
+            "type":"object",
+            "properties":{
+               "adresseLigne1":{
+                  "description":"Adresse",
+                  "type":"string",
+                  "example":"37 B avenue d'Alsace"
+               },
+               "adresseLigne2":{
+                  "description":"Complément d'adresse",
+                  "type":"string",
+                  "example":"Au second étage du bâtiment"
+               },
+               "adresseLigne3":{
+                  "description":"Libellé de lieu",
+                  "type":"string",
+                  "example":"Bâtiment AQSISSE"
+               },
+               "adresseLigne4":{
+                  "description":"adresseLigne4",
+                  "type":"string",
+                  "example":"Adresse complémentaire"
+               },
+               "codeInsee":{
+                  "description":"Code Insee",
+                  "type":"string",
+                  "example":"67000"
+               },
+               "codePostal":{
+                  "description":"code Postal",
+                  "type":"string",
+                  "example":"67000"
+               },
+               "identifiant":{
+                  "description":"identifiant technique chiffré",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantAurore":{
+                  "description":"identifiant Aurore",
+                  "type":"string",
+                  "example":"12345"
+               },
+               "mail":{
+                  "description":"mail",
+                  "type":"string",
+                  "example":"formation67@wanadoo.com"
+               },
+               "telephone":{
+                  "description":"telephone",
+                  "type":"string",
+                  "example":"0102030405"
+               },
+               "typeLieu":{
+                  "description":"type du lieu",
+                  "enum":[
+                     "INTERNE",
+                     "EXTERNE",
+                     "AUTRE",
+                     "WEBCAM"
+                  ],
+                  "type":"string",
+                  "example":"EXTERNE"
+               },
+               "ville":{
+                  "description":"ville",
+                  "type":"string",
+                  "example":"Strasbourg"
+               },
+               "villePostale":{
+                  "description":"villePostale",
+                  "type":"string",
+                  "example":"Strasbourg"
+               }
+            }
+         },
+         "ApercuTypePrestation":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"Code de la prestation",
+                  "type":"string",
+                  "example":"AP2"
+               },
+               "libelle":{
+                  "description":"Libelle de la prestation",
+                  "type":"string",
+                  "example":"Prépa compétences"
+               }
+            }
+         },
+         "Candidature":{
+            "required":[
+               "agentCreateur",
+               "codeTypePrestation",
+               "individu",
+               "numeroMarche",
+               "siteGestionnaire",
+               "siteRattachement",
+               "statut"
+            ],
+            "type":"object",
+            "properties":{
+               "agentCreateur":{
+                  "description":"Le matricule de l'agent créateur",
+                  "type":"string",
+                  "example":"ICJB3520",
+                  "nullable":false
+               },
+               "agentModificateur":{
+                  "type":"string",
+                  "description":"Matricule de l'agent modificateur de la candidature",
+                  "example":"IAZI7890"
+               },
+               "agentPrescripteur":{
+                  "type":"string",
+                  "description":"Matricule de l'agent prescripteur",
+                  "example":"IAZI7890"
+               },
+               "codeRome":{
+                  "description":"Le code ROME associé à la candidature",
+                  "type":"string",
+                  "example":"N4105"
+               },
+               "codeTypePrestation":{
+                  "type":"string",
+                  "nullable":false,
+                  "description":"Code du type de prestation",
+                  "example":"UES"
+               },
+               "commentaireTraitement":{
+                  "type":"string",
+                  "description":"Commentaire relatif au traitement de la candidature",
+                  "example":"Candidature traitée"
+               },
+               "contactPrealable":{
+                  "description":"Booléen pour définir si le prestataire a contacté le demandeur d'emploi au préalable",
+                  "type":"boolean",
+                  "example":true
+               },
+               "dateActivation":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date d'activation",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateAlerte":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date d'alerte",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateCreation":{
+                  "format":"date-time",
+                  "description":"La date de création de la candidature",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateCreationAction":{
+                  "format":"date-time",
+                  "description":"La date de création de l'action",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateModification":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date de dernière modification de la candidature",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateRelance":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date de dernière relance de la candidature",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "identifiantActionAude":{
+                  "type":"string",
+                  "description":"Code de l'identifiant de l'action AUDE",
+                  "example":"A"
+               },
+               "identifiantCandidature":{
+                  "type":"string",
+                  "description":"Identifiant technique chiffré de la candidature",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "individu":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Individu"
+                     },
+                     {
+                        "description":"L'individu bénéficiaire de la prestation",
+                        "nullable":false
+                     }
+                  ]
+               },
+               "listeActivite":{
+                  "description":"La liste des activités de la candidature",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/ActiviteCandidature"
+                  }
+               },
+               "listeCompetence":{
+                  "description":"La liste des compétences de la candidature",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/CompetenceCandidature"
+                  }
+               },
+               "listeConnaissanceCandidature":{
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/ConnaissanceCandidature"
+                  }
+               },
+               "motifCandidatureSansSuite":{
+                  "$ref":"#/components/schemas/MotifCandidature"
+               },
+               "numeroEtablissementRCE":{
+                  "format":"int64",
+                  "description":"L'identifiant RCE de l'établissement recruteur",
+                  "type":"integer",
+                  "example":35832690
+               },
+               "numeroMarche":{
+                  "description":"Le numéro de marché associé à la candidature",
+                  "type":"string",
+                  "example":"18114",
+                  "nullable":false
+               },
+               "numeroOffre":{
+                  "description":"Le numéro de l'offre d'emploi dans DUNE",
+                  "type":"string",
+                  "example":"142TATM"
+               },
+               "precision":{
+                  "description":"La précision associée à la candidature",
+                  "type":"string",
+                  "example":"permis B Pôle Emploi Mende (vérifier la capacité à suivre le permis B en 6 mois)"
+               },
+               "precisionDE":{
+                  "description":"La précision à destination du DE",
+                  "type":"string",
+                  "example":"Pour projet de réorientation"
+               },
+               "precisionMetier":{
+                  "description":"La précision du métier",
+                  "type":"string",
+                  "example":"Projet de se reorienter vers secretaire administrative"
+               },
+               "precisionPrestataire":{
+                  "description":"La précision du prestataire",
+                  "type":"string",
+                  "example":"TESTER AUSSI LA PARTIE GESTION COMMERCIALE"
+               },
+               "prestataire":{
+                  "$ref":"#/components/schemas/Prestataire"
+               },
+               "siteGestionnaire":{
+                  "type":"string",
+                  "nullable":false,
+                  "description":"Code du site gestionnaire de la candidature",
+                  "example":"59140"
+               },
+               "sitePrescripteur":{
+                  "$ref":"#/components/schemas/Site"
+               },
+               "siteRattachement":{
+                  "type":"string",
+                  "nullable":false,
+                  "description":"Code du site de rattachement de la candidature",
+                  "example":"59140"
+               },
+               "statut":{
+                  "description":"Le statut de la candidature: 'TR' pour les candidatures traitées, 'AN' pour les candidatures annulées, 'AT' pour les candidatures à traiter, 'SS' pour les candidatures sans suite, 'EC' pour les candidatures en cours, 'EA' pour les candidatures en attente",
+                  "enum":[
+                     "TR",
+                     "AN",
+                     "AT",
+                     "SS",
+                     "EC",
+                     "EA"
+                  ],
+                  "type":"string",
+                  "example":"AT",
+                  "nullable":false
+               },
+               "typeDE":{
+                  "description":"Le type de demandeur d'emploi",
+                  "enum":[
+                     "PRIORITAIRE",
+                     "DE_REINSCRIT",
+                     "DE_EN_COURS",
+                     "PERMITTENT",
+                     "DE_SUIVI",
+                     "DE_SORTIE_FORM",
+                     "DE_NOUV_INSCRIT",
+                     "DE_GUIDE",
+                     "AUTONOME"
+                  ],
+                  "type":"string",
+                  "example":"DE_SUIVI"
+               },
+               "verrou":{
+                  "description":"Indique si la candidature est verrouillée par un autre utilisateur",
+                  "type":"boolean",
+                  "example":true
+               }
+            }
+         },
+         "Commande":{
+            "type":"object",
+            "properties":{
+               "codeSitePESuiviResultat":{
+                  "description":"code safir de la site de suivi de réalisation",
+                  "type":"string",
+                  "example":"59166"
+               },
+               "dateCreation":{
+                  "format":"date-time",
+                  "description":"date de création",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateDerniereRelance":{
+                  "format":"date-time",
+                  "description":"date de derniere relance",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateReouverture":{
+                  "format":"date-time",
+                  "description":"date de réouverture",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "drDeLaPrestation":{
+                  "description":"code safir de la DR de la commande",
+                  "type":"string",
+                  "example":"59212"
+               },
+               "identifiantCommande":{
+                  "description":"identifiant chiffré de commande",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "listeRendezVous":{
+                  "description":"Liste des rendez-vous",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/RendezVous"
+                  }
+               },
+               "nbLivrableUploade":{
+                  "format":"int32",
+                  "description":"nb de livrables uploadé sur la commande",
+                  "type":"integer",
+                  "example":3
+               },
+               "numeroCommandeSRM":{
+                  "description":"numero de la commande sur 10 caractères",
+                  "type":"string",
+                  "example":"SEAP2PJ636"
+               },
+               "numeroPrestationDePM":{
+                  "description":"numero de la commande sur 5 caractères",
+                  "type":"string",
+                  "example":"PJ636"
+               },
+               "session":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Session"
+                     },
+                     {
+                        "description":"Session"
+                     }
+                  ]
+               },
+               "statutCommandeCourant":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/StatutCommandeReferentiel"
+                     },
+                     {
+                        "description":"Statut courant de la commande"
+                     }
+                  ]
+               },
+               "statutMetierPrestaCourant":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/StatutMetierPresta"
+                     },
+                     {
+                        "description":"Statut métier prestataire courant lié à la commande"
+                     }
+                  ]
+               }
+            }
+         },
+         "Commune":{
+            "required":[
+               "codeCommune",
+               "codePostal"
+            ],
+            "type":"object",
+            "properties":{
+               "codeCommune":{
+                  "maxLength":5,
+                  "minLength":5,
+                  "type":"string",
+                  "nullable":false,
+                  "example":"67000",
+                  "description":"Code commune de la commune"
+               },
+               "codeDepartement":{
+                  "description":"Code du département",
+                  "type":"string",
+                  "example":"67"
+               },
+               "codePostal":{
+                  "maxLength":5,
+                  "minLength":5,
+                  "type":"string",
+                  "nullable":false,
+                  "example":"67009",
+                  "description":"Code postal de la commune"
+               },
+               "libelle":{
+                  "description":"Libellé de la commune",
+                  "type":"string",
+                  "example":"Strasbourg"
+               },
+               "libellePostal":{
+                  "description":"Libellé postal de la commune",
+                  "type":"string",
+                  "example":"Strasbourg"
+               }
+            }
+         },
+         "CommuneDa044":{
+            "required":[
+               "codeCommune",
+               "codePostal"
+            ],
+            "type":"object",
+            "properties":{
+               "codeCommune":{
+                  "description":"Code commune de la commune",
+                  "maxLength":5,
+                  "minLength":5,
+                  "type":"string",
+                  "example":"67000",
+                  "nullable":false
+               },
+               "codeDepartement":{
+                  "description":"Code du département",
+                  "type":"string",
+                  "example":"67"
+               },
+               "codePostal":{
+                  "description":"Code postal de la commune",
+                  "maxLength":5,
+                  "minLength":5,
+                  "type":"string",
+                  "example":"67000",
+                  "nullable":false
+               },
+               "libelle":{
+                  "description":"Libellé de la commune",
+                  "type":"string",
+                  "example":"Strasbourg"
+               },
+               "libellePostal":{
+                  "description":"Libellé postal de la commune",
+                  "type":"string",
+                  "example":"Hautepierre"
+               }
+            }
+         },
+         "Competence":{
+            "type":"object",
+            "properties":{
+               "codeCompetence":{
+                  "description":"code compétence",
+                  "type":"string",
+                  "example":"123123"
+               },
+               "identifiantRendezVous":{
+                  "description":"identifiant chiffré du rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantTechnique":{
+                  "description":"identifiant technique chiffré",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               }
+            }
+         },
+         "CompetenceCandidature":{
+            "type":"object",
+            "properties":{
+               "identifiantCandidature":{
+                  "description":"Identifiant chiffré de la candidature",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316",
+                  "type":"string"
+               },
+               "identifiantCompetence":{
+                  "description":"Identifiant chiffré OGR de la compétence",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantCompetenceCandidature":{
+                  "description":"Identifiant chiffré de la compétence",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "natureCompetence":{
+                  "description":"Code de la nature OGR de la compétence",
+                  "type":"string",
+                  "example":"B"
+               }
+            }
+         },
+         "Connaissance":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"Code de référentiel de la connaissance",
+                  "type":"string",
+                  "example":"C10"
+               },
+               "domaine":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/DomaineCompetence"
+                     },
+                     {
+                        "description":"Domaine de compétence lié à la connaissance"
+                     }
+                  ]
+               },
+               "libelle":{
+                  "description":"Libellé de référentiel de la connaissance",
+                  "type":"string",
+                  "example":"écouter et comprendre"
+               },
+               "ordreAffichage":{
+                  "format":"int32",
+                  "type":"integer",
+                  "example":5
+               }
+            }
+         },
+         "ConnaissanceCandidature":{
+            "type":"object",
+            "properties":{
+               "connaissance":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Connaissance"
+                     },
+                     {
+                        "description":"Connaissance de référence"
+                     }
+                  ]
+               },
+               "identifiantCandidature":{
+                  "description":"Identifiant chiffré de la candidature",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316",
+                  "type":"string"
+               },
+               "identifiantConnaissanceCandidature":{
+                  "description":"Identifiant chiffré de la connaissance",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316",
+                  "type":"string"
+               }
+            }
+         },
+         "CoordonneesGPS":{
+            "type":"object",
+            "properties":{
+               "latitude":{
+                  "format":"double",
+                  "description":"latitude",
+                  "type":"number",
+                  "example":48.599998
+               },
+               "longitude":{
+                  "format":"double",
+                  "description":"longitude",
+                  "type":"number",
+                  "example":7.75
+               }
+            }
+         },
+         "Dispositif":{
+            "type":"object",
+            "properties":{
+               "codeDispositif":{
+                  "description":"Code dispositif",
+                  "type":"string",
+                  "example":"CSPAD"
+               },
+               "libelle":{
+                  "description":"libelle",
+                  "type":"string",
+                  "example":"Adhérent CSP"
+               },
+               "libelleAude":{
+                  "description":"libelle Aude du  dispositif",
+                  "type":"string",
+                  "example":"ADHERENTS CSP"
+               },
+               "libelleLong":{
+                  "description":"libelle long ",
+                  "type":"string",
+                  "example":"Adhérent CSP"
+               }
+            }
+         },
+         "DispositifRendezVous":{
+            "type":"object",
+            "properties":{
+               "dateDebut":{
+                  "format":"date-time",
+                  "description":"date debut",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFin":{
+                  "format":"date-time",
+                  "description":"date fin",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dispositif":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Dispositif"
+                     },
+                     {
+                        "description":"Reférentiel Dispositif"
+                     }
+                  ]
+               },
+               "identifiantDispositifRendezVous":{
+                  "description":"identifiantDispositifRendezVous",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantRendezVous":{
+                  "description":"identifiant de rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               }
+            }
+         },
+         "DomaineCompetence":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"Code du domaine de compétence",
+                  "type":"string",
+                  "example":"D1"
+               },
+               "libelle":{
+                  "description":"Libellé du domaine de compétence",
+                  "type":"string",
+                  "example":"COMMUNIQUER EN FRANCAIS"
+               }
+            }
+         },
+         "Duree":{
+            "type":"object",
+            "properties":{
+               "unite":{
+                  "description":"Unité de la durée",
+                  "enum":[
+                     "JOUR",
+                     "HEURE",
+                     "MINUTE"
+                  ],
+                  "type":"string",
+                  "example":"JOUR"
+               },
+               "valeur":{
+                  "format":"double",
+                  "description":"valeur de la durée",
+                  "type":"number",
+                  "example":1
+               }
+            }
+         },
+         "ElementPrescription":{
+            "type":"object",
+            "properties":{
+               "identifiantRendezVous":{
+                  "description":"identifiant chiffré de rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "listeReponse":{
+                  "description":"Liste des réponses",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Reponse"
+                  }
+               },
+               "question":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Question"
+                     },
+                     {
+                        "description":"Question"
+                     }
+                  ]
+               }
+            }
+         },
+         "EntreeListeNumeroCommande":{
+            "required":[
+               "listeNumeroCommande"
+            ],
+            "type":"object",
+            "properties":{
+               "listeNumeroCommande":{
+                  "description":"Liste des numéros de commandes",
+                  "minItems":1,
+                  "type":"array",
+                  "items":{
+                     "type":"string"
+                  },
+                  "nullable":false
+               }
+            }
+         },
+         "EntreeSaisirResultatRendezVous":{
+            "required":[
+               "numCommande",
+               "saisirResultatRendezVous"
+            ],
+            "type":"object",
+            "properties":{
+               "numCommande":{
+                  "description":"Numéro de la commande pour laquelle on veut saisir un résultalt de RDV",
+                  "maxLength":10,
+                  "minLength":10,
+                  "type":"string",
+                  "example":"SPAP3D0001",
+                  "nullable":false
+               },
+               "saisirResultatRendezVous":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/SaisirResultatRendezVous"
+                     },
+                     {
+                        "nullable":false
+                     }
+                  ]
+               }
+            }
+         },
+         "Entretien":{
+            "type":"object",
+            "properties":{
+               "codeEntretien":{
+                  "description":"Code de l'entretien",
+                  "enum":[
+                     "I",
+                     "B",
+                     "M",
+                     "P"
+                  ],
+                  "type":"string",
+                  "example":"I"
+               },
+               "codeTypePrestation":{
+                  "description":"Code du type de prestation lié à l'entretien",
+                  "type":"string",
+                  "example":"AP3"
+               },
+               "entretienDematerialise":{
+                  "description":"Indique si l'entretien est dématérialisé (true) ou non",
+                  "type":"boolean",
+                  "example":false
+               },
+               "idEntretien":{
+                  "description":"Identifiant de l'entretien",
+                  "type":"string",
+                  "example":"123123123"
+               },
+               "interneUniquement":{
+                  "description":"Indique si l'entretien est en interne uniquement (true) ou non",
+                  "type":"boolean",
+                  "example":false
+               },
+               "libelleEntretien":{
+                  "description":"Libellé associé à l'entretien",
+                  "type":"string",
+                  "example":"Bilan de fin d'adhésion"
+               },
+               "ordre":{
+                  "format":"int32",
+                  "description":"Ordre de l'entretien",
+                  "type":"integer",
+                  "example":2
+               }
+            }
+         },
+         "EntretienRendezVous":{
+            "type":"object",
+            "properties":{
+               "dateEntretien":{
+                  "format":"date-time",
+                  "description":"Date de l'entretien",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "entretien":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Entretien"
+                     },
+                     {
+                        "description":"Entretien de référence"
+                     }
+                  ]
+               },
+               "idEntretienRendezVous":{
+                  "description":"Identifiant de l'entretien de rendez-vous",
+                  "type":"string",
+                  "example":"123123123"
+               },
+               "natureEntretien":{
+                  "description":"P = Physique, W = Webcam",
+                  "enum":[
+                     "P,W"
+                  ],
+                  "type":"string",
+                  "example":"P"
+               }
+            }
+         },
+         "Etablissement":{
+            "type":"object",
+            "properties":{
+               "dateCessation":{
+                  "format":"date-time",
+                  "description":"Date de cessation de l'établissement",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "designation":{
+                  "description":"Désignation de l'établissement",
+                  "type":"string",
+                  "example":"KIKI EURO MEDITERRAN TRAVAIL ECHANGES"
+               },
+               "enseigne":{
+                  "description":"Enseigne de l'établissement",
+                  "type":"string",
+                  "example":"LALA LE TREMPLIN DES ENTREPRENEURS"
+               },
+               "numeroRCE":{
+                  "format":"int64",
+                  "description":"Numéro RCE de l'établissement",
+                  "type":"integer",
+                  "example":12312312312
+               },
+               "raisonSociale":{
+                  "description":"Raison sociale de l'établissement",
+                  "type":"string",
+                  "example":"POPO EURO MEDITERRAN TRAVAIL ECHANGES"
+               },
+               "siret":{
+                  "description":"Numéro de siret de l'établissement",
+                  "type":"string",
+                  "example":"22987179601014"
+               }
+            }
+         },
+         "EvaluationRendezVous":{
+            "type":"object",
+            "properties":{
+               "codeCompetenceCEP":{
+                  "description":"Code de la compétence",
+                  "enum":[
+                     "E",
+                     "A",
+                     "C",
+                     "D"
+                  ],
+                  "type":"string",
+                  "example":"E"
+               },
+               "codeNiveau":{
+                  "format":"int32",
+                  "description":"Niveau lors de l'évaluation",
+                  "type":"integer",
+                  "example":2
+               },
+               "identifiantRendezVous":{
+                  "description":"Identifiant du rendez-vous",
+                  "type":"string",
+                  "example":"123123123"
+               },
+               "typeEvaluation":{
+                  "description":"Type d'évaluation: I = initiale, F = finale",
+                  "enum":[
+                     "I",
+                     "F"
+                  ],
+                  "type":"string",
+                  "example":"I"
+               }
+            }
+         },
+         "ExportCommande":{
+            "type":"object",
+            "properties":{
+               "numeroMarcheMarco":{
+                  "type":"sring",
+                  "example":"12345",
+                  "description":"Numéro de marché sur 5 caractères"
+               },
+               "numCommande":{
+                  "type":"string",
+                  "example":"SEAGCH1234",
+                  "description":"Numéro de commande sur 10 caractères"
+               },
+               "enseigne":{
+                  "type":"string",
+                  "example":"ENSEIGNE PRESTATION",
+                  "description":"Enseigne du prestataire animateur de la commande"
+               },
+               "dateDebutSession":{
+                  "type":"date",
+                  "example":"2023-04-27T09:00:00",
+                  "description":"Date de début de session"
+               },
+               "dateFinSession":{
+                  "type":"date",
+                  "example":"2023-04-27T09:00:00",
+                  "description":"Date de fin de session"
+               },
+               "libelleResultat":{
+                  "type":"string",
+                  "example":"Sortie anticipée/abandon après le 2nd atelier",
+                  "description":"libellé du résultat"
+               },
+               "codeRome":{
+                  "type":"string",
+                  "example":"D1214",
+                  "description":"Code ROME"
+               },
+               "libelleRome":{
+                  "type":"string",
+                  "example":"Vente en habillement et accessoires de la personne",
+                  "description":"Libellé ROME"
+               },
+               "libelleModule":{
+                  "type":"string",
+                  "example":"Projet professionnel",
+                  "description":"Libellé du module"
+               },
+               "siret":{
+                  "type":"string",
+                  "example":"12345678901234",
+                  "description":"Siret du prestataire animatur de la commande"
+               },
+               "typeExport":{
+                  "type":"string",
+                  "example":"ECHUE",
+                  "description":"Type d'export: ECHUE, DEBLOQUEE_SEMAP"
+               }
+            }
+         },
+         "FamilleMetier":{
+            "type":"object",
+            "properties":{
+               "codeFamilleMetier":{
+                  "description":"Code de la famille metier",
+                  "type":"string",
+                  "example":"F07"
+               },
+               "libelleFamilleMetier":{
+                  "description":"Libellé de la famille métier",
+                  "type":"string",
+                  "example":"Prestations spécifiques"
+               },
+               "ordreAffichage":{
+                  "format":"int32",
+                  "description":"Numéro d'ordre afin de gérer les priorites d'affichage",
+                  "type":"integer",
+                  "example":7
+               }
+            }
+         },
+         "HeaderModeAppelEnum":{
+            "enum":[
+               "PRODUCTION",
+               "TEST"
+            ],
+            "type":"string"
+         },
+         "Individu":{
+            "type":"object",
+            "properties":{
+               "categorieBeneficiaire":{
+                  "description":"Code de la catégorie de bénéficiaire",
+                  "enum":[
+                     "DV",
+                     "DE"
+                  ],
+                  "type":"string",
+                  "example":"DV"
+               },
+               "civilite":{
+                  "description":"Code la civilité de l'individu",
+                  "enum":[
+                     "1",
+                     "3"
+                  ],
+                  "type":"string",
+                  "example":"1"
+               },
+               "codeAssedic":{
+                  "description":"Code régional de l'individu",
+                  "type":"string",
+                  "example":"032"
+               },
+               "codeBNI":{
+                  "description":"Code BNI chiffré de l'individu sur 10 caractères",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316",
+                  "type":"string"
+               },
+               "idGide":{
+                  "description":"Identifiant GIDE de l'individu sur 8 caractères",
+                  "example":"A1231231",
+                  "type":"string"
+               },
+               "identifiantRCU":{
+                  "description":"Identifiant RCU de l'individu",
+                  "example":"1231221212",
+                  "type":"string"
+               },
+               "nom":{
+                  "description":"Nom",
+                  "example":"Zidjelal",
+                  "type":"string"
+               },
+               "numeroFranceTravail":{
+                  "description":"Numéro France Travail de l'individu",
+                  "type":"string",
+                  "example":"12312312312"
+               },
+               "prenom":{
+                  "description":"Prénom de l'individu",
+                  "type":"string",
+                  "example":"Auriane"
+               },
+               "telephone":{
+                  "description":"Numéro de téléphone de l'individu",
+                  "type":"string",
+                  "example":"0102030405"
+               },
+               "telephoneMobile":{
+                  "description":"Numéro de téléphone portable de l'individu",
+                  "type":"string",
+                  "example":"0102030405"
+               },
+               "commune":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Commune"
+                     },
+                     {
+                        "description":"Commune de résidence de l'individu"
+                     }
+                  ]
+               },
+               "mail":{
+                  "description":"Adresse mail",
+                  "example":"bg67@gmail.com",
+                  "type":"string"
+               },
+               "typeUtilisateurMSC":{
+                  "description":"Type d'utilisateur",
+                  "enum":[
+                     "DE_INSCRIT",
+                     "DE_RADIE",
+                     "CANDIDAT",
+                     "INDIVIDU_NON_DE"
+                  ],
+                  "type":"string",
+                  "example":"DE_INSCRIT"
+               }
+            }
+         },
+         "InputPart":{
+            "type":"object",
+            "properties":{
+               "bodyAsString":{
+                  "type":"string"
+               },
+               "headers":{
+                  "$ref":"#/components/schemas/MultivaluedMapStringString"
+               },
+               "mediaType":{
+                  "$ref":"#/components/schemas/MediaType"
+               },
+               "contentTypeFromMessage":{
+                  "type":"boolean"
+               }
+            }
+         },
+         "InputStream":{
+            "type":"object"
+         },
+         "Lien":{
+            "type":"object",
+            "properties":{
+               "texte":{
+                  "description":"Texte du lien",
+                  "type":"string",
+                  "example":"Réunion pour la session ATC"
+               },
+               "titre":{
+                  "description":"Titre du lien",
+                  "type":"string",
+                  "example":"Réunion pour la session ATC"
+               },
+               "url":{
+                  "description":"Url du lien",
+                  "type":"string",
+                  "example":"http://teams.com/121243141"
+               }
+            }
+         },
+         "LieuRealisation":{
+            "type":"object",
+            "properties":{
+               "adresse":{
+                  "description":"Numéro, complément de voie, type de voie, nom de voie",
+                  "type":"string",
+                  "example":"5C rue de Barre"
+               },
+               "commune":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/CommuneDa044"
+                     },
+                     {
+                        "description":"Commune du lieu de réalisation"
+                     }
+                  ]
+               },
+               "complementAdresse":{
+                  "description":"Complément d'adresse",
+                  "type":"string",
+                  "example":"2e étage du bâtiment"
+               },
+               "identifiantAurore":{
+                  "description":"Identifiant AURORE du lieu",
+                  "type":"string",
+                  "example":"12345"
+               },
+               "identifiantLieu":{
+                  "description":"Identifiant du lieu de réalisation",
+                  "type":"string",
+                  "example":"12312312"
+               },
+               "libelleLieu":{
+                  "description":"Libellé du lieu",
+                  "type":"string",
+                  "example":"Bâtiment Formation INC"
+               },
+               "mail":{
+                  "description":"Adresse mail du lieu",
+                  "type":"string",
+                  "example":"trucmuche67@formationINC.fr"
+               },
+               "numeroTelephoneLieuRealisation":{
+                  "description":"Numéro de téléphone du lieu de réalisation",
+                  "type":"string",
+                  "example":"0102030405"
+               },
+               "typeLieu":{
+                  "description":"Type de lieu: INTERNE pour interne, EXTERNE pour externe, AUTRE pour autre, WEBCAM pour 100% à distance",
+                  "enum":[
+                     "INTERNE",
+                     "EXTERNE",
+                     "AUTRE",
+                     "WEBCAM"
+                  ],
+                  "type":"string",
+                  "example":"INTERNE"
+               }
+            }
+         },
+         "Marche":{
+            "type":"object",
+            "properties":{
+               "commentaire":{
+                  "description":"commmentaire assoicié au marché",
+                  "type":"string",
+                  "example":"Commentaire"
+               },
+               "drOrigine":{
+                  "description":"Code safir de la DR d'origine",
+                  "type":"string",
+                  "example":"59212"
+               },
+               "etatMarche":{
+                  "description":"etat du marche calculé en fonction de la date de recherche.",
+                  "type":"string",
+                  "example":"ACTIF, INACTIF, ECHU"
+               },
+               "identifiantMarche":{
+                  "format":"int64",
+                  "description":"identifiant  marché",
+                  "type":"integer",
+                  "example":1000001
+               },
+               "intituleLot":{
+                  "description":"intitulé du  lot",
+                  "type":"string",
+                  "example":"AEM - BRE - Dpt 22 & 29N - SRM 10020"
+               },
+               "listePrestataire":{
+                  "description":"liste des Prestataires du marchés",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Prestataire"
+                  }
+               },
+               "listeSiteDR":{
+                  "description":"liste des sites",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Site"
+                  }
+               },
+               "numeroLot":{
+                  "description":"numéro de lot",
+                  "type":"string",
+                  "example":"2"
+               },
+               "numeroMarcheMarco":{
+                  "description":"numero de marché",
+                  "type":"string",
+                  "example":"14114"
+               },
+               "numeroMarcheOlimp":{
+                  "description":"numero de marché Olimp",
+                  "type":"string",
+                  "example":"12345"
+               },
+               "statut":{
+                  "description":"statut du marché",
+                  "type":"string",
+                  "example":"A"
+               }
+            }
+         },
+         "MediaType":{
+            "type":"object",
+            "properties":{
+               "parameters":{
+                  "type":"object",
+                  "additionalProperties":{
+                     "type":"string"
+                  }
+               },
+               "subtype":{
+                  "type":"string"
+               },
+               "type":{
+                  "type":"string"
+               },
+               "wildcardSubtype":{
+                  "type":"boolean"
+               },
+               "wildcardType":{
+                  "type":"boolean"
+               }
+            }
+         },
+         "ModificationListeStatutPresence":{
+            "required":[
+               "listeRendezVous"
+            ],
+            "type":"object",
+            "properties":{
+               "identifiantListeInscrits":{
+                  "description":"Identifiant de la liste d'inscrits pour laquelle on veut saisir les présences",
+                  "type":"string",
+                  "example":"12341234"
+               },
+               "listeRendezVous":{
+                  "description":"Liste des rendez-vous pour lesquels on veut saisir une présence",
+                  "minItems":1,
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/RendezVous"
+                  },
+                  "nullable":false
+               }
+            }
+         },
+         "MotifCandidature":{
+            "type":"object",
+            "properties":{
+               "codeMotif":{
+                  "type":"string",
+                  "description":"Code de motif de traitement sans suite de candidature",
+                  "example":"AUT"
+               },
+               "libelleMotif":{
+                  "description":"Libellé du motif de candidature",
+                  "type":"string",
+                  "example":"Autre impossibilité"
+               }
+            }
+         },
+         "MultivaluedMapStringString":{
+            "type":"object",
+            "additionalProperties":{
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            }
+         },
+         "Offre":{
+            "type":"object",
+            "properties":{
+               "codeOffreDune":{
+                  "description":"code de l'offre",
+                  "type":"string",
+                  "example":"076PMWN"
+               },
+               "etablissementRecruteurRCE":{
+                  "format":"int64",
+                  "description":"identifiant de l'établissement",
+                  "type":"integer"
+               },
+               "idOffre":{
+                  "format":"int64",
+                  "description":"identifiant de l'offre",
+                  "type":"integer"
+               }
+            }
+         },
+         "ParametrageNationalGenICO":{
+            "type":"object",
+            "properties":{
+               "codeTypePrestaInfoCollective":{
+                  "description":"Code de l'information collective relatif a un code type prestation",
+                  "type":"string"
+               },
+               "dateDebutStrate":{
+                  "format":"date-time",
+                  "description":"Date de début de strate de l'ICO",
+                  "type":"string",
+                  "example":"2018-10-19T00:00:00+02:00"
+               },
+               "dateFinStrate":{
+                  "format":"date-time",
+                  "description":"Date de fin de strate de l'ICO",
+                  "type":"string",
+                  "example":"2018-10-19T00:00:00+02:00"
+               },
+               "delaiFinAlerteICOEchue":{
+                  "format":"int32",
+                  "description":"Delai de fin de l'alerte ICO echues",
+                  "type":"integer"
+               },
+               "delaiPreReservation":{
+                  "format":"int32",
+                  "description":"Delai à partir duquel les places pre-reservees sont libérées",
+                  "type":"integer"
+               },
+               "disponibleAutoInscription":{
+                  "description":"Booléen qui indique si l'information collective est disponible en auto inscription",
+                  "type":"boolean"
+               },
+               "duree":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"Durée de l'information collective"
+                     }
+                  ]
+               },
+               "identifiantTechnique":{
+                  "description":"Identifiant technique en BDD du paramétrage national générique ICO",
+                  "type":"string"
+               },
+               "libelleCourtICO":{
+                  "description":"Libellé court de l'information collective",
+                  "type":"string"
+               },
+               "libelleLongICO":{
+                  "description":"Libellé long de l'information collective",
+                  "type":"string"
+               }
+            }
+         },
+         "ParametrageNationalGenSession":{
+            "type":"object",
+            "properties":{
+               "autoriseLieuWebcam":{
+                  "description":"Booléen pour indiquer si le lieu webcam est autorisé",
+                  "type":"boolean"
+               },
+               "codeTypePrestationGide":{
+                  "description":"Code GIDE de la prestation",
+                  "type":"string",
+                  "example":"A00"
+               },
+               "dateDebutStrate":{
+                  "format":"date-time",
+                  "description":"Date de début de strate du paramétrage national générique session",
+                  "type":"string",
+                  "example":"2018-10-19T00:00:00+02:00"
+               },
+               "dateFinStrate":{
+                  "format":"date-time",
+                  "description":"Date de fin de strate du paramétrage national générique session",
+                  "type":"string",
+                  "example":"2018-10-19T00:00:00+02:00"
+               },
+               "disponibleAutoInscriptionExterne":{
+                  "description":"Booléen pour indiquer si l'auto-inscription par le DE est gérée pour lieu externe",
+                  "type":"boolean"
+               },
+               "disponibleAutoInscriptionInterne":{
+                  "description":"Booléen pour indiquer si l'auto-inscription par le DE est gérée pour lieu interne",
+                  "type":"boolean"
+               },
+               "dureeExterne":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"La durée nominale pour lieu externe"
+                     }
+                  ]
+               },
+               "dureeInterne":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"La durée nominale pour lieu interne"
+                     }
+                  ]
+               },
+               "gereElementPrescription":{
+                  "description":"Booléen pour indiquer si les éléments de prescription/qualitatifs sont gérés",
+                  "type":"boolean"
+               },
+               "identifiantTechnique":{
+                  "description":"Identifiant technique en BDD du paramétrage national générique session",
+                  "type":"string"
+               },
+               "reunionInformation":{
+                  "description":"Booléen pour indiquer si les réunions d'information sont gérées",
+                  "type":"boolean"
+               },
+               "typeAtelier":{
+                  "description":"Booléen pour indiquer si les ateliers sont autorisés",
+                  "type":"boolean"
+               },
+               "typeCourrier":{
+                  "description":"Type de courrier gérés",
+                  "type":"string",
+                  "example":"CON"
+               },
+               "utilisationModuleThematique":{
+                  "description":"Indique si le module thématique est autorisé",
+                  "type":"string",
+                  "example":"I"
+               }
+            }
+         },
+         "ParametrageSession":{
+            "type":"object",
+            "properties":{
+               "actionAudeTheme":{
+                  "description":" true : la gestion des actions AUDE est effectuée à partir des codes des thèmes, ceux-ci venant se substituer au type de prestation dans AUDE. false: la gestion des actions AUDE est traditionnelle, effectuée à partir du type de prestation et du type de prestation GIDE (type d'action) qui lui est associé",
+                  "type":"boolean",
+                  "example":true
+               },
+               "animationExterneParConvention":{
+                  "description":"Indique si la prestation est susceptible d'être animée par des prestataires d'un convention(I Interdit, F Facultatif, O Obligatoire)",
+                  "type":"string",
+                  "example":"O"
+               },
+               "animationExterneParMarche":{
+                  "description":"Indique si la prestation est susceptible d'être animée par des prestataires d'un marché(I Interdit, F Facultatif, O Obligatoire)",
+                  "type":"string",
+                  "example":"O"
+               },
+               "animationInterne":{
+                  "description":"Indique si la prestation est susceptible d'être animée par des agents(I Interdit, F Facultatif, O Obligatoire)",
+                  "type":"string",
+                  "example":"O"
+               },
+               "codeTypePrestationGide":{
+                  "description":"Champs permettant d'avoir la correspondance entre le code type de prestation de AUDE et celui de AUDEP",
+                  "type":"string",
+                  "example":"AP2"
+               },
+               "cofinanceFSE":{
+                  "description":"Si la session est cofinancee FSE",
+                  "type":"boolean",
+                  "example":true
+               },
+               "delaiAlertePlancher":{
+                  "format":"int32",
+                  "type":"integer",
+                  "example":2,
+                  "description":"Délai pour l'alerte plancher"
+               },
+               "delaiFinAlerteIcoEchues":{
+                  "format":"int32",
+                  "type":"integer",
+                  "example":2,
+                  "description":"Délai de fin d'alerte des ICO échues"
+               },
+               "delaiInfoAnticipe":{
+                  "format":"int32",
+                  "type":"integer",
+                  "example":3,
+                  "description":"Délai info anticipé"
+               },
+               "delaiLimitePrescription":{
+                  "format":"int32",
+                  "description":"delai Limite de Prescription",
+                  "type":"integer",
+                  "example":3
+               },
+               "delaiPreReservation":{
+                  "format":"int32",
+                  "type":"integer",
+                  "example":3,
+                  "description":"Délai de préreservation"
+               },
+               "disponibleAutoInscription":{
+                  "description":"Indique si la session est disponible en auto-inscription",
+                  "type":"boolean",
+                  "example":true
+               },
+               "disponibleWebcam":{
+                  "type":"boolean",
+                  "example":true,
+                  "description":"Indique si le type de prestation autorise les RDV en webcam"
+               },
+               "dureePrestationExterne":{
+                  "format":"int32",
+                  "description":"duree de Prestation  extene",
+                  "type":"integer",
+                  "example":2
+               },
+               "dureePrestationInterne":{
+                  "format":"int32",
+                  "description":"duree de Prestation  Interne",
+                  "type":"integer",
+                  "example":2
+               },
+               "editionDescriptif":{
+                  "description":"permet de définir s'il faut ou non édirer le descriptif de la prestation sur la convocation",
+                  "type":"boolean",
+                  "example":true
+               },
+               "gereLesCohortes":{
+                  "description":"indique si la session gère les cohortes",
+                  "type":"boolean",
+                  "example":true
+               },
+               "gereLesElementsQualitatifs":{
+                  "description":"indique si la session gère les éléments qualitatifs",
+                  "type":"boolean",
+                  "example":true
+               },
+               "gestionViaPortail":{
+                  "description":"Gestion sur le portail ",
+                  "type":"boolean",
+                  "example":true
+               },
+               "grandDomaine":{
+                  "type":"boolean",
+                  "description":"Indique si le type de prestation gère les grands domaines",
+                  "example":true
+               },
+               "identifiantParametrageSession":{
+                  "description":"identifiant chiffré du paramétrage session",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "lieuRealisationAutre":{
+                  "description":"lieu de réalisation autre O/N",
+                  "type":"string",
+                  "example":"O"
+               },
+               "lieuRealisationDematerialise":{
+                  "description":"Lieu 100% à distance (I ou F, I pour interdit, F pour facultatif) ",
+                  "type":"string",
+                  "example":"I"
+               },
+               "lieuRealisationExterne":{
+                  "description":"lieu de réalisation externe O/N",
+                  "type":"string",
+                  "example":"O"
+               },
+               "lieuRealisationInterne":{
+                  "description":"lieu de réalisation interne O/N",
+                  "type":"string",
+                  "example":"O"
+               },
+               "modalite":{
+                  "description":"Indique l'utilisation de la modalité de marché",
+                  "type":"boolean",
+                  "example":true
+               },
+               "natureDureePrestationExterne":{
+                  "description":"Nature de la durée de prestation externe. OE : en jours ouvrés ; CS : calendaire simple ; CW : calendaire avec fin en jour ouvré",
+                  "type":"string",
+                  "example":"CW"
+               },
+               "natureDureePrestationInterne":{
+                  "description":"Nature de la durée de prestation interne. OE : en jours ouvrés ; CS : calendaire simple ; CW : calendaire avec fin en jour ouvré",
+                  "type":"string",
+                  "example":"CW"
+               },
+               "nbInscritPlancher":{
+                  "format":"int32",
+                  "description":"Nombre minimum d'inscrit sur une prestation collective",
+                  "type":"integer",
+                  "example":3
+               },
+               "nbOffreDune":{
+                  "format":"int32",
+                  "description":"le nombre d'offres qu'il est possible de saisir sur la session",
+                  "type":"integer",
+                  "example":3
+               },
+               "possibiliteInterruption":{
+                  "description":"possibilite d'Interruption ?",
+                  "type":"boolean",
+                  "example":true
+               },
+               "presenceRome":{
+                  "description":"présence du code ROME obligatoire pour certaines prestations O/N",
+                  "type":"string",
+                  "example":"O"
+               },
+               "prestaPeutActiverVR":{
+                  "description":"indique si la session peut activer  VR",
+                  "type":"boolean",
+                  "example":true
+               },
+               "prestaPeutUtiliserVR":{
+                  "description":"indique si la session peut utiliserla  VR",
+                  "type":"boolean",
+                  "example":true
+               },
+               "publicVise":{
+                  "description":"Indique si la prestation peut spécifiquement s'adresser à un public précis. O/N",
+                  "type":"string",
+                  "example":"O"
+               },
+               "reunionInformation":{
+                  "description":"Indique s'il s'agit d'une réunion d'info collevtive  (Zoom Sur...).",
+                  "type":"boolean",
+                  "example":true
+               },
+               "romeDansMarche":{
+                  "description":"Le code ROME est-il rattaché au marché",
+                  "type":"string",
+                  "example":"O"
+               },
+               "typeAtelier":{
+                  "description":"La prestation est de type Atelier (ATE)",
+                  "type":"boolean",
+                  "example":true
+               },
+               "typeCourrier":{
+                  "description":"Indique le type de courrier, INV: invitation, CON: convocation",
+                  "type":"string",
+                  "example":"CON"
+               },
+               "typeOrganisation":{
+                  "description":"Type d'organisation: individuelle (I) ou collective (C)",
+                  "type":"string",
+                  "example":"I"
+               },
+               "utilisationModuleThematique":{
+                  "description":"L'utilisation de module thématique est  : Obligatoire, Facultative ou Interdite, pour la session ",
+                  "type":"string",
+                  "example":"I"
+               },
+               "utilisationPrecisionPrestataire":{
+                  "description":"Indique si l'utilisation de la précision Prestataire est Obligatoire, Facultatif ou Interdit. ",
+                  "type":"string",
+                  "example":"I"
+               },
+               "utilisationPrecisionPrestataireComplementaire":{
+                  "description":"Indique si  l'utilisation de précisions complémentaires  est Obligatoire, Facultatif ou Interdit.",
+                  "type":"string",
+                  "example":"I"
+               }
+            }
+         },
+         "PeriodeMarche":{
+            "type":"object",
+            "properties":{
+               "dateDebutPeriodeMarche":{
+                  "format":"date-time",
+                  "description":"date de début de Periode Marché",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFinPeriodeMarche":{
+                  "format":"date-time",
+                  "description":"date de fin de Periode Marché",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "gestionSeuilPhysiquePeriodeMarche":{
+                  "description":"Gestion par poste (P) ou global (G)",
+                  "type":"string",
+                  "example":"G"
+               },
+               "identifiantPeriodeMarche":{
+                  "format":"int64",
+                  "description":"identifiant période marché",
+                  "type":"integer",
+                  "example":1000001
+               },
+               "marche":{
+                  "$ref":"#/components/schemas/Marche"
+               },
+               "natureSeuilPhysiquePeriodeMarche":{
+                  "description":"NNature des seuils physiques",
+                  "type":"string",
+                  "example":"P"
+               },
+               "physiqueReelPeriodeMarche":{
+                  "format":"int32",
+                  "description":" Physique Réel Periode Marche",
+                  "type":"integer",
+                  "example":3
+               },
+               "seuilPhysiqueMaxPeriodeMarche":{
+                  "format":"int32",
+                  "description":"seuil Physique Max Periode Marche",
+                  "type":"integer",
+                  "example":5
+               },
+               "seuilPhysiqueMinPeriodeMarche":{
+                  "format":"int32",
+                  "description":"seuil Physique Min Periode Marche",
+                  "type":"integer",
+                  "example":5
+               }
+            }
+         },
+         "PieceGED":{
+            "type":"object",
+            "properties":{
+               "codeStatut":{
+                  "description":"Code statut",
+                  "type":"string",
+                  "example":"BRO"
+               },
+               "commande":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Commande"
+                     },
+                     {
+                        "description":"Commande"
+                     }
+                  ]
+               },
+               "idDoc":{
+                  "description":"Identifiant du document",
+                  "type":"string",
+                  "example":"1231234123"
+               },
+               "identifiantECS":{
+                  "description":"Identifiant chiffré du document dans l'ECS",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantPieceGED":{
+                  "description":"Identifiant chiffré de piece GED",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantRendezVous":{
+                  "description":"identifiant de rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "lieuStockage":{
+                  "description":"lieu de Stockage (GED ou ECS)",
+                  "type":"string",
+                  "example":"ECS"
+               },
+               "nomFichier":{
+                  "description":"Nom du fichier",
+                  "type":"string",
+                  "example":"Bilan adhésion Dupont Julien"
+               },
+               "referentielPieceGED":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ReferentielPieceGED"
+                     },
+                     {
+                        "description":"Referentiel Piece"
+                     }
+                  ]
+               }
+            }
+         },
+         "Poste":{
+            "type":"object",
+            "properties":{
+               "codeTypePrestation":{
+                  "description":"code Type Prestation",
+                  "type":"string",
+                  "example":"ATC"
+               },
+               "identifiantPoste":{
+                  "format":"int64",
+                  "description":"identifiant du poste de marché",
+                  "type":"integer",
+                  "example":1000001
+               },
+               "listeCodeRome":{
+                  "description":"liste code rome",
+                  "type":"array",
+                  "items":{
+                     "type":"string"
+                  }
+               },
+               "listeLieuRealisation":{
+                  "description":"Liste des lieux de réalisation",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/LieuRealisation"
+                  }
+               },
+               "listePosteTypeLieu":{
+                  "description":"liste des types de lieux autorisés",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/PosteTypeLieu"
+                  }
+               },
+               "natureSeuilPhysique":{
+                  "description":"nature du seuil physique B pour les presta individuelles P pour les presta Collectives",
+                  "type":"string",
+                  "example":"B"
+               },
+               "numeroMarco":{
+                  "format":"int32",
+                  "description":"numero de marché",
+                  "type":"integer",
+                  "example":14114
+               },
+               "periodeMarche":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/PeriodeMarche"
+                     },
+                     {
+                        "description":"Période marché"
+                     }
+                  ]
+               },
+               "seuilMax":{
+                  "format":"int64",
+                  "description":"Seuil physique maximal du poste",
+                  "type":"integer",
+                  "example":99000
+               },
+               "seuilMin":{
+                  "format":"int64",
+                  "description":"Seuil physique minimal du poste",
+                  "type":"integer",
+                  "example":65
+               }
+            }
+         },
+         "PosteTypeLieu":{
+            "type":"object",
+            "properties":{
+               "codeTypeLieuAutorise":{
+                  "description":"code type lieu autorisé",
+                  "type":"string",
+                  "example":"A"
+               },
+               "identifiantPoste":{
+                  "description":"identifiant chiffré du poste de marché",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               }
+            }
+         },
+         "PrecisionResultat":{
+            "type":"object",
+            "properties":{
+               "affichageDescriptifPrecisionResultat":{
+                  "description":"Y a-t-il un descriptif associé à la précision",
+                  "type":"boolean",
+                  "example":true
+               },
+               "codePrecisionResultat":{
+                  "description":"Code de la précision du résultat",
+                  "type":"string",
+                  "example":"AU"
+               },
+               "libellePrecisionResultat":{
+                  "description":"Libellé de la précision du résultat",
+                  "type":"string",
+                  "example":"Autre"
+               },
+               "listeSousPrecisionResultats":{
+                  "description":"Liste des sous-précisions liées à la précision de résultat",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/SousPrecisionResultat"
+                  }
+               },
+               "ordreAffichagePrecisionResultat":{
+                  "format":"int32",
+                  "description":"Ordre de l'affichage des précisions de résultat",
+                  "type":"integer",
+                  "example":3
+               }
+            }
+         },
+         "PrecisionStatutPresence":{
+            "type":"object",
+            "properties":{
+               "avecCommentaire":{
+                  "description":"Indique si la précision est associée à un commentaire (true) ou non",
+                  "type":"boolean",
+                  "example":true
+               },
+               "codePrecisionStatutPresence":{
+                  "description":"Code de la précision de présence",
+                  "type":"string",
+                  "example":" PRC"
+               },
+               "libelle":{
+                  "description":"Libellé de la précision de Statut Presence",
+                  "type":"string",
+                  "example":"Prise d'un rendez-vous auprès du conseiller référent"
+               }
+            }
+         },
+         "Prestataire":{
+            "type":"object",
+            "properties":{
+               "dateDebutEffet":{
+                  "format":"date-time",
+                  "description":"Date de début d'activation prestataire",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFinEffet":{
+                  "format":"date-time",
+                  "description":"date Fin Effet",
+                  "type":"string"
+               },
+               "etablissement":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Etablissement"
+                     },
+                     {
+                        "description":"etablissement"
+                     }
+                  ]
+               },
+               "fax":{
+                  "description":"Numéro de fax du prestataire",
+                  "type":"string",
+                  "example":"0102030405"
+               },
+               "identifiantPrestataire":{
+                  "description":"Identifiant chiffré du prestataire",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "mailContractuel":{
+                  "description":"mailContractuel",
+                  "type":"string",
+                  "example":"prestation67@gmail.com"
+               },
+               "mailOperationnel":{
+                  "description":"Mail opérationnel du prestataire",
+                  "type":"string",
+                  "example":"trucmuche@gmail.fr"
+               },
+               "typePrestataire":{
+                  "$ref":"#/components/schemas/TypePrestataire"
+               }
+            }
+         },
+         "PrestationSpecifique":{
+            "type":"object",
+            "properties":{
+               "codeTypePrestation":{
+                  "description":"Code de la prestation spécifique",
+                  "type":"string",
+                  "example":"R8R"
+               },
+               "libelleAudep":{
+                  "description":"Libelle de la prestation pour AUDEP",
+                  "type":"string",
+                  "example":"Renouvellement"
+               },
+               "libelleCourtAude":{
+                  "description":"Libelle court de la prestation pour AUDE",
+                  "type":"string",
+                  "example":"Renouvellement"
+               },
+               "libelleCourtAudep":{
+                  "description":"Libelle court de la prestation pour AUDEP",
+                  "type":"string",
+                  "example":"Renouvellement"
+               }
+            }
+         },
+         "Question":{
+            "type":"object",
+            "properties":{
+               "codeQuestion":{
+                  "description":"code Question",
+                  "type":"string",
+                  "example":"QFEMEWB01"
+               },
+               "libelle":{
+                  "description":"libelle de la question",
+                  "type":"string",
+                  "example":"Objectif de la prestation"
+               },
+               "listeReponseDefinie":{
+                  "description":"liste des réponses Definies",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/ReponseDefinie"
+                  }
+               },
+               "placeholder":{
+                  "description":"placeholder",
+                  "type":"string",
+                  "example":"Exemples : PMSPM, enquête métier, atelier..."
+               },
+               "tailleMaxChampLibre":{
+                  "format":"int32",
+                  "description":"taille Max du Champ Libre",
+                  "type":"integer",
+                  "example":474
+               }
+            }
+         },
+         "ReferentielPieceGED":{
+            "type":"object",
+            "properties":{
+               "apercuTypePrestation":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ApercuTypePrestation"
+                     },
+                     {
+                        "description":"Apercu du type de prestation auquel est lié le livrable"
+                     }
+                  ]
+               },
+               "code":{
+                  "description":"code pièce",
+                  "type":"string",
+                  "example":"AP240"
+               },
+               "estUnique":{
+                  "description":"la pièce est unique?",
+                  "type":"boolean",
+                  "example":true
+               },
+               "nature":{
+                  "description":"Nature de la pièce: B pour bénéficiaires, P prestation",
+                  "enum":[
+                     "B",
+                     "P"
+                  ],
+                  "type":"string",
+                  "example":"B"
+               }
+            }
+         },
+         "ReferentielStatutMetierPresta":{
+            "type":"object",
+            "properties":{
+               "codeStatutMetierPresta":{
+                  "type":"string",
+                  "description":"Code du statut métier presta",
+                  "example":"CLO"
+               },
+               "libelleStatutMetierPresta":{
+                  "type":"string",
+                  "description":"Libellé du statut métier presta",
+                  "example":"Clôturée"
+               }
+            }
+         },
+         "Relance":{
+            "type":"object",
+            "properties":{
+               "dateRelance":{
+                  "format":"date-time",
+                  "description":"date de relance",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "idListeInscrit":{
+                  "format":"int64",
+                  "description":"id de la liste d'inscrit",
+                  "type":"integer",
+                  "example":100000012
+               },
+               "identifiantHistoRelance":{
+                  "format":"int64",
+                  "description":"identifiant HistoRelance",
+                  "type":"integer",
+                  "example":100000012
+               },
+               "numeroCommande":{
+                  "description":"numero de la commande sur 10 caractères",
+                  "type":"string",
+                  "example":"SEAP2PJ636"
+               },
+               "typeRelance":{
+                  "description":"type de relance",
+                  "type":"string"
+               }
+            }
+         },
+         "RendezVous":{
+            "type":"object",
+            "properties":{
+               "adhesion":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Adhesion"
+                     },
+                     {
+                        "description":"Adhésion du bénénficiaire à l'information collective"
+                     }
+                  ]
+               },
+               "agentCreateur":{
+                  "description":"Matricule de l'agent créateur",
+                  "type":"string",
+                  "example":"ijbe4850"
+               },
+               "agentModificateur":{
+                  "description":"Matricule de l'agent modificateur",
+                  "type":"string",
+                  "example":"ijbe4850"
+               },
+               "agentPrescripteur":{
+                  "description":"Matricule de l'agent prescripteur",
+                  "type":"string",
+                  "example":"ijbe4850"
+               },
+               "agentPresence":{
+                  "description":"Matricule de l'agent qui met à jour le statut présence",
+                  "type":"string",
+                  "example":"ijbe4850"
+               },
+               "annule":{
+                  "description":"Indiquant que le rdv est annulé (true) ou non",
+                  "type":"boolean",
+                  "example":false
+               },
+               "codeApplicationOrigine":{
+                  "description":"Code de l'application d'origine pour les inscription via WEB: JRE, MSPEe, PN249, PN052",
+                  "type":"string",
+                  "example":"PN249"
+               },
+               "codeAssedic":{
+                  "description":"Code régional",
+                  "type":"string",
+                  "example":"032"
+               },
+               "codeBNI":{
+                  "description":"Identifiant national RCI chiffré",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "commande":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Commande"
+                     },
+                     {
+                        "description":"Commande associée au rendez-vous"
+                     }
+                  ]
+               },
+               "commentaireAdhesion":{
+                  "description":"Commentaire lié à l'adhésion",
+                  "type":"string",
+                  "example":"Le bénéficiaire n'est pas intéressé"
+               },
+               "commentaireStatutPresence":{
+                  "description":"Commentaire associé au statut de présence",
+                  "type":"string",
+                  "example":"Le DE avait piscine"
+               },
+               "dateCreationAction":{
+                  "format":"date-time",
+                  "description":"Date de création de l'action dans Aude",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "datefin":{
+                  "format":"date-time",
+                  "description":"date fin effective du RDV",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dispositifRendezVous":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/DispositifRendezVous"
+                     },
+                     {
+                        "description":"Dispositif associé à un RDV (par ex dispositif CSP)"
+                     }
+                  ]
+               },
+               "idGide":{
+                  "description":"Identifiant Regional (GIDE)",
+                  "type":"string",
+                  "example":"1231231R"
+               },
+               "idNouveauRdv":{
+                  "description":"Identifiant du nouveau Rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "idRdv":{
+                  "description":"Identifiant chiffré de rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantActionAude":{
+                  "description":"Identifiant clée action Aude",
+                  "type":"string",
+                  "example":"A"
+               },
+               "identifiantRCU":{
+                  "description":"Idenfifiant RCU du bénéficiaire",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "identifiantStable":{
+                  "description":"Identifiant stable du rdv",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "listeCompetence":{
+                  "description":"liste des compétences",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Competence"
+                  }
+               },
+               "listeElementPrescription":{
+                  "description":"liste des élement de prescriptions associé au RDV",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/ElementPrescription"
+                  }
+               },
+               "listePieceGED":{
+                  "description":"liste des pièces associés un RDV",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/PieceGED"
+                  }
+               },
+               "mail":{
+                  "description":"Email du bénéficiaire",
+                  "type":"string",
+                  "example":"jean.dupont@gmail.com"
+               },
+               "nom":{
+                  "description":"Nom de du bénéficaire",
+                  "type":"string",
+                  "example":"JORDAN"
+               },
+               "nomPrescripteur":{
+                  "description":"Mom de l'agent prescripteur",
+                  "type":"string",
+                  "example":"MARTIN Jean"
+               },
+               "numeroFranceTravail":{
+                  "description":"Numéro France Travail",
+                  "type":"string",
+                  "example":"12312312312"
+               },
+               "origine":{
+                  "description":"Origine du Rdv: PA pour Prest@ppli, BO pour back-office, WB pour Mes services à la carte, FO pour Front-Office, FW pour Front-Office Webco, CW pour le Webco XP, AC pour Mes Evenements Emploi, MP pour le Webco MPA, CD pour les conseils départementaux, ML pour les missions locales",
+                  "enum":[
+                     "PA",
+                     "BO",
+                     "WB",
+                     "FO",
+                     "FW",
+                     "CW",
+                     "AC",
+                     "MP",
+                     "CO",
+                     "ML"
+                  ],
+                  "type":"string",
+                  "example":"FO"
+               },
+               "origineElementPrescription":{
+                  "description":"Origine des élement de prescriptions",
+                  "type":"string",
+                  "example":"FO"
+               },
+               "pmsmp":{
+                  "description":"Indique la présence d'une PMSMP (true) ou non",
+                  "type":"boolean",
+                  "example":true
+               },
+               "precisionDE":{
+                  "description":"Informations pratiques pour un DE se rendant à une prestation",
+                  "type":"string",
+                  "example":"Evaluer les compétences du DE sur le métier de comptable."
+               },
+               "precisionPrestataire":{
+                  "description":"Commentaire de précision du prestataire",
+                  "type":"string",
+                  "example":"Evaluer les compétences du DE sur le métier de comptable."
+               },
+               "precisionPrestataireComplementaire":{
+                  "description":"Commentaire de précision complementaire du prestataire",
+                  "type":"string",
+                  "example":"Evaluer les compétences du DE sur le métier de comptable."
+               },
+               "precisionStatutPresence":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/PrecisionStatutPresence"
+                     },
+                     {
+                        "description":"Précision du statut de Presence"
+                     }
+                  ]
+               },
+               "prenom":{
+                  "description":"Prénom de du bénéficaire",
+                  "type":"string",
+                  "example":"Michael"
+               },
+               "resultatRendezVous":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ResultatRendezVous"
+                     },
+                     {
+                        "description":"Resultat du Rendez-Vous"
+                     }
+                  ]
+               },
+               "session":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Session"
+                     },
+                     {
+                        "description":"Session à laquelle le rendez-vous est lié"
+                     }
+                  ]
+               },
+               "siteConnexion":{
+                  "description":"Code safir du site de connexion",
+                  "type":"string",
+                  "example":"59166"
+               },
+               "sitePrescripteur":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Site"
+                     },
+                     {
+                        "description":"Site prescripteur du rendez-vous"
+                     }
+                  ]
+               },
+               "specificiteConvocation":{
+                  "description":"Complément d'information communiquée au bénéficiaire",
+                  "type":"string",
+                  "example":"Ramener un document d'identité"
+               },
+               "statutPresence":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/StatutPresence"
+                     },
+                     {
+                        "description":"Statut de Presence"
+                     }
+                  ]
+               },
+               "statutRDV":{
+                  "description":"Statut du rendez-vous",
+                  "type":"string",
+                  "example":"A"
+               },
+               "telephone":{
+                  "description":"Téléphone du bénéficiaire",
+                  "type":"string",
+                  "example":"0387540126"
+               },
+               "telephoneMobile":{
+                  "description":"Téléphone mobile du bénéficiaire",
+                  "type":"string",
+                  "example":"0678045518"
+               },
+               "typeUtilisateurMSC":{
+                  "description":"Type de l'utilisateur MSC: DE_INSCRIT pour un inscrit, DE_RADIE pour un radié, CANDIDAT pour un candidiat, INDIVIDU_NON_DE pour un individu non DE",
+                  "enum":[
+                     "DE_INSCRIT",
+                     "DE_RADIE",
+                     "CANDIDAT",
+                     "INDIVIDU_NON_DE"
+                  ],
+                  "type":"string",
+                  "example":"DE_INSCRIT"
+               }
+            }
+         },
+         "Reponse":{
+            "type":"object",
+            "properties":{
+               "champsLibre":{
+                  "description":"champ libre",
+                  "type":"string",
+                  "example":"ma vie familiale est peu compatible avec des horaires de bureau, mon marché du travail local offre peu de perspectives"
+               },
+               "reponseDefinie":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ReponseDefinie"
+                     },
+                     {
+                        "description":"réponse Definie"
+                     }
+                  ]
+               },
+               "typeReponse":{
+                  "description":"type reponse",
+                  "type":"string",
+                  "example":"A"
+               }
+            }
+         },
+         "ReponseDefinie":{
+            "type":"object",
+            "properties":{
+               "codeQuestion":{
+                  "description":"code Question",
+                  "type":"string",
+                  "example":"QFEMEWB01"
+               },
+               "codeReponse":{
+                  "description":"code réponse",
+                  "type":"string",
+                  "example":"R01"
+               },
+               "libelle":{
+                  "description":"libelle",
+                  "type":"string",
+                  "example":"Confirmer un ou plusieurs projets professionnels"
+               },
+               "placeholder":{
+                  "description":"placeholder",
+                  "type":"string",
+                  "example":"Exemples : ma vie familiale est peu compatible avec des horaires de bureau, mon marché du travail local offre peu de perspectives, ..."
+               },
+               "tailleMaxChampLibre":{
+                  "format":"int32",
+                  "description":"taille Max du Champ Libre",
+                  "type":"integer",
+                  "example":255
+               }
+            }
+         },
+         "Resultat":{
+            "required":[
+               "codeResultat",
+               "codeTypePrestation"
+            ],
+            "type":"object",
+            "properties":{
+               "abandon":{
+                  "description":"Indique si le résultat est un abandon (true) ou non (false)",
+                  "type":"boolean",
+                  "example":true
+               },
+               "codeResultat":{
+                  "description":"code du résultat",
+                  "maxLength":3,
+                  "minLength":3,
+                  "type":"string",
+                  "example":"VAT",
+                  "nullable":false
+               },
+               "codeTypePrestation":{
+                  "description":"code du type prestation",
+                  "maxLength":5,
+                  "minLength":3,
+                  "type":"string",
+                  "example":"ACL",
+                  "nullable":false
+               },
+               "libelleResultat":{
+                  "description":"libellé du résultat",
+                  "type":"string",
+                  "example":"Acquit"
+               },
+               "listePrecisionResultat":{
+                  "description":"Liste de precisions de résultats liées au résultat",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/PrecisionResultat"
+                  }
+               },
+               "moduleParcoursCarte":{
+                  "description":"module Parcours carte",
+                  "type":"boolean",
+                  "example":true
+               },
+               "moduleParcoursSocle":{
+                  "description":"module Parcours Socle",
+                  "type":"boolean",
+                  "example":true
+               },
+               "utilisationDateEffet":{
+                  "description":"Utilisation date d'effet O/I ",
+                  "enum":[
+                     "O",
+                     "I"
+                  ],
+                  "type":"string",
+                  "example":"O"
+               }
+            }
+         },
+         "ResultatRendezVous":{
+            "required":[
+               "identifiantRendezVous",
+               "resultat"
+            ],
+            "type":"object",
+            "properties":{
+               "commentaireResultatPE":{
+                  "description":"commentaire associé au resultat",
+                  "type":"string",
+                  "example":"absence contrat d'accompagnement + PSP"
+               },
+               "commentaireResultatRendezVous":{
+                  "description":"commentaire associé à la précision de resultat",
+                  "type":"string",
+                  "example":"Pas de signature à mi-parcours"
+               },
+               "dateCreation":{
+                  "format":"date-time",
+                  "description":"date de creation du résultat",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateEffetResultatRendezVous":{
+                  "format":"date-time",
+                  "description":"date d'effet du résultat",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateModification":{
+                  "format":"date-time",
+                  "description":"date de modification du résultat",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "decisionSurResultat":{
+                  "description":"decision sur Resultat, I: en cours, C: comfirmé par PE, M: Modifié par PE",
+                  "enum":[
+                     "I",
+                     "C",
+                     "M"
+                  ],
+                  "type":"string",
+                  "example":"C"
+               },
+               "dureePrestation":{
+                  "format":"int64",
+                  "description":"durée de la prestation (en jour)",
+                  "type":"integer",
+                  "example":84
+               },
+               "identifiantRendezVous":{
+                  "description":"identifiantRendezVous, Nécessite d'être dans le queryParam select pour être valorisé",
+                  "type":"string",
+                  "example":"123123123",
+                  "nullable":false
+               },
+               "identifiantResultatRendezVous":{
+                  "description":"identifiant chiffré du résultat",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "justificationModificationResultat":{
+                  "description":"Justification de la modification du résultat par Pôle Emploi",
+                  "type":"string",
+                  "example":"DE absent"
+               },
+               "justificationRefaction":{
+                  "description":"commmentaire de justification de la réfaction",
+                  "type":"string",
+                  "example":"contrat inférieur à 78 heures mensuelles"
+               },
+               "nbEntretien":{
+                  "format":"int32",
+                  "description":"nombre d'entretien",
+                  "type":"integer",
+                  "example":2
+               },
+               "nbModuleALaCarte":{
+                  "format":"int32",
+                  "description":"Nombre de Modules à la carte",
+                  "type":"integer",
+                  "example":3
+               },
+               "nbModuleSocle":{
+                  "format":"int32",
+                  "description":"Nombre de Modules socles",
+                  "type":"integer",
+                  "example":2
+               },
+               "niveauRefaction":{
+                  "description":"niveau de Refaction, 0:aucune, 1 : refaction partielle, 2: réfaction totale",
+                  "enum":[
+                     "0",
+                     "1",
+                     "2"
+                  ],
+                  "type":"string",
+                  "example":"0"
+               },
+               "precisionResultat":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/PrecisionResultat"
+                     },
+                     {
+                        "description":"Précision de résultat"
+                     }
+                  ]
+               },
+               "resultat":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Resultat"
+                     },
+                     {
+                        "description":"Résultat",
+                        "nullable":false
+                     }
+                  ]
+               },
+               "sousPrecisionResultat":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/SousPrecisionResultat"
+                     },
+                     {
+                        "description":"Sous-précision du résultat"
+                     }
+                  ]
+               }
+            }
+         },
+         "Rome":{
+            "type":"object",
+            "properties":{
+               "codeRome":{
+                  "description":"Code ROME",
+                  "type":"string",
+                  "example":"D1212"
+               },
+               "libelle":{
+                  "description":"Libellé correspondant au code ROME",
+                  "type":"string",
+                  "example":"Boulangerie patisserie"
+               }
+            }
+         },
+         "SaisirResultatRendezVous":{
+            "type":"object",
+            "properties":{
+               "listeCompetence":{
+                  "description":"Liste des compétences",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Competence"
+                  }
+               },
+               "listeEntretienRendezVous":{
+                  "description":"Liste des entretiens réalisés",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/EntretienRendezVous"
+                  }
+               },
+               "listeEvaluationRendezVous":{
+                  "description":"Liste des évaluations",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/EvaluationRendezVous"
+                  }
+               },
+               "pmsmp":{
+                  "description":"Indique si la commande valide le PMSMP (true) ou non",
+                  "type":"boolean",
+                  "example":true
+               },
+               "resultatRendezVous":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ResultatRendezVous"
+                     },
+                     {
+                        "description":"Résultat de rendez-vous"
+                     }
+                  ]
+               }
+            }
+         },
+         "Session":{
+            "type":"object",
+            "properties":{
+               "adresse":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Adresse"
+                     },
+                     {
+                        "description":"Adresse du lieu de réalisation"
+                     }
+                  ]
+               },
+               "agentCreateur":{
+                  "description":"Iddgasi de l'agent créateur",
+                  "type":"string",
+                  "example":"IJBE4850"
+               },
+               "agentModificateur":{
+                  "description":"Iddgasi de l'agent modificateur",
+                  "type":"string",
+                  "example":"IJBE4850"
+               },
+               "codeDomaineProfessionnel":{
+                  "description":"code du domaine professionnel",
+                  "type":"string",
+                  "example":"A12"
+               },
+               "codeEtatSession":{
+                  "description":"code état de la session",
+                  "type":"string",
+                  "example":"DIS"
+               },
+               "codeGrandDomaine":{
+                  "description":"code grand domaine - Secteur d'activité",
+                  "type":"string",
+                  "example":"A"
+               },
+               "commentaire":{
+                  "description":"Commentaire saisi lors de la planification de la session",
+                  "type":"string",
+                  "example":"à coté du de la boulangerie"
+               },
+               "coordonneesGPS":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/CoordonneesGPS"
+                     },
+                     {
+                        "description":"coordonnees GPS"
+                     }
+                  ]
+               },
+               "dateDebut":{
+                  "format":"date-time",
+                  "description":"date de début de la session",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateDiffusion":{
+                  "format":"date-time",
+                  "description":"date de mise en visibilité de la session aux agences et francetravail.fr/",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFinPrevue":{
+                  "format":"date-time",
+                  "description":"date de fin prévisionnel de la session",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateLimite":{
+                  "format":"date-time",
+                  "description":"date limite de préscription",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "demiJournee":{
+                  "description":"indique que la session est sur une demi-journée",
+                  "type":"boolean",
+                  "example":true
+               },
+               "duree":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"Durée de la session"
+                     }
+                  ]
+               },
+               "duree1erRendezVous":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"durée du premier rendez-vous"
+                     }
+                  ]
+               },
+               "dureeReunionInformationCollective":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"Durée de l'information collective"
+                     }
+                  ]
+               },
+               "enAgence":{
+                  "description":" enAgence=true: la prestation est animé sur un lieu physqiue, enAgence=false: 100% à distance ",
+                  "type":"boolean",
+                  "example":true
+               },
+               "idSession":{
+                  "description":"identifiant de session",
+                  "type":"string",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "infoCollective":{
+                  "description":" infoCollective=true: il s'agit d'une session d'information collective, infoCollective=false, il s'agit d'une session de prestation ",
+                  "type":"boolean",
+                  "example":true
+               },
+               "interruptionLeMecredi":{
+                  "description":"booléen indiquant si la session est interrompu le mercredi",
+                  "type":"boolean",
+                  "example":true
+               },
+               "listeRendezVous":{
+                  "description":"liste des rendez-vous associés à la session",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/RendezVous"
+                  }
+               },
+               "listeSiteDiffusion":{
+                  "description":"liste des Agences PE sur laquelle la session est diffusée",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Site"
+                  }
+               },
+               "matriculeAnimateurInterne":{
+                  "description":"Iddgasi de l'agent animateur",
+                  "type":"string",
+                  "example":"IJBE4850"
+               },
+               "modalitePremierRendezVous":{
+                  "description":"Modalité du premier rendez-vous nature de l'animation de la session, P pour lieu physique, W pour à distance",
+                  "enum":[
+                     "P",
+                     "W"
+                  ],
+                  "type":"string",
+                  "example":"P"
+               },
+               "natureAnimation":{
+                  "description":"Nature de l'animation de la session, I pour interne, E pour externe",
+                  "enum":[
+                     "I",
+                     "E"
+                  ],
+                  "type":"string",
+                  "example":"I"
+               },
+               "nbPlacePrevue":{
+                  "format":"int32",
+                  "description":"nombre de place prévu sur la session",
+                  "type":"integer",
+                  "example":3
+               },
+               "nbPlacesPreReservees":{
+                  "format":"int32",
+                  "description":"nombre de place pré-réservées sur la session",
+                  "type":"integer",
+                  "example":1
+               },
+               "nbReelInscrits":{
+                  "format":"int32",
+                  "description":"nombre réel d'inscrits sur la session",
+                  "type":"integer",
+                  "example":2
+               },
+               "origineSession":{
+                  "description":"Origine de la session,  PL: Planification standard, HC: Hors calendrier, RC: commande de régularisation",
+                  "enum":[
+                     "PL",
+                     "HC",
+                     "RC"
+                  ],
+                  "type":"string",
+                  "example":"PL"
+               },
+               "parametrageSession":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ParametrageSession"
+                     },
+                     {
+                        "description":"paramétrage de la session"
+                     }
+                  ]
+               },
+               "poste":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Poste"
+                     },
+                     {
+                        "description":"Poste de marché de la session"
+                     }
+                  ]
+               },
+               "prestataire":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Prestataire"
+                     },
+                     {
+                        "description":"prestataire"
+                     }
+                  ]
+               },
+               "realiteVirtuelle":{
+                  "description":"booléen indiquant que la prestation est animée en réalité virtuelle",
+                  "type":"boolean",
+                  "example":true
+               },
+               "reunionInfoCommentaire":{
+                  "description":"Commentaire saisi lors de la planification de réunion d'information collective",
+                  "type":"string",
+                  "example":"à coté du de la boulangerie"
+               },
+               "rome":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Rome"
+                     },
+                     {
+                        "description":"ROME associé à la session"
+                     }
+                  ]
+               },
+               "siteCodePE":{
+                  "description":"code safir de l'agence de planification",
+                  "type":"string",
+                  "example":"59140"
+               },
+               "sousThemeAtelier":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/SousThemeAtelier"
+                     },
+                     {
+                        "description":"sous- Theme Atelier"
+                     }
+                  ]
+               },
+               "territoireDiffusionDefaut":{
+                  "description":"booléen indiquant si la prestation est duffusé sur le territoire de diffusion par défaut",
+                  "type":"boolean",
+                  "example":true
+               },
+               "themeAtelier":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ThemeAtelier"
+                     },
+                     {
+                        "description":"Theme Atelier"
+                     }
+                  ]
+               },
+               "typePrestation":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/TypePrestation"
+                     },
+                     {
+                        "description":"Type prestation"
+                     }
+                  ]
+               },
+               "typePublic":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/TypePublic"
+                     },
+                     {
+                        "description":"type de public de la session"
+                     }
+                  ]
+               },
+               "urlWebcam":{
+                  "description":"lien visio",
+                  "type":"string",
+                  "example":"http://teams.com/blablabla"
+               }
+            }
+         },
+         "Site":{
+            "type":"object",
+            "properties":{
+               "codePe":{
+                  "description":"code safir de la structure",
+                  "type":"string",
+                  "example":"59140"
+               },
+               "libelleStructure":{
+                  "description":"libellé de la structure",
+                  "type":"string",
+                  "example":"HEM"
+               }
+            }
+         },
+         "SousPrecisionResultat":{
+            "type":"object",
+            "properties":{
+               "codeSousPrecision":{
+                  "description":"Code de la sous-précision",
+                  "type":"string",
+                  "example":"PRC"
+               },
+               "libelleSousPrecision":{
+                  "description":"Libellé de la sous-précision",
+                  "type":"string",
+                  "example":"Prise d'un rendez-vous auprès du conseiller référent"
+               }
+            }
+         },
+         "SousThemeAtelier":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"code du Sous Theme Atelier",
+                  "type":"string",
+                  "example":"S12"
+               },
+               "descriptif":{
+                  "description":"descriptif du Sous Theme Atelier",
+                  "type":"string",
+                  "example":"Je n'ai pas de diplôme ou j'ai un CAP ou BEP (niveau BAC maximum), je viens découvrir les métiers du numérique, un secteur d'emploi qui recrute et les formations associées."
+               },
+               "libelle":{
+                  "description":"libelle du Sous Theme Atelier",
+                  "type":"string",
+                  "example":"Métiers du numérique votre prochain emploi !"
+               }
+            }
+         },
+         "StatutCommandeReferentiel":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "type":"string",
+                  "description":"Code du statut de commande",
+                  "example":"CLO"
+               },
+               "libelle":{
+                  "type":"string",
+                  "description":"Libellé du statut de commande",
+                  "example":"Clôturée"
+               },
+               "ordreTri":{
+                  "format":"int32",
+                  "type":"integer",
+                  "description":"Ordre de tri",
+                  "example":2
+               }
+            }
+         },
+         "StatutMetierPresta":{
+            "type":"object",
+            "properties":{
+               "dateChangementStatut":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date de changement de statut",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateDebutEffet":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date de début d'effet de statut",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateFinEffet":{
+                  "format":"date-time",
+                  "type":"string",
+                  "description":"Date de fin d'effet de statut",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "identifiantStatutMetierPresta":{
+                  "type":"string",
+                  "description":"Identifiant chiffré du statut métier presta",
+                  "example":"336a7504-98df-4702-8ac2-b0b424e28316"
+               },
+               "referentielStatutMetierPresta":{
+                  "$ref":"#/components/schemas/ReferentielStatutMetierPresta"
+               },
+               "structureUser":{
+                  "type":"string",
+                  "description":"Structure ou SIRET de l'utilisateur à l'origine du changement de statut",
+                  "example":"12312312312312"
+               },
+               "userChangementStatut":{
+                  "type":"string",
+                  "description":"Profil de l'utilisateur à l'origine du changement de statut",
+                  "example":"azildjelal"
+               }
+            }
+         },
+         "StatutPresence":{
+            "type":"object",
+            "properties":{
+               "asssocieUnCommentaire":{
+                  "description":"booléen indiquant si le statut de présence doit être associé à un commentaire (true) ou non",
+                  "type":"boolean",
+                  "example":true
+               },
+               "codeStatutPresence":{
+                  "description":"Code du stautut de présence",
+                  "type":"string",
+                  "example":"P"
+               },
+               "libelle":{
+                  "description":"Libelle du stautut de présence",
+                  "type":"string",
+                  "example":"Présence"
+               }
+            }
+         },
+         "ThemeAtelier":{
+            "type":"object",
+            "properties":{
+               "accroche":{
+                  "description":"accroche",
+                  "type":"string",
+                  "example":"J'apprends à construire CV percutant"
+               },
+               "code":{
+                  "description":"Code du  Theme Atelier",
+                  "type":"string",
+                  "example":"C11"
+               },
+               "codeTypePrestation":{
+                  "description":"code du type de prestation",
+                  "type":"string",
+                  "example":"ATC"
+               },
+               "dateFinNouveau":{
+                  "format":"date-time",
+                  "description":"Date à partir de laquelle le thème n'est plus considéré comme nouveau",
+                  "type":"string"
+               },
+               "descriptif":{
+                  "description":"descriptif",
+                  "type":"string",
+                  "example":"Je conçois, j'adapte et j'améliore mon CV et j'apprends à valoriser mes compétences en fonction du métier recherché"
+               },
+               "disponibleAutoInscription":{
+                  "description":"disponible à l' auto-inscription",
+                  "type":"boolean",
+                  "example":true
+               },
+               "dureeInitiale":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/Duree"
+                     },
+                     {
+                        "description":"duree initiale",
+                        "example":1
+                     }
+                  ]
+               },
+               "familleMetier":{
+                  "$ref":"#/components/schemas/FamilleMetier"
+               },
+               "libelle":{
+                  "description":"libelle du  Theme Atelier",
+                  "type":"string",
+                  "example":"Concevoir un CV percutant"
+               },
+               "listeLienSupportVisuel":{
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/Lien"
+                  }
+               },
+               "listeSousThemeAtelier":{
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/SousThemeAtelier"
+                  }
+               },
+               "type":{
+                  "description":"Type d'atelier: THA pour les thèmes ateliers, MTH pour les modules thématiques",
+                  "enum":[
+                     "THA",
+                     "MTH"
+                  ],
+                  "type":"string",
+                  "example":"THA"
+               },
+               "typeCourrier":{
+                  "description":"type de courrier, INV:invitation, CON: convocation",
+                  "enum":[
+                     "INV",
+                     "CON"
+                  ],
+                  "type":"string",
+                  "example":"INV"
+               }
+            }
+         },
+         "TraitementCandidature":{
+            "required":[
+               "identifiantCandidature",
+               "numMarche",
+               "statut"
+            ],
+            "type":"object",
+            "properties":{
+               "agentModificateur":{
+                  "description":"L'identifiant de l'agent modificateur",
+                  "type":"string"
+               },
+               "codeMotifSansSuite":{
+                  "description":"Code du motif si le statut de la candidature est sans suite",
+                  "type":"string",
+                  "example":"AUT"
+               },
+               "commentaireTraitement":{
+                  "description":"Le commentaire du traitement de la candidature",
+                  "type":"string",
+                  "example":"Traitement effectué"
+               },
+               "contactPrealable":{
+                  "description":"Booléen pour indiquer si le prestataire a contacté le demandeur d'emploi au préalable",
+                  "type":"boolean",
+                  "example":true
+               },
+               "dateDernierappel":{
+                  "format":"date-time",
+                  "description":"La date du dernier appel",
+                  "type":"string",
+                  "example":"2022-10-26T13:30:00"
+               },
+               "dateRendezVous":{
+                  "format":"date-time",
+                  "description":"La date du rendez-vous",
+                  "example":"2022-10-26T13:30:00",
+                  "type":"string"
+               },
+               "idPrestataire":{
+                  "description":"L'identifiant du prestataire",
+                  "type":"string",
+                  "example":"12312313"
+               },
+               "identifiantCandidature":{
+                  "description":"L'identifiant de la candidature",
+                  "minLength":1,
+                  "type":"string",
+                  "nullable":false
+               },
+               "lieuRendezVous":{
+                  "description":"L'identifiant du lieu de rendez-vous",
+                  "type":"string",
+                  "example":"121212"
+               },
+               "lieuWebcam":{
+                  "description":"Booléen pour indiquer si la prestation est à distance",
+                  "type":"boolean",
+                  "example":true
+               },
+               "modalitePremierRendezVous":{
+                  "description":"La modalité du premier rendez-vous si la prestation est en présentiel",
+                  "enum":[
+                     "PHYSIQUE",
+                     "WEBCAM"
+                  ],
+                  "type":"string",
+                  "example":"PHYSIQUE"
+               },
+               "numMarche":{
+                  "description":"Numéro de marché",
+                  "maxLength":5,
+                  "minLength":5,
+                  "type":"string",
+                  "example":"12345",
+                  "nullable":false
+               },
+               "precisionIntervenantBeneficiaire":{
+                  "description":"Commentaire de l'intervenant pour le bénéficiaire",
+                  "type":"string",
+                  "example":"Projet d'assistante sociale"
+               },
+               "siretPrestataireAnimateur":{
+                  "description":"Le SIRET de l'animateur de la prestation",
+                  "type":"string",
+                  "example":"12312312312312"
+               },
+               "statut":{
+                  "description":"Le statut de la candidature: 'TR' pour les candidatures traitées, 'AN' pour les candidatures annulées, 'AT' pour les candidatures à traiter, 'SS' pour les candidatures sans suite, 'EC' pour les candidatures en cours, 'EA' pour les candidatures en attente",
+                  "enum":[
+                     "TR",
+                     "AN",
+                     "AT",
+                     "SS",
+                     "EC",
+                     "EA"
+                  ],
+                  "maxLength":2,
+                  "minLength":2,
+                  "type":"string",
+                  "example":"AT",
+                  "nullable":false
+               }
+            }
+         },
+         "TypeLivrable":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"Code du type de livrable",
+                  "type":"string",
+                  "example":"PRE40"
+               },
+               "libelle":{
+                  "description":"Libellé du type de livrable",
+                  "type":"string",
+                  "example":"Bilan final"
+               }
+            }
+         },
+         "TypePrestataire":{
+            "type":"object",
+            "properties":{
+               "codeTypePrestataire":{
+                  "description":"code de de type de prestataire",
+                  "enum":[
+                     "C",
+                     "S",
+                     "T"
+                  ],
+                  "type":"string",
+                  "example":"T"
+               },
+               "libelle":{
+                  "description":"libelle du TypePrestataire",
+                  "type":"string",
+                  "example":"Titulaire"
+               }
+            }
+         },
+         "TypePrestation":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"Code de la prestation",
+                  "type":"string",
+                  "example":"AP2"
+               },
+               "libelle":{
+                  "description":"Libelle de la prestation",
+                  "type":"string",
+                  "example":"Prépa compétences"
+               },
+               "accroche":{
+                  "description":"Accroche de la prestation",
+                  "type":"string",
+                  "example":"Je booste ma recherche d'emploi"
+               },
+               "actif":{
+                  "description":"Indique si la prestation est active",
+                  "type":"boolean",
+                  "example":true
+               },
+               "dateFinNouveau":{
+                  "format":"date-time",
+                  "description":"Date à partir de laquelle la prestation n'est plus considérée comme nouvelle",
+                  "type":"string",
+                  "example":"2018-10-19T00:00:00+02:00"
+               },
+               "descriptifTypePrestation":{
+                  "description":"Descriptif de la prestation",
+                  "type":"string",
+                  "example":"Je construis mon parcours de formation"
+               },
+               "familleMetier":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/FamilleMetier"
+                     },
+                     {
+                        "description":"Famille métier à laquelle la prestation appartient"
+                     }
+                  ]
+               },
+               "ordreVignette":{
+                  "format":"int32",
+                  "description":"Ordre d'affichage de la vignette de la prestation sur Pe.fr",
+                  "type":"integer",
+                  "example":7
+               },
+               "parametrageNationalGenICO":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ParametrageNationalGenICO"
+                     },
+                     {
+                        "description":"Paramétrage ICO de la prestation"
+                     }
+                  ]
+               },
+               "parametrageNationalGenSession":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/ParametrageNationalGenSession"
+                     },
+                     {
+                        "description":"Paramétrage national de la prestation"
+                     }
+                  ]
+               },
+               "prestationSpecifique":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/PrestationSpecifique"
+                     },
+                     {
+                        "description":"Propriétés de la prestation si elle est régionale"
+                     }
+                  ]
+               },
+               "themeAtelier":{
+                  "description":"Liste des thèmes d'ateliers liés à la prestation",
+                  "type":"array",
+                  "items":{
+                     "$ref":"#/components/schemas/ThemeAtelier"
+                  }
+               }
+            }
+         },
+         "TypePublic":{
+            "type":"object",
+            "properties":{
+               "code":{
+                  "description":"code du type de public",
+                  "type":"string",
+                  "example":"4A"
+               },
+               "inclusDansMarche":{
+                  "description":"est inclus dans le marché",
+                  "type":"boolean",
+                  "example":false
+               },
+               "libelle":{
+                  "description":"libelle du type de public",
+                  "type":"string",
+                  "example":"Créat-repreneur entreprise"
+               }
+            }
+         }
+      },
+     "securitySchemes":{
+       "authentification_partenaire":{
+         "type":"oauth2",
+         "flows":{
+           "clientCredentials":{
+             "tokenUrl":"https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+             "scopes":{
+               "api_partenaire-gerer-prestationsv1":"Obligatoire",
+               "prestationPartenaire":"Obligatoire"
+            }
+         }
+      },
+      "description":"Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail"
+   }
+  }
+ }
+}

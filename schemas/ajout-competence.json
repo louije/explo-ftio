@@ -1,0 +1,126 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Ajout de Compétence",
+    "description": "Cette API permet d'enregistrer des compétences dans le portefeuille de compétences.",
+    "version": "1.0.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-gestion-profilcompetences/v1"
+    }
+  ],
+  "paths": {
+    "/competences/enregistrer": {
+      "post": {
+        "summary": "Enregistrer des compétences",
+        "description": "Enregistre des compétences dans le portefeuille de compétences.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "competences": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "codeRome": {
+                          "type": "string",
+                          "description": "Code Rome lié à un référentiel Rome4.0",
+                          "example": "100684"
+                        }
+                      },
+                      "required": [
+                        "codeRome"
+                      ]
+                    }
+                  },
+                  "origine": {
+                    "type": "string",
+                    "description": "Nom de la startup",
+                    "example": "ORGACP"
+                  }
+                },
+                "required": [
+                  "competences",
+                  "origine"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Le lot de compétences a été enregistré dans le profil de compétences de l'usager."
+          },
+          "206": {
+            "description": "Le lot de compétences ou certaines compétences n'ont pas pu être enregistrées.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "competencesEnErreur": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "codeRome": {
+                            "type": "string",
+                            "description": "Code Rome concerné par l'erreur"
+                          },
+                          "raison": {
+                            "type": "string",
+                            "description": "La raison de l'erreur"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Un élément en entrée n'est pas conforme."
+          },
+          "500": {
+            "description": "Une erreur technique est survenue."
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "portefeuillecompetencesW",
+              "api_peconnect-gestion-profilcompetencesv1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "portefeuillecompetencesW": "Obligatoire",
+              "api_peconnect-gestion-profilcompetencesv1": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

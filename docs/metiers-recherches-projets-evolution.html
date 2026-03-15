@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métiers recherchés, projets d'évolution — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Métiers recherchés et projets</h1>
+  <div class="sub">Métiers visés, projets d'évolution professionnelle et projets de création d'entreprise d'un usager</div>
+  <div class="sub-tech">Métiers recherchés v1.0.40 — 2 endpoints · 16 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/metiers-projets-entreprises/v2</div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODELE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="grid-2">
+
+<!-- LEFT: metierRecherche -->
+<div class="n l0" id="m-metier">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Métier recherché <span class="dto">metierRecherche</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <!-- Métier ciblé -->
+    <div class="n l1-b" id="m-cible">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Métier ciblé <span class="dto">appellation · rome · typologieEmploi</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Quel métier l'usager recherche, basé sur le référentiel ROME
+          <div class="fi-tech"><code>identifiant</code> · <code>mrs</code> · <code>passeportEmploi</code> · <code>dateValidationPasseportEmploi</code></div>
+        </div>
+        <div class="n l2t" id="m-appellation">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Appellation ROME <span class="dto">appellation · AppellationDto</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Le nom précis du métier dans le référentiel ROME
+            <div class="fi-tech"><code>code</code> · <code>libelle</code></div>
+          </div></div>
+        </div>
+        <div class="n l2t" id="m-rome">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Code ROME <span class="dto">rome · RomeDto</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">La fiche métier ROME à laquelle l'appellation est rattachée
+            <div class="fi-tech"><code>code</code> · <code>libellé</code></div>
+          </div></div>
+        </div>
+        <div class="n l3" id="m-typologie">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Typologie <span class="dto">typologieEmploi · TypologieEmploiDto</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Nature du projet : métier recherché, projet d'évolution ou création d'entreprise
+            <div class="fi-tech"><code>code</code> <span class="ev">MR|PM|EF</span> · <code>libelle</code> <span class="ev">Métier Recherché|Projet de Métier|Création ou Reprise d'Entreprise</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conditions souhaitées -->
+    <div class="n l1-n" id="m-conditions">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Conditions souhaitées <span class="dto">contrats · salaire · dureesHebdomadaires · dureeExperience</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Critères de recherche : contrat, salaire, temps de travail, expérience
+          <div class="fi-tech"><code>contrats[]</code> · <code>salaire</code> · <code>dureesHebdomadaires[]</code> · <code>dureeExperience</code></div>
+        </div>
+        <div class="n l2c stack" id="m-contrats">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Contrats souhaités <span class="dto">contrats[] · ContratDto</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">Types de contrat souhaités avec priorité et critère ORE (Offre Raisonnable d'Emploi)
+            <div class="fi-tech"><code>type</code> <span class="ev">CDI|CDD|DIN|MIS|SAI|LIB|CCE|FS|E2|PS</span> · <code>priorite</code> int · <code>critereOre</code> bool · <span class="at">@ TypeContratDto</span></div>
+          </div></div>
+        </div>
+        <div class="n l3" id="m-salaire">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Salaire <span class="dto">salaire · SalaireDto</span></div>
+            <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Rémunération souhaitée en euros brut, avec l'échelle de temps
+            <div class="fi-tech"><code>remuneration</code> double · <code>libelle</code> <span class="ev">Annuel|Mensuel|Horaire|Cachet|Autre</span></div>
+          </div></div>
+        </div>
+        <div class="n l3 stack" id="m-duree-hebdo">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Durée hebdomadaire <span class="dto">dureesHebdomadaires[] · DureeHebdomadaireDto</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">Temps plein ou partiel, avec heures min/max en cas de temps partiel
+            <div class="fi-tech"><code>tempsTravail</code> <span class="ev">1 temps plein|2 temps partiel</span> · <code>min</code> · <code>max</code> · <code>critereOre</code> bool · <span class="at">@ UniteTempsTravailDto</span></div>
+          </div></div>
+        </div>
+        <div class="n l3" id="m-experience">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Expérience <span class="dto">dureeExperience · DureeExperienceDto</span></div>
+            <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Durée d'expérience dans le métier recherché
+            <div class="fi-tech"><code>valeur</code> int · <code>unite</code> <span class="ev">AN An(s)|MO Mois</span> · <span class="at">@ UniteDureeExperienceDto</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobilité géographique -->
+    <div class="n l1-p" id="m-mobilite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Mobilité géographique <span class="dto">mobilites · mobiliteHabitation</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Où l'usager est prêt à travailler
+          <div class="fi-tech"><code>mobilites[]</code> · <code>mobiliteHabitation</code></div>
+        </div>
+        <div class="n l2d stack" id="m-mobilites">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Mobilités <span class="dto">mobilites[] · MobiliteDto</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">Zones géographiques de recherche avec rayon et priorité
+            <div class="fi-tech"><code>lieu</code> (<code>code</code> INSEE · <code>Libelle</code>) · <code>type</code> <span class="ev">1 Pays|2 Continent|3 Région|4 Département|5 Commune</span> · <code>rayon</code> int · <code>unite</code> <span class="ev">KM|H|MN</span> · <code>mobilitePrioritaire</code> bool · <span class="at">@ LieuDto</span> · <span class="at">@ TypeLieuDto</span> · <span class="at">@ UniteLieuDto</span></div>
+          </div></div>
+        </div>
+        <div class="n l3" id="m-mobilite-hab">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Mobilité habitation <span class="dto">mobiliteHabitation · MobiliteHabitationDto</span></div>
+            <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Rayon autour du domicile de l'usager
+            <div class="fi-tech"><code>valeur</code> int · <code>unite</code> <span class="ev">KM|H|MN</span> · <code>mobilitePrioritaire</code> bool · <span class="at">@ UniteLieuDto</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RIGHT: projetCref -->
+<div class="n l0" id="m-cref">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Projet création/reprise/franchise <span class="dto">projetCref</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <!-- Projet entrepreneurial -->
+    <div class="n l1-b" id="m-cref-projet">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Projet entrepreneurial <span class="dto">projetCref</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Type de projet : création, reprise ou franchise d'entreprise
+          <div class="fi-tech"><code>typeCrefCreation</code> · <code>typeCrefReprise</code> · <code>typeCrefFranchise</code> · <code>identifiant</code></div>
+        </div>
+        <div class="n l2t" id="m-cref-appellation">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Appellation + ROME <span class="dto">appellation · rome</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Métier visé pour le projet entrepreneurial, basé sur le référentiel ROME
+            <div class="fi-tech"><code>appellation</code> (<code>code</code> · <code>libelle</code>) · <code>rome</code> (<code>code</code> · <code>libellé</code>)</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobilité du projet -->
+    <div class="n l1-p" id="m-cref-mobilite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Mobilité du projet <span class="dto">mobilites · mobiliteHabitation</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Zones géographiques envisagées pour le projet entrepreneurial
+          <div class="fi-tech"><code>mobilites[]</code> · <code>mobiliteHabitation</code></div>
+        </div>
+        <div class="n l2d stack" id="m-cref-mobilites">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Mobilités <span class="dto">mobilites[] · MobiliteDto</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">Lieu (code INSEE + libellé), type géographique, rayon et priorité
+            <div class="fi-tech"><code>lieu</code> · <code>type</code> <span class="ev">Pays|Continent|Région|Département|Commune</span> · <code>rayon</code> · <code>unite</code> <span class="ev">KM|H|MN</span> · <code>mobilitePrioritaire</code></div>
+          </div></div>
+        </div>
+        <div class="n l3" id="m-cref-mobilite-hab">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Mobilité habitation <span class="dto">mobiliteHabitation · MobiliteHabitationDto</span></div>
+            <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">Rayon autour du domicile, unité et priorité
+            <div class="fi-tech"><code>valeur</code> · <code>unite</code> <span class="ev">KM|H|MN</span> · <code>mobilitePrioritaire</code></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /grid-2 -->
+
+<div class="note">
+  <strong>Prérequis</strong> — Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel nécessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>. Le jeton est volatile (~1 journée).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="grid-2">
+<div class="domain">
+  <div class="domain-title">Métiers recherchés et projets d'évolution <span class="dt-human">— Métiers visés et projets professionnels</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupérer les métiers recherchés et projets d'évolution professionnelle</span><div class="ep-human">Lire la liste des métiers recherchés et projets d'évolution de l'usager</div><span class="ep-path">/metiers-recherches</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Projets de création, reprise et franchise <span class="dt-human">— Projets entrepreneuriaux</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupérer les projets de création, reprise et franchise d'entreprise</span><div class="ep-human">Lire les projets entrepreneuriaux de l'usager</div><span class="ep-path">/projets-cref</span></div></div>
+  </div>
+</div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">16 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">metierRecherche</span> <span class="sc-desc">— Métier recherché</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">projetCref</span> <span class="sc-desc">— Projet CREF</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">appellation</span> <span class="sc-desc">— Appellation ROME</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">rome</span> <span class="sc-desc">— Fiche ROME</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">contrat</span> <span class="sc-desc">— Contrat souhaité</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">typeContrat</span> <span class="sc-desc">— Type de contrat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">salaire</span> <span class="sc-desc">— Salaire souhaité</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">mobilite</span> <span class="sc-desc">— Mobilité géographique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">mobiliteHabitation</span> <span class="sc-desc">— Mobilité domicile</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">lieu</span> <span class="sc-desc">— Lieu géographique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">typologieEmploi</span> <span class="sc-desc">— Typologie emploi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">typeLieu</span> <span class="sc-desc">— Type de lieu</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">uniteLieu</span> <span class="sc-desc">— Unité mobilité</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">uniteDureeExperience</span> <span class="sc-desc">— Unité expérience</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">uniteTempsTravail</span> <span class="sc-desc">— Unité temps travail</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">dureeExperience</span> <span class="sc-desc">— Durée expérience</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">dureeHebdomadaire</span> <span class="sc-desc">— Durée hebdomadaire</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>2 endpoints</strong> · <strong>16 schémas</strong> — 11 en lecture (consultation des données de l'usager), 6 référentiels (types et unités de mesure). Tous les endpoints sont en GET (lecture seule) et nécessitent un jeton usager (<code>ft-jeton-usager</code>) obtenu via l'API Rechercher usager.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Données fictives mais réalistes</strong> — Youssef Kaddouri, ancien cuisinier, s'est reconverti dans le développement web après une formation. Son profil de compétences reflète sa nouvelle cible professionnelle : développeur web en CDI dans la région bordelaise.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-metier"><span class="jc">// GET /metiers-recherches</span>
+<span class="jc">// ── Headers obligatoires ──</span>
+<span class="jc">// ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">// pa-nom-agent:          Martin</span>
+<span class="jc">// pa-prenom-agent:       Henri</span>
+<span class="jc">// pa-identifiant-agent:  ML-AMI-0042</span>
+{
+  <span class="jk">"appellation"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"38972"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Développeur / Développeuse web"</span>
+  },
+  <span class="jk">"rome"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"M1805"</span>,
+    <span class="jk">"libellé"</span>: <span class="js">"Études et développement informatique"</span>
+  },
+  <span class="jk">"typologieEmploi"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"MR"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Métier Recherché"</span>
+  },
+  <span class="jk">"identifiant"</span>: <span class="js">"84721"</span>,
+  <span class="jk">"mrs"</span>: <span class="jb">false</span>,
+  <span class="jk">"passeportEmploi"</span>: <span class="jb">false</span>,</div>
+<div data-section="s-conditions">  <span class="jk">"contrats"</span>: [
+    {
+      <span class="jk">"type"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"CDI"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"CDI"</span>,
+        <span class="jk">"libelleLong"</span>: <span class="js">"Contrat à durée indéterminée"</span>
+      },
+      <span class="jk">"priorite"</span>: <span class="jn">0</span>,
+      <span class="jk">"critereOre"</span>: <span class="jb">true</span>
+    },
+    {
+      <span class="jk">"type"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"CDD"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"CDD"</span>,
+        <span class="jk">"libelleLong"</span>: <span class="js">"Contrat à durée déterminée"</span>
+      },
+      <span class="jk">"priorite"</span>: <span class="jn">1</span>,
+      <span class="jk">"critereOre"</span>: <span class="jb">false</span>
+    }
+  ],
+  <span class="jk">"salaire"</span>: {
+    <span class="jk">"remuneration"</span>: <span class="jn">28000</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Annuel"</span>
+  },
+  <span class="jk">"dureeExperience"</span>: {
+    <span class="jk">"valeur"</span>: <span class="jn">1</span>,
+    <span class="jk">"unite"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"AN"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"An(s)"</span>
+    }
+  },
+  <span class="jk">"dureesHebdomadaires"</span>: [
+    {
+      <span class="jk">"tempsTravail"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"1"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"temps plein"</span>
+      },
+      <span class="jk">"critereOre"</span>: <span class="jb">true</span>
+    }
+  ],</div>
+<div data-section="s-mobilite">  <span class="jk">"mobilites"</span>: [
+    {
+      <span class="jk">"lieu"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"33063"</span>,
+        <span class="jk">"Libelle"</span>: <span class="js">"Bordeaux"</span>,
+        <span class="jk">"type"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"5"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Commune"</span>
+        }
+      },
+      <span class="jk">"rayon"</span>: <span class="jn">30</span>,
+      <span class="jk">"unite"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"KM"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Kilomètres"</span>
+      },
+      <span class="jk">"mobilitePrioritaire"</span>: <span class="jb">true</span>
+    }
+  ],
+  <span class="jk">"mobiliteHabitation"</span>: {
+    <span class="jk">"valeur"</span>: <span class="jn">-1</span>,
+    <span class="jk">"unite"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"KM"</span>
+    },
+    <span class="jk">"mobilitePrioritaire"</span>: <span class="jb">false</span>
+  }
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-metier">
+  <div class="ex-title"><span class="ex-ico">&#x1F3AF;</span> Métier ciblé</div>
+  <div class="ex-card">
+    <h4>Développeur / Développeuse web</h4>
+    <p>Appellation 38972 — fiche ROME M1805 « Études et développement informatique » <span class="ex-tag tag-encours">Métier Recherché</span></p>
+    <p>Youssef a validé ce métier comme sa cible professionnelle principale. Pas de recrutement par simulation (MRS) prévu.</p>
+  </div>
+</div>
+
+<div data-section="s-conditions">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Conditions souhaitées</div>
+  <div class="ex-card">
+    <h4>Contrats et rémunération</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>CDI</strong> → <span class="ex-tag tag-prio">Priorité 0</span> <span class="ex-tag tag-ok">Critère ORE</span></div>
+      <div class="ex-item"><strong>CDD</strong> → <span class="ex-tag tag-faible">Priorité 1</span> <span style="font-size:0.76rem;color:var(--text-light);">(hors ORE)</span></div>
+    </div>
+    <p style="margin-top:8px;"><strong>Salaire visé :</strong> 28 000 EUR brut annuel</p>
+    <p><strong>Expérience :</strong> 1 an</p>
+    <p><strong>Temps de travail :</strong> temps plein <span class="ex-tag tag-ok">Critère ORE</span></p>
+  </div>
+</div>
+
+<div data-section="s-mobilite">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CD;</span> Mobilité géographique</div>
+  <div class="ex-card">
+    <h4>Zone de recherche</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Bordeaux</strong> (commune 33063) — rayon 30 km → <span class="ex-tag tag-prio">Prioritaire</span></div>
+    </div>
+    <p style="margin-top:8px;"><strong>Mobilité domicile :</strong> non renseignée (valeur -1) — <span style="font-size:0.76rem;color:var(--text-light);">non prioritaire</span></p>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Métiers recherchés v1.0.40 · api.francetravail.io · 2 endpoints · 16 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M&#xe9;tiers Recherch&#xe9;s &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>M&#xe9;tiers recherch&#xe9;s</h1>
+  <div class="sub">Les m&#xe9;tiers vis&#xe9;s par le demandeur d'emploi &#x2014; appellation, exp&#xe9;rience, mobilit&#xe9;, contrats et salaire souhait&#xe9;s</div>
+  <div class="sub-tech">API PE Connect - M&#xe9;tiers Recherch&#xe9;s v1.0.0 &#x2014; 1 endpoint &#xb7; 14 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-metiersrecherches/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0 stack" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">M&#xe9;tiers recherch&#xe9;s <span class="dto">MetierRecherche[]</span></div>
+    <div class="card">0 &#xe0; 2 &#xe9;l&#xe9;ments <span class="card-tech">array &#xb7; 0:2</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="grid-2">
+
+    <div class="n l1-b" id="m-rome">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">M&#xe9;tier ROME <span class="dto">rome &#xb7; Rome</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Famille ROME du m&#xe9;tier recherch&#xe9; &#x2014; le r&#xe9;f&#xe9;rentiel national des m&#xe9;tiers
+        <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; ex. <span class="ev">L1203</span> Art dramatique</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-b" id="m-appellation">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Appellation pr&#xe9;cise <span class="dto">appellation &#xb7; Appellation</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Intitul&#xe9; pr&#xe9;cis du m&#xe9;tier au sein de la famille ROME
+        <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; ex. <span class="ev">12724</span> Com&#xe9;dien / Com&#xe9;dienne</div>
+      </div></div>
+    </div>
+
+    </div>
+
+    <div class="n l1-p" id="m-experience">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Exp&#xe9;rience <span class="dto">dureeExperience &#xb7; DureeExperience</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Dur&#xe9;e d'exp&#xe9;rience dans ce m&#xe9;tier, exprim&#xe9;e en ann&#xe9;es ou en mois
+        <div class="fi-tech"><code>valeur</code> &#xb7; <code>unite.code</code> &#xb7; <code>unite.libelle</code> &#xb7; <span class="ev">AN|MOIS</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n stack" id="m-contrats">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contrats souhait&#xe9;s <span class="dto">contrats &#xb7; Contrat[]</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Types de contrats recherch&#xe9;s, class&#xe9;s par priorit&#xe9;, avec indication du crit&#xe8;re ORE (offres raisonnables d'emploi)
+        <div class="fi-tech"><code>critereOre</code> &#xb7; <code>priorite</code> &#xb7; <code>type.code</code> &#xb7; <code>type.libelle</code> &#xb7; <code>type.libelleLong</code></div>
+      </div>
+
+        <div class="n l3" id="m-typecontrat">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Type de contrat <span class="dto">type &#xb7; TypeContrat</span></div>
+            <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>libelleLong</code> &#xb7; <span class="ev">CDI|CDD|DIN|MIS|SAI|...</span></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-n stack" id="m-durees-hebdo">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Temps de travail souhait&#xe9; <span class="dto">dureesHebdo &#xb7; DureeHebdo[]</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Temps plein ou temps partiel, avec plage horaire pour le partiel (min/max)
+        <div class="fi-tech"><code>critereOre</code> &#xb7; <code>tempsTravail.code</code> &#xb7; <code>tempsTravail.libelle</code> &#xb7; <code>tempsTravail.min</code> &#xb7; <code>tempsTravail.max</code></div>
+      </div></div>
+    </div>
+
+    <div class="grid-2">
+
+    <div class="n l2d" id="m-mobilite-hab">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Mobilit&#xe9; autour du domicile <span class="dto">mobiliteHabitation &#xb7; MobiliteHabitation</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Rayon de d&#xe9;placement accept&#xe9; autour du lieu d'habitation
+        <div class="fi-tech"><code>valeur</code> &#xb7; <code>unite.code</code> &#xb7; <span class="ev">KM|MIN|H</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l2d stack" id="m-mobilites">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Lieux de travail accept&#xe9;s <span class="dto">mobilites &#xb7; Mobilite[]</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Zones g&#xe9;ographiques o&#xf9; l'usager accepte de travailler &#x2014; r&#xe9;gion, d&#xe9;partement ou commune
+        <div class="fi-tech"><code>rayon</code> &#xb7; <code>lieu.code</code> &#xb7; <code>lieu.libelle</code> &#xb7; <code>lieu.type.code</code> &#xb7; <code>lieu.codeDepartement</code> &#xb7; <code>lieu.codePostal</code> &#xb7; <code>unite.code</code></div>
+      </div>
+
+        <div class="n l3" id="m-lieu">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Lieu <span class="dto">lieu &#xb7; Lieu</span></div>
+            <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <code>codeDepartement</code> &#xb7; <code>codePostal</code> &#xb7; <code>type.code</code> &#xb7; <code>type.libelle</code> &#xb7; <span class="ev">R&#xe9;gion|D&#xe9;partement|Commune</span></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    </div>
+
+    <div class="n l2c" id="m-salaire">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Salaire souhait&#xe9; <span class="dto">salaire &#xb7; Salaire</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        R&#xe9;mun&#xe9;ration brute minimum accept&#xe9;e &#x2014; horaire, mensuelle, annuelle ou au cachet
+        <div class="fi-tech"><code>remuneration</code> &#xb7; <code>code</code> &#xb7; <code>libelle</code> &#xb7; <span class="ev">H|M|A|C</span> (Horaire, Mensuel, Annuel, Cachet)</div>
+      </div></div>
+    </div>
+
+    <div class="grid-2">
+
+    <div class="n l3" id="m-typologie">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Typologie d'emploi <span class="dto">typologieEmploi &#xb7; TypologieEmploi</span></div>
+        <div class="card">Facultatif <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Nature du projet professionnel &#x2014; m&#xe9;tier recherch&#xe9; ou cr&#xe9;ation/reprise d'entreprise
+        <div class="fi-tech"><code>code</code> &#xb7; <code>libelle</code> &#xb7; <span class="ev">MR|EF</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-cref">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Projet entrepreneurial <span class="dto">typeCref*</span></div>
+        <div class="card">3 bool&#xe9;ens <span class="card-tech">boolean &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Pour les projets de cr&#xe9;ation/reprise : indique s'il s'agit d'une cr&#xe9;ation, d'une reprise ou d'une franchise
+        <div class="fi-tech"><code>typeCrefCreation</code> &#xb7; <code>typeCrefReprise</code> &#xb7; <code>typeCrefFranchise</code></div>
+      </div></div>
+    </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume PE Connect (OAuth individu). L'usager doit s'&#xea;tre identifi&#xe9; via le bouton &#xab;&#xa0;Se connecter avec France Travail&#xa0;&#xbb;. Scopes requis : <code>api_peconnect-metiersrecherchesv1</code> et <code>cpmetiers</code>.
+</div>
+
+<div class="note">L'API retourne au maximum 2 m&#xe9;tiers recherch&#xe9;s issus du profil de comp&#xe9;tences de l'usager. Tous les champs sauf <code>rome</code>, <code>appellation</code> et <code>typologieEmploi</code> sont facultatifs &#x2014; leur pr&#xe9;sence d&#xe9;pend de ce que l'usager a renseign&#xe9; dans son profil.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">M&#xe9;tiers Recherch&#xe9;s <span class="dt-human">&#x2014; Consultation du profil de recherche</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les m&#xe9;tiers recherch&#xe9;s par un individu</span><div class="ep-human">Retourne les m&#xe9;tiers vis&#xe9;s avec exp&#xe9;rience, mobilit&#xe9;, contrats et salaire souhait&#xe9;s</div><span class="ep-path">/metiersrecherches</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">14 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> R&#xe9;f&#xe9;rentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">MetierRecherche</span> <span class="sc-desc">&#x2014; M&#xe9;tier recherch&#xe9; complet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Rome</span> <span class="sc-desc">&#x2014; Famille ROME (code + libell&#xe9;)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Appellation</span> <span class="sc-desc">&#x2014; Appellation pr&#xe9;cise du m&#xe9;tier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Contrat</span> <span class="sc-desc">&#x2014; Contrat souhait&#xe9; (priorit&#xe9; + ORE)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeContrat</span> <span class="sc-desc">&#x2014; Type de contrat (CDI, CDD&#x2026;)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DureeExperience</span> <span class="sc-desc">&#x2014; Dur&#xe9;e d'exp&#xe9;rience</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">UniteExperience</span> <span class="sc-desc">&#x2014; Unit&#xe9; de dur&#xe9;e (ann&#xe9;es, mois)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DureeHebdo</span> <span class="sc-desc">&#x2014; Temps de travail souhait&#xe9;</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TempsTravail</span> <span class="sc-desc">&#x2014; Plein / partiel (plage horaire)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">MobiliteHabitation</span> <span class="sc-desc">&#x2014; Rayon autour du domicile</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Mobilite</span> <span class="sc-desc">&#x2014; Zone g&#xe9;ographique accept&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Lieu</span> <span class="sc-desc">&#x2014; R&#xe9;gion, d&#xe9;partement ou commune</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeLieu</span> <span class="sc-desc">&#x2014; Type de lieu (code + libell&#xe9;)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Salaire</span> <span class="sc-desc">&#x2014; R&#xe9;mun&#xe9;ration brute souhait&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypologieEmploi</span> <span class="sc-desc">&#x2014; M&#xe9;tier recherch&#xe9; ou cr&#xe9;ation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">UniteMobilite</span> <span class="sc-desc">&#x2014; Unit&#xe9; de distance (km, min, h)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Karim, technicien en recherche active</strong> &#x2014; Karim vit &#xe0; Lille et recherche deux m&#xe9;tiers : technicien de maintenance industrielle (son domaine principal, en CDI) et &#xe9;lectricien du b&#xe2;timent (second choix, CDD accept&#xe9;). Il accepte de se d&#xe9;placer dans toute la r&#xe9;gion Hauts-de-France.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-metier1"><span class="jc">// GET /metiersrecherches</span>
+<span class="jc">// Authorization: Bearer &lt;token PE Connect&gt;</span>
+[
+  {
+    <span class="jk">"rome"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"I1304"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Installation et maintenance d'&#xe9;quipements industriels et d'exploitation"</span>
+    },
+    <span class="jk">"appellation"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"16723"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Technicien / Technicienne de maintenance industrielle"</span>
+    },
+    <span class="jk">"typologieEmploi"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"MR"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"M&#xe9;tier Recherch&#xe9;"</span>
+    },
+    <span class="jk">"dureeExperience"</span>: {
+      <span class="jk">"valeur"</span>: <span class="jn">5</span>,
+      <span class="jk">"unite"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"AN"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"An(s)"</span>
+      }
+    },
+    <span class="jk">"contrats"</span>: [
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">true</span>,
+        <span class="jk">"priorite"</span>: <span class="jn">1</span>,
+        <span class="jk">"type"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"CDI"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"CDI"</span>,
+          <span class="jk">"libelleLong"</span>: <span class="js">"Contrat &#xe0; dur&#xe9;e ind&#xe9;termin&#xe9;e"</span>
+        }
+      },
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">false</span>,
+        <span class="jk">"priorite"</span>: <span class="jn">2</span>,
+        <span class="jk">"type"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"MIS"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Int&#xe9;rim"</span>,
+          <span class="jk">"libelleLong"</span>: <span class="js">"Mission d'int&#xe9;rim"</span>
+        }
+      }
+    ],
+    <span class="jk">"dureesHebdo"</span>: [
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">true</span>,
+        <span class="jk">"tempsTravail"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"1"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"temps plein"</span>
+        }
+      }
+    ],
+    <span class="jk">"mobiliteHabitation"</span>: {
+      <span class="jk">"valeur"</span>: <span class="jn">40</span>,
+      <span class="jk">"unite"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"KM"</span>
+      }
+    },
+    <span class="jk">"mobilites"</span>: [
+      {
+        <span class="jk">"rayon"</span>: <span class="jn">0</span>,
+        <span class="jk">"lieu"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"32"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Hauts-de-France"</span>,
+          <span class="jk">"type"</span>: {
+            <span class="jk">"code"</span>: <span class="js">"3"</span>,
+            <span class="jk">"libelle"</span>: <span class="js">"R&#xe9;gion"</span>
+          }
+        },
+        <span class="jk">"unite"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"KM"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Kilom&#xe8;tres"</span>
+        }
+      },
+      {
+        <span class="jk">"rayon"</span>: <span class="jn">0</span>,
+        <span class="jk">"lieu"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"59350"</span>,
+          <span class="jk">"codeDepartement"</span>: <span class="js">"59"</span>,
+          <span class="jk">"codePostal"</span>: <span class="js">"59000"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"LILLE"</span>,
+          <span class="jk">"type"</span>: {
+            <span class="jk">"code"</span>: <span class="js">"5"</span>,
+            <span class="jk">"libelle"</span>: <span class="js">"Commune"</span>
+          }
+        },
+        <span class="jk">"unite"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"KM"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Kilom&#xe8;tres"</span>
+        }
+      }
+    ],
+    <span class="jk">"salaire"</span>: {
+      <span class="jk">"remuneration"</span>: <span class="jn">2200</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Mensuel"</span>,
+      <span class="jk">"code"</span>: <span class="js">"M"</span>
+    }
+  },</div>
+<div data-section="s-metier2">  {
+    <span class="jk">"rome"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"F1602"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"&#xc9;lectricit&#xe9; du b&#xe2;timent"</span>
+    },
+    <span class="jk">"appellation"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"11658"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"&#xc9;lectricien / &#xc9;lectricienne du b&#xe2;timent"</span>
+    },
+    <span class="jk">"typologieEmploi"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"MR"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"M&#xe9;tier Recherch&#xe9;"</span>
+    },
+    <span class="jk">"dureeExperience"</span>: {
+      <span class="jk">"valeur"</span>: <span class="jn">18</span>,
+      <span class="jk">"unite"</span>: {
+        <span class="jk">"code"</span>: <span class="js">"MOIS"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Mois"</span>
+      }
+    },
+    <span class="jk">"contrats"</span>: [
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">true</span>,
+        <span class="jk">"priorite"</span>: <span class="jn">1</span>,
+        <span class="jk">"type"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"CDD"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"CDD"</span>,
+          <span class="jk">"libelleLong"</span>: <span class="js">"Contrat &#xe0; dur&#xe9;e d&#xe9;termin&#xe9;e"</span>
+        }
+      }
+    ],
+    <span class="jk">"dureesHebdo"</span>: [
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">true</span>,
+        <span class="jk">"tempsTravail"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"1"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"temps plein"</span>
+        }
+      },
+      {
+        <span class="jk">"critereOre"</span>: <span class="jb">false</span>,
+        <span class="jk">"tempsTravail"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"2"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"temps partiel"</span>,
+          <span class="jk">"min"</span>: <span class="jn">20</span>,
+          <span class="jk">"max"</span>: <span class="jn">35</span>
+        }
+      }
+    ],
+    <span class="jk">"mobilites"</span>: [
+      {
+        <span class="jk">"rayon"</span>: <span class="jn">0</span>,
+        <span class="jk">"lieu"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"59"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Nord"</span>,
+          <span class="jk">"type"</span>: {
+            <span class="jk">"code"</span>: <span class="js">"4"</span>,
+            <span class="jk">"libelle"</span>: <span class="js">"D&#xe9;partement"</span>
+          }
+        },
+        <span class="jk">"unite"</span>: {
+          <span class="jk">"code"</span>: <span class="js">"KM"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Kilom&#xe8;tres"</span>
+        }
+      }
+    ],
+    <span class="jk">"salaire"</span>: {
+      <span class="jk">"remuneration"</span>: <span class="jn">1900</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Mensuel"</span>,
+      <span class="jk">"code"</span>: <span class="js">"M"</span>
+    }
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-metier1">
+  <div class="ex-title"><span class="ex-ico">&#x1F527;</span> M&#xe9;tier principal &#x2014; Maintenance industrielle</div>
+  <div class="ex-card">
+    <h4>Technicien de maintenance industrielle</h4>
+    <p>ROME <span class="ex-tag tag-prio">I1304</span> &#x2014; appellation 16723</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Exp&#xe9;rience</strong> &#x2192; 5 ans dans le m&#xe9;tier</div>
+      <div class="ex-item"><strong>Contrat prioritaire</strong> &#x2192; <span class="ex-tag tag-ok">CDI</span> (crit&#xe8;re ORE)</div>
+      <div class="ex-item"><strong>Contrat secondaire</strong> &#x2192; Int&#xe9;rim (non ORE)</div>
+      <div class="ex-item"><strong>Temps de travail</strong> &#x2192; <span class="ex-tag tag-ok">Temps plein</span> (crit&#xe8;re ORE)</div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h4>Mobilit&#xe9; et salaire</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Autour du domicile</strong> &#x2192; 40 km</div>
+      <div class="ex-item"><strong>R&#xe9;gion</strong> &#x2192; <span class="ex-tag tag-encours">Hauts-de-France</span></div>
+      <div class="ex-item"><strong>Commune</strong> &#x2192; Lille (59000)</div>
+      <div class="ex-item"><strong>Salaire minimum</strong> &#x2192; <span class="ex-tag tag-besoin">2 200 &#x20AC; brut / mois</span></div>
+    </div>
+    <div class="ex-agent">Profil exp&#xe9;riment&#xe9; &#x2014; recherche stable en CDI, ancrage r&#xe9;gional fort</div>
+  </div>
+</div>
+
+<div data-section="s-metier2">
+  <div class="ex-title"><span class="ex-ico">&#x26A1;</span> M&#xe9;tier secondaire &#x2014; &#xc9;lectricit&#xe9; du b&#xe2;timent</div>
+  <div class="ex-card">
+    <h4>&#xc9;lectricien du b&#xe2;timent</h4>
+    <p>ROME <span class="ex-tag tag-encours">F1602</span> &#x2014; appellation 11658</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Exp&#xe9;rience</strong> &#x2192; 18 mois</div>
+      <div class="ex-item"><strong>Contrat</strong> &#x2192; <span class="ex-tag tag-ok">CDD</span> (crit&#xe8;re ORE)</div>
+      <div class="ex-item"><strong>Temps de travail</strong> &#x2192; Temps plein (ORE) ou partiel 20&#x2013;35h</div>
+    </div>
+  </div>
+  <div class="ex-card">
+    <h4>Mobilit&#xe9; et salaire</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>D&#xe9;partement</strong> &#x2192; <span class="ex-tag tag-encours">Nord (59)</span></div>
+      <div class="ex-item"><strong>Salaire minimum</strong> &#x2192; <span class="ex-tag tag-besoin">1 900 &#x20AC; brut / mois</span></div>
+    </div>
+    <div class="ex-agent">Second m&#xe9;tier plus souple &#x2014; CDD accept&#xe9;, temps partiel possible, p&#xe9;rim&#xe8;tre d&#xe9;partemental</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 &#x2014; API PE Connect - M&#xe9;tiers Recherch&#xe9;s v1.0.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 14 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

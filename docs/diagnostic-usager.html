@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Usager v4 — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Diagnostic Usager v4</h1>
+  <div class="sub">Dossier de diagnostic d'un demandeur d'emploi — Tout ce que contient un diagnostic socio-professionnel partagé entre les acteurs du réseau pour l'emploi</div>
+  <div class="sub-tech">API Diagnostic Argumenté v4.0 — 25 endpoints · 44 schemas · 7 domaines</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/diagnosticargumente/v4</div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: VUE ENCHASSEE                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Dossier du demandeur d'emploi <span class="dto">DossierIndividuDto</span></div>
+    <div class="card">GET /dossiers — Réponse complète</div>
+  </div>
+  <div class="nb">
+
+    <!-- 1. besoinsParDiagnostic -->
+    <div class="n l1-b stack" id="m-besoins">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Projets professionnels et besoins <span class="dto">besoinsParDiagnostic[] · BesoinsParDiagnosticIndividuDto</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">
+          Pour chaque métier visé, on retrouve la liste de ses besoins identifiés, avec la date de la dernière exploration. <span class="at">Conseiller tracé</span>
+          <div class="fi-tech"><code>dateDerniereExplorationBesoin</code> · <span class="at">@ AgentDto</span></div>
+        </div>
+        <div class="n l2d" id="m-diagnostic">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Le métier ou projet visé <span class="dto">diagnostic · DiagnosticIndividuDto</span></div>
+            <div class="card">Exactement 1 <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            Nom du métier (ex. « Boulanger »), code ROME, nature — <span class="ev">Évolution/Formation</span> <span class="ev">Projet Métier</span> <span class="ev">Métier Recherché</span> — état <span class="ev">En cours</span> <span class="ev">Archivé</span> <span class="ev">Supprimé</span> — prioritaire ou non, créé par un partenaire ou non, dates de modification. <span class="at">Conseiller tracé</span>
+            <div class="fi-tech"><code>idDiagnostic</code> · <code>nomMetier</code> · <code>codeRome</code> · <code>codeAppellation</code> · <code>codeTypologie</code> <span class="ev">EF|PM|MR</span> · <code>codeSousTypologie</code> <span class="ev">C|R|F|CR|CF|RF|CRF</span> · <code>statut</code> <span class="ev">EN_COURS|ARCHIVE|SUPPRIME</span> · <code>estPrioritaire</code> · <code>estCreationPartenaire</code> · <code>typologie</code> · <code>dateMiseAJour</code> · <code>dateMiseAJourProjet</code> · <span class="at">@ AgentDto</span></div>
+          </div></div>
+        </div>
+        <div class="n l2t stack" id="m-thematiques">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Familles de besoins <span class="dto">thematiquesBesoins[] · ThematiqueBesoinDto</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Catégories comme « Choisir un métier », « Se former »… <span class="at">Conseiller tracé</span>
+              <div class="fi-tech"><code>code</code> · <code>libelle</code> · <span class="at">@ AgentDto</span> · <code>dateExploration</code></div>
+            </div>
+            <div class="n l3b stack" id="m-besoins-detail">
+              <div class="nh"><div class="dot"></div>
+                <div class="name">Besoins identifiés <span class="dto">besoins[] · BesoinIndividuDto</span></div>
+                <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+              </div>
+              <div class="nb"><div class="fi">
+                Chaque besoin a un intitulé et un état : <span class="ev">Point fort</span> <span class="ev">Besoin identifié</span> <span class="ev">Pas encore exploré</span> <span class="at">Conseiller tracé</span>
+                <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">POINT_FORT|BESOIN|NON_EXPLORE</span> · <code>dateExploration</code> · <span class="at">@ AgentDto</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+    <!-- 2. thematiqueContrainte -->
+    <div class="n l1-c" id="m-contraintes">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contraintes personnelles <span class="dto">thematiqueContrainte · ThematiqueContrainte</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Tout ce qui peut freiner le retour à l'emploi. Le demandeur peut aussi se déclarer sans contrainte. <span class="at">Conseiller tracé</span>
+          <div class="fi-tech"><code>code</code> "7" · <code>libelle</code> · <span class="at">@ AgentDto</span> · <code>dateExploration</code></div>
+        </div>
+        <div class="n l3" id="m-sans-contrainte">
+          <div class="nh"><div class="dot"></div><div class="name">Déclaration « sans contrainte » <span class="dto">declareSansContrainte</span></div><div class="card">Facultatif <span class="card-tech">object · 0:1</span></div></div>
+          <div class="nb"><div class="fi">Le demandeur déclare ne pas avoir de contrainte, avec la date.
+            <div class="fi-tech"><code>flag</code> bool · <code>date</code></div>
+          </div></div>
+        </div>
+        <div class="n l2c stack" id="m-contraintes-list">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Freins identifiés <span class="dto">contraintes[] · ContrainteIndividuDto</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">
+              Chaque frein (mobilité, famille, logement…) a un état <span class="ev">Pas abordé</span> <span class="ev">Identifié</span> <span class="ev">Résolu</span>, un impact <span class="ev">Fort</span> <span class="ev">Moyen</span> <span class="ev">Faible</span>, et peut être prioritaire (1 seul).
+              <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">NON_ABORDEE|OUI|CLOTUREE</span> · <code>impact</code> <span class="ev">FORT|MOYEN|FAIBLE|NON_RENSEIGNE</span> · <code>estPrioritaire</code> · <code>dateExploration</code></div>
+            </div>
+            <div class="n l3s stack" id="m-situations">
+              <div class="nh"><div class="dot"></div><div class="name">Détail de la situation <span class="dto">situations[] · SituationDto</span></div><div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div></div>
+              <div class="nb"><div class="fi">Constats précis : « Aucun transport », « Permis suspendu »… <span class="ev">Pas abordé</span> <span class="ev">Oui</span> <span class="ev">Non</span> <span class="at">Conseiller tracé</span>
+                <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">NON_ABORDEE|OUI|NON</span> · <span class="at">@ AgentDto</span></div>
+              </div></div>
+            </div>
+            <div class="n l3o stack" id="m-objectifs">
+              <div class="nh"><div class="dot"></div><div class="name">Objectifs pour lever le frein <span class="dto">objectifs[] · ObjectifDto</span></div><div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div></div>
+              <div class="nb"><div class="fi">Actions concrètes : « Obtenir le permis », « Trouver une garde »… <span class="ev">Pas abordé</span> <span class="ev">En cours</span> <span class="ev">Réalisé</span> <span class="ev">Abandonné</span> <span class="at">Conseiller tracé</span>
+                <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">NON_ABORDE|EN_COURS|REALISE|ABANDONNE</span> · <span class="at">@ AgentDto</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <!-- 3. pouvoirAgir -->
+    <div class="n l1-p" id="m-pouvoirAgir">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Confiance et capacité à agir <span class="dto">pouvoirAgir · PouvoirAgirIndividuDto</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        <strong>« Confiant pour vos démarches ? »</strong> <span class="ev">Oui</span> <span class="ev">Non</span> <span class="ev">Ne sait pas</span><br><strong>« Besoin d'accompagnement ? »</strong> <span class="ev">Oui</span> <span class="ev">Non</span> <span class="ev">Ne sait pas</span><br>Le système calcule une analyse, ex. « Possible perte de confiance ». <span class="at">Conseiller tracé</span>
+        <div class="fi-tech"><code>confiance</code> <span class="ev">OUI|NON|NE_SAIT_PAS</span> · <code>accompagnement</code> <span class="ev">OUI|NON|NE_SAIT_PAS</span> · <code>resultatAnalyse</code> texte · <span class="at">@ AgentDto</span></div>
+      </div></div>
+    </div>
+
+    <!-- 4. autonomieNumerique -->
+    <div class="n l1-n" id="m-autonomieNumerique">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Maîtrise du numérique <span class="dto">autonomieNumerique · AutonomieNumeriqueIndividuDto</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Évalue l'autonomie numérique du demandeur. <span class="at">Conseiller tracé</span>
+          <div class="fi-tech"><span class="at">@ AgentDto</span> · <code>dateExploration</code></div>
+        </div>
+        <div class="n l2c" id="m-num-contrainte">
+          <div class="nh"><div class="dot"></div><div class="name">Frein numérique <span class="dto">contrainte · ContrainteIndividuDto</span></div><div class="card">Unique <span class="card-tech">object · 1:1</span></div></div>
+          <div class="nb">
+            <div class="fi">« Accéder au numérique et en maîtriser les fondamentaux » — mêmes états et impact que les autres freins.
+              <div class="fi-tech">Code <code>"22"</code> · mêmes champs que 2.</div>
+            </div>
+            <div class="n l3s stack"><div class="nh"><div class="dot"></div><div class="name">Constats numériques <span class="dto">situations[]</span></div><div class="card">1 ou plus <span class="card-tech">array · 1:N</span></div></div><div class="nb"><div class="fi">Absence d'équipement, pas de connexion, difficulté démarches en ligne, score Pix faible…
+              <div class="fi-tech">équipement, connexion, maîtrise, Pix emploi…</div>
+            </div></div></div>
+            <div class="n l3o stack"><div class="nh"><div class="dot"></div><div class="name">Actions numériques <span class="dto">objectifs[]</span></div><div class="card">1 ou plus <span class="card-tech">array · 1:N</span></div></div><div class="nb"><div class="fi">Acquérir un équipement, obtenir une connexion, se former aux bases… <span class="ev">Pas abordé</span> <span class="ev">En cours</span> <span class="ev">Réalisé</span> <span class="ev">Abandonné</span>
+              <div class="fi-tech">acquérir équipement, connexion, fondamentaux</div>
+            </div></div></div>
+          </div>
+        </div>
+        <div class="n l3b" id="m-num-besoin">
+          <div class="nh"><div class="dot"></div><div class="name">Besoin numérique <span class="dto">besoin · BesoinIndividuDto</span></div><div class="card">Unique <span class="card-tech">object · 1:1</span></div></div>
+          <div class="nb"><div class="fi">« Connaître et utiliser les services numériques » — <span class="ev">Point fort</span> <span class="ev">Besoin</span> <span class="ev">Pas exploré</span>
+            <div class="fi-tech">Code <code>"7"</code> · <span class="ev">POINT_FORT|BESOIN|NON_EXPLORE</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    </div></div>
+  </div>
+</div>
+
+<div class="note"><strong>Conseiller tracé</strong> (<code>AgentDto</code>) : nom, prénom, structure du conseiller qui a fait la dernière modification + date. Partagé entre tous les acteurs (France Travail, missions locales, Cap emploi…).
+  <div class="fi-tech" style="margin-top:6px;"><code>id</code>* · <code>nom</code> · <code>prenom</code> · <code>structure</code> (nullable) · <code>type</code> <span class="ev">AGENT|USAGER|BATCH_ORIENTATION_USAGER|INCONNU</span><br><span style="font-size:.58rem;color:var(--text-light);">* id dans les exemples mais absent du schéma formel</span></div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Dossier Agrégé <span class="dt-human">— Dossier complet (vue d'ensemble)</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère le dossier agrégé</span><div class="ep-human">Lire le dossier complet du demandeur</div><span class="ep-path">/dossiers</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistre le dossier agrégé</span><div class="ep-human">Sauvegarder toutes les modifications d'un coup</div><span class="ep-path">/dossiers</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation du dossier</span><div class="ep-human">Voir l'historique des modifications du dossier</div><span class="ep-path">/dossiers/historisation</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Diagnostics Usager <span class="dt-human">— Projets professionnels</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les diagnostics</span><div class="ep-human">Lire la liste des projets professionnels</div><span class="ep-path">/diagnostics</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Crée un diagnostic</span><div class="ep-human">Ajouter un nouveau projet professionnel</div><span class="ep-path">/diagnostics</span></div></div>
+    <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Modifie un diagnostic</span><div class="ep-human">Modifier un projet existant</div><span class="ep-path">/diagnostics/{idDiagnostic}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Priorise un diagnostic</span><div class="ep-human">Marquer un projet comme prioritaire</div><span class="ep-path">/diagnostics/{idDiagnostic}/priorise</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Supprime un diagnostic</span><div class="ep-human">Supprimer un projet professionnel</div><span class="ep-path">/diagnostics/{idDiagnostic}/supprime</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation des diagnostics</span><div class="ep-human">Historique des projets</div><span class="ep-path">/historisation/diagnostics</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Besoins Usager <span class="dt-human">— Besoins du demandeur</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les besoins</span><div class="ep-human">Lire les besoins de tous les projets</div><span class="ep-path">/besoins</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistre les besoins</span><div class="ep-human">Sauvegarder les besoins d'un projet</div><span class="ep-path">/diagnostics/{idDiagnostic}/besoins</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation des besoins</span><div class="ep-human">Historique des besoins d'un projet</div><span class="ep-path">/historisation/diagnostics/{idDiagnostic}/besoins</span></div></div>
+  </div>
+</div>
+
+<div class="grid-2">
+<div class="domain">
+  <div class="domain-title">Contraintes Usager <span class="dt-human">— Freins personnels</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les contraintes</span><div class="ep-human">Lire les freins du demandeur</div><span class="ep-path">/contraintes</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistre les contraintes</span><div class="ep-human">Sauvegarder contraintes, situations, objectifs</div><span class="ep-path">/contraintes</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation des contraintes</span><div class="ep-human">Historique des freins</div><span class="ep-path">/historisation/contraintes</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Autonomie Numérique <span class="dt-human">— Maîtrise du numérique</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère l'autonomie numérique</span><div class="ep-human">Lire la situation numérique</div><span class="ep-path">/autonomienumerique</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistre l'autonomie numérique</span><div class="ep-human">Sauvegarder les modifications numériques</div><span class="ep-path">/autonomienumerique</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation autonomie numérique</span><div class="ep-human">Historique numérique</div><span class="ep-path">/historisation/autonomienumerique</span></div></div>
+  </div>
+</div>
+</div>
+
+<div class="grid-2">
+<div class="domain">
+  <div class="domain-title">Pouvoir Agir Usager <span class="dt-human">— Confiance et capacité à agir</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère le pouvoir d'agir</span><div class="ep-human">Lire la confiance du demandeur</div><span class="ep-path">/pouvoiragir</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistre le pouvoir d'agir</span><div class="ep-human">Sauvegarder confiance et accompagnement</div><span class="ep-path">/pouvoiragir</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation du pouvoir d'agir</span><div class="ep-human">Historique de la confiance</div><span class="ep-path">/historisation/pouvoiragir</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Référentiel <span class="dt-human">— Données de référence</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel complet</span><div class="ep-human">Toutes les listes de choix possibles</div><span class="ep-path">/referentiel</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Analyses pouvoir d'agir</span><div class="ep-human">Grille d'analyse confiance/accompagnement</div><span class="ep-path">/referentiel/pouvoir-agir/analyse</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel par domaine</span><div class="ep-human">Liste de choix d'un domaine</div><span class="ep-path">/referentiel/{domaine}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel domaine + sous-domaine</span><div class="ep-human">Liste de choix d'un sous-domaine</div><span class="ep-path">/referentiel/{domaine}/{sous-domaine}</span></div></div>
+  </div>
+</div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">44 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Enregistrement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#a78bfa;"></span> Historisation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DossierIndividuDto</span> <span class="sc-desc">— Dossier complet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AutonomieNumeriqueIndividuDto</span> <span class="sc-desc">— Numérique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AgentDto</span> <span class="sc-desc">— Conseiller</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">BesoinIndividuDto</span> <span class="sc-desc">— Besoin</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ContrainteIndividuDto</span> <span class="sc-desc">— Frein</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ObjectifDto</span> <span class="sc-desc">— Objectif</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SituationDto</span> <span class="sc-desc">— Constat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">BesoinsParDiagnosticIndividuDto</span> <span class="sc-desc">— Besoins/projet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DiagnosticIndividuDto</span> <span class="sc-desc">— Projet pro</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ThematiqueBesoinDto</span> <span class="sc-desc">— Famille besoins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PouvoirAgirIndividuDto</span> <span class="sc-desc">— Confiance</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ThematiqueContrainte</span> <span class="sc-desc">— Freins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DiagnosticsIndividusDto</span> <span class="sc-desc">— Liste projets</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DeclareSansContrainteIndividuDto</span> <span class="sc-desc">— Sans frein</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerDossierDto</span> <span class="sc-desc">— Sauv. dossier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerAutonomieNumeriqueDto</span> <span class="sc-desc">— Sauv. numérique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">BesoinEnregistrerDto</span> <span class="sc-desc">— Sauv. besoin</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ContrainteEnregistrerDto</span> <span class="sc-desc">— Sauv. frein</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerBesoinsDto</span> <span class="sc-desc">— Sauv. besoins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerContraintesDto</span> <span class="sc-desc">— Sauv. freins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ObjectifEnregistrerDto</span> <span class="sc-desc">— Sauv. objectif</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">SituationEnregistrerDto</span> <span class="sc-desc">— Sauv. constat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerDiagnosticPourDossierDto</span> <span class="sc-desc">— Sauv. projet/dossier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerPouvoirAgirDto</span> <span class="sc-desc">— Sauv. confiance</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EnregistrerDiagnosticDto</span> <span class="sc-desc">— Sauv. projet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">DossierIndividuHistorisationDto</span> <span class="sc-desc">— Hist. dossier</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">AutonomieNumeriqueHistorisationDto</span> <span class="sc-desc">— Hist. numérique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">BesoinIndividuHistorisationDto</span> <span class="sc-desc">— Hist. besoin</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">ContrainteHistorisationDto</span> <span class="sc-desc">— Hist. frein</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">ObjectifHistorisationDto</span> <span class="sc-desc">— Hist. objectif</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">SituationHistorisationDto</span> <span class="sc-desc">— Hist. constat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">BesoinsIndividuHistorisationDto</span> <span class="sc-desc">— Hist. besoins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">ContraintesIndividuHistorisationDto</span> <span class="sc-desc">— Hist. freins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">DiagnosticsIndividuHistorisationDto</span> <span class="sc-desc">— Hist. projets</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">DiagnosticIndividuHistorisationDto</span> <span class="sc-desc">— Hist. projet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">PouvoirAgirIndividuHistorisationDto</span> <span class="sc-desc">— Hist. confiance</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-hist"></span><span class="sc-name">VersionExploration</span> <span class="sc-desc">— Version</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">ReponseEnregistrerDiagnosticDto</span> <span class="sc-desc">— Réponse création</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DonneesReferentielDto</span> <span class="sc-desc">— Réf.complet</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ThematiqueBesoinDto1</span> <span class="sc-desc">— Réf.besoins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ThematiqueContrainteDto</span> <span class="sc-desc">— Réf.freins</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">PouvoirAgirDto</span> <span class="sc-desc">— Réf.confiance</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">AideQuestionnementDto</span> <span class="sc-desc">— Aide questionnement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">BesoinDto</span> <span class="sc-desc">— Réf.besoin</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ContrainteDto</span> <span class="sc-desc">— Réf.frein</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">QuestionDto</span> <span class="sc-desc">— Question</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">AnalyseDto</span> <span class="sc-desc">— Analyse</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">SituationDto1</span> <span class="sc-desc">— Réf.constat</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ObjectifDto1</span> <span class="sc-desc">— Réf.objectif</span></div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:16px;">
+  <strong>25 endpoints</strong> · <strong>44 schémas</strong> — 14 en lecture (consultation), 11 en écriture (enregistrement), 12 en historisation, 10 en référentiel (données de référence avec listes de choix et aide au questionnement), 1 divers (ReponseEnregistrerDiagnosticDto). Les schémas suffixés <code>1</code> (ex. SituationDto1) distinguent les variantes référentiel (avec <code>aideQuestionnement</code>) des variantes lecture individu.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE — SIDE BY SIDE                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Données fictives mais réalistes</strong> — Réponse d'un <code>GET /dossiers</code> pour Sophie Martin, 34 ans, ancienne vendeuse en prêt-à-porter qui souhaite se reconvertir comme assistante de vie. Elle vit dans une commune rurale sans permis de conduire, avec un enfant de 2 ans. Elle n'est pas très à l'aise avec les outils numériques et manque de confiance dans ses démarches. Son conseiller, M. Lefèvre de l'agence France Travail de Cahors, l'accompagne.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-diagnostic">{
+  <span class="jk">"besoinsParDiagnostic"</span>: [
+    {
+      <span class="jk">"diagnostic"</span>: {
+        <span class="jk">"idDiagnostic"</span>: <span class="js">"a3e7c1f2-9d44-4b8a-b6e1-2f8d3c5a7b90"</span>,
+        <span class="jk">"idMetierChiffre"</span>: <span class="js">"f19b72e3-8a14-4c6d-91a5-3e7f2b8c4d60#Kx9mNpQ..."</span>,
+        <span class="jk">"nomMetier"</span>: <span class="js">"Assistante de vie aux familles"</span>,
+        <span class="jk">"typologie"</span>: <span class="js">"métier recherché"</span>,
+        <span class="jk">"codeTypologie"</span>: <span class="js">"MR"</span>,
+        <span class="jk">"codeSousTypologie"</span>: <span class="js">"CR"</span>,
+        <span class="jk">"codeRome"</span>: <span class="js">"K1302"</span>,
+        <span class="jk">"codeAppellation"</span>: <span class="js">"10876"</span>,
+        <span class="jk">"statut"</span>: <span class="js">"EN_COURS"</span>,
+        <span class="jk">"estPrioritaire"</span>: <span class="jb">true</span>,
+        <span class="jk">"estCreationPartenaire"</span>: <span class="jb">false</span>,
+        <span class="jk">"agent"</span>: {
+          <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>,
+          <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>,
+          <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>,
+          <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span>
+        },
+        <span class="jk">"dateMiseAJour"</span>: <span class="js">"2025-03-12T10:30:00.000+01:00"</span>,
+        <span class="jk">"dateMiseAJourProjet"</span>: <span class="js">"2025-02-04T09:15:00.000+01:00"</span>
+      },
+      <span class="jk">"dateDerniereExplorationBesoin"</span>: <span class="js">"2025-03-12T10:30:00.000+01:00"</span>,
+      <span class="jk">"agentDerniereExplorationBesoin"</span>: {
+        <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span>
+      },</div>
+<div data-section="s-besoins-choisir">      <span class="jk">"thematiquesBesoins"</span>: [
+        {
+          <span class="jk">"code"</span>: <span class="js">"1"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Choisir un métier"</span>,
+          <span class="jk">"besoins"</span>: [
+            { <span class="jk">"code"</span>: <span class="js">"1"</span>, <span class="jk">"libelle"</span>: <span class="js">"Identifier ses points forts et ses compétences"</span>, <span class="jk">"valeur"</span>: <span class="js">"POINT_FORT"</span>,
+              <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+              <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-12T10:30:00.000+01:00"</span> },
+            { <span class="jk">"code"</span>: <span class="js">"3"</span>, <span class="jk">"libelle"</span>: <span class="js">"Découvrir un métier ou un secteur d'activité"</span>, <span class="jk">"valeur"</span>: <span class="js">"BESOIN"</span>,
+              <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+              <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-12T10:30:00.000+01:00"</span> },
+            { <span class="jk">"code"</span>: <span class="js">"4"</span>, <span class="jk">"libelle"</span>: <span class="js">"Confirmer son choix de métier"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON_EXPLORE"</span>,
+              <span class="jk">"agent"</span>: <span class="jnull">null</span>, <span class="jk">"dateExploration"</span>: <span class="jnull">null</span> }
+          ]
+        },</div>
+<div data-section="s-besoins-former">        {
+          <span class="jk">"code"</span>: <span class="js">"2"</span>,
+          <span class="jk">"libelle"</span>: <span class="js">"Se former"</span>,
+          <span class="jk">"besoins"</span>: [
+            { <span class="jk">"code"</span>: <span class="js">"5"</span>, <span class="jk">"libelle"</span>: <span class="js">"Trouver sa formation"</span>, <span class="jk">"valeur"</span>: <span class="js">"BESOIN"</span>,
+              <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+              <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-12T10:30:00.000+01:00"</span> },
+            { <span class="jk">"code"</span>: <span class="js">"6"</span>, <span class="jk">"libelle"</span>: <span class="js">"Monter son dossier de formation"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON_EXPLORE"</span>,
+              <span class="jk">"agent"</span>: <span class="jnull">null</span>, <span class="jk">"dateExploration"</span>: <span class="jnull">null</span> }
+          ]
+        }
+      ]
+    }
+  ],</div>
+
+<div data-section="s-mobilite">
+  <span class="jk">"thematiqueContrainte"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"7"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Résoudre ses contraintes personnelles"</span>,
+    <span class="jk">"declareSansContrainte"</span>: { <span class="jk">"flag"</span>: <span class="jb">false</span>, <span class="jk">"date"</span>: <span class="jnull">null</span> },
+    <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+    <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span>,
+    <span class="jk">"contraintes"</span>: [
+      {
+        <span class="jk">"code"</span>: <span class="js">"23"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Développer sa mobilité"</span>,
+        <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+        <span class="jk">"estPrioritaire"</span>: <span class="jb">true</span>,
+        <span class="jk">"impact"</span>: <span class="js">"FORT"</span>,
+        <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span>,
+        <span class="jk">"situations"</span>: [
+          { <span class="jk">"code"</span>: <span class="js">"6"</span>, <span class="jk">"libelle"</span>: <span class="js">"Aucun moyen de transport à disposition"</span>, <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> },
+          { <span class="jk">"code"</span>: <span class="js">"7"</span>, <span class="jk">"libelle"</span>: <span class="js">"Dépendant des transports en commun"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> },
+          { <span class="jk">"code"</span>: <span class="js">"8"</span>, <span class="jk">"libelle"</span>: <span class="js">"Permis non valide / suspension de permis"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON_ABORDEE"</span>,
+            <span class="jk">"agent"</span>: <span class="jnull">null</span>, <span class="jk">"dateExploration"</span>: <span class="jnull">null</span> }
+        ],
+        <span class="jk">"objectifs"</span>: [
+          { <span class="jk">"code"</span>: <span class="js">"6"</span>, <span class="jk">"libelle"</span>: <span class="js">"Obtenir le permis de conduire (code / conduite)"</span>, <span class="jk">"valeur"</span>: <span class="js">"EN_COURS"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> },
+          { <span class="jk">"code"</span>: <span class="js">"7"</span>, <span class="jk">"libelle"</span>: <span class="js">"Trouver une solution de transport"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON_ABORDE"</span>,
+            <span class="jk">"agent"</span>: <span class="jnull">null</span>, <span class="jk">"dateExploration"</span>: <span class="jnull">null</span> }
+        ]
+      },</div>
+<div data-section="s-famille">      {
+        <span class="jk">"code"</span>: <span class="js">"24"</span>,
+        <span class="jk">"libelle"</span>: <span class="js">"Surmonter ses contraintes familiales"</span>,
+        <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+        <span class="jk">"estPrioritaire"</span>: <span class="jb">false</span>,
+        <span class="jk">"impact"</span>: <span class="js">"MOYEN"</span>,
+        <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span>,
+        <span class="jk">"situations"</span>: [
+          { <span class="jk">"code"</span>: <span class="js">"13"</span>, <span class="jk">"libelle"</span>: <span class="js">"Enfant(s) de moins de 3 ans sans solution de garde"</span>, <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> },
+          { <span class="jk">"code"</span>: <span class="js">"10"</span>, <span class="jk">"libelle"</span>: <span class="js">"Contraintes horaires"</span>, <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> }
+        ],
+        <span class="jk">"objectifs"</span>: [
+          { <span class="jk">"code"</span>: <span class="js">"9"</span>, <span class="jk">"libelle"</span>: <span class="js">"Trouver des solutions de garde d'enfant"</span>, <span class="jk">"valeur"</span>: <span class="js">"EN_COURS"</span>,
+            <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+            <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T14:45:00.000+01:00"</span> }
+        ]
+      }
+    ]
+  },</div>
+
+<div data-section="s-pouvoirAgir">
+  <span class="jk">"pouvoirAgir"</span>: {
+    <span class="jk">"confiance"</span>: <span class="js">"NON"</span>,
+    <span class="jk">"accompagnement"</span>: <span class="js">"OUI"</span>,
+    <span class="jk">"resultatAnalyse"</span>: <span class="js">"Besoin d'appui pour consolider sa confiance à mener ses démarches"</span>,
+    <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+    <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:00:00.000+01:00"</span>
+  },</div>
+
+<div data-section="s-num-frein">
+  <span class="jk">"autonomieNumerique"</span>: {
+    <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+    <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span>,
+    <span class="jk">"contrainte"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"22"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Accéder au numérique et en maîtriser les fondamentaux"</span>,
+      <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+      <span class="jk">"estPrioritaire"</span>: <span class="jb">false</span>,
+      <span class="jk">"impact"</span>: <span class="js">"FAIBLE"</span>,
+      <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span>,
+      <span class="jk">"situations"</span>: [
+        { <span class="jk">"code"</span>: <span class="js">"44"</span>, <span class="jk">"libelle"</span>: <span class="js">"Dispose d'un smartphone"</span>, <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+          <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+          <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span> },
+        { <span class="jk">"code"</span>: <span class="js">"43"</span>, <span class="jk">"libelle"</span>: <span class="js">"Dispose d'un ordinateur"</span>, <span class="jk">"valeur"</span>: <span class="js">"NON"</span>,
+          <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+          <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span> },
+        { <span class="jk">"code"</span>: <span class="js">"52"</span>, <span class="jk">"libelle"</span>: <span class="js">"Difficulté à réaliser des démarches administratives en ligne"</span>, <span class="jk">"valeur"</span>: <span class="js">"OUI"</span>,
+          <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+          <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span> }
+      ],
+      <span class="jk">"objectifs"</span>: [
+        { <span class="jk">"code"</span>: <span class="js">"3"</span>, <span class="jk">"libelle"</span>: <span class="js">"Maîtriser les fondamentaux du numérique"</span>, <span class="jk">"valeur"</span>: <span class="js">"EN_COURS"</span>,
+          <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+          <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span> }
+      ]
+    },</div>
+<div data-section="s-num-besoin">    <span class="jk">"besoin"</span>: {
+      <span class="jk">"code"</span>: <span class="js">"7"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Connaître et utiliser les services numériques"</span>,
+      <span class="jk">"valeur"</span>: <span class="js">"BESOIN"</span>,
+      <span class="jk">"agent"</span>: { <span class="jk">"id"</span>: <span class="js">"jlef4821"</span>, <span class="jk">"nom"</span>: <span class="js">"Lefèvre"</span>, <span class="jk">"prenom"</span>: <span class="js">"Jean-Marc"</span>, <span class="jk">"structure"</span>: <span class="js">"FT Agence Cahors"</span> },
+      <span class="jk">"dateExploration"</span>: <span class="js">"2025-03-10T15:10:00.000+01:00"</span>
+    }
+  }</div>
+}</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-diagnostic">
+  <div class="ex-title"><span class="ex-ico">&#x1F9ED;</span> Projet professionnel</div>
+  <div class="ex-card">
+    <h4>Assistante de vie aux familles</h4>
+    <p>Métier recherché — code ROME K1302 — <span class="ex-tag tag-prio">Prioritaire</span> <span class="ex-tag tag-encours">En cours</span></p>
+    <p>Projet créé par France Travail, suivi depuis le 4 février 2025. Dernière mise à jour le 12 mars 2025.</p>
+    <div class="ex-agent">Suivi par Jean-Marc Lefèvre — FT Agence Cahors</div>
+  </div>
+</div>
+
+<div data-section="s-besoins-choisir">
+  <div class="ex-card">
+    <h4>Choisir un métier</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Identifier ses points forts et ses compétences</strong> → <span class="ex-tag tag-ok">Point fort</span></div>
+      <div class="ex-item"><strong>Découvrir un métier ou un secteur d'activité</strong> → <span class="ex-tag tag-besoin">Besoin identifié</span></div>
+      <div class="ex-item"><strong>Confirmer son choix de métier</strong> → <span class="ex-tag tag-nonex">Pas encore exploré</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-besoins-former">
+  <div class="ex-card">
+    <h4>Se former</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Trouver sa formation</strong> → <span class="ex-tag tag-besoin">Besoin identifié</span></div>
+      <div class="ex-item"><strong>Monter son dossier de formation</strong> → <span class="ex-tag tag-nonex">Pas encore exploré</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-mobilite">
+  <div class="ex-title"><span class="ex-ico">&#x1F6A7;</span> Contraintes personnelles</div>
+  <div class="ex-card">
+    <h4>&#x1F697; Développer sa mobilité</h4>
+    <p><span class="ex-tag tag-oui">Identifié</span> <span class="ex-tag tag-fort">Impact fort</span> <span class="ex-tag tag-prio">Prioritaire</span></p>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Situation constatée</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Aucun moyen de transport à disposition</strong> → <span class="ex-tag tag-oui">Oui</span></div>
+      <div class="ex-item"><strong>Dépendant des transports en commun</strong> → <span class="ex-tag tag-non">Non</span> <span style="font-size:0.76rem;color:var(--text-light);">(commune rurale, pas de réseau)</span></div>
+      <div class="ex-item"><strong>Permis non valide / suspension de permis</strong> → <span class="ex-tag tag-nonex">Pas abordé</span></div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Objectifs</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Obtenir le permis de conduire (code / conduite)</strong> → <span class="ex-tag tag-encours">En cours</span></div>
+      <div class="ex-item"><strong>Trouver une solution de transport</strong> → <span class="ex-tag tag-nonex">Pas abordé</span></div>
+    </div>
+    <div class="ex-agent">Exploré le 10 mars 2025 par Jean-Marc Lefèvre</div>
+  </div>
+</div>
+
+<div data-section="s-famille">
+  <div class="ex-card">
+    <h4>&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F467; Surmonter ses contraintes familiales</h4>
+    <p><span class="ex-tag tag-oui">Identifié</span> <span class="ex-tag tag-moyen">Impact moyen</span></p>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Situation constatée</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Enfant(s) de moins de 3 ans sans solution de garde</strong> → <span class="ex-tag tag-oui">Oui</span></div>
+      <div class="ex-item"><strong>Contraintes horaires</strong> → <span class="ex-tag tag-oui">Oui</span></div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Objectifs</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Trouver des solutions de garde d'enfant</strong> → <span class="ex-tag tag-encours">En cours</span></div>
+    </div>
+    <div class="ex-agent">Exploré le 10 mars 2025 par Jean-Marc Lefèvre</div>
+  </div>
+</div>
+
+<div data-section="s-pouvoirAgir">
+  <div class="ex-title"><span class="ex-ico">&#x1F4AA;</span> Confiance et capacité à agir</div>
+  <div class="ex-card">
+    <p><strong>« Vous sentez-vous confiante pour mener vos démarches ? »</strong> → <span class="ex-tag tag-oui">Non</span></p>
+    <p><strong>« Avez-vous besoin d'être accompagnée ? »</strong> → <span class="ex-tag tag-encours">Oui</span></p>
+    <p style="margin-top:8px;padding:8px 12px;background:#faf5ff;border-radius:6px;color:#5b21b6;font-size:0.84rem;">
+      <strong>Analyse :</strong> Besoin d'appui pour consolider sa confiance à mener ses démarches
+    </p>
+    <div class="ex-agent">Exploré le 10 mars 2025 par Jean-Marc Lefèvre</div>
+  </div>
+</div>
+
+<div data-section="s-num-frein">
+  <div class="ex-title"><span class="ex-ico">&#x1F4BB;</span> Maîtrise du numérique</div>
+  <div class="ex-card">
+    <h4>Frein numérique identifié</h4>
+    <p>Accéder au numérique et en maîtriser les fondamentaux — <span class="ex-tag tag-oui">Identifié</span> <span class="ex-tag tag-faible">Impact faible</span></p>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Situation</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Dispose d'un smartphone</strong> → <span class="ex-tag tag-non">Oui</span></div>
+      <div class="ex-item"><strong>Dispose d'un ordinateur</strong> → <span class="ex-tag tag-oui">Non</span></div>
+      <div class="ex-item"><strong>Difficulté à réaliser des démarches administratives en ligne</strong> → <span class="ex-tag tag-oui">Oui</span></div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Objectifs</div>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Maîtriser les fondamentaux du numérique</strong> → <span class="ex-tag tag-encours">En cours</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-num-besoin">
+  <div class="ex-card">
+    <h4>Besoin numérique</h4>
+    <p><strong>Connaître et utiliser les services numériques</strong> → <span class="ex-tag tag-besoin">Besoin identifié</span></p>
+    <div class="ex-agent">Exploré le 10 mars 2025 par Jean-Marc Lefèvre</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Diagnostic Usager v4.0 · api.francetravail.io · 25 endpoints · 44 schemas
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

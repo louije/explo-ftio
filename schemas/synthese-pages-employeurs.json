@@ -1,0 +1,714 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Synthèse des pages employeur",
+    "description": "La synthèse pages employeurs restitue des informations synthétiques d'employeurs ayant une page sur France Travail.\n\nGrâce à l'API, vous avez la possibilité de filtrer les entreprises que vous souhaitez mettre en avant, selon leurs secteurs d'activité, leurs localisations, date de création, nombre d'offres, etc.\n\nVous avez un service digital (site web ou application) dédié à la recherche d’emploi? Vous pouvez enrichir votre service avec des informations sur chacune de ces entreprises et donner accès à l'ensemble de leurs offres d'emploi publiées sur FranceTravail.fr.\n\nVous pouvez également illustrer les offres d'emploi d'une entreprise avec la vignette synthétique donnant accès à sa page employeur.\n\nA travers cette API, vous retrouvez des informations sur plus de 50 000 pages employeurs.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://api.francetravail.io/partenaire/synthese-pages-employeurs/v1"
+    }
+  ],
+  "paths": {
+    "/logo-employeur/{idRCE}": {
+      "get": {
+        "tags": [
+          "Logo Resource"
+        ],
+        "summary": "Récupérer le logo d'une entreprise ou d'un établissement pour une page employeur",
+        "description": "A partir d'un identifiant propre à l'employeur ou à son établissement, vous avez la possibilité de récupérer le logo utilisé pour cette entité chez France travail.",
+        "parameters": [
+          {
+            "name": "idRCE",
+            "in": "path",
+            "description": "L'ID RCE associé au logo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Le type de structure correspondant à l'ID RCE",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TypeLogo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logo récupéré au format du type mime donné en sortie (peut être image/webp, image/png, image/jpeg...)",
+            "content": {
+              "image/webp": {
+                "example": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAABQBQCdASoqABwAP/3+/3+/urWyMBVYA/A/iWIAAR7p/Y3etgh4KD8QqXEZj6waibITSIAA/cndnUz4/z4LEgByYUql75Cq/12W33KFIKQpc8L0Dt19C7NFXin0tKlxd70dzSF978msbuqLjDgAAA=="
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur lors du chargement de l'image",
+            "content": {}
+          },
+          "404": {
+            "description": "Logo non trouvé",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "pages-employeurs-synthese",
+              "api_synthese-pages-employeursv1"
+            ]
+          }
+        ]
+      }
+    },
+    "/page-employeur/recherche": {
+      "post": {
+        "tags": [
+          "Recherche Resource"
+        ],
+        "summary": "Rechercher des pages employeurs correspondant aux critères de recherches",
+        "description": "Cette recherche permet la combinaison de plusieurs filtres pour la recherche des pages employeurs créés et publiées au sein de France Travail.",
+        "requestBody": {
+          "description": "Les filtres de recherche",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RechercheParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Recherche complétée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SinglePageSearchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur lors de la recherche des pages employeur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecherchePageFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "pages-employeurs-synthese",
+              "api_synthese-pages-employeursv1"
+            ]
+          }
+        ]
+      }
+    },
+    "/page-employeur/recherche/mise-en-avant": {
+      "post": {
+        "tags": [
+          "Recherche Resource"
+        ],
+        "summary": "Rechercher des pages employeurs dans le cadre d'une mise en avant",
+        "description": "Similaire à l'API de recherche classique, cette recherche est utilisé dans le cadre de la mise en avant des employeurs ayant un contenu minimum atteint. Les pages seront aussi filtrés en fonction d'un paramètre de minimum de nombre d'offres attendu.\n\n Les pages sont mélangés pour mettre en avant le plus d'employeurs possible.",
+        "requestBody": {
+          "description": "Les filtres de mise en avant",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RechercheParams1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Recherche complétée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SinglePageSearchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur lors de la recherche des pages employeur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecherchePageFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "pages-employeurs-synthese",
+              "api_synthese-pages-employeursv1"
+            ]
+          }
+        ]
+      }
+    },
+    "/widget/image/data/{idImage}": {
+      "get": {
+        "tags": [
+          "Widget Resource"
+        ],
+        "summary": "Récupérer une image avec ses données associées",
+        "description": "Permet de récupérer une image utilisé dans la page employeur. Essentiellement utilisé pour la récupération de l'image de couverture présente dans l'entête de la page employeur.",
+        "parameters": [
+          {
+            "name": "idImage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "L'ID de l'image à récupérer (présent dans l'entête d'une page)",
+            "example": "123-4567"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image récupérée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageWidget"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erreur lors du chargement de l'image",
+            "content": {}
+          },
+          "404": {
+            "description": "Image non trouvée",
+            "content": {}
+          }
+        }
+      },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "pages-employeurs-synthese",
+              "api_synthese-pages-employeursv1"
+            ]
+          }
+        ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "Adresse": {
+        "type": "object",
+        "properties": {
+          "complementAdresse": {
+            "type": "string",
+            "example": "bâtiment B"
+          },
+          "numeroVoie": {
+            "type": "string",
+            "example": "123"
+          },
+          "extensionNumeroVoie": {
+            "type": "string",
+            "example": "bis"
+          },
+          "libelleVoie": {
+            "type": "string",
+            "example": "rue de la République"
+          },
+          "codePostal": {
+            "type": "string",
+            "example": "75000"
+          },
+          "libelleDistributionPostale": {
+            "type": "string",
+            "example": "Paris"
+          }
+        }
+      },
+      "Date": {
+        "format": "date",
+        "type": "string",
+        "example": "2022-03-10T00:00:00.000Z"
+      },
+      "Employeur": {
+        "type": "object",
+        "properties": {
+          "siren": {
+            "type": "string",
+            "example" : "123456789"
+          },
+          "etablissements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Etablissement"
+            }
+          },
+          "idRCE": {
+            "type": "string",
+            "example" : "123"
+          }
+        }
+      },
+      "Entete": {
+        "type": "object",
+        "properties": {
+          "pageName": {
+            "type": "string",
+            "description": "Nom donné à la page employeur",
+            "example" : "Ma page employeur"
+          },
+          "naf": {
+            "type": "string",
+            "description": "Secteur d'activité",
+            "example" : "01.23A"
+          },
+          "accroche": {
+            "type": "string",
+            "description": "Phrase d'accroche donné à la page",
+            "example" : "Ma phrase d'accroche"
+          },
+          "imageCouverture": {
+            "type": "string",
+            "description": "ID de l'image de couverture récupérable dont l'image est récupérable par API",
+            "example" : "1234-56789"
+          },
+          "logoUpdated": {
+            "type": "boolean",
+            "example" : "false"
+          }
+        }
+      },
+      "Etablissement": {
+        "type": "object",
+        "properties": {
+          "siret": {
+            "type": "string",
+            "description": "Le Siret de l'établissement",
+            "example": "12345678901234"
+          },
+          "adresse": {
+            "description": "L'adresse de l'établissement'",
+            "$ref": "#/components/schemas/Adresse"
+          },
+          "idRCE": {
+            "type": "string",
+            "example": "456"
+          },
+          "naf": {
+            "type": "string",
+            "description": "Le secteur d'activité de l'établissement",
+            "example": "07.21Z"
+          },
+          "content": {
+            "$ref": "#/components/schemas/EtablissementContent"
+          }
+        }
+      },
+      "EtablissementContent": {
+        "type": "object",
+        "properties": {
+          "visibilite": {
+            "type": "boolean",
+            "description": "si faux, signifie que l'établissement est masqué dans la page employeur",
+            "example": true
+          },
+          "logoUpdated": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "ImageNotFound": {
+        "type": "object"
+      },
+      "ImageWidget": {
+        "type": "object",
+        "properties": {
+          "texteAlt": {
+            "type": "string",
+            "example": "texte alternatif si l'image ne s'affiche pas"
+          },
+          "typeMime": {
+            "type": "string",
+            "example": "image/webp"
+          },
+          "imageEncode": {
+            "format": "binary",
+            "type": "string",
+            "example": "UklGRnoAAABXRUJQVlA4IG4AAABQBQCdASoqABwAP/3+/3+/urWyMBVYA/A/iWIAAR7p/Y3etgh4KD8QqXEZj6waibITSIAA/cndnUz4/z4LEgByYUql75Cq/12W33KFIKQpc8L0Dt19C7NFXin0tKlxd70dzSF978msbuqLjDgAAA=="
+          }
+        }
+      },
+      "InvalidUrlImage": {
+        "type": "object"
+      },
+      "InvalidUrlLogo": {
+        "type": "object"
+      },
+      "LogoNotFound": {
+        "type": "object"
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "entete": {
+            "description": "L'entête libre géré par l'employeur",
+            "$ref": "#/components/schemas/Entete"
+          },
+          "showHidden": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "PageEmployeur": {
+        "type": "object",
+        "properties": {
+          "sirenOrSiret": {
+            "type": "string",
+            "description": "Le Siren ou Siret associé directement à la page employeur",
+            "example": "123456789"
+          },
+          "employeur": {
+            "description": "L'employeur associé directement à la page si sirenOrSiret est un Siren",
+            "$ref": "#/components/schemas/Employeur"
+          },
+          "etablissement": {
+          "description": "L'établissement associé directement à la page si sirenOrSiret est un Siret",
+            "$ref": "#/components/schemas/Etablissement"
+          },
+          "urls": {
+            "type": "array",
+            "description": "Les URLs de la page employeur",
+            "items": {
+              "$ref": "#/components/schemas/URL"
+            }
+          },
+          "statutWrapper": {
+            "$ref": "#/components/schemas/StatutWrapper"
+          },
+          "page": {
+            "description": "Le contenu libre géré par l'employeur",
+            "$ref": "#/components/schemas/Page"
+          },
+          "offresCount": {
+            "format": "int32",
+            "description": "Le nombre total d'offre total associé à la page employeur",
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+      "PageEmployeurNotFound": {
+        "type": "object"
+      },
+      "PageEmployeurResult": {
+        "type": "object",
+        "properties": {
+          "pageEmployeur": {
+            "$ref": "#/components/schemas/PageEmployeur"
+          },
+          "rechercheResult": {
+            "$ref": "#/components/schemas/RechercheResult"
+          }
+        }
+      },
+      "RecherchePageFailure": {
+        "type": "object"
+      },
+      "RechercheParams": {
+        "type": "object",
+        "required": ["where"],
+        "properties": {
+          "where": {
+            "type": "string",
+            "description": "Un code région préfixé d'un 'r' et/ou un code département et/ou postal (séparés d'un espace pour en inclure plusieurs dans une recherche)",
+            "example": "r28 973 75 44100"
+          },
+          "codesNaf": {
+            "type": "array",
+            "description": "Des codes NAF de 5 caractères (supporte la recherche avec un début de code NAF)",
+            "items": {
+              "type": "string",
+              "example": "01.61Z"
+            }
+          },
+          "badges": {
+            "type": "array",
+            "description": "Des badges utilisés dans la page employeur",
+            "items": {
+              "type": "string",
+              "example": "handi bienveillant"
+            }
+          },
+          "labels": {
+            "type": "array",
+            "description": "Des libellés associés à la page employeur",
+            "items": {
+              "type": "string",
+              "example": "développement durable"
+            }
+          },
+          "avantages": {
+            "type": "array",
+            "description": "Des avantages proposés par l'employeur",
+            "items": {
+              "type": "string",
+              "example": "Aide au logement"
+            }
+          },
+          "sirens": {
+            "type": "array",
+            "description": "Des SIREN associés à la page de l'employeur recherché (limite 100)",
+            "items": {
+              "type": "string",
+              "example": "123456789"
+            }
+          },
+          "sirets": {
+            "type": "array",
+            "description": "Des SIRET de l'établissement associés à la page de l'employeur recherché (limite 100)",
+            "items": {
+              "type": "string",
+              "example": "12345678901234"
+            }
+          },
+          "offresOnly": {
+            "type": "boolean",
+            "description": "Permet de récupérer seulement les pages des employeurs ayant des offres en cours",
+            "example": true
+          },
+          "minOffres": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Permet de filtrer les pages ayant au moins x offres en cours",
+            "example": 5
+          },
+          "createdLast": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Permet de filtrer les pages ayant été crées il y a moins de x jours",
+            "example": 30
+          },
+          "pageNumber": {
+            "format": "int32",
+            "type": "integer",
+            "description": "La page de recherche voulue",
+            "example": 1
+          },
+          "pageMaxSize": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Le nombre d'éléments remontés par page",
+            "example": 10
+          },
+          "minNbMots": {
+            "type": "boolean",
+            "description": "Permet de récupérer les pages employeurs ayant un minimum de contenu",
+            "example": true
+          }
+        }
+      },
+      "RechercheParams1": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "type": "string",
+            "description": "Un code région préfixé d'un 'r' et/ou un code département et/ou postal (séparés d'un espace pour en inclure plusieurs dans une recherche)",
+            "example": "r28 973 75 44100"
+          },
+          "codesNaf": {
+            "type": "array",
+            "description": "Des codes NAF de 5 caractères (supporte la recherche avec un début de code NAF)",
+            "items": {
+              "type": "string",
+              "example": "01.61Z"
+            }
+          },
+          "badges": {
+            "type": "array",
+            "description": "Des badges utilisés dans la page employeur",
+            "items": {
+              "type": "string",
+              "example": "handi bienveillant"
+            }
+          },
+          "labels": {
+            "type": "array",
+            "description": "Des libellés associés à la page employeur",
+            "items": {
+              "type": "string",
+              "example": "développement durable"
+            }
+          },
+          "avantages": {
+            "type": "array",
+            "description": "Des avantages proposés par l'employeur",
+            "items": {
+              "type": "string",
+              "example": "Aide au logement"
+            }
+          },
+          "sirens": {
+            "type": "array",
+            "description": "Des SIREN associés à la page de l'employeur recherché (limite 100)",
+            "items": {
+              "type": "string",
+              "example": "123456789"
+            }
+          },
+          "sirets": {
+            "type": "array",
+            "description": "Des SIRET de l'établissement associés à la page de l'employeur recherché (limite 100)",
+            "items": {
+              "type": "string",
+              "example": "12345678901234"
+            }
+          },
+          "offresOnly": {
+            "type": "boolean",
+            "description": "Permet de récupérer seulement les pages des employeurs ayant des offres en cours",
+            "example": true
+          },
+          "minOffres": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Permet de filtrer les pages ayant au moins x offres en cours",
+            "example": 5
+          },
+          "createdLast": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Permet de filtrer les pages ayant été crées il y a moins de x jours",
+            "example": 30
+          },
+          "pageNumber": {
+            "format": "int32",
+            "type": "integer",
+            "description": "La page de recherche voulue",
+            "example": 1
+          },
+          "pageMaxSize": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Le nombre d'éléments remontés par page",
+            "example": 10
+          },
+          "minNbMots": {
+            "type": "boolean",
+            "description": "Permet de récupérer les pages employeurs ayant un minimum de contenu",
+            "example": true
+          }
+        }
+      },
+      "RechercheResult": {
+        "type": "object",
+        "properties": {
+          "scoreTotal": {
+            "format": "double",
+            "description": "Le score donnée à la page employeur en fonction des paramètres de recherche donnée",
+            "type": "number",
+            "example": "100"
+          }
+        }
+      },
+      "ResultatsOffreNotFound": {
+        "type": "object"
+      },
+      "ResultatsOffreServiceFailure": {
+        "type": "object"
+      },
+      "SinglePageSearchResult": {
+        "type": "object",
+        "properties": {
+          "totalResults": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Le nombre total de pages employeur correspondant à la recherche",
+            "example": 61
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": "integer",
+            "description": "Le nombre de page qu'il est possible de récupérer",
+            "example": 7
+          },
+          "pageEmployeurResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PageEmployeurResult"
+            }
+          }
+        }
+      },
+      "StatutWrapper": {
+        "type": "object",
+        "properties": {
+          "auto": {
+            "type": "boolean",
+            "description": "Si vrai, signifie que la page employeur est actuellement gérée par france Travail",
+            "example": false
+          }
+        }
+      },
+      "TypeLogo": {
+        "enum": [
+          "LOGO_ENTREPRISE",
+          "LOGO_ETABLISSEMENT"
+        ],
+        "type": "string"
+      },
+      "URL": {
+        "type": "object",
+        "properties": {
+          "urlPath": {
+            "type": "string",
+            "description": "Contient la fin de l'URL de la page employeur",
+            "example": "hypermache-123"
+          },
+          "actif": {
+            "type": "boolean",
+            "description": "Détermine si l'URL est bien active",
+            "example": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "pages-employeurs-synthese": "Obligatoire",
+              "api_synthese-pages-employeursv1": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

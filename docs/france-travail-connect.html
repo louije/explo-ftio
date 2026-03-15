@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>France Travail Connect &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>France Travail Connect</h1>
+  <div class="sub">Fournisseur d'identit&#xe9; &#x2014; connexion OAuth et informations utilisateur (nom, pr&#xe9;nom, email) apr&#xe8;s authentification</div>
+  <div class="sub-tech">France Travail Connect v1.0.0 &#x2014; 1 endpoint &#xb7; 1 schema</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-individu/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MODÈLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Informations utilisateur <span class="dto">UserInfo</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-p" id="m-identite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identit&#xe9;</div>
+        <div class="card">3 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Pr&#xe9;nom, nom et genre de l'utilisateur connect&#xe9; &#x2014; renvoy&#xe9;s si le scope <code>profile</code> a &#xe9;t&#xe9; autoris&#xe9;
+        <div class="fi-tech"><code>given_name</code> &#xb7; <code>family_name</code> &#xb7; <code>gender</code> &#xb7; <span class="ev">male|female</span></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-contact">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contact</div>
+        <div class="card">1 champ</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Adresse email de l'utilisateur, uniquement si confirm&#xe9;e dans son espace France Travail et si le scope <code>email</code> a &#xe9;t&#xe9; autoris&#xe9;
+        <div class="fi-tech"><code>email</code> &#xb7; format <code>email</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l1-b" id="m-identifiants">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identifiants techniques</div>
+        <div class="card">2 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Identifiant unique stable (UUID) de l'utilisateur dans le syst&#xe8;me France Travail &#x2014; <code>sub</code> et <code>idIdentiteExterne</code> contiennent la m&#xea;me valeur
+        <div class="fi-tech"><code>sub</code> &#xb7; <code>idIdentiteExterne</code> &#xb7; format <code>uuid</code></div>
+      </div></div>
+    </div>
+
+    <div class="n l3" id="m-meta">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">M&#xe9;tadonn&#xe9;es</div>
+        <div class="card">2 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Horodatage de la derni&#xe8;re mise &#xe0; jour et champ <code>subname</code> r&#xe9;serv&#xe9; (toujours <code>null</code>)
+        <div class="fi-tech"><code>updated_at</code> (timestamp Unix) &#xb7; <code>subname</code> (toujours <span class="jnull">null</span>)</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; France Travail Connect est le fournisseur d'identit&#xe9; OAuth 2.0. L'usager se connecte &#xe0; votre application via le bouton &#xab;&#xa0;Se connecter avec France Travail&#xa0;&#xbb; (obligatoire par la licence). Apr&#xe8;s authentification, le token d'acc&#xe8;s permet d'appeler <code>/userinfo</code>. Scopes : <code>api_peconnect-individuv1</code> (obligatoire), <code>openid</code> (obligatoire), <code>profile</code> (nom/pr&#xe9;nom/genre), <code>email</code> (adresse email).
+</div>
+
+<div class="note">Les champs <code>sub</code> et <code>idIdentiteExterne</code> sont identiques &#x2014; ils repr&#xe9;sentent le m&#xea;me UUID stable. Ce doublon est un artefact historique de l'API. Le champ <code>subname</code> est syst&#xe9;matiquement <code>null</code> et n'a pas de fonction connue.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Utilisateur <span class="dt-human">&#x2014; Identit&#xe9; de l'usager connect&#xe9;</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">R&#xe9;cup&#xe9;rer les informations de l'utilisateur connect&#xe9;</span><div class="ep-human">Lire le nom, le pr&#xe9;nom, l'email et l'identifiant France Travail apr&#xe8;s connexion OAuth</div><span class="ep-path">/userinfo</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Sch&#xe9;ma <span class="dt-human">&#x2014; Type de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">UserInfo</span> <span class="sc-desc">&#x2014; Donn&#xe9;es d'identit&#xe9; de l'utilisateur connect&#xe9;</span></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">Flux OAuth 2.0 <span class="dt-human">&#x2014; Cin&#xe9;matique d'authentification</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;padding:16px;">
+    <div class="fi">
+      <strong>1.</strong> L'usager clique sur le bouton &#xab;&#xa0;Se connecter avec France Travail&#xa0;&#xbb;
+      <div class="fi-tech" style="margin-top:4px;">Redirection vers <code>authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu</code></div>
+    </div>
+    <div class="fi" style="margin-top:12px;">
+      <strong>2.</strong> Apr&#xe8;s connexion, France Travail redirige vers votre <code>redirect_uri</code> avec un code d'autorisation
+    </div>
+    <div class="fi" style="margin-top:12px;">
+      <strong>3.</strong> Votre serveur &#xe9;change le code contre un token d'acc&#xe8;s
+      <div class="fi-tech" style="margin-top:4px;">POST <code>authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu</code></div>
+    </div>
+    <div class="fi" style="margin-top:12px;">
+      <strong>4.</strong> Avec le token, appelez <code>GET /userinfo</code> pour obtenir l'identit&#xe9; de l'usager
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Connexion d'un demandeur d'emploi</strong> &#x2014; Am&#xe9;lie Durand se connecte &#xe0; une application partenaire avec son compte France Travail. Apr&#xe8;s avoir autoris&#xe9; les scopes demand&#xe9;s, l'application r&#xe9;cup&#xe8;re ses informations d'identit&#xe9;.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-userinfo"><span class="jc">// GET /userinfo</span>
+<span class="jc">// &#x2500;&#x2500; OAuth PE Connect &#x2500;&#x2500;</span>
+<span class="jc">// Authorization: Bearer eyJhbGciOi...</span>
+<span class="jc">// Scopes: api_peconnect-individuv1, openid, profile, email</span>
+<span class="jc">// &#x2500;&#x2500; R&#xe9;ponse &#x2500;&#x2500;</span>
+{
+  <span class="jk">"sub"</span>: <span class="js">"a3b8c1d4-e5f6-7890-abcd-ef1234567890"</span>,
+  <span class="jk">"gender"</span>: <span class="js">"female"</span>,
+  <span class="jk">"family_name"</span>: <span class="js">"Durand"</span>,
+  <span class="jk">"given_name"</span>: <span class="js">"Am&#xe9;lie"</span>,
+  <span class="jk">"email"</span>: <span class="js">"amelie.durand@mail.fr"</span>,
+  <span class="jk">"idIdentiteExterne"</span>: <span class="js">"a3b8c1d4-e5f6-7890-abcd-ef1234567890"</span>,
+  <span class="jk">"subname"</span>: <span class="jnull">null</span>,
+  <span class="jk">"updated_at"</span>: <span class="jn">1709827200</span>
+}</div>
+<div data-section="s-minimal"><span class="jc">// R&#xe9;ponse avec scopes minimaux (openid seul)</span>
+{
+  <span class="jk">"sub"</span>: <span class="js">"f7e6d5c4-b3a2-1098-7654-321fedcba098"</span>,
+  <span class="jk">"gender"</span>: <span class="js">"male"</span>,
+  <span class="jk">"family_name"</span>: <span class="js">"Martin"</span>,
+  <span class="jk">"given_name"</span>: <span class="js">"Lucas"</span>,
+  <span class="jk">"idIdentiteExterne"</span>: <span class="js">"f7e6d5c4-b3a2-1098-7654-321fedcba098"</span>,
+  <span class="jk">"subname"</span>: <span class="jnull">null</span>,
+  <span class="jk">"updated_at"</span>: <span class="jn">1715270400</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-userinfo">
+  <div class="ex-title"><span class="ex-ico">&#x1F464;</span> Connexion compl&#xe8;te &#x2014; tous les scopes</div>
+  <div class="ex-card">
+    <h4>Am&#xe9;lie Durand</h4>
+    <p>Connexion <span class="ex-tag tag-ok">R&#xe9;ussie</span> avec les scopes <code>openid</code>, <code>profile</code> et <code>email</code></p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Identit&#xe9;</strong> &#x2192; Am&#xe9;lie Durand (genre : female)</div>
+      <div class="ex-item"><strong>Email</strong> &#x2192; amelie.durand@mail.fr</div>
+      <div class="ex-item"><strong>Identifiant</strong> &#x2192; a3b8c1d4-e5f6-7890-abcd-ef1234567890</div>
+      <div class="ex-item"><strong>Derni&#xe8;re MAJ</strong> &#x2192; 7 mars 2024 (timestamp 1709827200)</div>
+    </div>
+    <div class="ex-agent">L'email est pr&#xe9;sent car le scope <code>email</code> a &#xe9;t&#xe9; autoris&#xe9; et l'adresse est confirm&#xe9;e</div>
+  </div>
+</div>
+
+<div data-section="s-minimal">
+  <div class="ex-title"><span class="ex-ico">&#x1F512;</span> Connexion minimale &#x2014; sans email</div>
+  <div class="ex-card">
+    <h4>Lucas Martin</h4>
+    <p>Connexion <span class="ex-tag tag-encours">Partielle</span> &#x2014; scope <code>email</code> non demand&#xe9;</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Identit&#xe9;</strong> &#x2192; Lucas Martin (genre : male)</div>
+      <div class="ex-item"><strong>Email</strong> &#x2192; <span class="ex-tag tag-nonex">Absent</span> (scope non demand&#xe9;)</div>
+      <div class="ex-item"><strong>Identifiant</strong> &#x2192; f7e6d5c4-b3a2-1098-7654-321fedcba098</div>
+      <div class="ex-item"><strong>Derni&#xe8;re MAJ</strong> &#x2192; 9 mai 2024 (timestamp 1715270400)</div>
+    </div>
+    <div class="ex-agent">Sans le scope <code>email</code>, le champ est simplement absent de la r&#xe9;ponse</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 &#x2014; France Travail Connect v1.0.0 &#xb7; api.francetravail.io &#xb7; 1 endpoint &#xb7; 1 schema
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
