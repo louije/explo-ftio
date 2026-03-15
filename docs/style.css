@@ -7,6 +7,8 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',system-ui,sans-serif;padding:32px 16px 60px;min-height:100vh;}
 .container{margin:0 auto;}
+.back-link{display:inline-block;margin-bottom:12px;font-size:0.78rem;color:var(--text-light);text-decoration:none;transition:color .12s;}
+.back-link:hover{color:var(--text);}
 header{margin-bottom:20px;}
 header h1{font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400;color:var(--text);}
 header .sub{font-size:0.86rem;color:var(--text-dim);margin-top:3px;}
