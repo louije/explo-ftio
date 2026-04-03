@@ -1,0 +1,1762 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0",
+    "title": "Orientation Usager",
+    "description": "Cette API permet :\r\n- de récupérer une proposition de résultat d'orientation d'un usager.\r\n- de prendre une décision afin de l'orienter vers un organisme et dans un des trois parcours : Social, Socio-Professionnel, Professionnel.\r\n- d'orienter un usager sans avoir à détailler les critères de l'orientation.\r\n- de modifier un parcours ou une structure sans réorienter l'usager.",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/orientationusager/v1"
+    }
+  ],
+  "paths": {
+    "/calculOrientation": {
+      "post": {
+        "tags": [
+          "Orientation"
+        ],
+        "summary": "Calculer une orientation",
+        "description": "Calculer l'orientation et enregistrer les critères afin de calculer l'orientation ainsi que d'enregistrer son résultat (parcours, organisme et structure)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Bearer "
+            },
+            "description": "Token d'authentification Bearer"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriteresOrientationCA_CalculerEntree"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Résultat de l'orientation en cas de succès de l'API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrientationCA_Calculer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "En cas de réponse 400, veuillez vous référer à l'erreur mentionnée dans l'objet message.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "default": {
+                    "value": {
+                      "timestamp": "2024-08-01T12:51:59.196+00:00",
+                      "status": 400,
+                      "error": "Bad Request",
+                      "message": "Le champ contrainteSante doit avoir une de ces valeurs : [INCAPACITE_RECHERCHE_ACTIVITE_PRO, IMPACT_FAIBLE_RECHERCHE_EMPLOI, AUCUNE, IMPACT_FORT_RECHERCHE_EMPLOI]",
+                      "path": "/api-orientationusager/v1/orientation/calculer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors du calcul ou de l'enregistrement de l'orientation de l'usager"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          }
+        ]
+      }
+    },
+    "/lectureOrientation": {
+      "get": {
+        "tags": [
+          "Orientation"
+        ],
+        "summary": "Lire les orientations",
+        "description": "Lire les données d'orientation.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée) actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "etatOrientation",
+            "in": "query",
+            "description": "L'état d'avancement de l'orientation",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BROUILLON",
+                "EN_ATTENTE",
+                "OUVERT",
+                "CLOTURE"
+              ]
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Bearer "
+            },
+            "description": "Token d'authentification Bearer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des orientations de l'usager en cas de succès de l'API",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrientationCA_Lecture"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "En cas de réponse 400, veuillez vous référer à l'erreur mentionnée dans l'objet message.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "default": {
+                    "value": {
+                      "timestamp": "2024-08-01T12:51:59.196+00:00",
+                      "status": 400,
+                      "error": "Bad Request",
+                      "message": "Le champ etatOrientation doit avoir une de ces valeurs : [BROUILLON, EN_ATTENTE, OUVERT, CLOTURE]",
+                      "path": "/api-orientationusager/v1/orientation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur de la lecture de l'orientation de l'usager"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          }
+        ]
+      }
+    },
+    "/orientation": {
+      "post": {
+        "tags": [
+          "Orientation"
+        ],
+        "summary": "Orienter un usager",
+        "description": "Orienter et enregistrer l'orientation d'un usager sans saisir des données d'orientation",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Bearer "
+            },
+            "description": "Token d'authentification Bearer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrientationCreationCA_Commun"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "L'orientation est correctement enregistrée"
+          },
+          "400": {
+            "description": "Les paramètres d'entrées sont incorrects"
+          },
+          "500": {
+            "description": "Erreur lors de l'enregistrement de l'orientation"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          }
+        ]
+      }
+    },
+    "/modificationOrientation": {
+      "put": {
+        "tags": [
+          "Orientation"
+        ],
+        "summary": "Modifier le parcours et/ou la structure",
+        "description": "Modifier le parcours et/ou la structure d'une orientation pour un usager",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "codeParcours",
+            "in": "header",
+            "description": "Saisir le code du parcours sur lequel l'usager sera accompagné : PED, PSP ou PSO",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "PED"
+            }
+          },
+          {
+            "name": "codeStructure",
+            "in": "header",
+            "description": "Saisir le code aurore ou le code safir de la nouvelle structure qui accompagnera l'usager.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "NAQ0057"
+            }
+          },
+          {
+            "name": "dateEntreeParcours",
+            "in": "header",
+            "description": "Renseigner la date d'entrée en parcours de l'orientation en cours.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-25"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Bearer "
+            },
+            "description": "Token d'authentification Bearer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orientation modifiée",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrientationCA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": " Exemple : Au moins un champ est obligatoire parmi codeParcours, codeStructure, dateEntreeParcours",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrientationCA"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la modification de l'orientation",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/orientationusager/v1"
+          }
+        ],
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          }
+        ]
+      }
+    },
+    "/decisionOrientation": {
+      "post": {
+        "tags": [
+          "Decision"
+        ],
+        "summary": "Décider une orientation",
+        "description": "Décider une orientation qui a été proposée : Accepter ou refuser la proposition d'orientation.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Bearer "
+            },
+            "description": "Token d'authentification Bearer"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionCA"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "La décision est bien enregistrée"
+          },
+          "400": {
+            "description": "En cas de réponse 400, veuillez vous référer à l'erreur mentionnée dans l'objet message.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "default": {
+                    "value": {
+                      "timestamp": "2024-08-01T12:51:59.196+00:00",
+                      "status": 400,
+                      "error": "Bad Request",
+                      "message": "Le champ etatDecision est obligatoire",
+                      "path": "/api-orientationusager/v1/orientation/decider"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur de la lecture de l'orientation de l'usager"
+          }
+        },
+        "security": [
+          {
+            "authentification_agent-clientCredentials": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          },
+          {
+            "authentification_agent": [
+              "api_orientationusagerv1",
+              "orientationusager"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrientationCA": {
+        "type": "object",
+        "properties": {
+          "parcours": {
+            "type": "string",
+            "enum": [
+              "PED",
+              "PSP",
+              "PSO"
+            ],
+            "description": "Le parcours d'orientation de l'usager"
+          },
+          "organisme": {
+            "type": "string",
+            "enum": [
+              "CD",
+              "CAF",
+              "FT",
+              "ML",
+              "CE"
+            ],
+            "description": "L'organisme d'orientation de l'usager"
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "structure_decision": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "DECIDE"
+            ],
+            "description": "Le statut actuel de l'orientation de l'usager"
+          },
+          "etat": {
+            "type": "string",
+            "enum": [
+              "OUVERT"
+            ],
+            "description": "L'état d'avancement de l'orientation"
+          }
+        }
+      },
+      "CriteresOrientationCA_CalculerEntree": {
+        "type": "object",
+        "properties": {
+          "origine": {
+            "type": "string",
+            "enum": [
+              "INSCRIPTION_CONSEILLER_CD",
+              "INSCRIPTION_AUTO_MILO",
+              "INSCRIPTION_AUTO_CAF",
+              "INSCRIPTION_AUTO_MSA"
+            ],
+            "description": "Le cas d'utilisation qui est à l'origine du déclenchement du calcul de l'orientation"
+          },
+          "situation_professionnelle": {
+            "type": "string",
+            "enum": [
+              "EN_ACTIVITE",
+              "DEUX_DERNIERES_ANNEES",
+              "PLUS_DEUX_ANS",
+              "JAMAIS"
+            ],
+            "description": "La situation professionnelle de l'usager"
+          },
+          "type_emploi": {
+            "type": "string",
+            "enum": [
+              "SAISONNIER",
+              "ARTISTE_OU_AUTEUR",
+              "INTERMITTENT_SPECTACLE",
+              "EXPLOITANT_AGRICOLE",
+              "ASSISTANTE_MATERNELLE",
+              "CREATEUR_ENTREPRISE_OU_INDEPENDANT",
+              "AUTRE"
+            ],
+            "description": "Le type d'emploi de l'usager losque sa situation professionnelle est : en activité"
+          },
+          "niveau_etude": {
+            "type": "string",
+            "enum": [
+              "AFS",
+              "C12",
+              "C3A",
+              "CFG",
+              "CP4",
+              "NV5",
+              "NV4",
+              "NV3",
+              "NV2",
+              "NV1"
+            ],
+            "description": "Le code qui correspond au niveau d'étude de l'usager.\r\n\r\nCode | Libellé\r\n---------|----------\r\n AFS | Aucune formation scolaire |\r\n C12 | 2nd ou 1ère achevée |\r\n C3A | 3ème achevée ou Brevet |\r\n CFG | 4ème achevée |\r\n CP4 | Primaire à 4ème |\r\n NV1 | Bac+5 et plus ou équivalents |\r\n NV2 | Bac+3, Bac+4 ou équivalents |\r\n NV3 | Bac+2 ou équivalents |\r\n NV4 | Bac ou équivalent |\r\n NV5 | CAP, BEP et équivalents |\r\n"
+          },
+          "capacite_a_travailler": {
+            "type": "boolean",
+            "description": "La capacité à travailler de l'usager"
+          },
+          "projet_pro": {
+            "type": "string",
+            "enum": [
+              "SALARIAT",
+              "ENTREPRENARIAT",
+              "FORMATION",
+              "AUCUN"
+            ],
+            "description": "Le projet profesionnel de l'usager"
+          },
+          "contrainte_sante": {
+            "type": "string",
+            "enum": [
+              "INCAPACITE_RECHERCHE_ACTIVITE_PRO",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de sante de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_logement": {
+            "type": "string",
+            "enum": [
+              "SANS_LOGEMENT",
+              "PROCEDURE_EXPULSION",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de logement de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_mobilite": {
+            "type": "string",
+            "enum": [
+              "AUCUN_MOYEN_DE_TRANSPORT",
+              "DEPENDANT_TRANSPORT",
+              "AUTRE",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de mobilité de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_familiale": {
+            "type": "string",
+            "enum": [
+              "AIDANT_FAMILIAL",
+              "ENFANT_SANS_SOLUTION_GARDE",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes familliales de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_financiere": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes financières de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_numerique": {
+            "type": "string",
+            "enum": [
+              "NON_ACCES_INTERNET",
+              "NON_MAITRISE",
+              "REFUS",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes numériques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_administrative_juridique": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes administratives et juridiques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_francais_calcul": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de maitrise de la langue française et de calcul de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "boe": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi"
+          },
+          "baeeh": {
+            "type": "boolean",
+            "description": "L'usager est bénéficiaire ou ancien bénéficiaire de l’AEEH / PCH / PPS"
+          },
+          "scolarite_etablissement_specialise": {
+            "type": "boolean",
+            "description": "L'usager est scolarisé dans un établissement d’éducation spécialisée (IME ou IMPRO)"
+          },
+          "esat": {
+            "type": "boolean",
+            "description": "L'usager travaille, a travaillé ou bénéficie d’une orientation en ESAT et souhaite travailler en milieu ordinaire"
+          },
+          "boe_souhait_accompagnement": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi et souhaite un accompagnement sur le sujet"
+          },
+          "msa_autonomie_recherche_emploi": {
+            "type": "integer",
+            "description": "L'autonomie de l'usager dans ses recherches d'emploi. 1- Non, pas du tout; 2- Non, pas vraiment; 3- Moyennement; 4- Oui, plutôt; 5- Oui, complètement",
+            "format": "int32",
+            "example": 1
+          },
+          "msa_demarches_professionnelles": {
+            "type": "string",
+            "enum": [
+              "AUCUNE_DEMARCHE",
+              "PEU_DEMARCHES",
+              "PLUSIEURS_DEMARCHES"
+            ],
+            "description": "Le niveau d'avancement des demarches professionnelles de l'usager"
+          }
+        }
+      },
+      "OrientationCA_Calculer": {
+        "type": "object",
+        "properties": {
+          "parcours": {
+            "type": "string",
+            "enum": [
+              "PED",
+              "PSP",
+              "PSO",
+              "EO",
+              "IND"
+            ],
+            "description": "Le parcours d'orientation de l'usager\r\n\r\nCode | Libellé\r\n---------|----------\r\n PED | Parcours professionnel |\r\n PSP | Parcours socio-professionnel |\r\n PSO | Parcours social |\r\n EO | Entretien d'orientation |\r\n IND | Indéterminé |"
+          },
+          "organisme": {
+            "type": "string",
+            "enum": [
+              "CD",
+              "CAF",
+              "FT",
+              "ML",
+              "CE",
+              "IND"
+            ],
+            "description": "L'organisme d'orientation de l'usager"
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "structure_decision": {
+            "$ref": "#/components/schemas/StructureDecision"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "PRECONISE",
+              "DECIDE"
+            ],
+            "description": "Le statut actuel de l'orientation de l'usager"
+          },
+          "etat": {
+            "type": "string",
+            "enum": [
+              "EN_ATTENTE",
+              "BROUILLON",
+              "SAISIE_COMPLETE",
+              "OUVERT",
+              "CLOTURE"
+            ],
+            "description": "L'état d'avancement de l'orientation"
+          },
+          "agent_creation": {
+            "type": "string",
+            "description": "L'agent qui a fait la création de l'orientation de l'usager",
+            "example": "IIII9999"
+          },
+          "agent_derniere_modification": {
+            "type": "string",
+            "description": "L'agent qui a fait la dernière modification de l'orientation de l'usager",
+            "example": "IIII9999"
+          },
+          "date_entree_parcours": {
+            "type": "string",
+            "description": "La date d'entrée en parcours de l'orientation de l'usager",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "date_creation": {
+            "type": "string",
+            "description": "La date de création de l'orientation de l'usager",
+            "format": "date-time"
+          },
+          "date_modification": {
+            "type": "string",
+            "description": "La date de dernière modification de l'orientation de l'usager",
+            "format": "date-time"
+          },
+          "criteres_orientation": {
+            "$ref": "#/components/schemas/CriteresOrientationCA_Calculer"
+          }
+        }
+      },
+      "Structure": {
+        "type": "object",
+        "description": "La structure d'accompagnement de l'usager",
+        "properties": {
+          "code_aurore": {
+            "type": "string",
+            "pattern": "^[A-Za-z]{3}[0-9]{4}$",
+            "example": "NAQ0057"
+          },
+          "code_safir": {
+            "type": "string",
+            "pattern": "^\\d{5}$",
+            "example": "69000"
+          },
+          "libelle_structure": {
+            "type": "string",
+            "readOnly": true,
+            "example": "Agence Mériadek"
+          }
+        }
+      },
+      "StructureDecision": {
+        "type": "object",
+        "description": "La structure liée à la decision de l'orientation de l'usager",
+        "properties": {
+          "code_aurore": {
+            "type": "string",
+            "pattern": "^[A-Za-z]{3}[0-9]{4}$",
+            "example": "NAQ0057"
+          },
+          "code_safir": {
+            "type": "string",
+            "pattern": "^\\d{5}$",
+            "example": "69000"
+          },
+          "libelle_structure": {
+            "type": "string",
+            "readOnly": true,
+            "example": "Agence Mériadek"
+          }
+        }
+      },
+      "CriteresOrientationCA_Calculer": {
+        "type": "object",
+        "description": "Les critères qui ont permis de calculer l'orientation de l'usager",
+        "properties": {
+          "origine": {
+            "type": "string",
+            "enum": [
+              "INSCRIPTION_CONSEILLER_CD",
+              "INSCRIPTION_AUTO_MILO",
+              "INSCRIPTION_AUTO_CAF",
+              "INSCRIPTION_AUTO_MSA"
+            ],
+            "description": "Le cas d'utilisation qui est à l'origine du déclenchement du calcul de l'orientation"
+          },
+          "situation_professionnelle": {
+            "type": "string",
+            "enum": [
+              "EN_ACTIVITE",
+              "DEUX_DERNIERES_ANNEES",
+              "PLUS_DEUX_ANS",
+              "JAMAIS"
+            ],
+            "description": "La situation professionnelle de l'usager"
+          },
+          "type_emploi": {
+            "type": "string",
+            "enum": [
+              "SAISONNIER",
+              "ARTISTE_OU_AUTEUR",
+              "INTERMITTENT_SPECTACLE",
+              "EXPLOITANT_AGRICOLE",
+              "ASSISTANTE_MATERNELLE",
+              "CREATEUR_ENTREPRISE_OU_INDEPENDANT",
+              "AUTRE"
+            ],
+            "description": "Le type d'emploi de l'usager losque sa situation professionnelle est : en activité"
+          },
+          "niveau_etude": {
+            "type": "string",
+            "enum": [
+              "AFS",
+              "C12",
+              "C3A",
+              "CFG",
+              "CP4",
+              "NV5",
+              "NV4",
+              "NV3",
+              "NV2",
+              "NV1"
+            ],
+            "description": "Le code qui correspond au niveau d'étude de l'usager.\r\n\r\nCode | Libellé\r\n---------|----------\r\n AFS | Aucune formation scolaire |\r\n C12 | 2nd ou 1ère achevée |\r\n C3A | 3ème achevée ou Brevet |\r\n CFG | 4ème achevée |\r\n CP4 | Primaire à 4ème |\r\n NV1 | Bac+5 et plus ou équivalents |\r\n NV2 | Bac+3, Bac+4 ou équivalents |\r\n NV3 | Bac+2 ou équivalents |\r\n NV4 | Bac ou équivalent |\r\n NV5 | CAP, BEP et équivalents |\r\n"
+          },
+          "capacite_a_travailler": {
+            "type": "boolean",
+            "description": "La capacité à travailler de l'usager"
+          },
+          "projet_pro": {
+            "type": "string",
+            "enum": [
+              "SALARIAT",
+              "ENTREPRENARIAT",
+              "FORMATION",
+              "AUCUN"
+            ],
+            "description": "Le projet profesionnel de l'usager"
+          },
+          "contrainte_sante": {
+            "type": "string",
+            "enum": [
+              "INCAPACITE_RECHERCHE_ACTIVITE_PRO",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de sante de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_logement": {
+            "type": "string",
+            "enum": [
+              "SANS_LOGEMENT",
+              "PROCEDURE_EXPULSION",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de logement de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_mobilite": {
+            "type": "string",
+            "enum": [
+              "AUCUN_MOYEN_DE_TRANSPORT",
+              "DEPENDANT_TRANSPORT",
+              "AUTRE",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de mobilité de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_familiale": {
+            "type": "string",
+            "enum": [
+              "AIDANT_FAMILIAL",
+              "ENFANT_SANS_SOLUTION_GARDE",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes familliales de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_financiere": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes financières de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_numerique": {
+            "type": "string",
+            "enum": [
+              "NON_ACCES_INTERNET",
+              "NON_MAITRISE",
+              "REFUS",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes numériques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_administrative_juridique": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes administratives et juridiques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_francais_calcul": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de maitrise de la langue française et de calcul de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "brsa": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire du RSA"
+          },
+          "boe": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi"
+          },
+          "baeeh": {
+            "type": "boolean",
+            "description": "L'usager est bénéficiaire ou ancien bénéficiaire de l’AEEH / PCH / PPS"
+          },
+          "scolarite_etablissement_specialise": {
+            "type": "boolean",
+            "description": "L'usager est scolarisé dans un établissement d’éducation spécialisée (IME ou IMPRO)"
+          },
+          "esat": {
+            "type": "boolean",
+            "description": "L'usager travaille, a travaillé ou bénéficie d’une orientation en ESAT et souhaite travailler en milieu ordinaire"
+          },
+          "boe_souhait_accompagnement": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi et souhaite un accompagnement sur le sujet"
+          },
+          "date_naissance": {
+            "type": "string",
+            "description": "La date de naissance de l'usager",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "msa_autonomie_recherche_emploi": {
+            "type": "integer",
+            "description": "L'autonomie de l'usager dans ses recherches d'emploi. 1- Non, pas du tout; 2- Non, pas vraiment; 3- Moyennement; 4- Oui, plutôt; 5- Oui, complètement",
+            "format": "int32",
+            "example": 1
+          },
+          "msa_demarches_professionnelles": {
+            "type": "string",
+            "enum": [
+              "AUCUNE_DEMARCHE",
+              "PEU_DEMARCHES",
+              "PLUSIEURS_DEMARCHES"
+            ],
+            "description": "Le niveau d'avancement des demarches professionnelles de l'usager"
+          },
+          "adresse": {
+            "$ref": "#/components/schemas/Adresse"
+          }
+        }
+      },
+      "Adresse": {
+        "type": "object",
+        "description": "L'adresse de l'usager",
+        "properties": {
+          "code_commune": {
+            "type": "string",
+            "description": "Le code INSEE de la commune de l'adresse de l'usager",
+            "example": "33063"
+          },
+          "libelle_commune": {
+            "type": "string",
+            "description": "Le libelle de la commune de l'adresse de l'usager",
+            "example": "Bordeaux"
+          },
+          "code_postal": {
+            "type": "string",
+            "description": "Le code postal de l'adresse de l'usager",
+            "example": "33000"
+          },
+          "numero_type_libelle_voie": {
+            "type": "string",
+            "description": "Le numéro, type et libelle de la voie de l'adresse de l'usager",
+            "example": "25 rue lacroix"
+          }
+        }
+      },
+      "OrientationCA_Lecture": {
+        "type": "object",
+        "properties": {
+          "parcours": {
+            "type": "string",
+            "enum": [
+              "PSO",
+              "PED",
+              "PSP",
+              "EO",
+              "IND"
+            ],
+            "description": "Le parcours d'orientation de l'usager\r\n\r\nCode | Libellé\r\n---------|----------\r\n PED | Parcours professionnel |\r\n PSP | Parcours socio-professionnel |\r\n PSO | Parcours social |\r\n EO | Entretien d'orientation |\r\n IND | Indéterminé |"
+          },
+          "organisme": {
+            "type": "string",
+            "enum": [
+              "CD",
+              "CAF",
+              "FT",
+              "ML",
+              "CE",
+              "IND"
+            ],
+            "description": "L'organisme d'orientation de l'usager"
+          },
+          "organisme_decision": {
+            "type": "string",
+            "description": "L'organisme de décision d'orientation de l'usager",
+            "enum": [
+              "CD",
+              "FT",
+              "ML",
+              "CE",
+              "CAF"
+            ]
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "structure_decision": {
+            "$ref": "#/components/schemas/StructureDecision"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "PRECONISE",
+              "DECIDE"
+            ],
+            "description": "Le statut actuel de l'orientation de l'usager"
+          },
+          "etat": {
+            "type": "string",
+            "enum": [
+              "EN_ATTENTE",
+              "SAISIE_COMPLETE",
+              "BROUILLON",
+              "OUVERT",
+              "CLOTURE"
+            ],
+            "description": "L'état d'avancement de l'orientation"
+          },
+          "agent_creation": {
+            "type": "string",
+            "description": "L'agent qui a fait la création de l'orientation de l'usager",
+            "example": "IIII9999"
+          },
+          "agent_derniere_modification": {
+            "type": "string",
+            "description": "L'agent qui a fait la dernière modification de l'orientation de l'usager",
+            "example": "IIII9999"
+          },
+          "date_entree_parcours": {
+            "type": "string",
+            "description": "La date d'entrée en parcours de l'orientation de l'usager",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "date_sortie_parcours": {
+            "type": "string",
+            "description": "La date de sortie en parcours de l'orientation de l'usager",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "motif_sortie_parcours": {
+            "type": "string",
+            "description": "Le motif de sortie en parcours de l'orientation de l'usager",
+            "example": "Exemple de motif"
+          },
+          "date_creation": {
+            "type": "string",
+            "description": "La date de création de l'orientation de l'usager",
+            "format": "date-time"
+          },
+          "date_modification": {
+            "type": "string",
+            "description": "La date de dernière modification de l'orientation de l'usager",
+            "format": "date-time"
+          },
+          "criteres_orientation": {
+            "$ref": "#/components/schemas/CriteresOrientationCA_Lecture"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/DecisionCA_Lecture"
+          }
+        }
+      },
+      "Structure_Lecture": {
+        "type": "object",
+        "properties": {
+          "code_aurore": {
+            "pattern": "^[A-Za-z]{3}[0-9]{4}$",
+            "type": "string",
+            "example": "NAQ0057"
+          },
+          "code_safir": {
+            "pattern": "^\\d{5}$",
+            "type": "string",
+            "example": "69000"
+          },
+          "libelle_structure": {
+            "type": "string",
+            "readOnly": true,
+            "example": "Agence Mériadek"
+          }
+        },
+        "description": "La structure de l'orientation choisie pour l'usager lorsque la décision est refusée",
+        "writeOnly": true
+      },
+      "CriteresOrientationCA_Lecture": {
+        "type": "object",
+        "description": "Les critères qui ont permis de calculer l'orientation de l'usager",
+        "properties": {
+          "origine": {
+            "type": "string",
+            "enum": [
+              "INSCRIPTION_AUTO_CAF",
+              "INSCRIPTION_VOLONTAIRE",
+              "INSCRIPTION_AUTO_MILO",
+              "INSCRIPTION_AUTO_MSA",
+              "INSCRIPTION_CONSEILLER_FT",
+              "INSCRIPTION_CONSEILLER_CD",
+              "INSCRIPTION_CONSEILLER_CE",
+              "RDS_LPE"
+            ],
+            "description": "Le cas d'utilisation qui est à l'origine du déclenchement du calcul de l'orientation"
+          },
+          "situation_professionnelle": {
+            "type": "string",
+            "enum": [
+              "EN_ACTIVITE",
+              "DEUX_DERNIERES_ANNEES",
+              "PLUS_DEUX_ANS",
+              "JAMAIS"
+            ],
+            "description": "La situation professionnelle de l'usager"
+          },
+          "type_emploi": {
+            "type": "string",
+            "enum": [
+              "SAISONNIER",
+              "ARTISTE_OU_AUTEUR",
+              "INTERMITTENT_SPECTACLE",
+              "EXPLOITANT_AGRICOLE",
+              "ASSISTANTE_MATERNELLE",
+              "CREATEUR_ENTREPRISE_OU_INDEPENDANT",
+              "AUTRE"
+            ],
+            "description": "Le type d'emploi de l'usager losque sa situation professionnelle est : en activité"
+          },
+          "niveau_etude": {
+            "type": "string",
+            "enum": [
+              "AFS",
+              "C12",
+              "C3A",
+              "CFG",
+              "CP4",
+              "NV5",
+              "NV4",
+              "NV3",
+              "NV2",
+              "NV1"
+            ],
+            "description": "Le code qui correspond au niveau d'étude de l'usager.\r\n\r\nCode | Libellé\r\n---------|----------\r\n AFS | Aucune formation scolaire |\r\n C12 | 2nd ou 1ère achevée |\r\n C3A | 3ème achevée ou Brevet |\r\n CFG | 4ème achevée |\r\n CP4 | Primaire à 4ème |\r\n NV1 | Bac+5 et plus ou équivalents |\r\n NV2 | Bac+3, Bac+4 ou équivalents |\r\n NV3 | Bac+2 ou équivalents |\r\n NV4 | Bac ou équivalent |\r\n NV5 | CAP, BEP et équivalents |\r\n"
+          },
+          "capacite_a_travailler": {
+            "type": "boolean",
+            "description": "La capacité à travailler de l'usager"
+          },
+          "projet_pro": {
+            "type": "string",
+            "enum": [
+              "SALARIAT",
+              "ENTREPRENARIAT",
+              "FORMATION",
+              "AUCUN"
+            ],
+            "description": "Le projet profesionnel de l'usager"
+          },
+          "contrainte_sante": {
+            "type": "string",
+            "enum": [
+              "INCAPACITE_RECHERCHE_ACTIVITE_PRO",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de sante de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_logement": {
+            "type": "string",
+            "enum": [
+              "SANS_LOGEMENT",
+              "PROCEDURE_EXPULSION",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de logement de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_mobilite": {
+            "type": "string",
+            "enum": [
+              "AUCUN_MOYEN_DE_TRANSPORT",
+              "DEPENDANT_TRANSPORT",
+              "AUTRE",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de mobilité de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_familiale": {
+            "type": "string",
+            "enum": [
+              "AIDANT_FAMILIAL",
+              "ENFANT_SANS_SOLUTION_GARDE",
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes familliales de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_financiere": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes financières de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_numerique": {
+            "type": "string",
+            "enum": [
+              "NON_ACCES_INTERNET",
+              "NON_MAITRISE",
+              "REFUS",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes numériques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_administrative_juridique": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes administratives et juridiques de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "contrainte_francais_calcul": {
+            "type": "string",
+            "enum": [
+              "IMPACT_FORT_RECHERCHE_EMPLOI",
+              "IMPACT_FAIBLE_RECHERCHE_EMPLOI",
+              "AUCUNE"
+            ],
+            "description": "Les contraintes de maitrise de la langue française et de calcul de l'usager qui compliquent ses recherches d'emploi"
+          },
+          "brsa": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire du RSA"
+          },
+          "boe": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi"
+          },
+          "baeeh": {
+            "type": "boolean",
+            "description": "L'usager est bénéficiaire ou ancien bénéficiaire de l’AEEH / PCH / PPS"
+          },
+          "scolarite_etablissement_specialise": {
+            "type": "boolean",
+            "description": "L'usager est scolarisé dans un établissement d’éducation spécialisée (IME ou IMPRO)"
+          },
+          "esat": {
+            "type": "boolean",
+            "description": "L'usager travaille, a travaillé ou bénéficie d’une orientation en ESAT et souhaite travailler en milieu ordinaire"
+          },
+          "boe_souhait_accompagnement": {
+            "type": "boolean",
+            "description": "L'usager est bénéficaire de l'obligation d'emploi et souhaite un accompagnement sur le sujet"
+          },
+          "date_naissance": {
+            "type": "string",
+            "description": "La date de naissance de l'usager",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "msa_autonomie_recherche_emploi": {
+            "type": "integer",
+            "description": "L'autonomie de l'usager dans ses recherches d'emploi. 1- Non, pas du tout; 2- Non, pas vraiment; 3- Moyennement; 4- Oui, plutôt; 5- Oui, complètement",
+            "format": "int32",
+            "example": 1
+          },
+          "msa_demarches_professionnelles": {
+            "type": "string",
+            "enum": [
+              "AUCUNE_DEMARCHE",
+              "PEU_DEMARCHES",
+              "PLUSIEURS_DEMARCHES"
+            ],
+            "description": "Le niveau d'avancement des demarches professionnelles de l'usager"
+          },
+          "adresse": {
+            "$ref": "#/components/schemas/Adresse"
+          },
+          "date_saisie_donnees": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "DecisionCA_Lecture": {
+        "required": [
+          "date_decision",
+          "etat_decision",
+          "organisme_decision"
+        ],
+        "type": "object",
+        "properties": {
+          "etat_decision": {
+            "type": "string",
+            "description": "L'état de la décision, elle peut être refusée ou acceptée",
+            "enum": [
+              "REFUSEE",
+              "ACCEPTEE"
+            ]
+          },
+          "date_decision": {
+            "type": "string",
+            "description": "La date de la décision",
+            "format": "date"
+          },
+          "agent_decision": {
+            "type": "string",
+            "description": "L'agent qui prend la décision",
+            "readOnly": true,
+            "example": "IIII9999"
+          },
+          "motif_refus": {
+            "type": "string",
+            "description": "Le motif de refus lorsque la décision est refusée",
+            "enum": [
+              "DECLARATION_INEXACTE",
+              "SITUATION_NON_COUVERTE",
+              "APPRECIATION_DIFFERENTE",
+              "MANQUE_CAPACITE_ACCUEIL",
+              "ENTRETIEN_ORIENTATION",
+              "AUTRE"
+            ]
+          },
+          "commentaire_refus": {
+            "type": "string",
+            "description": "Un commentaire lorsque la décision est refusée",
+            "example": "Champ libre"
+          },
+          "parcours": {
+            "type": "string",
+            "description": "Le parcours de l'orientation choisie pour l'usager lorsque la décision est refusée",
+            "writeOnly": true,
+            "enum": [
+              "IND",
+              "PED",
+              "PSP",
+              "PSO",
+              "EO"
+            ]
+          },
+          "organisme": {
+            "type": "string",
+            "description": "L'organisme de l'orientation choisie pour l'usager lorsque la décision est refusée",
+            "writeOnly": true,
+            "enum": [
+              "CD",
+              "FT",
+              "ML",
+              "CE",
+              "CAF"
+            ]
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure_Lecture"
+          }
+        },
+        "description": "La décision liée à l'orientation de l'usager"
+      },
+      "OrientationCreationCA_Commun": {
+        "required": [
+          "organisme",
+          "origine",
+          "parcours"
+        ],
+        "type": "object",
+        "properties": {
+          "origine": {
+            "type": "string",
+            "description": "Origine à partir de laquelle a été calculé l'orientation",
+            "enum": [
+              "INSCRIPTION_CONSEILLER_CD",
+              "INSCRIPTION_AUTO_CAF",
+              "INSCRIPTION_AUTO_MILO",
+              "INSCRIPTION_AUTO_MSA"
+            ]
+          },
+          "parcours": {
+            "type": "string",
+            "enum": [
+              "PSO",
+              "PSP",
+              "PED"
+            ],
+            "description": "Le parcours d'orientation de l'usager\r\n\r\nCode | Libellé\r\n---------|----------\r\n PED | Parcours professionnel |\r\n PSP | Parcours socio-professionnel |\r\n PSO | Parcours social |"
+          },
+          "organisme": {
+            "type": "string",
+            "description": "L'organisme d'orientation de l'usager",
+            "enum": [
+              "CD",
+              "CAF",
+              "FT",
+              "ML",
+              "CE"
+            ]
+          },
+          "date_entree_parcours": {
+            "type": "string",
+            "description": "La date d'entrée en parcours de l'orientation en cours",
+            "format": "date"
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "structure_decision": {
+            "$ref": "#/components/schemas/Structure_Commun"
+          }
+        }
+      },
+      "Structure_Commun": {
+        "type": "object",
+        "properties": {
+          "code_aurore": {
+            "pattern": "^[A-Za-z]{3}[0-9]{4}$",
+            "type": "string",
+            "example": "NAQ0057"
+          },
+          "code_safir": {
+            "pattern": "^\\d{5}$",
+            "type": "string",
+            "example": "69000"
+          },
+          "libelle_structure": {
+            "type": "string",
+            "readOnly": true,
+            "example": "Agence Mériadek"
+          }
+        },
+        "description": "La structure de décision qui a conduit à cette orientation de l'usager"
+      },
+      "DecisionCA": {
+        "type": "object",
+        "description": "La décision liée à l'orientation de l'usager",
+        "properties": {
+          "etat_decision": {
+            "type": "string",
+            "enum": [
+              "REFUSEE",
+              "ACCEPTEE"
+            ],
+            "description": "L'état de la décision, elle peut être refusée ou acceptée"
+          },
+          "date_decision": {
+            "type": "string",
+            "description": "La date de la décision",
+            "format": "date",
+            "example": "2024-08-01"
+          },
+          "organisme_decision": {
+            "type": "string",
+            "description": "L'organisme qui prend la décision",
+            "enum": [
+              "CD",
+              "ML",
+              "CAF",
+              "CE",
+              "FT"
+            ]
+          },
+          "structure_decision": {
+            "$ref": "#/components/schemas/Structure"
+          },
+          "agent_decision": {
+            "type": "string",
+            "description": "L'agent qui prend la décision",
+            "example": "IIII9999"
+          },
+          "motif_refus": {
+            "type": "string",
+            "enum": [
+              "DECLARATION_INEXACTE",
+              "SITUATION_NON_COUVERTE",
+              "APPRECIATION_DIFFERENTE",
+              "MANQUE_CAPACITE_ACCUEIL",
+              "ENTRETIEN_ORIENTATION",
+              "AUTRE"
+            ],
+            "description": "Le motif de refus lorsque la décision est refusée"
+          },
+          "commentaire_refus": {
+            "type": "string",
+            "description": "Un commentaire lorsque la décision est refusée",
+            "example": "Champ libre"
+          },
+          "parcours": {
+            "type": "string",
+            "enum": [
+              "PED",
+              "PSP",
+              "PSO"
+            ],
+            "description": "Le parcours de l'orientation choisie pour l'usager lorsque la décision est refusée\r\n\r\nCode | Libellé\r\n---------|----------\r\n PED | Parcours professionnel |\r\n PSP | Parcours socio-professionnel |\r\n PSO | Parcours social |\r\n EO | Entretien d'orientation |\r\n IND | Indéterminé |",
+            "writeOnly": true
+          },
+          "organisme": {
+            "type": "string",
+            "enum": [
+              "CD",
+              "CAF",
+              "FT",
+              "ML",
+              "CE"
+            ],
+            "description": "L'organisme de l'orientation choisie pour l'usager lorsque la décision est refusée",
+            "writeOnly": true
+          },
+          "structure": {
+            "$ref": "#/components/schemas/Structure"
+          }
+        },
+        "required": [
+          "etat_decision",
+          "date_decision",
+          "organisme_decision",
+          "agent_decision"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "authentification_agent": {
+        "type": "oauth2",
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+            "scopes": {
+              "api_orientationusagerv1": "Obligatoire",
+              "orientationusager": "Obligatoire"
+            },
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token"
+          }
+        }
+      },
+      "authentification_agent-clientCredentials": {
+        "type": "oauth2",
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+        "flows": {
+          "clientCredentials": {
+            "scopes": {
+              "api_orientationusagerv1": "Obligatoire",
+              "orientationusager": "Obligatoire"
+            },
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent"
+          }
+        }
+      }
+    }
+  }
+}

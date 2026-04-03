@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orientation Usager &#x2014; Sch&#xe9;ma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+<a href="../index.html" class="back-link">&larr; Catalogue</a>
+
+<header>
+  <h1>Orientation Usager</h1>
+  <div class="sub">Calcul, enregistrement et d&#xe9;cision d'orientation d'un usager vers un parcours (Social, Socio-Professionnel, Professionnel) et un organisme d'accompagnement</div>
+  <div class="sub-tech">Orientation Usager v1.0 &#x2014; 5 endpoints &#xb7; 14 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/orientationusager/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 1: MOD&#xc8;LE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">R&#xe9;sultat d'orientation <span class="dto">OrientationCA_Calculer</span></div>
+    <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-c" id="m-parcours">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Parcours et organisme <span class="dto">parcours &#xb7; organisme</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">L'orientation d&#xe9;termine un parcours d'accompagnement et un organisme r&#xe9;f&#xe9;rent pour l'usager
+          <div class="fi-tech"><code>parcours</code> &#xb7; <code>organisme</code> &#xb7; <code>statut</code> &#xb7; <code>etat</code> &#xb7; <code>date_entree_parcours</code> &#xb7; <code>date_creation</code> &#xb7; <code>date_modification</code>
+            <br><span class="ev">PED</span> Professionnel &#xb7; <span class="ev">PSP</span> Socio-professionnel &#xb7; <span class="ev">PSO</span> Social &#xb7; <span class="ev">EO</span> Entretien d'orientation &#xb7; <span class="ev">IND</span> Ind&#xe9;termin&#xe9;
+            <br><span class="ev">FT</span> France Travail &#xb7; <span class="ev">CD</span> Conseil d&#xe9;partemental &#xb7; <span class="ev">ML</span> Mission locale &#xb7; <span class="ev">CAF</span> &#xb7; <span class="ev">CE</span> Cap emploi</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l2c" id="m-structure">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Structures <span class="dto">Structure &#xb7; StructureDecision</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">L'agence d'accompagnement et l'agence de d&#xe9;cision, identifi&#xe9;es par code Aurore ou code Safir
+          <div class="fi-tech"><code>structure.code_aurore</code> &#xb7; <code>structure.code_safir</code> &#xb7; <code>structure.libelle_structure</code>
+            <br><code>structure_decision.code_aurore</code> &#xb7; <code>structure_decision.code_safir</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-b stack" id="m-criteres">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Crit&#xe8;res d'orientation <span class="dto">CriteresOrientationCA_Calculer</span></div>
+        <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Situation professionnelle, niveau d'&#xe9;tude et projet professionnel de l'usager
+          <div class="fi-tech"><code>origine</code> &#xb7; <code>situation_professionnelle</code> &#xb7; <code>type_emploi</code> &#xb7; <code>niveau_etude</code> &#xb7; <code>capacite_a_travailler</code> &#xb7; <code>projet_pro</code>
+            <br><span class="ev">EN_ACTIVITE</span> &#xb7; <span class="ev">DEUX_DERNIERES_ANNEES</span> &#xb7; <span class="ev">PLUS_DEUX_ANS</span> &#xb7; <span class="ev">JAMAIS</span>
+            <br><span class="ev">SALARIAT</span> &#xb7; <span class="ev">ENTREPRENARIAT</span> &#xb7; <span class="ev">FORMATION</span> &#xb7; <span class="ev">AUCUN</span></div>
+        </div>
+
+        <div class="n l3 stack" id="m-contraintes">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Contraintes freins &#xe0; l'emploi</div>
+          </div>
+          <div class="nb">
+            <div class="fi">Sept dimensions de freins &#xe9;valu&#xe9;es pour d&#xe9;terminer le parcours : sant&#xe9;, logement, mobilit&#xe9;, famille, finances, num&#xe9;rique, administratif/juridique, ma&#xee;trise du fran&#xe7;ais
+              <div class="fi-tech"><code>contrainte_sante</code> &#xb7; <code>contrainte_logement</code> &#xb7; <code>contrainte_mobilite</code> &#xb7; <code>contrainte_familiale</code> &#xb7; <code>contrainte_financiere</code> &#xb7; <code>contrainte_numerique</code> &#xb7; <code>contrainte_administrative_juridique</code> &#xb7; <code>contrainte_francais_calcul</code>
+                <br>Valeurs type : <span class="ev">AUCUNE</span> &#xb7; <span class="ev">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> &#xb7; <span class="ev">IMPACT_FORT_RECHERCHE_EMPLOI</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="n l2t stack" id="m-handicap">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Handicap et situation sp&#xe9;cifique</div>
+          </div>
+          <div class="nb">
+            <div class="fi">Indicateurs li&#xe9;s au handicap, &#xe0; la scolarit&#xe9; sp&#xe9;cialis&#xe9;e et &#xe0; l'ESAT
+              <div class="fi-tech"><code>boe</code> &#xb7; <code>baeeh</code> &#xb7; <code>scolarite_etablissement_specialise</code> &#xb7; <code>esat</code> &#xb7; <code>boe_souhait_accompagnement</code> &#xb7; <code>brsa</code>
+                <br>Tous bool&#xe9;ens &#x2014; <code>boe</code> = b&#xe9;n&#xe9;ficiaire obligation d'emploi &#xb7; <code>baeeh</code> = AEEH/PCH/PPS &#xb7; <code>esat</code> = exp&#xe9;rience ESAT</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-p stack" id="m-decision">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">D&#xe9;cision d'orientation <span class="dto">DecisionCA</span></div>
+        <div class="card">Optionnelle <span class="card-tech">object &#xb7; 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Acceptation ou refus de la proposition d'orientation. En cas de refus, un motif et un parcours alternatif peuvent &#xea;tre propos&#xe9;s.
+          <div class="fi-tech"><code>etat_decision</code> &#xb7; <code>date_decision</code> &#xb7; <code>organisme_decision</code> &#xb7; <code>agent_decision</code> &#xb7; <code>motif_refus</code> &#xb7; <code>commentaire_refus</code>
+            <br><span class="ev">ACCEPTEE</span> &#xb7; <span class="ev">REFUSEE</span>
+            <br>Motifs : <span class="ev">DECLARATION_INEXACTE</span> &#xb7; <span class="ev">SITUATION_NON_COUVERTE</span> &#xb7; <span class="ev">APPRECIATION_DIFFERENTE</span> &#xb7; <span class="ev">MANQUE_CAPACITE_ACCUEIL</span> &#xb7; <span class="ev">ENTRETIEN_ORIENTATION</span> &#xb7; <span class="ev">AUTRE</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel n&#xe9;cessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+</div>
+
+<div class="note">
+  <strong>Flux d'orientation (deux acteurs)</strong> &#x2014;
+  <strong>1.</strong> L'agent d'origine (ex. CAF, CD) appelle <code>calculOrientation</code> &#x2014; attention, cet appel a des <strong>effets de bord</strong> : il calcule le parcours <em>et enregistre imm&#xe9;diatement</em> l'orientation dans le syst&#xe8;me (statut PRECONISE, &#xe9;tat EN_ATTENTE).
+  <strong>2.</strong> L'organisme d'accueil (ex. Mission locale) d&#xe9;couvre l'orientation via <code>lectureOrientation</code> filtr&#xe9;e sur <code>etatOrientation=EN_ATTENTE</code>.
+  <strong>3.</strong> Il accepte ou refuse via <code>decisionOrientation</code> &#x2192; l'orientation passe &#xe0; DECIDE/OUVERT.
+  Il n'y a pas d'endpoint de notification : c'est l'enregistrement par <code>calculOrientation</code> qui rend l'orientation visible &#xe0; l'organisme destinataire.
+  L'endpoint <code>POST /orientation</code> permet d'enregistrer une orientation directement (sans calcul de crit&#xe8;res).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 2: COUVERTURE API                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Orientation <span class="dt-human">&#x2014; Calcul et gestion</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Calculer une orientation</span><div class="ep-human">Saisir les crit&#xe8;res sociaux et professionnels, calculer le parcours et l'organisme recommand&#xe9;s</div><span class="ep-path">/calculOrientation</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire les orientations</span><div class="ep-human">Consulter les orientations d'un usager, filtrables par &#xe9;tat (BROUILLON, EN_ATTENTE, OUVERT, CLOTURE)</div><span class="ep-path">/lectureOrientation</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Orienter un usager</span><div class="ep-human">Enregistrer directement une orientation sans saisir de crit&#xe8;res d&#xe9;taill&#xe9;s</div><span class="ep-path">/orientation</span></div></div>
+    <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Modifier parcours ou structure</span><div class="ep-human">Changer le parcours, la structure d'accompagnement ou la date d'entr&#xe9;e sans r&#xe9;orienter</div><span class="ep-path">/modificationOrientation</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">D&#xe9;cision <span class="dt-human">&#x2014; Accepter ou refuser</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">D&#xe9;cider une orientation</span><div class="ep-human">Accepter ou refuser la proposition d'orientation, avec motif de refus si applicable</div><span class="ep-path">/decisionOrientation</span></div></div>
+  </div>
+</div>
+
+<!-- Schemas -->
+<div style="margin-top:24px;">
+  <div class="domain-title">14 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Enregistrement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OrientationCA_Calculer</span> <span class="sc-desc">&#x2014; R&#xe9;sultat du calcul d'orientation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OrientationCA_Lecture</span> <span class="sc-desc">&#x2014; Orientation lue (avec d&#xe9;cision)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OrientationCA</span> <span class="sc-desc">&#x2014; Orientation modifi&#xe9;e</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">CriteresOrientationCA_Calculer</span> <span class="sc-desc">&#x2014; Crit&#xe8;res en sortie (avec brsa, adresse)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">CriteresOrientationCA_Lecture</span> <span class="sc-desc">&#x2014; Crit&#xe8;res lus (avec date saisie)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DecisionCA_Lecture</span> <span class="sc-desc">&#x2014; D&#xe9;cision lue</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CriteresOrientationCA_CalculerEntree</span> <span class="sc-desc">&#x2014; Crit&#xe8;res en entr&#xe9;e du calcul</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">OrientationCreationCA_Commun</span> <span class="sc-desc">&#x2014; Orientation directe (sans calcul)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DecisionCA</span> <span class="sc-desc">&#x2014; D&#xe9;cision &#xe0; enregistrer</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Structure</span> <span class="sc-desc">&#x2014; Agence d'accompagnement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">StructureDecision</span> <span class="sc-desc">&#x2014; Agence de d&#xe9;cision</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Structure_Commun</span> <span class="sc-desc">&#x2014; Structure pour orientation directe</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Structure_Lecture</span> <span class="sc-desc">&#x2014; Structure en lecture (refus)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Adresse</span> <span class="sc-desc">&#x2014; Adresse de l'usager</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: EXEMPLE                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Deux acteurs, un parcours</strong> &#x2014; Un allocataire RSA s'inscrit via la CAF. L'agent CAF saisit les crit&#xe8;res et lance le calcul, qui <em>enregistre imm&#xe9;diatement</em> une pr&#xe9;conisation. Le lendemain, la Mission locale consulte ses orientations en attente, d&#xe9;couvre la pr&#xe9;conisation, et l'accepte. En parall&#xe8;le, un conseiller d&#xe9;partemental oriente directement un autre usager sans passer par le calcul.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-calcul"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// ACTEUR 1 : Agent CAF (Sophie Martin)</span>
+<span class="jc">// POST /calculOrientation</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// &#x26a0; EFFET DE BORD : cet appel enregistre</span>
+<span class="jc">//   l'orientation dans le syst&#xe8;me. Elle devient</span>
+<span class="jc">//   visible par l'organisme d'accueil.</span>
+<span class="jc">// Headers:</span>
+<span class="jc">//   ft-jeton-usager:       ewogIC...  (via Rechercher usager)</span>
+<span class="jc">//   pa-nom-agent:          Martin</span>
+<span class="jc">//   pa-prenom-agent:       Sophie</span>
+<span class="jc">//   pa-identifiant-agent:  CAF75-0112</span>
+<span class="jc">// &#x2500; Requ&#xea;te (crit&#xe8;res) &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</span>
+{
+  <span class="jk">"origine"</span>: <span class="js">"INSCRIPTION_AUTO_CAF"</span>,
+  <span class="jk">"situation_professionnelle"</span>: <span class="js">"PLUS_DEUX_ANS"</span>,
+  <span class="jk">"niveau_etude"</span>: <span class="js">"NV5"</span>,
+  <span class="jk">"capacite_a_travailler"</span>: <span class="jb">true</span>,
+  <span class="jk">"projet_pro"</span>: <span class="js">"SALARIAT"</span>,
+  <span class="jk">"contrainte_sante"</span>: <span class="js">"AUCUNE"</span>,
+  <span class="jk">"contrainte_logement"</span>: <span class="js">"IMPACT_FAIBLE_RECHERCHE_EMPLOI"</span>,
+  <span class="jk">"contrainte_mobilite"</span>: <span class="js">"DEPENDANT_TRANSPORT"</span>,
+  <span class="jk">"contrainte_familiale"</span>: <span class="js">"ENFANT_SANS_SOLUTION_GARDE"</span>,
+  <span class="jk">"contrainte_financiere"</span>: <span class="js">"IMPACT_FORT_RECHERCHE_EMPLOI"</span>,
+  <span class="jk">"contrainte_numerique"</span>: <span class="js">"AUCUNE"</span>,
+  <span class="jk">"contrainte_administrative_juridique"</span>: <span class="js">"AUCUNE"</span>,
+  <span class="jk">"contrainte_francais_calcul"</span>: <span class="js">"AUCUNE"</span>,
+  <span class="jk">"boe"</span>: <span class="jb">false</span>,
+  <span class="jk">"baeeh"</span>: <span class="jb">false</span>,
+  <span class="jk">"scolarite_etablissement_specialise"</span>: <span class="jb">false</span>,
+  <span class="jk">"esat"</span>: <span class="jb">false</span>,
+  <span class="jk">"boe_souhait_accompagnement"</span>: <span class="jb">false</span>
+}</div>
+<div data-section="s-resultat"><span class="jc">// &#x2500; R&#xe9;ponse 200 &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</span>
+<span class="jc">// L'orientation est d&#xe9;j&#xe0; ENREGISTR&#xc9;E dans le</span>
+<span class="jc">// syst&#xe8;me &#xe0; ce stade (statut PRECONISE).</span>
+{
+  <span class="jk">"parcours"</span>: <span class="js">"PSP"</span>,
+  <span class="jk">"organisme"</span>: <span class="js">"ML"</span>,
+  <span class="jk">"structure"</span>: {
+    <span class="jk">"code_safir"</span>: <span class="js">"75012"</span>,
+    <span class="jk">"libelle_structure"</span>: <span class="js">"Mission locale Paris 12e"</span>
+  },
+  <span class="jk">"statut"</span>: <span class="js">"PRECONISE"</span>,
+  <span class="jk">"etat"</span>: <span class="js">"EN_ATTENTE"</span>,
+  <span class="jk">"agent_creation"</span>: <span class="js">"CAF75-0112"</span>,
+  <span class="jk">"date_creation"</span>: <span class="js">"2026-03-10T09:30:00"</span>,
+  <span class="jk">"criteres_orientation"</span>: {
+    <span class="jk">"origine"</span>: <span class="js">"INSCRIPTION_AUTO_CAF"</span>,
+    <span class="jk">"situation_professionnelle"</span>: <span class="js">"PLUS_DEUX_ANS"</span>,
+    <span class="jk">"niveau_etude"</span>: <span class="js">"NV5"</span>,
+    <span class="jk">"brsa"</span>: <span class="jb">true</span>,
+    <span class="jc">// ... (crit&#xe8;res complets)</span>
+  }
+}</div>
+<div data-section="s-lecture"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// ACTEUR 2 : Agent Mission locale (Thomas Dupont)</span>
+<span class="jc">// GET /lectureOrientation?etatOrientation=EN_ATTENTE</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// Le lendemain. Autre agent, autre syst&#xe8;me.</span>
+<span class="jc">// Headers:</span>
+<span class="jc">//   ft-jeton-usager:       ewogIC...  (m&#xea;me usager)</span>
+<span class="jc">//   pa-nom-agent:          Dupont</span>
+<span class="jc">//   pa-prenom-agent:       Thomas</span>
+<span class="jc">//   pa-identifiant-agent:  ML75-0089</span>
+<span class="jc">// &#x2500; R&#xe9;ponse 200 (tableau) &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</span>
+[
+  {
+    <span class="jk">"parcours"</span>: <span class="js">"PSP"</span>,
+    <span class="jk">"organisme"</span>: <span class="js">"ML"</span>,
+    <span class="jk">"structure"</span>: {
+      <span class="jk">"code_safir"</span>: <span class="js">"75012"</span>,
+      <span class="jk">"libelle_structure"</span>: <span class="js">"Mission locale Paris 12e"</span>
+    },
+    <span class="jk">"statut"</span>: <span class="js">"PRECONISE"</span>,
+    <span class="jk">"etat"</span>: <span class="js">"EN_ATTENTE"</span>,
+    <span class="jk">"agent_creation"</span>: <span class="js">"CAF75-0112"</span>,
+    <span class="jk">"date_entree_parcours"</span>: <span class="jnull">null</span>,
+    <span class="jk">"date_creation"</span>: <span class="js">"2026-03-10T09:30:00"</span>,
+    <span class="jk">"date_modification"</span>: <span class="js">"2026-03-10T09:30:00"</span>,
+    <span class="jk">"criteres_orientation"</span>: {
+      <span class="jk">"origine"</span>: <span class="js">"INSCRIPTION_AUTO_CAF"</span>,
+      <span class="jk">"situation_professionnelle"</span>: <span class="js">"PLUS_DEUX_ANS"</span>,
+      <span class="jk">"niveau_etude"</span>: <span class="js">"NV5"</span>,
+      <span class="jk">"brsa"</span>: <span class="jb">true</span>,
+      <span class="jk">"contrainte_familiale"</span>: <span class="js">"ENFANT_SANS_SOLUTION_GARDE"</span>,
+      <span class="jk">"contrainte_financiere"</span>: <span class="js">"IMPACT_FORT_RECHERCHE_EMPLOI"</span>,
+      <span class="jk">"contrainte_mobilite"</span>: <span class="js">"DEPENDANT_TRANSPORT"</span>,
+      <span class="jc">// ... (autres crit&#xe8;res)</span>
+      <span class="jk">"date_saisie_donnees"</span>: <span class="js">"2026-03-10T09:30:00"</span>
+    },
+    <span class="jk">"decision"</span>: <span class="jnull">null</span>
+  }
+]</div>
+<div data-section="s-decision"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// ACTEUR 2 (suite) : l'agent ML accepte</span>
+<span class="jc">// POST /decisionOrientation</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+{
+  <span class="jk">"etat_decision"</span>: <span class="js">"ACCEPTEE"</span>,
+  <span class="jk">"date_decision"</span>: <span class="js">"2026-03-11"</span>,
+  <span class="jk">"organisme_decision"</span>: <span class="js">"ML"</span>,
+  <span class="jk">"structure_decision"</span>: {
+    <span class="jk">"code_safir"</span>: <span class="js">"75012"</span>
+  },
+  <span class="jk">"agent_decision"</span>: <span class="js">"ML75-0089"</span>
+}
+<span class="jc">// &#x2192; 201 Created</span></div>
+<div data-section="s-orienter"><span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// SC&#xc9;NARIO ALTERNATIF : orientation directe</span>
+<span class="jc">// POST /orientation</span>
+<span class="jc">// &#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;</span>
+<span class="jc">// Pas de calcul &#x2014; le conseiller d&#xe9;cide seul.</span>
+<span class="jc">// Headers: ft-jeton-usager + pa-*-agent</span>
+{
+  <span class="jk">"origine"</span>: <span class="js">"INSCRIPTION_CONSEILLER_CD"</span>,
+  <span class="jk">"parcours"</span>: <span class="js">"PSO"</span>,
+  <span class="jk">"organisme"</span>: <span class="js">"CD"</span>,
+  <span class="jk">"date_entree_parcours"</span>: <span class="js">"2026-03-15"</span>,
+  <span class="jk">"structure"</span>: {
+    <span class="jk">"code_aurore"</span>: <span class="js">"IDF0033"</span>
+  },
+  <span class="jk">"structure_decision"</span>: {
+    <span class="jk">"code_aurore"</span>: <span class="js">"IDF0033"</span>
+  }
+}
+<span class="jc">// &#x2192; 201 Created (pas de body en retour)</span></div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-calcul">
+  <div class="ex-title"><span class="ex-ico">&#x1F9ED;</span> Acteur 1 &#x2014; Agent CAF calcule</div>
+  <div class="ex-card">
+    <h4>Inscription via la CAF &#x2014; 10 mars 2026</h4>
+    <p><span class="ex-tag tag-encours">INSCRIPTION_AUTO_CAF</span> L'usager, allocataire du RSA, n'a pas travaill&#xe9; depuis plus de 2 ans. Titulaire d'un CAP, il souhaite retrouver un emploi salari&#xe9;. L'agent CAF saisit les crit&#xe8;res.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>&#x1F3E0; Logement</strong> &#x2192; Impact faible</div>
+      <div class="ex-item"><strong>&#x1F697; Mobilit&#xe9;</strong> &#x2192; D&#xe9;pendant des transports</div>
+      <div class="ex-item"><strong>&#x1F46A; Famille</strong> &#x2192; Enfant sans solution de garde</div>
+      <div class="ex-item"><strong>&#x1F4B0; Finances</strong> &#x2192; Impact fort</div>
+    </div>
+    <div class="ex-agent"><strong>Agent CAF</strong> : Sophie Martin (CAF75-0112)</div>
+  </div>
+</div>
+
+<div data-section="s-resultat">
+  <div class="ex-title"><span class="ex-ico">&#x26a0;</span> R&#xe9;ponse avec effet de bord</div>
+  <div class="ex-card">
+    <h4>PSP / Mission locale &#x2014; enregistr&#xe9; imm&#xe9;diatement</h4>
+    <p>L'algorithme pr&#xe9;conise <strong>PSP</strong> (socio-professionnel) vers la <strong>Mission locale Paris 12e</strong>. L'orientation est <strong>d&#xe9;j&#xe0; persist&#xe9;e</strong> dans le syst&#xe8;me &#xe0; cet instant &#x2014; il n'y a pas d'&#xe9;tape d'envoi s&#xe9;par&#xe9;e.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Statut</strong> &#x2192; <span class="ex-tag tag-besoin">PRECONISE</span> (pas encore d&#xe9;cid&#xe9;)</div>
+      <div class="ex-item"><strong>&#xc9;tat</strong> &#x2192; <span class="ex-tag tag-besoin">EN_ATTENTE</span> (visible par la ML)</div>
+      <div class="ex-item"><strong>brsa</strong> &#x2192; true (enrichi automatiquement)</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Le POST <code>/calculOrientation</code> n'est pas un simple calcul : il <strong>&#xe9;crit</strong> dans le syst&#xe8;me. D&#xe8;s la r&#xe9;ponse 200, l'orientation existe et peut &#xea;tre lue par l'organisme d'accueil.</p>
+  </div>
+</div>
+
+<div data-section="s-lecture">
+  <div class="ex-title"><span class="ex-ico">&#x1F4CB;</span> Acteur 2 &#x2014; Mission locale d&#xe9;couvre</div>
+  <div class="ex-card">
+    <h4>Consultation des orientations en attente &#x2014; 11 mars</h4>
+    <p><span class="ex-tag tag-besoin">EN_ATTENTE</span> Le lendemain, l'agent de la Mission locale interroge les orientations en attente pour cet usager. Il retrouve la pr&#xe9;conisation cr&#xe9;&#xe9;e la veille par l'agent CAF.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Cr&#xe9;&#xe9;e par</strong> &#x2192; CAF75-0112 (pas le m&#xea;me agent)</div>
+      <div class="ex-item"><strong>Crit&#xe8;res</strong> &#x2192; Complets, avec <code>brsa: true</code></div>
+      <div class="ex-item"><strong>D&#xe9;cision</strong> &#x2192; null (pas encore prise)</div>
+    </div>
+    <div class="ex-agent"><strong>Agent ML</strong> : Thomas Dupont (ML75-0089)</div>
+  </div>
+</div>
+
+<div data-section="s-decision">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Acteur 2 &#x2014; Mission locale accepte</div>
+  <div class="ex-card">
+    <h4>Orientation accept&#xe9;e &#x2014; 11 mars 2026</h4>
+    <p>L'agent ML accepte la pr&#xe9;conisation. L'usager sera accompagn&#xe9; en parcours socio-professionnel, combinant leviers emploi et aide sociale.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Statut</strong> &#x2192; DECIDE &#xb7; &#xc9;tat &#x2192; OUVERT</div>
+    </div>
+    <div class="ex-agent"><strong>Agent ML</strong> : Thomas Dupont (ML75-0089)</div>
+  </div>
+</div>
+
+<div data-section="s-orienter">
+  <div class="ex-title"><span class="ex-ico">&#x1F4DD;</span> Sc&#xe9;nario alternatif &#x2014; Orientation directe</div>
+  <div class="ex-card">
+    <h4>Parcours social &#x2014; Conseil d&#xe9;partemental</h4>
+    <p><span class="ex-tag tag-encours">INSCRIPTION_CONSEILLER_CD</span> Un conseiller du d&#xe9;partement oriente un autre usager directement vers le parcours social, sans passer par le calcul. Utile quand la situation est d&#xe9;j&#xe0; connue.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Parcours</strong> &#x2192; PSO (social)</div>
+      <div class="ex-item"><strong>Organisme</strong> &#x2192; CD</div>
+      <div class="ex-item"><strong>Structure</strong> &#x2192; IDF0033</div>
+    </div>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Les champs <code>origine</code>, <code>parcours</code> et <code>organisme</code> sont obligatoires. Pas de calcul, pas de pr&#xe9;conisation &#x2014; l'orientation est enregistr&#xe9;e directement.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<footer>
+  OpenAPI 3.0.1 &#x2014; Orientation Usager v1.0 &#xb7; api.francetravail.io &#xb7; 5 endpoints &#xb7; 14 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

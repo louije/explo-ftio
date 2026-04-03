@@ -2,7 +2,7 @@
 
 Schema download pattern: `https://francetravail.io/api-peio/v2/api/{pageId}/openapi`
 
-## APIs with downloadable OpenAPI schemas (29)
+## APIs with downloadable OpenAPI schemas (30)
 
 | # | Page ID | API Name | Version | Schema URL | Local File |
 |---|---------|----------|---------|-----------|------------|
@@ -35,6 +35,7 @@ Schema download pattern: `https://francetravail.io/api-peio/v2/api/{pageId}/open
 | 27 | 416 | Rendez-vous partenaire | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/416/openapi) | rendez-vous-partenaires.json |
 | 28 | 561 | Synthese des pages employeur | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/561/openapi) | synthese-pages-employeurs.json |
 | 29 | 260 | Gestion des prestations sous-traitees | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/260/openapi) | prestation-partenaire.json |
+| 30 | ? | Orientation Usager | 1.0 | ? | orientation-usager.json |
 
 ## APIs without downloadable OpenAPI schemas (16)
 

@@ -1,5 +1,5 @@
 /**
- * build-catalogue.ts — Extracts metadata from 29 OpenAPI schemas
+ * build-catalogue.ts — Extracts metadata from OpenAPI schemas
  * Run: bun run build-catalogue.ts
  * Output: catalogue-data.js
  */
@@ -42,6 +42,7 @@ const PAGE_IDS: Record<string, number> = {
   "rendez-vous-partenaires": 416,
   "synthese-pages-employeurs": 561,
   "prestation-partenaire": 260,
+  "orientation-usager": 0,
 };
 
 const GROUPS: Record<string, [string, string]> = {
@@ -60,6 +61,7 @@ const GROUPS: Record<string, [string, string]> = {
   "diagnostic-usager":                   ["usager-agent", "Dossier usager"],
   "metiers-recherches-projets-evolution":["usager-agent", "Dossier usager"],
   "rendez-vous-partenaires":             ["usager-agent", "Dossier usager"],
+  "orientation-usager":                   ["usager-agent", "Dossier usager"],
   "gestion-sanctions-rsa":               ["partenaire", "Gestion partenaire"],
   "prestation-partenaire":               ["partenaire", "Gestion partenaire"],
   "offres-emploi":                       ["offres", "Offres d'emploi"],
@@ -151,6 +153,12 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Commandes",
     "Rendez-vous et présence",
     "Résultats et livrables",
+  ],
+  "orientation-usager": [
+    "Calcul d'orientation",
+    "Décision d'orientation",
+    "Parcours et structure",
+    "Critères sociaux et professionnels",
   ],
   "referentiel-agences": [
     "Identité et type",
@@ -254,6 +262,7 @@ const DOC_CONCEPTS: Record<string, string[]> = {
 // Starred APIs — appear first on the catalogue when no filter is active
 const STARRED: string[] = [
   "diagnostic-usager",
+  "orientation-usager",
   "rendez-vous-partenaires",
   "prestation-partenaire",
 ];
