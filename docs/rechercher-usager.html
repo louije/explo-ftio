@@ -23,6 +23,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -131,7 +132,77 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Deux petits vocabulaires, mais critiques</strong> — Pas d'endpoint <code>/referentiel</code> ici, seulement deux champs dont les valeurs conditionnent l'usage côté consommateur. Le <code>codeRetour</code> en particulier n'est <strong>pas déclaré en enum</strong> dans l'OpenAPI — ses valeurs sont documentées uniquement à travers les exemples de réponses, et la logique d'intégration dépend directement de cette liste.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires des réponses
+    <span class="rs-count">1 enum · 1 pseudo-enum (exemples)</span>
+    <span class="rs-tech">schémas <code>ResultatDTO</code> · <code>Resultat{400,403,500,503}DTO</code></span>
+  </h2>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Code retour</span><span class="ref-count">8 valeurs — 3 succès · 5 erreurs</span></div>
+      <p style="font-size:0.82rem;color:var(--text-dim);line-height:1.55;margin:2px 0 10px;">
+        Le code retour détermine comment interpréter la réponse. Le préfixe est signifiant : <strong>S</strong> = succès métier (HTTP 200), <strong>R</strong> = erreur (HTTP 4xx/5xx). Seul <code>S001</code> produit un <code>jetonUsager</code> exploitable.
+      </p>
+
+      <div class="ref-subtitle">Succès métier <span class="ref-count">HTTP 200</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">S001</span> Usager trouvé — un <code>jetonUsager</code> est produit (<code>topIdentiteCertifiee</code> = O ou N)</li>
+        <li><span class="voc-code">S002</span> Aucun usager trouvé — pas de jeton (<code>topIdentiteCertifiee</code> = null)</li>
+        <li><span class="voc-code">S003</span> Plusieurs usagers trouvés — pas de jeton, résultat ambigu à lever en amont</li>
+      </ul>
+
+      <div class="ref-subtitle" style="margin-top:14px;">Erreurs <span class="ref-count">HTTP 4xx / 5xx</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R997</span> Erreur de validation des paramètres (HTTP 400)</li>
+        <li><span class="voc-code">R001</span> Accès non autorisé (HTTP 403)</li>
+        <li><span class="voc-code">R002</span> L'usager n'est pas rattaché à la structure de l'accédant (HTTP 403)</li>
+        <li><span class="voc-code">R998</span> Un service a répondu en erreur (HTTP 500)</li>
+        <li><span class="voc-code">R999</span> Service indisponible, à réessayer ultérieurement (HTTP 503)</li>
+      </ul>
+
+      <div class="voc-tech">
+        <code>ResultatDTO.codeRetour</code> — également présent dans les 4 DTO d'erreur. Le champ <code>message</code> porte la version humaine du code. <strong>Non déclaré en enum</strong> : la liste est reconstituée uniquement à partir des exemples de réponses de l'OpenAPI.
+      </div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Identité certifiée</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">O</span> Identité de l'usager certifiée par France Travail</li>
+        <li><span class="voc-code">N</span> Identité non certifiée — dossier accessible avec réserve</li>
+        <li><span class="voc-code">null</span> Non applicable (aucun ou plusieurs usagers trouvés)</li>
+      </ul>
+      <div class="voc-tech">
+        <code>ResultatDTO.topIdentiteCertifiee</code> — déclaré en <code>enum</code> dans l'OpenAPI.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Pour aller plus loin</strong> — Les APIs appelées avec le <code>jetonUsager</code> ont leurs propres vocabulaires métier : <a href="diagnostic-usager.html#ref">API Diagnostic</a> (référentiel complet), <a href="orientation-usager.html#ref">API Orientation</a> (parcours, organismes, freins, décisions).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

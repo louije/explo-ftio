@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -211,7 +212,361 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Plus d'une trentaine de vocabulaires</strong> — Cette API a un périmètre métier <strong>dense</strong> : elle couvre le cycle de vie complet d'une prestation partenaire (candidature → session → rendez-vous → résultat) et chaque étape porte ses propres codes. Parfois le même concept est codé différemment selon le DTO (ex. la nature d'animation est <code>I</code>/<code>E</code> dans <code>Session</code> mais <code>INTERNE</code>/<code>EXTERNE</code> dans les filtres de recherche — même sens, encodages divergents). Quelques libellés ne sont pas documentés dans l'OpenAPI et sont marqués comme tels.
+</div>
+
+<!-- ── CANDIDATURE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Candidature
+    <span class="rs-count">2 vocabulaires · 15 codes</span>
+    <span class="rs-tech">schéma <code>Candidature</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le cœur du cycle de vie : d'où vient le demandeur envoyé au prestataire, et où en est sa candidature.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Statut de la candidature</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AT</span> À traiter</li>
+        <li><span class="voc-code">EA</span> En attente</li>
+        <li><span class="voc-code">EC</span> En cours</li>
+        <li><span class="voc-code">TR</span> Traitée</li>
+        <li><span class="voc-code">SS</span> Sans suite</li>
+        <li><span class="voc-code">AN</span> Annulée</li>
+      </ul>
+      <div class="voc-tech"><code>Candidature.statut</code> · <code>TraitementCandidature.statut</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de demandeur d'emploi</span><span class="ref-count">9</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DE_NOUV_INSCRIT</span> DE Nouvel inscrit</li>
+        <li><span class="voc-code">DE_REINSCRIT</span> DE Réinscrit</li>
+        <li><span class="voc-code">DE_EN_COURS</span> DE en cours</li>
+        <li><span class="voc-code">DE_SUIVI</span> DE Suivi</li>
+        <li><span class="voc-code">DE_SORTIE_FORM</span> DE Sortie formation</li>
+        <li><span class="voc-code">DE_GUIDE</span> DE Guidé</li>
+        <li><span class="voc-code">PRIORITAIRE</span> Prioritaire</li>
+        <li><span class="voc-code">PERMITTENT</span> Permittent</li>
+        <li><span class="voc-code">AUTONOME</span> Autonome</li>
+      </ul>
+      <div class="voc-tech"><code>Candidature.typeDE</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SESSION & ANIMATION ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Session &amp; animation
+    <span class="rs-count">8 vocabulaires · 18 codes</span>
+    <span class="rs-tech">schémas <code>Session</code> · <code>ParametrageSession</code> · <code>LieuRealisation</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Une session est une mise en œuvre concrète de la prestation (date, lieu, animateur, bénéficiaires). Plusieurs vocabulaires coexistent pour dire des choses voisines mais pas équivalentes : origine de la session, nature de l'animation, lieu de réalisation, modalité du 1er rendez-vous.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Origine de la session</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PL</span> Planification standard</li>
+        <li><span class="voc-code">HC</span> Hors-calendrier</li>
+        <li><span class="voc-code">RC</span> Commande de régularisation</li>
+      </ul>
+      <div class="voc-tech"><code>Session.origineSession</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nature d'animation — court</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">I</span> Interne</li>
+        <li><span class="voc-code">E</span> Externe</li>
+      </ul>
+      <div class="voc-tech"><code>Session.natureAnimation</code> (et paramètres GED).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nature d'animation — long</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">INTERNE</span> Interne</li>
+        <li><span class="voc-code">EXTERNE</span> Externe</li>
+      </ul>
+      <div class="voc-tech">Filtres de recherche sur <code>Resultat</code>. <strong>Divergence de codage</strong> avec la version courte — même sens métier, encodage différent selon le contexte.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de lieu de réalisation</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">INTERNE</span> Interne (locaux partenaire)</li>
+        <li><span class="voc-code">EXTERNE</span> Externe</li>
+        <li><span class="voc-code">AUTRE</span> Autre</li>
+        <li><span class="voc-code">WEBCAM</span> 100 % à distance</li>
+      </ul>
+      <div class="voc-tech"><code>LieuRealisation.typeLieu</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Modalité 1er RDV — court</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">P</span> Physique</li>
+        <li><span class="voc-code">W</span> Webcam (à distance)</li>
+      </ul>
+      <div class="voc-tech"><code>Session.modalitePremierRendezVous</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Modalité 1er RDV — long</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PHYSIQUE</span> Physique</li>
+        <li><span class="voc-code">WEBCAM</span> Webcam</li>
+      </ul>
+      <div class="voc-tech"><code>TraitementCandidature.modalitePremierRendezVous</code> — à nouveau deux encodages coexistent pour un même concept.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'atelier / module</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">THA</span> Thème Atelier</li>
+        <li><span class="voc-code">MTH</span> Module Thématique</li>
+      </ul>
+      <div class="voc-tech"><code>ParametrageSession.type</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de courrier</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">INV</span> Invitation</li>
+        <li><span class="voc-code">CON</span> Convocation</li>
+      </ul>
+      <div class="voc-tech"><code>ParametrageSession.typeCourrier</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── RENDEZ-VOUS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Rendez-vous &amp; individu
+    <span class="rs-count">4 vocabulaires · 18 codes</span>
+    <span class="rs-tech">schémas <code>RendezVous</code> · <code>Entretien</code> · <code>Individu</code></span>
+  </h2>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Origine du rendez-vous</span><span class="ref-count">10</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PA</span> Prest@ppli</li>
+        <li><span class="voc-code">BO</span> Back-office</li>
+        <li><span class="voc-code">WB</span> Mes Services à la carte</li>
+        <li><span class="voc-code">FO</span> Front-Office</li>
+        <li><span class="voc-code">FW</span> Front-Office Webco</li>
+        <li><span class="voc-code">CW</span> Webco XP</li>
+        <li><span class="voc-code">AC</span> Mes Événements Emploi</li>
+        <li><span class="voc-code">MP</span> Webco MPA</li>
+        <li><span class="voc-code">CD</span> Conseils départementaux</li>
+        <li><span class="voc-code">ML</span> Missions locales</li>
+      </ul>
+      <div class="voc-tech"><code>RendezVous.origine</code> — documente la surface d'appel (quel canal ou système a créé le RDV). La liste est un patchwork historique d'outils FT internes et de partenaires externes.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Code entretien</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">I</span> Individuel</li>
+        <li><span class="voc-code">B</span> Bilan</li>
+        <li><span class="voc-code">M</span> Mixte</li>
+        <li><span class="voc-code">P</span> <em>(non documenté)</em></li>
+      </ul>
+      <div class="voc-tech"><code>Entretien.codeEntretien</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type utilisateur MSC</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DE_INSCRIT</span> DE inscrit</li>
+        <li><span class="voc-code">DE_RADIE</span> DE radié</li>
+        <li><span class="voc-code">CANDIDAT</span> Candidat</li>
+        <li><span class="voc-code">INDIVIDU_NON_DE</span> Individu non-DE</li>
+      </ul>
+      <div class="voc-tech"><code>Individu.typeUtilisateurMSC</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Civilité</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Monsieur</li>
+        <li><span class="voc-code">3</span> Madame</li>
+      </ul>
+      <div class="voc-tech"><code>Individu.civilite</code> — codage numérique (hérité SI, différent des autres APIs qui utilisent <code>M</code>/<code>Mme</code>/<code>Mx</code>).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── RÉSULTAT & ÉVALUATION ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Résultat &amp; évaluation
+    <span class="rs-count">5 vocabulaires · 14 codes</span>
+    <span class="rs-tech">schémas <code>Resultat</code> · <code>ResultatRendezVous</code> · <code>EvaluationRendezVous</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Après la prestation : la décision de France Travail, le niveau de réfaction appliqué (si réfaction il y a), et l'évaluation CEP (Conseil en Évolution Professionnelle).
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Décision sur résultat</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">I</span> En cours (instruction)</li>
+        <li><span class="voc-code">C</span> Confirmé par FT</li>
+        <li><span class="voc-code">M</span> Modifié par FT</li>
+      </ul>
+      <div class="voc-tech"><code>ResultatRendezVous.decisionSurResultat</code> — « PE » dans le schéma (France Travail / ex-Pôle Emploi).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveau de réfaction</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">0</span> Aucune</li>
+        <li><span class="voc-code">1</span> Réfaction partielle</li>
+        <li><span class="voc-code">2</span> Réfaction totale</li>
+      </ul>
+      <div class="voc-tech"><code>ResultatRendezVous.niveauRefaction</code> — la réfaction est une décote de paiement appliquée quand la prestation n'a pas été entièrement réalisée.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'évaluation</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">I</span> Initiale</li>
+        <li><span class="voc-code">F</span> Finale</li>
+      </ul>
+      <div class="voc-tech"><code>EvaluationRendezVous.typeEvaluation</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Code compétence CEP</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">A</span> <em>(non documenté)</em></li>
+        <li><span class="voc-code">C</span> <em>(non documenté)</em></li>
+        <li><span class="voc-code">D</span> <em>(non documenté)</em></li>
+        <li><span class="voc-code">E</span> <em>(non documenté)</em></li>
+      </ul>
+      <div class="voc-tech"><code>EvaluationRendezVous.codeCompetenceCEP</code> — les libellés ne sont pas dans l'OpenAPI. Probablement les 4 axes du CEP (Définir son projet, Connaître les métiers, etc.) mais non confirmé par le schéma.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Utilisation date d'effet</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">O</span> Oui</li>
+        <li><span class="voc-code">I</span> Non <em>(codage atypique — « I » et non « N »)</em></li>
+      </ul>
+      <div class="voc-tech"><code>Resultat.utilisationDateEffet</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── DIVERS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Divers
+    <span class="rs-count">6 vocabulaires courts</span>
+    <span class="rs-tech">classifications, GED, recherche</span>
+  </h2>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de prestataire</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">T</span> Titulaire</li>
+        <li><span class="voc-code">C</span> Co-traitant</li>
+        <li><span class="voc-code">S</span> Sous-traitant</li>
+      </ul>
+      <div class="voc-tech"><code>TypePrestataire.codeTypePrestataire</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Catégorie de bénéficiaire</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DE</span> <em>(non documenté — probablement « Demandeur d'emploi »)</em></li>
+        <li><span class="voc-code">DV</span> <em>(non documenté)</em></li>
+      </ul>
+      <div class="voc-tech"><code>Individu.categorieBeneficiaire</code> — libellés absents de l'OpenAPI.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nature pièce GED</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">B</span> Bénéficiaire</li>
+        <li><span class="voc-code">P</span> Prestation</li>
+      </ul>
+      <div class="voc-tech"><code>PieceGED.nature</code> — Gestion Électronique des Documents.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Unité de durée</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">JOUR</span> Jour</li>
+        <li><span class="voc-code">HEURE</span> Heure</li>
+        <li><span class="voc-code">MINUTE</span> Minute</li>
+      </ul>
+      <div class="voc-tech"><code>Duree.unite</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Ordre de tri</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ASCENDING</span> Croissant</li>
+        <li><span class="voc-code">DESCENDING</span> Décroissant</li>
+      </ul>
+      <div class="voc-tech">Paramètre <code>ordreTri</code> de la recherche de sessions.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Mode d'appel</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PRODUCTION</span> Production</li>
+        <li><span class="voc-code">TEST</span> Test</li>
+      </ul>
+      <div class="voc-tech"><code>HeaderModeAppelEnum</code> — en header pour distinguer un appel productif d'un appel de test.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="offres-emploi.html#ref">Offres d'emploi</a> · <a href="metiers-recherches-projets-evolution.html#ref">Métiers recherchés</a> · <a href="formations-professionnelles.html#ref">Formations professionnelles</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a> · <a href="rendez-vous-partenaires.html#ref">Rendez-vous partenaires</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

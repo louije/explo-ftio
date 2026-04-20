@@ -23,6 +23,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -188,7 +189,518 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Les listes de choix de l'API</strong> — L'API expose, via quatre endpoints <code>/referentiel*</code>, l'intégralité des codes et libellés utilisés dans un diagnostic : familles de besoins, freins, situations constatées, objectifs de travail, et grille d'analyse du pouvoir d'agir. Les codes sont stables et partagés entre tous les acteurs (France Travail, missions locales, Cap emploi, conseils départementaux…). Ce sont ces listes qui alimentent les menus déroulants côté applicatif.
+  <div class="fi-tech" style="margin-top:8px;"><code>GET /referentiel</code> · <code>GET /referentiel/{domaine}</code> · <code>GET /referentiel/{domaine}/{sous-domaine}</code> · <code>GET /referentiel/pouvoir-agir/analyse</code> — schéma <span class="at">DonneesReferentielDto</span></div>
+  <div style="margin-top:8px;font-size:0.78rem;">À voir aussi : les vocabulaires de l'<a href="orientation-usager.html#ref">API Orientation</a>, plus grossiers (les freins de diagnostic y sont résumés en 3 niveaux d'impact).</div>
+</div>
+
+<!-- ── BESOINS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Besoins
+    <span class="rs-count">6 familles · 21 besoins</span>
+    <span class="rs-tech">domaine <code>besoin</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Une famille regroupe les besoins liés à une étape du parcours (choisir, se former, candidater…). Chaque besoin est évalué à <span class="ev">POINT_FORT</span> <span class="ev">BESOIN</span> <span class="ev">NON_EXPLORE</span>.
+  </div>
+
+  <div class="ref-families">
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">1</span><span class="ref-title">Choisir un métier</span><span class="ref-count">4 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">1</span> Identifier ses points forts et ses compétences</li>
+      <li><span class="ref-code">2</span> Connaître les opportunités d'emploi</li>
+      <li><span class="ref-code">3</span> Découvrir un métier ou un secteur d'activité</li>
+      <li><span class="ref-code">4</span> Confirmer son choix de métier</li>
+    </ul>
+  </div>
+
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">2</span><span class="ref-title">Se former</span><span class="ref-count">3 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">5</span> Trouver sa formation</li>
+      <li><span class="ref-code">6</span> Monter son dossier de formation</li>
+      <li><span class="ref-code">7</span> Utiliser le numérique</li>
+    </ul>
+  </div>
+
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">3</span><span class="ref-title">Préparer sa candidature</span><span class="ref-count">4 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">8</span> Valoriser ses compétences</li>
+      <li><span class="ref-code">9</span> Réaliser un CV et/ou une lettre de motivation</li>
+      <li><span class="ref-code">10</span> Développer son réseau</li>
+      <li><span class="ref-code">11</span> Organiser ses démarches de recherche d'emploi</li>
+    </ul>
+  </div>
+
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">4</span><span class="ref-title">Trouver un emploi</span><span class="ref-count">4 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">12</span> Répondre à des offres d'emploi</li>
+      <li><span class="ref-code">13</span> Faire des candidatures spontanées</li>
+      <li><span class="ref-code">14</span> Suivre ses candidatures et relancer les recruteurs</li>
+      <li><span class="ref-code">15</span> Convaincre un recruteur en entretien</li>
+    </ul>
+  </div>
+
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">5</span><span class="ref-title">Créer une entreprise</span><span class="ref-count">3 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">16</span> Définir son projet de création d'entreprise</li>
+      <li><span class="ref-code">17</span> Structurer son projet de création d'entreprise</li>
+      <li><span class="ref-code">18</span> Développer son entreprise</li>
+    </ul>
+  </div>
+
+  <div class="ref-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <div class="ref-head"><span class="ref-num">6</span><span class="ref-title">S'ouvrir à l'international</span><span class="ref-count">3 besoins</span></div>
+    <ul class="ref-list">
+      <li><span class="ref-code">19</span> Connaître les opportunités d'emploi à l'étranger</li>
+      <li><span class="ref-code">20</span> S'informer sur les aides pour travailler à l'étranger</li>
+      <li><span class="ref-code">21</span> S'organiser suite à son retour en France</li>
+    </ul>
+  </div>
+  </div>
+</div>
+
+<!-- ── CONTRAINTES ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Freins
+    <span class="rs-count">8 freins · ~90 situations · ~50 objectifs</span>
+    <span class="rs-tech">domaine <code>contrainte</code> · sous-domaines <code>situation</code> · <code>objectif</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Chaque frein se décline en <strong>situations constatées</strong> (ce que le conseiller voit — <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">NON</span>) et en <strong>objectifs</strong> (ce qu'on vise — <span class="ev">NON_ABORDE</span> <span class="ev">EN_COURS</span> <span class="ev">REALISE</span> <span class="ev">ABANDONNE</span>). Le frein lui-même est <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">CLOTUREE</span> <span class="ev">SUPPRIMEE</span>.
+    Les codes de situations et d'objectifs ne sont <strong>pas uniques au niveau global</strong> — ils ne le sont qu'à l'intérieur d'un même frein (ex. objectif « 6 » existe à la fois sous mobilité et sous numérique).
+  </div>
+
+  <div class="ref-freins">
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">22</span><span class="ref-title">Accéder au numérique et en maîtriser les fondamentaux</span><span class="ref-count">16 situations · 7 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">42</span> Absence de matériel (ordinateur, tablette, smartphone)</li>
+          <li><span class="ref-code">43</span> Dispose d'un ordinateur</li>
+          <li><span class="ref-code">44</span> Dispose d'un smartphone</li>
+          <li><span class="ref-code">45</span> Dispose d'une tablette</li>
+          <li><span class="ref-code">46</span> Absence de maîtrise de l'équipement</li>
+          <li><span class="ref-code">47</span> Absence de connexion (ADSL, Fibre ou 4G)</li>
+          <li><span class="ref-code">48</span> Absence de connexion (refus)</li>
+          <li><span class="ref-code">49</span> Absence de connexion (autre)</li>
+          <li><span class="ref-code">50</span> Absence d'adresse de messagerie (email)</li>
+          <li><span class="ref-code">51</span> Absence de mobilité pour accéder à un espace numérique</li>
+          <li><span class="ref-code">52</span> Difficulté à réaliser des démarches administratives en ligne</li>
+          <li><span class="ref-code">53</span> En difficulté sur le numérique (résultat Pix emploi &lt;50%)</li>
+          <li><span class="ref-code">58</span> Absence d'équipement adapté à la situation de handicap</li>
+          <li><span class="ref-code">59</span> Absence de compte France Connect</li>
+          <li><span class="ref-code">60</span> Absence d'identité numérique</li>
+          <li><span class="ref-code">61</span> Dispose d'un espace public proposant un accès au numérique</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">1</span> Acquérir un équipement</li>
+          <li><span class="ref-code">2</span> Accéder à une connexion internet</li>
+          <li><span class="ref-code">3</span> Maîtriser les fondamentaux du numérique</li>
+          <li><span class="ref-code">34</span> Accéder à des services en ligne</li>
+          <li><span class="ref-code">43</span> Se créer une identité numérique</li>
+          <li><span class="ref-code">47</span> Créer une adresse mail</li>
+          <li><span class="ref-code">48</span> Bénéficier d'un appui pour les aménagements adaptés au handicap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">23</span><span class="ref-title">Développer sa mobilité</span><span class="ref-count">16 situations · 7 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">6</span> Aucun moyen de transport à disposition</li>
+          <li><span class="ref-code">7</span> Dépendant des transports en commun</li>
+          <li><span class="ref-code">8</span> Permis non valide / suspension de permis</li>
+          <li><span class="ref-code">40</span> État de santé déclaré rendant incompatible la conduite</li>
+          <li><span class="ref-code">2305</span> Permis B</li>
+          <li><span class="ref-code">2306</span> Code obtenu</li>
+          <li><span class="ref-code">2307</span> Vélo ou trottinette électrique</li>
+          <li><span class="ref-code">2308</span> Véhicule sans permis</li>
+          <li><span class="ref-code">2309</span> Co-voiturage</li>
+          <li><span class="ref-code">2310</span> Autres permis (poids lourd, bus, …)</li>
+          <li><span class="ref-code">2311</span> Permis et/ou code en cours</li>
+          <li><span class="ref-code">2312</span> Véhicule (voiture, moto, scooter)</li>
+          <li><span class="ref-code">2313</span> Permis étranger (hors EEE)</li>
+          <li><span class="ref-code">2314</span> État de santé limitant la conduite et/ou les transports en commun</li>
+          <li><span class="ref-code">2315</span> Nécessité d'un permis de conduire aménagé</li>
+          <li><span class="ref-code">2316</span> Dépendant d'un tiers pour se déplacer</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">4</span> Faire un point complet sur sa mobilité</li>
+          <li><span class="ref-code">5</span> Entretenir / réparer son véhicule et être en conformité</li>
+          <li><span class="ref-code">6</span> Obtenir le permis de conduire (code / conduite)</li>
+          <li><span class="ref-code">7</span> Trouver une solution de transport et/ou les titres correspondants</li>
+          <li><span class="ref-code">29</span> Accéder à un véhicule</li>
+          <li><span class="ref-code">30</span> Travailler la mobilité psychologique</li>
+          <li><span class="ref-code">49</span> Bénéficier d'un appui pour aménagements (handicap / santé)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">24</span><span class="ref-title">Surmonter ses contraintes familiales</span><span class="ref-count">8 situations · 6 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">9</span> Enfant(s) en situation de handicap</li>
+          <li><span class="ref-code">10</span> Contraintes horaires</li>
+          <li><span class="ref-code">11</span> Aidant (s'occuper d'un proche)</li>
+          <li><span class="ref-code">12</span> Autres contraintes familiales à prendre en compte</li>
+          <li><span class="ref-code">13</span> Enfant(s) de moins de 3 ans sans solution de garde</li>
+          <li><span class="ref-code">14</span> Attend un enfant ou plus</li>
+          <li><span class="ref-code">54</span> Problématique de santé d'un enfant</li>
+          <li><span class="ref-code">57</span> Manque de lien familial et social</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">8</span> Faire face à la prise en charge d'une personne dépendante</li>
+          <li><span class="ref-code">9</span> Trouver des solutions de garde d'enfant</li>
+          <li><span class="ref-code">10</span> Surmonter des difficultés éducatives ou de parentalité</li>
+          <li><span class="ref-code">11</span> Faire face à un conflit familial et/ou une séparation</li>
+          <li><span class="ref-code">31</span> Accéder aux informations et aides disponibles pour les aidants</li>
+          <li><span class="ref-code">32</span> Rompre l'isolement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">25</span><span class="ref-title">Prendre en compte son état de santé</span><span class="ref-count">12 situations · 6 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">15</span> Difficulté déclarée entravant l'exercice de certains métiers</li>
+          <li><span class="ref-code">16</span> Accès ou mise à jour de la couverture sécurité sociale / mutuelle</li>
+          <li><span class="ref-code">17</span> Difficulté ne permettant plus d'exercer une activité</li>
+          <li><span class="ref-code">18</span> Difficulté ne permettant pas une reprise immédiate</li>
+          <li><span class="ref-code">19</span> Difficulté entraînant des absences régulières</li>
+          <li><span class="ref-code">56</span> Difficulté concernant l'accès à un professionnel de santé</li>
+          <li><span class="ref-code">2501</span> Existence d'un dossier MDPH ou BOETH</li>
+          <li><span class="ref-code">2502</span> Difficulté n'entravant pas la reprise d'une activité</li>
+          <li><span class="ref-code">2503</span> Difficulté liée à une situation de handicap</li>
+          <li><span class="ref-code">2504</span> Difficulté empêchant d'exercer une précédente activité</li>
+          <li><span class="ref-code">2505</span> Difficulté à prendre conscience de la problématique santé/handicap</li>
+          <li><span class="ref-code">2506</span> Difficulté à intégrer la situation dans son parcours</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">13</span> Accompagnement pour accéder aux droits et aux soins</li>
+          <li><span class="ref-code">33</span> Travailler sur les comportements de santé (dépendances, hygiène, dépistage…)</li>
+          <li><span class="ref-code">42</span> Constituer un dossier MDPH / invalidité</li>
+          <li><span class="ref-code">44</span> Bénéficier d'un accompagnement adapté (santé / handicap)</li>
+          <li><span class="ref-code">45</span> Accéder à un bilan de santé gratuit (CPAM)</li>
+          <li><span class="ref-code">50</span> S'informer sur les démarches liées à l'accès aux soins</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">26</span><span class="ref-title">Développer ses capacités en lecture, écriture et calcul</span><span class="ref-count">6 situations · 3 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">20</span> Difficulté en français à l'écrit</li>
+          <li><span class="ref-code">21</span> Difficulté en français en lecture</li>
+          <li><span class="ref-code">22</span> Difficulté en français à l'oral</li>
+          <li><span class="ref-code">23</span> Difficultés en calcul</li>
+          <li><span class="ref-code">55</span> Français Langue Étrangère (FLE) : non maîtrise ou en apprentissage</li>
+          <li><span class="ref-code">2801</span> Difficulté dans les apprentissages</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">16</span> Apprendre / améliorer ses capacités en français</li>
+          <li><span class="ref-code">17</span> Apprendre / améliorer ses capacités en calcul</li>
+          <li><span class="ref-code">46</span> Apprendre à compenser ses difficultés liées à l'apprentissage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">27</span><span class="ref-title">Faire face à des difficultés de logement</span><span class="ref-count">18 situations · 7 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">24</span> Personne sans abri</li>
+          <li><span class="ref-code">25</span> Logement insalubre</li>
+          <li><span class="ref-code">26</span> Difficulté à payer le loyer</li>
+          <li><span class="ref-code">27</span> Procédure d'expulsion (locataire ou propriétaire)</li>
+          <li><span class="ref-code">28</span> Territoire isolé</li>
+          <li><span class="ref-code">41</span> Logement inadapté (handicap, confort de vie…)</li>
+          <li><span class="ref-code">2707</span> Hébergé chez un tiers</li>
+          <li><span class="ref-code">2708</span> Hébergé au domicile parental</li>
+          <li><span class="ref-code">2709</span> Propriétaire</li>
+          <li><span class="ref-code">2710</span> Locataire du parc social</li>
+          <li><span class="ref-code">2711</span> Locataire du parc privé</li>
+          <li><span class="ref-code">2712</span> Hébergement AHI (CHRS, CHU, hôtel…)</li>
+          <li><span class="ref-code">2713</span> Hébergement collectif (CHRS, CHU, CPH, CADA, FJT, famille d'accueil…)</li>
+          <li><span class="ref-code">2714</span> Habitat mobile (mobil-home, caravane, camion aménagé…)</li>
+          <li><span class="ref-code">2715</span> Personne à l'abri (halte de nuit, gymnase)</li>
+          <li><span class="ref-code">2716</span> Dispositif national d'accueil (CPH, HUDA, CADA)</li>
+          <li><span class="ref-code">2717</span> Autre établissement sanitaire/social/médico-social (PJJ, ASE, handicap…)</li>
+          <li><span class="ref-code">2718</span> Habitat non conventionnel (squat, bidonville, yourte, tiny house…)</li>
+          <li><span class="ref-code">2719</span> Logement en suroccupation</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">18</span> Se maintenir dans le logement</li>
+          <li><span class="ref-code">19</span> Rechercher une solution d'hébergement temporaire</li>
+          <li><span class="ref-code">20</span> Changer de logement</li>
+          <li><span class="ref-code">35</span> Réduire les impayés de loyer</li>
+          <li><span class="ref-code">36</span> Accéder à un logement</li>
+          <li><span class="ref-code">37</span> S'informer sur les démarches liées à l'accès au logement</li>
+          <li><span class="ref-code">51</span> S'informer sur les démarches liées à l'adaptation du logement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">28</span><span class="ref-title">Faire face à des difficultés financières</span><span class="ref-count">9 situations · 7 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">29</span> Sans aucune ressource</li>
+          <li><span class="ref-code">30</span> Baisse des ressources</li>
+          <li><span class="ref-code">31</span> Difficulté dans la gestion d'un budget</li>
+          <li><span class="ref-code">32</span> En situation d'endettement ou de surendettement</li>
+          <li><span class="ref-code">33</span> Besoin d'un soutien alimentaire</li>
+          <li><span class="ref-code">34</span> Ressources précaires (inférieures au seuil de pauvreté)</li>
+          <li><span class="ref-code">2901</span> Absence ou difficulté pour ouvrir un compte bancaire</li>
+          <li><span class="ref-code">2902</span> Absence d'un soutien financier par un tiers</li>
+          <li><span class="ref-code">2903</span> Bénéficie d'un soutien financier par un tiers</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">21</span> Mettre en place une mesure de protection (tutelle, curatelle…)</li>
+          <li><span class="ref-code">22</span> Améliorer sa gestion budgétaire</li>
+          <li><span class="ref-code">23</span> Faire face à une situation d'endettement / surendettement</li>
+          <li><span class="ref-code">39</span> Acquérir une autonomie budgétaire</li>
+          <li><span class="ref-code">41</span> Prévenir une dégradation de la situation financière</li>
+          <li><span class="ref-code">52</span> Mobiliser un dispositif d'aide alimentaire</li>
+          <li><span class="ref-code">53</span> Faire valoir son droit au compte bancaire</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-card" style="--lc:#dc2626;--lbg:#fef7f7;">
+    <div class="ref-head"><span class="ref-num">29</span><span class="ref-title">Faire face à des difficultés administratives ou juridiques</span><span class="ref-count">6 situations · 6 objectifs</span></div>
+    <div class="ref-cols">
+      <div>
+        <div class="ref-subtitle">Situations</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">35</span> Difficulté liée à une démarche administrative</li>
+          <li><span class="ref-code">36</span> Besoin d'être guidé dans le cadre d'un accès aux droits</li>
+          <li><span class="ref-code">37</span> Difficulté d'ordre juridique</li>
+          <li><span class="ref-code">38</span> Difficulté liée à un justificatif d'identité / titre de séjour</li>
+          <li><span class="ref-code">39</span> Difficulté liée à son avis d'imposition</li>
+          <li><span class="ref-code">3001</span> Dossier retraite en cours (CNAV, MSA…)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ref-subtitle">Objectifs</div>
+        <ul class="ref-list">
+          <li><span class="ref-code">25</span> Connaître les voies de recours face à une discrimination</li>
+          <li><span class="ref-code">26</span> Prendre en compte une problématique judiciaire</li>
+          <li><span class="ref-code">27</span> Bénéficier d'un appui aux démarches administratives</li>
+          <li><span class="ref-code">28</span> Bénéficier d'un accompagnement pour accéder aux droits</li>
+          <li><span class="ref-code">38</span> Bénéficier d'une mesure d'accompagnement (autonomie / handicap)</li>
+          <li><span class="ref-code">40</span> Bénéficier d'un accompagnement à l'accès à la citoyenneté</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="note" style="margin-top:8px;">
+    <strong>Frein « 22 » — cas particulier</strong> : le frein numérique est à la fois dans la liste générale des freins (code 22) et exposé séparément par l'API via <code>/autonomienumerique</code>. C'est le seul frein dont le besoin associé est aussi exposé (besoin code « 7 » « Utiliser le numérique », même code que celui de la famille « Se former » — les codes de besoins, eux, sont uniques au global).
+  </div>
+</div>
+
+<!-- ── POUVOIR D'AGIR ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Pouvoir d'agir
+    <span class="rs-count">2 questions · 9 analyses</span>
+    <span class="rs-tech">domaine <code>pouvoir-agir</code> · sous-domaines <code>question</code> · <code>analyse</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le pouvoir d'agir évalue la confiance de l'usager à mener ses démarches et son besoin d'accompagnement. Deux questions fermées, trois réponses possibles chacune, et la grille d'analyse qui en découle (9 combinaisons).
+  </div>
+
+  <div class="ref-questions">
+    <div class="rq">
+      <span class="rq-key">confiance</span>
+      <span class="rq-text">« Vous sentez-vous confiant(e) pour réaliser vos démarches ? » — <span class="ev">OUI</span> <span class="ev">NON</span> <span class="ev">NE_SAIT_PAS</span></span>
+    </div>
+    <div class="rq">
+      <span class="rq-key">accompagnement</span>
+      <span class="rq-text">« Pensez-vous avoir besoin de l'appui d'un professionnel pour réaliser vos démarches ? » — <span class="ev">OUI</span> <span class="ev">NON</span> <span class="ev">NE_SAIT_PAS</span></span>
+    </div>
+  </div>
+
+  <table class="ref-matrix">
+    <thead>
+      <tr>
+        <th style="width:220px;">confiance × accompagnement</th>
+        <th>Libellé de l'analyse produite</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="mx-cond">OUI × OUI</td><td class="mx-libelle">Besoin d'appui pour consolider sa confiance à mener ses démarches</td></tr>
+      <tr><td class="mx-cond">OUI × NON</td><td class="mx-libelle">Confiant(e) et autonome pour mener ses démarches</td></tr>
+      <tr><td class="mx-cond">OUI × NE_SAIT_PAS</td><td class="mx-libelle">Confiant(e) et probable besoin d'informations complémentaires sur les modalités d'accompagnement</td></tr>
+      <tr><td class="mx-cond">NON × OUI</td><td class="mx-libelle">Besoin de réassurance et besoin d'appui</td></tr>
+      <tr><td class="mx-cond">NON × NON</td><td class="mx-libelle">Besoin de réassurance et d'informations complémentaires sur les modalités d'accompagnement</td></tr>
+      <tr><td class="mx-cond">NON × NE_SAIT_PAS</td><td class="mx-libelle">Besoin de réassurance et probable besoin d'informations complémentaires sur les modalités d'accompagnement</td></tr>
+      <tr><td class="mx-cond">NE_SAIT_PAS × OUI</td><td class="mx-libelle">Possible besoin de réassurance et besoin d'appui</td></tr>
+      <tr><td class="mx-cond">NE_SAIT_PAS × NON</td><td class="mx-libelle">Possible besoin de réassurance et besoin d'informations complémentaires sur les modalités d'accompagnement</td></tr>
+      <tr><td class="mx-cond">NE_SAIT_PAS × NE_SAIT_PAS</td><td class="mx-libelle">Possible besoin de réassurance et probable besoin d'informations complémentaires sur les modalités d'accompagnement</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:14px;">
+    <strong>Aide au questionnement</strong> — Couvert dans la section « Vocabulaires » ci-dessous.
+  </div>
+</div>
+
+<!-- ── VOCABULAIRES (enums non référencés) ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires
+    <span class="rs-count">5 enums · 1 structure d'enrichissement</span>
+    <span class="rs-tech">déclarés en <code>enum</code> dans les DTO, hors <code>/referentiel</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Ces listes ne sont pas exposées par un endpoint dédié — elles sont déclarées directement dans les schémas des DTO. On les croise ponctuellement dans le Modèle (onglet 1) sous forme de badges <span class="ev">VALEUR</span>, mais elles méritent d'être consolidées ici pour répondre à la question « cette valeur fait-elle partie d'un choix fermé ? ».
+  </div>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Typologie du diagnostic</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">EF</span> Évolution / Formation</li>
+        <li><span class="voc-code">PM</span> Projet Métier</li>
+        <li><span class="voc-code">MR</span> Métier Recherché</li>
+      </ul>
+      <div class="voc-tech"><code>DiagnosticIndividuDto.codeTypologie</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Sous-typologie</span><span class="ref-count">7</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">C</span> <em>non documenté</em></li>
+        <li><span class="voc-code">R</span> <em>non documenté</em></li>
+        <li><span class="voc-code">F</span> <em>non documenté</em></li>
+        <li><span class="voc-code">CR</span> <em>non documenté</em></li>
+        <li><span class="voc-code">CF</span> <em>non documenté</em></li>
+        <li><span class="voc-code">RF</span> <em>non documenté</em></li>
+        <li><span class="voc-code">CRF</span> <em>non documenté</em></li>
+      </ul>
+      <div class="voc-tech"><code>DiagnosticIndividuDto.codeSousTypologie</code> — le champ voisin <code>nomActiviteCref</code> suggère <strong>C</strong>réation / <strong>R</strong>eprise / <strong>F</strong>ormation, non confirmé par l'OpenAPI.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Statut du diagnostic</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">EN_COURS</span> Projet actif</li>
+        <li><span class="voc-code">ARCHIVE</span> Projet archivé</li>
+        <li><span class="voc-code">SUPPRIME</span> Projet supprimé</li>
+      </ul>
+      <div class="voc-tech"><code>DiagnosticIndividuDto.statut</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Impact d'un frein</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">FORT</span> Impact fort sur la recherche d'emploi</li>
+        <li><span class="voc-code">MOYEN</span> Impact moyen</li>
+        <li><span class="voc-code">FAIBLE</span> Impact faible</li>
+        <li><span class="voc-code">NON_RENSEIGNE</span> Pas encore évalué</li>
+      </ul>
+      <div class="voc-tech"><code>ContrainteIndividuDto.impact</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'agent modificateur</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AGENT</span> Conseiller d'un opérateur</li>
+        <li><span class="voc-code">USAGER</span> Le demandeur lui-même</li>
+        <li><span class="voc-code">BATCH_ORIENTATION_USAGER</span> Traitement automatisé</li>
+        <li><span class="voc-code">INCONNU</span> Origine non identifiée</li>
+      </ul>
+      <div class="voc-tech"><code>AgentDto.type</code> — présent sur tous les champs « Conseiller tracé ».</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Aide au questionnement</span><span class="ref-count">structure d'enrichissement</span></div>
+      <p style="font-size:0.82rem;color:var(--text-dim);line-height:1.55;margin:2px 0 6px;">
+        Ce n'est pas une liste mais une surcouche : en appelant un endpoint <code>/referentiel*</code> avec <code>?inclure=aide-questionnement</code>, chaque item référentiel (famille, besoin, frein, situation, objectif, question, analyse) peut être accompagné d'une question d'entretien et d'une liste de précisions, destinées au conseiller. Non retourné par défaut.
+      </p>
+      <div class="voc-example">
+        <em>Exemple fourni par le schéma</em>
+        « Avez-vous un exemple de démarche que vous avez menée à bien ? (compléter un formulaire, faire un CV, se déplacer ou contacter une administration…) »
+        <span class="vp">→ Précision : « Établir vos prévisions financières »</span>
+      </div>
+      <div class="voc-tech"><code>AideQuestionnementDto</code> — propriétés <code>question</code> (string) · <code>precisions[]</code> (string[])</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -223,7 +224,141 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Sept vocabulaires pour décrire un RDV</strong> — Tous déclarés en <code>enum</code> dans le schéma. Rien n'est énorme, mais ils caractérisent complètement un rendez-vous : qui l'organise, qui le prend, par quel canal, pour quel motif, dans quel format, et où il en est. L'organisme partage son vocabulaire avec l'<a href="orientation-usager.html#ref">API Orientation</a> (avec une variation : ici <code>DCD</code> apparaît, et <code>CAF</code> n'y est pas — pas les mêmes cas d'usage).
+</div>
+
+<!-- ── QUI ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Qui — organisme &amp; interlocuteur
+    <span class="rs-count">2 vocabulaires · 9 codes</span>
+    <span class="rs-tech">schémas <code>Organisme</code> · <code>Interlocuteur</code></span>
+  </h2>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Organisme qui effectue le RDV</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">FT</span> France Travail</li>
+        <li><span class="voc-code">CD</span> Conseil départemental</li>
+        <li><span class="voc-code">DCD</span> Délégation du Conseil départemental</li>
+        <li><span class="voc-code">ML</span> Mission locale</li>
+        <li><span class="voc-code">CE</span> Cap emploi</li>
+        <li><span class="voc-code">IND</span> Indéterminé</li>
+      </ul>
+      <div class="voc-tech"><code>Organisme.code</code> — à comparer avec <a href="orientation-usager.html#ref"><code>organisme</code> de Orientation</a> : ici <code>DCD</code> est ajouté (délégation du CD), et <code>CAF</code> n'existe pas (la CAF n'organise pas de RDV partenaire dans ce cadre).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Civilité de l'interlocuteur</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">M</span> Monsieur</li>
+        <li><span class="voc-code">Mme</span> Madame</li>
+        <li><span class="voc-code">Mx</span> Neutre</li>
+      </ul>
+      <div class="voc-tech"><code>Interlocuteur.civilite</code> — inclut la civilité neutre <code>Mx</code>.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── QUOI ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Quoi — motif, modalité, format
+    <span class="rs-count">3 vocabulaires · 8 codes</span>
+    <span class="rs-tech">schéma <code>Rdvp</code></span>
+  </h2>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ACC</span> Accompagnement</li>
+        <li><span class="voc-code">ORI</span> Orientation</li>
+        <li><span class="voc-code">AUT</span> Autre (le champ <code>theme</code> prend le relais)</li>
+      </ul>
+      <div class="voc-tech"><code>motif</code> — avec <code>AUT</code>, le libellé humain vient du champ <code>theme</code> (texte libre).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Modalité de contact</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PHYSIQUE</span> En présentiel</li>
+        <li><span class="voc-code">TELEPHONE</span> Téléphonique</li>
+        <li><span class="voc-code">VISIO</span> Visioconférence</li>
+      </ul>
+      <div class="voc-tech"><code>modaliteContact</code> — vocabulaire plus simple qu'en <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> (qui a 8 codes). Si <code>VISIO</code>, le champ <code>urlVisio</code> porte le lien.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de réception</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">IND</span> Individuel</li>
+        <li><span class="voc-code">COL</span> Collectif</li>
+      </ul>
+      <div class="voc-tech"><code>typeReception</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── OÙ EN EST-ON ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Où en est-on — statut &amp; initiateur
+    <span class="rs-count">2 vocabulaires · 7 codes</span>
+    <span class="rs-tech">schéma <code>Rdvp</code></span>
+  </h2>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Statut du rendez-vous</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PRIS</span> Planifié, à venir</li>
+        <li><span class="voc-code">MODIFIE</span> Déplacé / replanifié</li>
+        <li><span class="voc-code">EFFECTUE</span> Tenu — l'usager était présent</li>
+        <li><span class="voc-code">ABSENT</span> Non tenu — absence de l'usager</li>
+        <li><span class="voc-code">ANNULE</span> Annulé</li>
+      </ul>
+      <div class="voc-tech"><code>statut</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Initiateur</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">USAGER</span> Le demandeur d'emploi a pris l'initiative</li>
+        <li><span class="voc-code">PARTENAIRE</span> L'organisme a pris l'initiative</li>
+      </ul>
+      <div class="voc-tech">Champ déclaré dans <code>Rdvp</code>, indique qui a proposé le RDV.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="offres-emploi.html#ref">Offres d'emploi</a> · <a href="metiers-recherches-projets-evolution.html#ref">Métiers recherchés</a> · <a href="formations-professionnelles.html#ref">Formations professionnelles</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

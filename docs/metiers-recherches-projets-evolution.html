@@ -23,6 +23,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -239,7 +240,142 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Six vocabulaires, tous déclarés en enum</strong> — Tous les champs de cette API sont exposés en paires <code>(code, libelle)</code> dans des DTO dédiés (<code>TypologieEmploiDto</code>, <code>TypeContratDto</code>, etc.). Plusieurs vocabulaires sont <strong>partagés avec d'autres APIs</strong> : la typologie d'emploi est identique à celle du <a href="diagnostic-usager.html#ref">Diagnostic</a>, les types de contrat à ceux servis par <a href="offres-emploi.html#ref">Offres d'emploi</a>.
+</div>
+
+<!-- ── TYPOLOGIE & NATURE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Typologie &amp; nature du projet
+    <span class="rs-count">2 vocabulaires · 13 codes</span>
+    <span class="rs-tech">schémas <code>TypologieEmploiDto</code> · <code>TypeContratDto</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    La <em>typologie</em> dit si on parle d'un métier déjà recherché, d'un projet d'évolution, ou d'un projet d'entreprise. Le <em>type de contrat</em> décrit la forme juridique envisagée.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Typologie d'emploi</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">MR</span> Métier Recherché</li>
+        <li><span class="voc-code">PM</span> Projet de Métier</li>
+        <li><span class="voc-code">EF</span> Création ou Reprise d'Entreprise ou de Franchise</li>
+      </ul>
+      <div class="voc-tech"><code>typologieEmploi.code</code> — <strong>vocabulaire partagé</strong> avec <a href="diagnostic-usager.html#ref"><code>codeTypologie</code></a> de l'API Diagnostic (mêmes 3 codes, mêmes sens). Note : le libellé de EF est orthographié « Franchiseaire » dans le schéma (typo).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de contrat</span><span class="ref-count">10</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">CDI</span> CDI</li>
+        <li><span class="voc-code">CDD</span> CDD</li>
+        <li><span class="voc-code">DIN</span> CDI intérimaire</li>
+        <li><span class="voc-code">MIS</span> Mission intérimaire</li>
+        <li><span class="voc-code">SAI</span> Saisonnier</li>
+        <li><span class="voc-code">LIB</span> Profession libérale</li>
+        <li><span class="voc-code">CCE</span> Profession commerciale</li>
+        <li><span class="voc-code">FS</span> Contrat de professionnalisation</li>
+        <li><span class="voc-code">E2</span> Contrat d'apprentissage</li>
+        <li><span class="voc-code">PS</span> Portage salarial</li>
+      </ul>
+      <div class="voc-tech"><code>typeContrat.code</code> — <strong>vocabulaire partagé</strong> : servi aussi par <a href="offres-emploi.html#ref"><code>/v2/referentiel/typesContrats</code></a>.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TEMPS & EXPÉRIENCE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Temps de travail &amp; expérience
+    <span class="rs-count">3 vocabulaires · 9 codes</span>
+    <span class="rs-tech">schémas <code>UniteTempsTravailDto</code> · <code>UniteDureeExperienceDto</code> · <code>SalaireDto</code></span>
+  </h2>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Unité de temps de travail</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Temps plein</li>
+        <li><span class="voc-code">2</span> Temps partiel</li>
+      </ul>
+      <div class="voc-tech"><code>tempsTravail.code</code> — si « temps partiel », le champ <code>max</code> précise le nombre d'heures hebdo max.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Unité de durée d'expérience</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AN</span> An(s)</li>
+        <li><span class="voc-code">MO</span> Mois</li>
+      </ul>
+      <div class="voc-tech"><code>unite.code</code> dans <code>dureeExperience</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Échelle du salaire</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Annuel</span> Brut annuel</li>
+        <li><span class="voc-code">Mensuel</span> Brut mensuel</li>
+        <li><span class="voc-code">Horaire</span> Brut horaire</li>
+        <li><span class="voc-code">Cachet</span> Rémunération au cachet</li>
+        <li><span class="voc-code">Autre</span> Autre échelle</li>
+      </ul>
+      <div class="voc-tech"><code>salaire.libelle</code> — déclaré en enum sur le libellé (pas de code court dans cette API). Le montant est porté par <code>remuneration</code> en euros bruts.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── LIEU ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Type de lieu (mobilité)
+    <span class="rs-count">1 vocabulaire · 5 codes</span>
+    <span class="rs-tech">schéma <code>TypeLieuDto</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Granularité géographique d'un souhait de mobilité, du pays à la commune. Le code géographique réel (INSEE, code pays) est porté à part dans <code>lieu.code</code>.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">1</span> Pays</li>
+      <li><span class="voc-code">2</span> Continent</li>
+      <li><span class="voc-code">3</span> Région</li>
+      <li><span class="voc-code">4</span> Département</li>
+      <li><span class="voc-code">5</span> Commune</li>
+    </ul>
+    <div class="voc-tech"><code>lieu.type.code</code> — les lieux (pays, régions, départements, communes) sont des référentiels exhaustifs servis par <a href="offres-emploi.html#ref">Offres d'emploi</a>.</div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>API sœur</strong> — <a href="metiers-recherches.html#ref">Métiers recherchés</a> (v1) partage les mêmes vocabulaires métier mais sans déclaration enum formelle dans son OpenAPI — c'est la version précédente de cette API. Les codes sont identiques.
+</div>
+
+<div class="note" style="margin-top:12px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="offres-emploi.html#ref">Offres d'emploi</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

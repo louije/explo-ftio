@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -103,7 +104,90 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Un enum et quatre nomenclatures de référence</strong> — Seul <code>m_statut</code> est déclaré en <code>enum</code> OpenAPI. Les quatre autres dimensions (motif d'inscription, catégorie, situation au regard de l'emploi, motif de clôture) sont des <strong>nomenclatures France Travail officielles</strong> portées par paires <code>_code</code>/<code>_lib</code> — mais leurs valeurs possibles ne sont pas documentées dans le schéma OpenAPI. Ce qui est listé ci-dessous provient uniquement des exemples de réponses ; les listes complètes sont définies ailleurs (référentiels métiers internes à France Travail).
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires du contrat usager
+    <span class="rs-count">1 enum formel · 4 nomenclatures partielles</span>
+    <span class="rs-tech">schéma <code>Contrat</code></span>
+  </h2>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Statut d'inscription</span><span class="ref-count">4 — enum</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Identifié</span> Connu du SI mais non inscrit comme demandeur d'emploi</li>
+        <li><span class="voc-code">Inscrit</span> Demandeur d'emploi actif</li>
+        <li><span class="voc-code">Cessé</span> Cessation d'inscription (ex. : réinscription à venir)</li>
+        <li><span class="voc-code">Radié</span> Radié du fichier des demandeurs</li>
+      </ul>
+      <div class="voc-tech"><code>m_statut</code> — seul champ de cet onglet déclaré en <code>enum</code>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif d'inscription</span><span class="ref-count">liste partielle</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">11</span> Licenciement économique</li>
+        <li><span class="voc-code">32</span> Rupture conventionnelle du CDI</li>
+      </ul>
+      <div class="voc-tech"><code>m_motif_inscription_code</code> · <code>m_motif_inscription_lib</code> — valeurs ci-dessus extraites des exemples de l'OpenAPI. La nomenclature complète (fin de CDD, démission, fin de mission intérim, première entrée, etc.) n'est pas fournie dans ce schéma.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Catégorie d'inscription</span><span class="ref-count">liste partielle</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Personne sans emploi, disponible, durée indéterminée, plein temps</li>
+        <li><span class="voc-code">3</span> Personne sans emploi, disponible, durée déterminée ou saison</li>
+      </ul>
+      <div class="voc-tech"><code>m_categ_inscription_code</code> · <code>m_categ_inscription_lib</code> — valeurs extraites des exemples. La nomenclature France Travail comporte les catégories 1 à 8 (sans emploi / en activité réduite / sans recherche active…) mais seules 1 et 3 figurent dans le schéma.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Situation au regard de l'emploi</span><span class="ref-count">liste partielle</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ADR</span> Aide différentielle au reclassement</li>
+        <li><span class="voc-code">SAN</span> Sans objet</li>
+      </ul>
+      <div class="voc-tech"><code>m_situation_reg_emp_code</code> · <code>m_situation_reg_emp_lib</code> — valeurs extraites des exemples. Les codes sont alphabétiques (3 lettres).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif de clôture</span><span class="ref-count">liste partielle</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">5</span> Refus d'action de reclassement</li>
+        <li><span class="voc-code">25</span> Reprise d'emploi par l'agence sur emploi non précisé</li>
+        <li><span class="voc-code">MV</span> Abandon action aide à la recherche d'une activité (suppression de 1 mois)</li>
+      </ul>
+      <div class="voc-tech"><code>m_motif_cloture_code</code> · <code>m_motif_cloture_lib</code> — valeurs extraites des exemples. Codes hétérogènes (numériques et alphabétiques). Renseigné uniquement si <code>m_statut</code> = Radié ou Cessé.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Limite documentaire</strong> — Les quatre nomenclatures partielles (<code>motif_inscription</code>, <code>categ_inscription</code>, <code>situation_reg_emp</code>, <code>motif_cloture</code>) renvoient à des référentiels internes France Travail. L'API retourne à la fois le code et son libellé (paires <code>_code</code>/<code>_lib</code>), donc un consommateur n'a pas strictement besoin du référentiel complet pour afficher la donnée — mais pour filtrer/analyser, il faut disposer du référentiel. Celui-ci n'est pas exposé par ce schéma.
+</div>
+
+<div class="note" style="margin-top:12px;">
+  <strong>Pour aller plus loin</strong> — <a href="rechercher-usager.html#ref">API Rechercher usager</a> · <a href="diagnostic-usager.html#ref">API Diagnostic</a> · <a href="orientation-usager.html#ref">API Orientation</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

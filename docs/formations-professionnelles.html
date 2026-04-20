@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('ref')">R&#xe9;f&#xe9;rentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -106,7 +107,123 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Deux référentiels documentés, beaucoup partagés</strong> — Cette API porte deux vocabulaires fermés mais <strong>sans les déclarer en <code>enum</code></strong> dans les DTO. Les codes et libellés sont en revanche listés exhaustivement dans les descriptions des champs <code>niveau.code</code> et <code>Permis.code</code>. Les deux sont <strong>partagés</strong> avec d'autres APIs : le niveau d'étude avec l'<a href="orientation-usager.html#ref">API Orientation</a>, les catégories de permis avec <a href="offres-emploi.html#ref">Offres d'emploi</a>.
+</div>
+
+<!-- ── NIVEAU DE FORMATION ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Niveau de formation
+    <span class="rs-count">10 codes</span>
+    <span class="rs-tech">champ <code>niveau.code</code> — liste dans la description OpenAPI</span>
+  </h2>
+  <div class="ref-section-intro">
+    Grille nationale française des niveaux de formation, du plus faible (aucune formation) au plus élevé (Bac+5 et plus). Même codage utilisé par l'<a href="orientation-usager.html#ref">API Orientation</a> (champ <code>niveau_etude</code>) et servi par <a href="offres-emploi.html#ref"><code>/v2/referentiel/niveauxFormations</code></a>.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">AFS</span> Aucune formation scolaire</li>
+      <li><span class="voc-code">CP4</span> Primaire à 4ème</li>
+      <li><span class="voc-code">CFG</span> 4ème achevée</li>
+      <li><span class="voc-code">C3A</span> BEPC ou 3ème achevée</li>
+      <li><span class="voc-code">C12</span> 2nd ou 1ère achevée</li>
+      <li><span class="voc-code">NV5</span> CAP, BEP ou équivalent</li>
+      <li><span class="voc-code">NV4</span> Bac ou équivalent</li>
+      <li><span class="voc-code">NV3</span> Bac+2 ou équivalent</li>
+      <li><span class="voc-code">NV2</span> Bac+3, Bac+4 ou équivalent</li>
+      <li><span class="voc-code">NV1</span> Bac+5 et plus ou équivalent</li>
+    </ul>
+    <div class="voc-tech">L'ordre <em>naturel</em> est présenté ici (du plus bas au plus haut). Le schéma liste les codes en désordre. Le champ <code>etranger</code> booléen indique si la formation a été obtenue hors de France, le <code>diplomeObtenu</code> si le diplôme a été validé.</div>
+  </div>
+</div>
+
+<!-- ── PERMIS DE CONDUIRE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Permis de conduire
+    <span class="rs-count">20 codes</span>
+    <span class="rs-tech">champ <code>Permis.code</code> — liste dans la description OpenAPI</span>
+  </h2>
+  <div class="ref-section-intro">
+    Catégories réglementaires du permis de conduire français. Regroupe tous les permis (moto, voiture, poids lourd, transport de personnes) et leurs mentions spécifiques (remorque, PTAC…). Référentiel également servi par <a href="offres-emploi.html#ref"><code>/v2/referentiel/permis</code></a>.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+      <div class="ref-head"><span class="ref-title">Deux-roues</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AM</span> Cyclomoteur &lt;= 50 cm³</li>
+        <li><span class="voc-code">A1</span> Motocyclette &lt;= 125 cm³</li>
+        <li><span class="voc-code">A2</span> Moto &lt;= 600 cm³</li>
+        <li><span class="voc-code">A</span> Moto (toutes cylindrées)</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+      <div class="ref-head"><span class="ref-title">Véhicule léger</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">B1</span> Quadricycle</li>
+        <li><span class="voc-code">B</span> Véhicule léger</li>
+        <li><span class="voc-code">B79</span> B mention 79.06 (= EB)</li>
+        <li><span class="voc-code">B96</span> B mention 96 — VL + remorque (PTAC &lt; 4,25 T)</li>
+        <li><span class="voc-code">BE</span> Véhicule léger + remorque (PTAC &gt; 4,25 T)</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+      <div class="ref-head"><span class="ref-title">Poids lourd</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">C1</span> Poids lourd &lt; 7,5 T</li>
+        <li><span class="voc-code">C</span> Poids lourd</li>
+        <li><span class="voc-code">C1E</span> Poids lourd &lt; 7,5 T + remorque</li>
+        <li><span class="voc-code">CE</span> Poids lourd + remorque (= EC)</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+      <div class="ref-head"><span class="ref-title">Transport de personnes</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">D1</span> Transport &lt;= 16 places</li>
+        <li><span class="voc-code">D</span> Transport de personnes</li>
+        <li><span class="voc-code">D1E</span> Transport &lt;= 16 places + remorque</li>
+        <li><span class="voc-code">DE</span> Transport + remorque (= ED)</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+      <div class="ref-head"><span class="ref-title">Codes d'équivalence historiques</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">EB</span> Véhicule léger + remorque (= B79)</li>
+        <li><span class="voc-code">EC</span> Poids lourd + remorque (= CE)</li>
+        <li><span class="voc-code">ED</span> Transport de personnes + remorque (= DE)</li>
+      </ul>
+      <div class="voc-tech">Codes doublons de l'ancienne numérotation, encore présents dans le référentiel.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="offres-emploi.html#ref">Offres d'emploi</a> · <a href="metiers-recherches-projets-evolution.html#ref">Métiers recherchés et projets d'évolution</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

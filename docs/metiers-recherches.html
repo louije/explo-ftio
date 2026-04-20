@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('ref')">R&#xe9;f&#xe9;rentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -193,7 +194,81 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Vocabulaires non déclarés en enum</strong> — Cette API (v1) utilise les mêmes concepts métier que sa version sœur <a href="metiers-recherches-projets-evolution.html#ref">Métiers recherchés et projets d'évolution</a> (v1.1) mais <strong>sans déclaration <code>enum</code> dans le schéma OpenAPI</strong> — les champs <code>code</code> et <code>libelle</code> sont typés <code>string</code> libre. Les valeurs réelles suivent le même référentiel que la v1.1 et ne sont visibles ici qu'à travers les exemples de réponse.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires utilisés
+    <span class="rs-count">6 dimensions · voir la v1.1 pour la référence formelle</span>
+    <span class="rs-tech">schémas <code>TypologieEmploi</code> · <code>TypeContrat</code> · <code>TypeLieu</code> · <code>Salaire</code></span>
+  </h2>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Typologie d'emploi</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">MR</span> Métier Recherché</li>
+        <li><span class="voc-code">EF</span> Création ou Reprise d'Entreprise ou de Franchise</li>
+        <li><span class="voc-code">PM</span> Projet de Métier (v1.1 uniquement)</li>
+      </ul>
+      <div class="voc-tech"><code>typologieEmploi.code</code> — observé dans les exemples : MR, EF. Voir <a href="metiers-recherches-projets-evolution.html#ref">v1.1</a> pour la liste complète (y compris PM). <strong>Partagé</strong> avec le <code>codeTypologie</code> de l'API <a href="diagnostic-usager.html#ref">Diagnostic</a>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Échelle du salaire</span><span class="ref-count">exemples</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">C</span> Cachet (exemple)</li>
+        <li><span class="voc-code">M</span> Mensuel (vu ailleurs)</li>
+        <li><span class="voc-code">A</span> Annuel (vu ailleurs)</li>
+        <li><span class="voc-code">H</span> Horaire (vu ailleurs)</li>
+      </ul>
+      <div class="voc-tech"><code>salaire.code</code> · <code>salaire.libelle</code> — codes courts visibles dans les exemples ; la v1.1 n'utilise que les libellés complets (Annuel, Mensuel, Cachet, Horaire, Autre).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de contrat</span><span class="ref-count">voir v1.1</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">10 codes : CDI, CDD, DIN, MIS, SAI, LIB, CCE, FS, E2, PS. Voir <a href="metiers-recherches-projets-evolution.html#ref">v1.1</a> ou <a href="offres-emploi.html#ref">Offres d'emploi</a> pour les libellés.</p>
+      <div class="voc-tech"><code>type.code</code> (schéma <code>TypeContrat</code>)</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de lieu</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Pays</li>
+        <li><span class="voc-code">2</span> Continent</li>
+        <li><span class="voc-code">3</span> Région</li>
+        <li><span class="voc-code">4</span> Département</li>
+        <li><span class="voc-code">5</span> Commune</li>
+      </ul>
+      <div class="voc-tech"><code>lieu.type.code</code> — <strong>identique</strong> à la v1.1. Le code géographique (code INSEE, code pays) est porté à part dans <code>lieu.code</code>.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Pour la référence formelle</strong> — <a href="metiers-recherches-projets-evolution.html#ref">Métiers recherchés et projets d'évolution</a> (v1.1) déclare ces mêmes vocabulaires en <code>enum</code>. C'est la source à utiliser pour valider des entrées ou construire des menus déroulants.
+</div>
+
+<div class="note" style="margin-top:12px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="offres-emploi.html#ref">Offres d'emploi</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

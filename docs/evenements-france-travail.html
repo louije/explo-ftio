@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -154,7 +155,212 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Sept taxonomies, une centaine de codes</strong> — L'API ne filtre pas uniquement sur des dates et lieux : chaque événement est tagué sur plusieurs dimensions (type, objectif, public ciblé, opération nationale, secteur d'activité). Les codes sont numériques (types, objectifs, publics, opérations) ou alphabétiques (modalité, secteur) selon la dimension. Tous sont déclarés en <code>enum</code> dans le schéma de requête, avec leurs libellés fournis directement par l'OpenAPI — c'est donc une doc exhaustive de ce qu'on peut passer en critère de filtre.
+</div>
+
+<!-- ── TYPES & MODALITÉS D'ÉVÉNEMENT ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Type &amp; modalité d'événement
+    <span class="rs-count">2 taxonomies · 10 codes</span>
+    <span class="rs-tech">schéma <code>EvenementRequest</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le <em>type</em> décrit le format de l'événement (forum, atelier, job dating…), la <em>modalité</em> indique s'il se tient en physique ou en ligne.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'événement</span><span class="ref-count">8</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">13</span> Réunion d'information</li>
+        <li><span class="voc-code">14</span> Forum</li>
+        <li><span class="voc-code">15</span> Conférence</li>
+        <li><span class="voc-code">16</span> Atelier</li>
+        <li><span class="voc-code">17</span> Salon en ligne</li>
+        <li><span class="voc-code">18</span> Job Dating</li>
+        <li><span class="voc-code">31</span> Visite d'entreprise</li>
+        <li><span class="voc-code">32</span> Portes ouvertes</li>
+      </ul>
+      <div class="voc-tech"><code>typeEvenement</code> — <code>integer</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Modalité</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ENPHY</span> En présentiel (physique)</li>
+        <li><span class="voc-code">ADIST</span> À distance (en ligne)</li>
+      </ul>
+      <div class="voc-tech"><code>modalite</code> — <code>string</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── OBJECTIFS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Objectifs
+    <span class="rs-count">12 thématiques proposées aux candidats</span>
+    <span class="rs-tech">champ <code>objectifs[]</code> · <code>integer</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Ce que l'usager vient chercher à l'événement : recruter, découvrir un secteur, trouver une formation, s'informer sur l'international, préparer un entretien, etc.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">19</span> Recrutement</li>
+      <li><span class="voc-code">20</span> Découverte secteur / métier</li>
+      <li><span class="voc-code">21</span> Découverte formation</li>
+      <li><span class="voc-code">33</span> Aides à l'emploi</li>
+      <li><span class="voc-code">34</span> Création d'entreprise</li>
+      <li><span class="voc-code">35</span> Insertion</li>
+      <li><span class="voc-code">36</span> International</li>
+      <li><span class="voc-code">37</span> Marché du travail</li>
+      <li><span class="voc-code">38</span> Recrutement sans CV</li>
+      <li><span class="voc-code">39</span> Se préparer (entretien, CV…)</li>
+      <li><span class="voc-code">40</span> S'informer</li>
+      <li><span class="voc-code">41</span> Sport et insertion</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── PUBLIC CIBLE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Public ciblé
+    <span class="rs-count">11 catégories</span>
+    <span class="rs-tech">champs <code>publicCible[]</code> &amp; <code>beneficeParticipations[]</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Qui l'événement accueille explicitement. <strong>La même liste est utilisée deux fois</strong> dans le schéma : une fois pour filtrer (<code>publicCible</code>), une fois comme bénéfice de participation (<code>beneficeParticipations</code>). Codes identiques, libellés identiques.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">1</span> Ouvert aux jeunes</li>
+      <li><span class="voc-code">2</span> Débutant(e) accepté(e)</li>
+      <li><span class="voc-code">3</span> Pas de diplôme exigé</li>
+      <li><span class="voc-code">5</span> Ouvert aux personnes en situation de handicap</li>
+      <li><span class="voc-code">29</span> Ouvert aux séniors</li>
+      <li><span class="voc-code">48</span> Ouvert aux cadres</li>
+      <li><span class="voc-code">94</span> Ouvert au public insertion par l'activité économique</li>
+      <li><span class="voc-code">95</span> Ouvert aux bénéficiaires du RSA</li>
+      <li><span class="voc-code">96</span> Ouvert aux femmes</li>
+      <li><span class="voc-code">97</span> Ouvert aux professionnels du spectacle</li>
+      <li><span class="voc-code">98</span> Ouvert aux résidants en quartier prioritaire de la ville</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── OPÉRATIONS NATIONALES ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Opérations nationales
+    <span class="rs-count">36 codes · opérations labellisées</span>
+    <span class="rs-tech">champ <code>operations[]</code> · <code>integer</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Grands rendez-vous nationaux récurrents auxquels un événement peut être rattaché : semaines thématiques sectorielles, plans grande cause, opérations marquantes (JO 2024). Les codes ne suivent pas une logique numérique stricte — ils reflètent l'historique des campagnes ajoutées au fil du temps.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#0d9488;--lbg:#f0fdfa;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">22</span> 1 jeune 1 solution</li>
+      <li><span class="voc-code">23</span> La semaine du maritime et du fluvial</li>
+      <li><span class="voc-code">24</span> La semaine du numérique</li>
+      <li><span class="voc-code">25</span> La semaine de l'emploi</li>
+      <li><span class="voc-code">26</span> #TousMobilisés</li>
+      <li><span class="voc-code">42</span> Jeux Olympiques Paris 2024</li>
+      <li><span class="voc-code">43</span> La semaine de l'agriculture</li>
+      <li><span class="voc-code">44</span> La semaine de la création et reprise d'entreprise</li>
+      <li><span class="voc-code">45</span> La semaine du handicap</li>
+      <li><span class="voc-code">46</span> La place de l'emploi et de la formation</li>
+      <li><span class="voc-code">47</span> Travail avenir formation</li>
+      <li><span class="voc-code">49</span> La semaine de l'alternance</li>
+      <li><span class="voc-code">50</span> La semaine du BTP</li>
+      <li><span class="voc-code">51</span> Détection de potentiel</li>
+      <li><span class="voc-code">52</span> La semaine de l'industrie agroalimentaire</li>
+      <li><span class="voc-code">53</span> La semaine de l'emploi intérimaire</li>
+      <li><span class="voc-code">54</span> La semaine de l'emploi TF1</li>
+      <li><span class="voc-code">55</span> La semaine de l'industrie</li>
+      <li><span class="voc-code">56</span> La semaine de l'industrie pharmaceutique</li>
+      <li><span class="voc-code">57</span> La semaine du nucléaire</li>
+      <li><span class="voc-code">58</span> La semaine du soin et de l'accompagnement</li>
+      <li><span class="voc-code">59</span> La semaine de la propreté</li>
+      <li><span class="voc-code">60</span> La semaine du transport / logistique</li>
+      <li><span class="voc-code">61</span> 1 jour 1 formation</li>
+      <li><span class="voc-code">62</span> Décroche un job d'été</li>
+      <li><span class="voc-code">63</span> Décroche un job d'hiver</li>
+      <li><span class="voc-code">64</span> Du Stade vers l'Emploi</li>
+      <li><span class="voc-code">65</span> La route de votre avenir</li>
+      <li><span class="voc-code">66</span> Le mois de la formation</li>
+      <li><span class="voc-code">67</span> Rentrée des métiers</li>
+      <li><span class="voc-code">68</span> Semaine du commerce</li>
+      <li><span class="voc-code">102</span> La semaine de l'intégration</li>
+      <li><span class="voc-code">104</span> La semaine des métiers de la Défense et de la Sécurité</li>
+      <li><span class="voc-code">105</span> Réussir sans attendre</li>
+      <li><span class="voc-code">106</span> ReStart</li>
+      <li><span class="voc-code">108</span> La semaine du Tourisme</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── SECTEUR D'ACTIVITÉ ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#16a34a;"></span>
+    Secteur d'activité
+    <span class="rs-count">14 grands domaines ROME (A–N)</span>
+    <span class="rs-tech">champ <code>secteurActivite</code> · <code>string</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Codage alphabétique sur une lettre, correspondant aux <strong>grands domaines professionnels ROME</strong> (nomenclature France Travail pour classer les métiers). C'est le premier niveau de la hiérarchie ROME — en dessous viennent les domaines, sous-domaines, puis les codes ROME à 5 caractères.
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#16a34a;--lbg:#f0fdf4;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">A</span> Agriculture, pêche, espaces naturels, espaces verts, soins aux animaux</li>
+      <li><span class="voc-code">B</span> Arts et façonnage d'ouvrages d'art</li>
+      <li><span class="voc-code">C</span> Banque, assurance, immobilier</li>
+      <li><span class="voc-code">D</span> Commerce, vente, grande distribution</li>
+      <li><span class="voc-code">E</span> Communication, média, multimédia</li>
+      <li><span class="voc-code">F</span> Construction, bâtiment, travaux publics</li>
+      <li><span class="voc-code">G</span> Hôtellerie-restauration, tourisme, loisirs, animation</li>
+      <li><span class="voc-code">H</span> Industrie</li>
+      <li><span class="voc-code">I</span> Installation et maintenance</li>
+      <li><span class="voc-code">J</span> Santé</li>
+      <li><span class="voc-code">K</span> Services à la personne et à la collectivité</li>
+      <li><span class="voc-code">L</span> Spectacle</li>
+      <li><span class="voc-code">M</span> Support à l'entreprise</li>
+      <li><span class="voc-code">N</span> Transport et logistique</li>
+    </ul>
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Pour aller plus loin</strong> — Le secteur d'activité est la racine de la nomenclature ROME, servie en détail par les <a href="rome-4-0-fiches-metiers.html">APIs ROME 4.0</a>. Vocabulaires d'autres APIs : <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

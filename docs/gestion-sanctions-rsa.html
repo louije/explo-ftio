@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('ref')">R&#xe9;f&#xe9;rentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -127,7 +128,257 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Une douzaine de vocabulaires sensibles</strong> — Cette API formalise un <strong>cycle de vie de sanction</strong> qui implique plusieurs acteurs (France Travail, Conseil Départemental, CAF, manager FT, médiateur, tribunal administratif). Chaque événement du cycle porte son type, son motif, éventuellement sa conséquence (suspension / suppression / radiation), sa modalité (pourcentage ou montant), sa durée. Tous ces vocabulaires sont déclarés en <code>enum</code> dans l'OpenAPI.
+</div>
+
+<!-- ── MANQUEMENT (L'ORIGINE) ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Manquement — l'origine
+    <span class="rs-count">4 natures · 2 rangs</span>
+    <span class="rs-tech">schéma <code>DecisionSanctionRsa</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Ce qui déclenche une sanction : une violation de l'engagement (le « manquement ») et son caractère (premier ou répété).
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nature du manquement</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">N61</span> Manquement aux obligations du contrat d'engagement</li>
+        <li><span class="voc-code">N63</span> Refus d'élaborer le contrat d'engagement</li>
+        <li><span class="voc-code">N64</span> Refus d'actualiser le contrat d'engagement</li>
+        <li><span class="voc-code">N65</span> Manquement + refus de deux offres raisonnables d'emploi</li>
+      </ul>
+      <div class="voc-tech"><code>natureManquement</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Rang du manquement</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R1</span> 1er manquement sanctionné</li>
+        <li><span class="voc-code">R2</span> Second manquement ou plus</li>
+      </ul>
+      <div class="voc-tech"><code>rangManquement</code> — détermine la sévérité de la sanction applicable.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── CONSÉQUENCE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Conséquence — la sanction appliquée
+    <span class="rs-count">7 types · modalité P/M · durée 1-4 mois</span>
+    <span class="rs-tech">schémas <code>DetailSanction</code> · <code>TraitementSanctionRsa</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Ce que subit l'usager. Distingue les sanctions <strong>FT</strong> (allocations chômage) des sanctions <strong>RSA</strong> (Revenu de solidarité active, géré par les Conseils départementaux).
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de conséquence</span><span class="ref-count">7</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">RAPPEL_A_ORDRE</span> Rappel à l'ordre (1er manquement, demandeur non indemnisé)</li>
+        <li><span class="voc-code">SUSP_RSA</span> Suspension du RSA</li>
+        <li><span class="voc-code">SUPPR_RSA</span> Suppression du RSA</li>
+        <li><span class="voc-code">SUSP_FT</span> Suspension des allocations France Travail</li>
+        <li><span class="voc-code">SUPPR_FT</span> Suppression des allocations FT</li>
+        <li><span class="voc-code">SUPPR_FT_DEF</span> Suppression définitive des allocations FT</li>
+        <li><span class="voc-code">RADIATION</span> Radiation de la liste des demandeurs d'emploi</li>
+      </ul>
+      <div class="voc-tech"><code>typeConsequenceSanction</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de sanction validée</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">SUSP_RSA</span> Suspension du RSA</li>
+        <li><span class="voc-code">SUPPR_RSA</span> Suppression du RSA</li>
+      </ul>
+      <div class="voc-tech"><code>typeSanctionValide</code> — vocabulaire restreint aux décisions RSA (sous-ensemble du type de conséquence).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Modalité financière</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">P</span> Pourcentage de l'allocation</li>
+        <li><span class="voc-code">M</span> Montant forfaitaire en €</li>
+      </ul>
+      <div class="voc-tech"><code>modaliteProposee</code> · <code>modaliteValidee</code> — applicable uniquement aux sanctions FT de type suspension/suppression.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Durée</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> 1 mois</li>
+        <li><span class="voc-code">2</span> 2 mois</li>
+        <li><span class="voc-code">3</span> 3 mois</li>
+        <li><span class="voc-code">4</span> 4 mois</li>
+      </ul>
+      <div class="voc-tech"><code>dureeProposee</code> · <code>dureeValidee</code> — applicable aux suspensions.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── CYCLE DE VIE ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Cycle de vie de la sanction
+    <span class="rs-count">11 types d'événement · 2 vocabulaires de motif</span>
+    <span class="rs-tech">schémas <code>Evenement</code> · <code>DetailEvenementSanction</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Une sanction traverse plusieurs étapes : proposition → validation (ou refus) → éventuellement annulation ou levée de suspension. Chaque étape est un <strong>événement</strong>, avec son type et son motif. Deux vocabulaires de motif coexistent : un court (3 valeurs, simplifié) et un détaillé (18 valeurs, qui distingue qui a pris la décision : FT, CD, CAF, manager, médiateur, tribunal…).
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;grid-column:1/-1;">
+    <div class="ref-head"><span class="ref-title">Type d'événement</span><span class="ref-count">11</span></div>
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">PROP_SANCTION</span> Proposition / initialisation de la sanction</li>
+      <li><span class="voc-code">SAISIE_SANCTION</span> Choix d'instruire la proposition par le CD (suspension RSA uniquement)</li>
+      <li><span class="voc-code">REFUS_SAISIE_SANCTION</span> Refus d'instruire par le CD (suspension RSA uniquement)</li>
+      <li><span class="voc-code">ACCORD_FT_SANCTION</span> Accord du manager France Travail</li>
+      <li><span class="voc-code">VALID_SANCTION</span> Décision de sanction</li>
+      <li><span class="voc-code">REFUS_SANCTION</span> Sanction refusée</li>
+      <li><span class="voc-code">ANNULATION_SANCTION</span> Annulation (recours, erreur, tribunal…)</li>
+      <li><span class="voc-code">PROP_LEVEE_SUSP</span> Proposition de levée de suspension</li>
+      <li><span class="voc-code">ACCORD_FT_LEVEE_SUSP</span> Accord levée de suspension par le manager FT</li>
+      <li><span class="voc-code">VALID_LEVEE_SUSP</span> Décision de levée de suspension</li>
+      <li><span class="voc-code">REFUS_LEVEE_SUSP</span> Refus de levée de suspension</li>
+    </ul>
+    <div class="voc-tech"><code>typeEvenement</code> — séquence type : PROP_SANCTION → [SAISIE_SANCTION | REFUS_SAISIE_SANCTION] → ACCORD_FT_SANCTION → [VALID_SANCTION | REFUS_SANCTION] → (éventuellement ANNULATION_SANCTION ou cycle levée suspension).</div>
+  </div>
+
+  <div class="ref-families" style="margin-top:10px;">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif — version courte</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DROIT_ERREUR</span> Droit à l'erreur</li>
+        <li><span class="voc-code">RECOURS</span> Annulation suite à recours</li>
+        <li><span class="voc-code">AUTRE</span> Autre motif</li>
+      </ul>
+      <div class="voc-tech"><code>motifEvenement</code> (dans le schéma <code>Evenement</code>) — utilisé principalement pour <code>ANNULATION_SANCTION</code>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif — version détaillée</span><span class="ref-count">17</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DROIT_ERREUR</span> Droit à l'erreur (sanction prononcée CD ou CAF)</li>
+        <li><span class="voc-code">RECOURS</span> Annulation suite à recours (sanction prononcée CD ou CAF)</li>
+        <li><span class="voc-code">AUTRE</span> Autre motif (sanction prononcée CD ou CAF)</li>
+        <li><span class="voc-code">DELEGATION_FT</span> Validation au titre de la délégation FT</li>
+        <li><span class="voc-code">DELAI_SAISIE_DEPASSE</span> Délai d'instruction CD dépassé</li>
+        <li><span class="voc-code">REFUS_SAISIE</span> Refus d'instruction par le CD</li>
+        <li><span class="voc-code">VALIDATION_CD</span> Décision de sanction par le CD</li>
+        <li><span class="voc-code">REFUS_CD</span> Proposition refusée par le CD</li>
+        <li><span class="voc-code">REFUS_ELD</span> Proposition refusée par le manager France Travail</li>
+        <li><span class="voc-code">RECENTALISATION_RSA_OUTREMER</span> Proposition à traiter CAF Outremer (recentralisation RSA)</li>
+        <li><span class="voc-code">VALIDATION_CAF</span> Décision de sanction par la CAF</li>
+        <li><span class="voc-code">REFUS_CAF</span> Proposition refusée par la CAF</li>
+        <li><span class="voc-code">ABANDON_RECOURS_FT</span> Annulation suite réclamation FT (sanction prononcée FT)</li>
+        <li><span class="voc-code">MEDIATEUR</span> Annulation suite préconisation médiateur (sanction prononcée FT)</li>
+        <li><span class="voc-code">TRIBUNAL_ADM</span> Annulation suite décision tribunal administratif</li>
+        <li><span class="voc-code">ANNU_SANCTION</span> Annulation suite erreur décision sanction (sanction prononcée FT)</li>
+        <li><span class="voc-code">ANNU_RECOURS</span> Annulation suite erreur décision recours (sanction prononcée FT)</li>
+      </ul>
+      <div class="voc-tech"><code>motif</code> (dans le schéma <code>DetailEvenementSanction</code>) — vocabulaire riche qui porte à la fois <em>quoi</em> et <em>qui</em> (FT, CD, CAF, manager, médiateur, tribunal). Note orthographique : <code>RECENTALISATION</code> est l'orthographe du schéma (typo probable de « recentralisation »).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── CODES DE SORTIE & ERREURS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Codes de retour
+    <span class="rs-count">7 codes de sortie · 28 codes d'erreur</span>
+    <span class="rs-tech">schémas <code>Retour*</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Réponses structurées du service. Les codes <code>C0xx</code> signalent un succès ou une incompatibilité métier ; les <code>R0xx</code> signalent des erreurs de validation (champs manquants ou invalides).
+  </div>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Codes de sortie (métier)</span><span class="ref-count">7</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">C000</span> Demande de radiation créée (<code>RetourDemandeRadiation</code>)</li>
+        <li><span class="voc-code">C001</span> Événement publié / sanction partenaire créée (succès standard)</li>
+        <li><span class="voc-code">C002</span> (non documenté — <code>RetourDemandeRadiation</code>)</li>
+        <li><span class="voc-code">C003</span> (non documenté — <code>RetourDemandeRadiation</code>)</li>
+        <li><span class="voc-code">C004</span> (non documenté — <code>RetourDemandeRadiation</code>)</li>
+        <li><span class="voc-code">C999</span> Événement incompatible avec les événements connus pour cette conséquence</li>
+      </ul>
+      <div class="voc-tech"><code>codeSortie</code> — la signification varie selon le schéma (mise à jour événement, création de sanction partenaire, demande de radiation). Les libellés C002-C004 ne sont pas documentés dans l'OpenAPI.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Codes d'erreur de validation</span><span class="ref-count">28</span></div>
+      <p style="font-size:0.82rem;color:var(--text-dim);line-height:1.55;margin:2px 0 8px;">
+        Série <code>R0xx</code> groupée par champ concerné. Pattern : numéro pair = « obligatoire », numéro impair = « invalide ».
+      </p>
+      <div class="ref-subtitle">Identifiant de la conséquence</div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R010</span> / <span class="voc-code">R011</span> Obligatoire / invalide</li>
+        <li><span class="voc-code">R012</span> / <span class="voc-code">R013</span> Obligatoire / invalide (avec accents)</li>
+      </ul>
+      <div class="ref-subtitle" style="margin-top:8px;">Événement</div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R020</span> / <span class="voc-code">R021</span> Type d'événement obligatoire / invalide</li>
+        <li><span class="voc-code">R030</span> / <span class="voc-code">R031</span> Date obligatoire / erronée</li>
+        <li><span class="voc-code">R040</span> Commentaire invalide · <span class="voc-code">R041</span> Justification de la décision invalide</li>
+      </ul>
+      <div class="ref-subtitle" style="margin-top:8px;">Conséquence / montant / modalité</div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R050</span> / <span class="voc-code">R051</span> / <span class="voc-code">R052</span> / <span class="voc-code">R053</span> Type de conséquence obligatoire / invalide (variantes)</li>
+        <li><span class="voc-code">R060</span> / <span class="voc-code">R061</span> Montant obligatoire / invalide</li>
+        <li><span class="voc-code">R062</span> / <span class="voc-code">R063</span> Modalité incorrecte / obligatoire</li>
+        <li><span class="voc-code">R064</span> Montant invalide pour le type de manquement</li>
+        <li><span class="voc-code">R070</span> / <span class="voc-code">R071</span> Durée obligatoire / invalide</li>
+      </ul>
+      <div class="ref-subtitle" style="margin-top:8px;">Manquement</div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R080</span> / <span class="voc-code">R081</span> Nature obligatoire / invalide</li>
+        <li><span class="voc-code">R082</span> Rang invalide</li>
+        <li><span class="voc-code">R090</span> / <span class="voc-code">R091</span> Date obligatoire / invalide</li>
+      </ul>
+      <div class="ref-subtitle" style="margin-top:8px;">Radiation</div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R100</span> Justification de la demande de radiation invalide</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Pour aller plus loin</strong> — Autres APIs avec vocabulaires métier : <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

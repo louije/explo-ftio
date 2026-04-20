@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('ref')">R&#xe9;f&#xe9;rentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -136,7 +137,374 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: R&#xc9;F&#xc9;RENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Pas de référentiel exposé par l'API</strong> — Contrairement à l'API <a href="diagnostic-usager.html#ref">Diagnostic</a>, aucun endpoint <code>/referentiel*</code> ne liste les valeurs possibles. Tout le vocabulaire métier de l'orientation est déclaré en <code>enum</code> directement dans les schémas des DTO. Ces valeurs tombent en deux groupes : celles que <strong>le conseiller saisit</strong> (critères, freins, drapeaux) et celles que <strong>l'API calcule et retourne</strong> (parcours, organisme, statut, état).
+</div>
+
+<!-- ── ORIENTATION (identité, sortie du calcul) ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Orientation
+    <span class="rs-count">5 vocabulaires · sortie du calcul</span>
+    <span class="rs-tech">schéma <code>OrientationCA_Calculer</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les valeurs produites par <code>POST /calculOrientation</code> et portées dans toutes les lectures ultérieures. Elles décrivent <em>qui accompagne l'usager, dans quel cadre, et où en est le dossier</em>.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Parcours</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PED</span> Parcours professionnel</li>
+        <li><span class="voc-code">PSP</span> Parcours socio-professionnel</li>
+        <li><span class="voc-code">PSO</span> Parcours social</li>
+        <li><span class="voc-code">EO</span> Entretien d'orientation</li>
+        <li><span class="voc-code">IND</span> Indéterminé</li>
+      </ul>
+      <div class="voc-tech"><code>parcours</code> — déclinaison selon la distance à l'emploi et les freins déclarés.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Organisme référent</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">FT</span> France Travail</li>
+        <li><span class="voc-code">CD</span> Conseil départemental</li>
+        <li><span class="voc-code">ML</span> Mission locale</li>
+        <li><span class="voc-code">CAF</span> Caisse d'allocations familiales</li>
+        <li><span class="voc-code">CE</span> Cap emploi</li>
+        <li><span class="voc-code">IND</span> Indéterminé</li>
+      </ul>
+      <div class="voc-tech"><code>organisme</code> — l'opérateur vers qui l'usager est orienté. Le champ jumeau <code>organisme_decision</code> reprend les mêmes valeurs <strong>sauf IND</strong> (cf. section Décision).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Statut</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PRECONISE</span> Orientation calculée, en attente de décision de l'organisme destinataire</li>
+        <li><span class="voc-code">DECIDE</span> Orientation validée par l'organisme, l'accompagnement est ouvert</li>
+      </ul>
+      <div class="voc-tech"><code>statut</code> — après <code>POST /calculOrientation</code> : PRECONISE ; après <code>POST /decisionOrientation</code> acceptée : DECIDE.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">État</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">BROUILLON</span> Saisie incomplète côté conseiller</li>
+        <li><span class="voc-code">EN_ATTENTE</span> Saisie complète, attend la décision</li>
+        <li><span class="voc-code">SAISIE_COMPLETE</span> Variante, selon contexte</li>
+        <li><span class="voc-code">OUVERT</span> Accompagnement en cours</li>
+        <li><span class="voc-code">CLOTURE</span> Parcours terminé</li>
+      </ul>
+      <div class="voc-tech"><code>etat</code> — aussi utilisé en paramètre de filtrage <code>etatOrientation</code> sur <code>GET /lectureOrientation</code> (où seuls BROUILLON, EN_ATTENTE, OUVERT et CLOTURE sont acceptés).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Origine du calcul</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">INSCRIPTION_CONSEILLER_CD</span> Saisi par un conseiller du Conseil départemental</li>
+        <li><span class="voc-code">INSCRIPTION_AUTO_MILO</span> Automatique depuis Mission locale (i-milo)</li>
+        <li><span class="voc-code">INSCRIPTION_AUTO_CAF</span> Automatique depuis la CAF</li>
+        <li><span class="voc-code">INSCRIPTION_AUTO_MSA</span> Automatique depuis la MSA</li>
+      </ul>
+      <div class="voc-tech"><code>origine</code> — quel cas d'usage a déclenché le calcul d'orientation.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── CRITÈRES DE CALCUL ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Critères de calcul
+    <span class="rs-count">4 vocabulaires · saisie conseiller</span>
+    <span class="rs-tech">schéma <code>CriteresOrientationCA_CalculerEntree</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les informations renseignées sur la situation de l'usager au moment du calcul. Ce sont les entrées principales de l'algorithme (hors freins et drapeaux, traités dans les sections suivantes).
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Situation professionnelle</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">EN_ACTIVITE</span> En emploi actuellement</li>
+        <li><span class="voc-code">DEUX_DERNIERES_ANNEES</span> A travaillé dans les 2 dernières années</li>
+        <li><span class="voc-code">PLUS_DEUX_ANS</span> Dernier emploi il y a plus de 2 ans</li>
+        <li><span class="voc-code">JAMAIS</span> N'a jamais travaillé</li>
+      </ul>
+      <div class="voc-tech"><code>situation_professionnelle</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'emploi</span><span class="ref-count">7</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">SAISONNIER</span> Saisonnier</li>
+        <li><span class="voc-code">ARTISTE_OU_AUTEUR</span> Artiste / auteur</li>
+        <li><span class="voc-code">INTERMITTENT_SPECTACLE</span> Intermittent du spectacle</li>
+        <li><span class="voc-code">EXPLOITANT_AGRICOLE</span> Exploitant agricole</li>
+        <li><span class="voc-code">ASSISTANTE_MATERNELLE</span> Assistante maternelle</li>
+        <li><span class="voc-code">CREATEUR_ENTREPRISE_OU_INDEPENDANT</span> Créateur d'entreprise / indépendant</li>
+        <li><span class="voc-code">AUTRE</span> Autre</li>
+      </ul>
+      <div class="voc-tech"><code>type_emploi</code> — renseigné uniquement si <code>situation_professionnelle=EN_ACTIVITE</code>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveau d'étude</span><span class="ref-count">10</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AFS</span> Aucune formation scolaire</li>
+        <li><span class="voc-code">CP4</span> Primaire à 4ème</li>
+        <li><span class="voc-code">CFG</span> 4ème achevée</li>
+        <li><span class="voc-code">C3A</span> 3ème achevée ou Brevet</li>
+        <li><span class="voc-code">C12</span> 2nd ou 1ère achevée</li>
+        <li><span class="voc-code">NV5</span> CAP, BEP et équivalents</li>
+        <li><span class="voc-code">NV4</span> Bac ou équivalent</li>
+        <li><span class="voc-code">NV3</span> Bac+2 ou équivalents</li>
+        <li><span class="voc-code">NV2</span> Bac+3, Bac+4 ou équivalents</li>
+        <li><span class="voc-code">NV1</span> Bac+5 et plus</li>
+      </ul>
+      <div class="voc-tech"><code>niveau_etude</code> — libellés documentés directement dans l'OpenAPI.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Projet professionnel</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">SALARIAT</span> Recherche un emploi salarié</li>
+        <li><span class="voc-code">ENTREPRENARIAT</span> Projet d'entrepreneuriat</li>
+        <li><span class="voc-code">FORMATION</span> Projet de formation</li>
+        <li><span class="voc-code">AUCUN</span> Pas de projet défini</li>
+      </ul>
+      <div class="voc-tech"><code>projet_pro</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FREINS DÉCLARÉS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Freins déclarés
+    <span class="rs-count">8 dimensions · valeurs d'impact</span>
+    <span class="rs-tech">schéma <code>CriteresOrientationCA_CalculerEntree</code> (champs <code>contrainte_*</code>)</span>
+  </h2>
+  <div class="ref-section-intro">
+    Huit dimensions de freins à la recherche d'emploi. Chacune est évaluée sur son propre vocabulaire — la majorité utilisent le trio d'impact <span class="ev">IMPACT_FORT_RECHERCHE_EMPLOI</span> · <span class="ev">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> · <span class="ev">AUCUNE</span>, mais plusieurs dimensions ont des valeurs plus spécifiques (santé, logement, mobilité, famille, numérique).
+    <br>À noter : ces valeurs sont plus grossières que celles de l'<a href="diagnostic-usager.html#ref">API Diagnostic</a> (qui distingue jusqu'à la situation et l'objectif). C'est un <strong>résumé</strong>, pas un diagnostic détaillé.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Santé</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">INCAPACITE_RECHERCHE_ACTIVITE_PRO</span> Incapacité à rechercher une activité</li>
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_sante</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Logement</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">SANS_LOGEMENT</span> Sans logement</li>
+        <li><span class="voc-code">PROCEDURE_EXPULSION</span> Procédure d'expulsion en cours</li>
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_logement</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Mobilité</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AUCUN_MOYEN_DE_TRANSPORT</span> Aucun moyen de transport</li>
+        <li><span class="voc-code">DEPENDANT_TRANSPORT</span> Dépendant des transports</li>
+        <li><span class="voc-code">AUTRE</span> Autre frein mobilité</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_mobilite</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Familiale</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AIDANT_FAMILIAL</span> Aidant familial</li>
+        <li><span class="voc-code">ENFANT_SANS_SOLUTION_GARDE</span> Enfant sans solution de garde</li>
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_familiale</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Financière</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_financiere</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Numérique</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">NON_ACCES_INTERNET</span> Pas d'accès internet</li>
+        <li><span class="voc-code">NON_MAITRISE</span> Ne maîtrise pas les outils numériques</li>
+        <li><span class="voc-code">REFUS</span> Refus d'utiliser le numérique</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_numerique</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Administrative / juridique</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_administrative_juridique</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Français / calcul</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">IMPACT_FORT_RECHERCHE_EMPLOI</span> Impact fort</li>
+        <li><span class="voc-code">IMPACT_FAIBLE_RECHERCHE_EMPLOI</span> Impact faible</li>
+        <li><span class="voc-code">AUCUNE</span> Aucune</li>
+      </ul>
+      <div class="voc-tech"><code>contrainte_francais_calcul</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── DÉCISION ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Décision
+    <span class="rs-count">3 vocabulaires · réponse de l'organisme destinataire</span>
+    <span class="rs-tech">schémas <code>DecisionCA</code> · <code>DecisionCA_Lecture</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Valeurs portées par <code>POST /decisionOrientation</code>. L'organisme destinataire accepte ou refuse l'orientation proposée ; en cas de refus, un motif (et éventuellement un parcours alternatif) doit accompagner le refus.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">État de la décision</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ACCEPTEE</span> L'organisme accepte l'accompagnement</li>
+        <li><span class="voc-code">REFUSEE</span> L'organisme refuse — un motif est obligatoire</li>
+      </ul>
+      <div class="voc-tech"><code>etat_decision</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Motif de refus</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DECLARATION_INEXACTE</span> Informations déclarées incorrectes</li>
+        <li><span class="voc-code">SITUATION_NON_COUVERTE</span> L'usager ne relève pas de cet organisme</li>
+        <li><span class="voc-code">APPRECIATION_DIFFERENTE</span> Appréciation différente sur le parcours approprié</li>
+        <li><span class="voc-code">MANQUE_CAPACITE_ACCUEIL</span> Plus de capacité d'accueil disponible</li>
+        <li><span class="voc-code">ENTRETIEN_ORIENTATION</span> Nécessite un entretien d'orientation préalable</li>
+        <li><span class="voc-code">AUTRE</span> Autre motif — champ <code>commentaire_refus</code> à remplir</li>
+      </ul>
+      <div class="voc-tech"><code>motif_refus</code> — uniquement si <code>etat_decision=REFUSEE</code>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Organisme décisionnaire</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">FT</span> France Travail</li>
+        <li><span class="voc-code">CD</span> Conseil départemental</li>
+        <li><span class="voc-code">ML</span> Mission locale</li>
+        <li><span class="voc-code">CAF</span> Caisse d'allocations familiales</li>
+        <li><span class="voc-code">CE</span> Cap emploi</li>
+      </ul>
+      <div class="voc-tech"><code>organisme_decision</code> — mêmes codes que <code>organisme</code> <strong>sans IND</strong> (on ne décide pas pour « indéterminé »).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── VOCABULAIRES DIVERS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires divers
+    <span class="rs-count">2 enums MSA · 7 drapeaux booléens</span>
+    <span class="rs-tech">champs spécifiques à certains contextes d'inscription</span>
+  </h2>
+  <div class="ref-section-intro">
+    Informations supplémentaires qui accompagnent le calcul mais ne sont pas au cœur du routage parcours/organisme. Les drapeaux booléens caractérisent des publics cibles (BOE, ESAT, RSA…) et influencent la décision d'orientation.
+  </div>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Autonomie (MSA)</span><span class="ref-count">barème 1–5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Non, pas du tout</li>
+        <li><span class="voc-code">2</span> Non, pas vraiment</li>
+        <li><span class="voc-code">3</span> Moyennement</li>
+        <li><span class="voc-code">4</span> Oui, plutôt</li>
+        <li><span class="voc-code">5</span> Oui, complètement</li>
+      </ul>
+      <div class="voc-tech"><code>msa_autonomie_recherche_emploi</code> — entier avec libellés documentés. Renseigné uniquement quand l'origine est MSA.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Démarches professionnelles (MSA)</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AUCUNE_DEMARCHE</span> Aucune démarche entreprise</li>
+        <li><span class="voc-code">PEU_DEMARCHES</span> Quelques démarches</li>
+        <li><span class="voc-code">PLUSIEURS_DEMARCHES</span> Plusieurs démarches engagées</li>
+      </ul>
+      <div class="voc-tech"><code>msa_demarches_professionnelles</code></div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Drapeaux booléens</span><span class="ref-count">7 champs <code>true</code>/<code>false</code></span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">brsa</span> Bénéficiaire du RSA</li>
+        <li><span class="voc-code">boe</span> Bénéficiaire de l'obligation d'emploi (handicap)</li>
+        <li><span class="voc-code">baeeh</span> Bénéficiaire ou ancien bénéficiaire de l'AEEH / PCH / PPS</li>
+        <li><span class="voc-code">scolarite_etablissement_specialise</span> Scolarisé en établissement d'éducation spécialisée (IME, IMPRO)</li>
+        <li><span class="voc-code">esat</span> Travaille, a travaillé ou bénéficie d'une orientation ESAT et souhaite le milieu ordinaire</li>
+        <li><span class="voc-code">boe_souhait_accompagnement</span> Souhaite un accompagnement spécifique sur le volet BOE</li>
+        <li><span class="voc-code">capacite_a_travailler</span> Déclaré capable de travailler</li>
+      </ul>
+      <div class="voc-tech">Tous déclarés en <code>boolean</code> dans <code>CriteresOrientationCA_CalculerEntree</code>. Absents = non renseignés, et non « faux ».</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

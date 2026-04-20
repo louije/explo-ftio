@@ -23,6 +23,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -143,7 +144,92 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Deux taxonomies, 29 codes</strong> — Chaque entretien porté par l'API est tagué sur deux dimensions : son <strong>type</strong> (21 codes pour distinguer un entretien d'indemnisation d'un bilan CRP, d'un diagnostic Cap emploi, etc.) et sa <strong>modalité de contact</strong> (8 codes pour distinguer physique, téléphone, visioconférence, courriel). Les deux listes sont déclarées en <code>enum</code> dans l'OpenAPI — mais les libellés tels que stockés sont <strong>tronqués</strong> (chaînes longues coupées à ~28 caractères, convention héritée du SI d'origine).
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Type d'entretien
+    <span class="rs-count">21 codes</span>
+    <span class="rs-tech">champ <code>typeEntretien</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le type décrit la <em>raison</em> de l'entretien — à la fois son objet métier (diagnostic, bilan, contrôle…) et le dispositif France Travail associé (PEC/CIE, CRP, PPAE, Cap emploi, etc.).
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#d97706;--lbg:#fffbf2;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">ESI</span> Entretien de situation</li>
+      <li><span class="voc-code">EDP</span> Entretien personnalisé</li>
+      <li><span class="voc-code">EDA</span> 1er entretien d'accompagnement</li>
+      <li><span class="voc-code">EDO</span> Entretien d'orientation</li>
+      <li><span class="voc-code">ETP</span> Entretien point d'étape</li>
+      <li><span class="voc-code">USA</span> Entretien usager</li>
+      <li><span class="voc-code">IND</span> Entretien indemnisation</li>
+      <li><span class="voc-code">CRL</span> Entretien longue durée</li>
+      <li><span class="voc-code">CRE</span> Contrôle recherche emploi</li>
+      <li><span class="voc-code">SEF</span> Suivi emploi / formation</li>
+      <li><span class="voc-code">PAK</span> Entretien pack de démarrage (PPAE)</li>
+      <li><span class="voc-code">EPK</span> Entretien PPAE pack différé</li>
+      <li><span class="voc-code">PE1</span> Entretien tripartite PEC / CIE</li>
+      <li><span class="voc-code">PE2</span> Entretien de suivi PEC / CIE</li>
+      <li><span class="voc-code">PE3</span> Entretien bilatéral sortie PEC / CIE</li>
+      <li><span class="voc-code">PBI</span> Pré-bilan CRP</li>
+      <li><span class="voc-code">CRP</span> Entretien actualisation CRP</li>
+      <li><span class="voc-code">BIL</span> Bilan CRP</li>
+      <li><span class="voc-code">PSP</span> Plan de sécurisation professionnel</li>
+      <li><span class="voc-code">CPS</span> Conclusion psychologue du travail</li>
+      <li><span class="voc-code">DCE</span> Diagnostic croisé Cap emploi</li>
+    </ul>
+    <div class="voc-tech">
+      Libellés d'origine tronqués à ~28 caractères dans le schéma (convention SI historique). Les libellés ci-dessus sont la version humainement lisible. <strong>PEC / CIE</strong> = contrat aidé · <strong>CRP</strong> = Convention de Reclassement Personnalisé · <strong>PPAE</strong> = Projet Personnalisé d'Accès à l'Emploi.
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Modalité de contact
+    <span class="rs-count">8 codes</span>
+    <span class="rs-tech">champ <code>codeModaliteContact</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Comment l'entretien s'est physiquement déroulé : en face à face, par téléphone, par visioconférence, ou par simple échange de courriel. Plusieurs déclinaisons de la visio selon l'outil utilisé côté FT (visioguichet vs visioconférence classique).
+  </div>
+
+  <div class="ref-card voc-card" style="--lc:#0d9488;--lbg:#f0fdfa;">
+    <ul class="ref-list voc-list">
+      <li><span class="voc-code">I</span> Entretien individuel physique</li>
+      <li><span class="voc-code">R</span> Entretien collectif physique</li>
+      <li><span class="voc-code">T</span> Entretien individuel téléphonique</li>
+      <li><span class="voc-code">V</span> Entretien individuel visioguichet</li>
+      <li><span class="voc-code">W</span> Entretien individuel visioconférence</li>
+      <li><span class="voc-code">F</span> Entretien visioconférence d'information</li>
+      <li><span class="voc-code">B</span> Bilan en ligne</li>
+      <li><span class="voc-code">C</span> Échange courriel</li>
+    </ul>
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Pour aller plus loin</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

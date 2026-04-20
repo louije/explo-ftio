@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('ref')">R&#xe9;f&#xe9;rentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -228,7 +229,237 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
-<!-- TAB 2: COUVERTURE API                               -->
+<!-- TAB 2: RÉFÉRENTIELS                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Cette API EST un service de référentiels</strong> — En plus de la recherche d'offres, elle expose <strong>15 endpoints <code>GET /v2/referentiel/…</code></strong> qui servent les catalogues utilisés à la fois par le moteur d'offres et, plus largement, comme source de vérité pour d'autres APIs du réseau (types de contrat, permis, ROME, géographie). Chaque endpoint renvoie un tableau paginé de paires <code>(code, libelle)</code>. Tous en accès direct (partenaire, pas de jeton usager).
+</div>
+
+<!-- ── RÉFÉRENTIELS SERVIS ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Référentiels servis par l'API
+    <span class="rs-count">15 endpoints · catalogues paires code/libellé</span>
+    <span class="rs-tech">schéma de réponse <code>Referentiel</code> (code · libelle)</span>
+  </h2>
+  <div class="ref-section-intro">
+    Les petits catalogues (&lt;30 items) sont affichables d'un bloc côté UI. Les grands (communes, appellations, NAF) passent par pagination <code>range</code> et header <code>Content-Range</code>. <strong>Scale</strong> indique la volumétrie approximative.
+  </div>
+
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Types de contrats</span><span class="ref-count">~5-10 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Catégories de contrat utilisées en filtre de recherche (CDI, CDD, MIS, etc.). Référentiel partagé avec <a href="metiers-recherches.html">Métiers recherchés</a> et <a href="metiers-recherches-projets-evolution.html">Projets d'évolution</a>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/typesContrats</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Natures de contrats</span><span class="ref-count">~5-10 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Qualification de la relation d'emploi (distinct du type de contrat). Ex. connu : <code>E1</code>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/naturesContrats</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveaux de formation</span><span class="ref-count">~10-15 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Exigences de formation (NV1 à NV5, AFS, etc.). Vocabulaire <strong>identique</strong> à <code>niveau_etude</code> de l'<a href="orientation-usager.html#ref">API Orientation</a> et <code>niveau.code</code> de <a href="formations-professionnelles.html">Formations professionnelles</a>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/niveauxFormations</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Permis de conduire</span><span class="ref-count">~21 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Catégories de permis (B, C, D, etc.). Référentiel partagé avec <a href="formations-professionnelles.html">Formations professionnelles</a> (qui déclare les 21 codes en enum).</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/permis</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Langues</span><span class="ref-count">~40-50 · moyen</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Langues requises ou souhaitées sur une offre (français, anglais, allemand…).</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/langues</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Thèmes ROME</span><span class="ref-count">~20-30 · moyen</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Niveau intermédiaire dans la taxonomie ROME (entre secteur et métier).</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/themes</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Domaines métiers</span><span class="ref-count">~20-30 · moyen</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Groupements métier plus fins que les secteurs. Exemple connu : <code>G17</code>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/domaines</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Secteurs d'activités (NAF)</span><span class="ref-count">~88 · moyen</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Divisions NAF sur 2 chiffres (ex. <code>01</code>, <code>10</code>). Premier niveau de la classification de l'activité d'une entreprise.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/secteursActivites</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Codes NAF complets</span><span class="ref-count">~700+ · grand</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Code APE à 5 chiffres + lettre (ex. <code>78.20Z</code>, <code>10.71C</code>). Le niveau détaillé du NAF, sous les secteurs.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/nafs</code> — à paginer</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Métiers ROME</span><span class="ref-count">~500-600 · grand</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Fiches métier ROME sur 5 caractères (ex. <code>D1102</code> Boulanger). Niveau où s'indexent les offres par métier recherché.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/metiers</code> — à paginer</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Appellations ROME</span><span class="ref-count">milliers · très grand</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Intitulés d'emploi indexés sous un métier ROME. C'est ce que l'usager voit dans une offre (« Boulanger/Boulangère tourier »).</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/appellations</code> — à paginer</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Régions</span><span class="ref-count">18 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Régions françaises (post-réforme 2016). Schéma de réponse <code>Region</code> = <code>code</code> · <code>libelle</code>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/regions</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Départements</span><span class="ref-count">~101 · moyen</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Départements (métropole + outremer) avec leur région rattachée. Schéma <code>Departement</code> = <code>code</code> · <code>libelle</code> · <code>region</code>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/departements</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Communes</span><span class="ref-count">~35 000 · énorme</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Ensemble des communes françaises avec code INSEE, code postal et département. Schéma <code>Commune</code> = <code>code</code> · <code>libelle</code> · <code>codePostal</code> · <code>codeDepartement</code>.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/communes</code> — forte pagination requise</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Pays</span><span class="ref-count">~250 · grand</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Codes pays (codage interne FT, ex. <code>99127</code>) pour les offres internationales.</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/pays</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Continents</span><span class="ref-count">7 · petit</span></div>
+      <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;margin:2px 0 6px;">Groupements continentaux (Afrique, Asie, Europe, Amérique du Nord, Amérique du Sud, Océanie, Antarctique).</p>
+      <div class="voc-tech"><code>GET /v2/referentiel/continents</code></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ENUMS INTERNES ── -->
+<div class="ref-section">
+  <h2 class="ref-section-title rs-soft">
+    Vocabulaires internes aux offres
+    <span class="rs-count">7 enums courts</span>
+    <span class="rs-tech">champs du schéma <code>Offre</code> et filtres de recherche</span>
+  </h2>
+  <div class="ref-section-intro">
+    Ces codes ne sont <strong>pas</strong> exposés via un endpoint référentiel — ils sont fixes et documentés dans les DTO de l'API. Ils qualifient un besoin (exigence de diplôme ou de permis), une caractéristique de poste (déplacements, expérience, qualification) ou un critère de recherche (période salaire, origine de l'offre, durée hebdo).
+  </div>
+
+  <div class="ref-vocs">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Exigence</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">E</span> Exigé (impératif sur l'offre)</li>
+        <li><span class="voc-code">S</span> Souhaité (atout, non bloquant)</li>
+      </ul>
+      <div class="voc-tech">Champs <code>exigence</code> de Competence, Formation, Langue, Permis</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Expérience exigée</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">D</span> Débutant accepté</li>
+        <li><span class="voc-code">S</span> Souhaitée</li>
+        <li><span class="voc-code">E</span> Exigée</li>
+      </ul>
+      <div class="voc-tech"><code>experienceExige</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Qualification du poste</span><span class="ref-count">9 niveaux</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Manœuvre</li>
+        <li><span class="voc-code">…</span> Échelons intermédiaires</li>
+        <li><span class="voc-code">9</span> Cadre</li>
+      </ul>
+      <div class="voc-tech"><code>qualificationCode</code> — échelle classique ouvrier → cadre (codage exact des paliers non détaillé dans l'OpenAPI).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Déplacements</span><span class="ref-count">plusieurs niveaux</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Jamais</li>
+        <li><span class="voc-code">…</span> Échelle croissante de fréquence</li>
+      </ul>
+      <div class="voc-tech"><code>deplacementCode</code> — code numérique croissant ; les libellés détaillés ne sont pas dans le schéma.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Période du salaire</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">M</span> Mensuel</li>
+        <li><span class="voc-code">A</span> Annuel</li>
+        <li><span class="voc-code">H</span> Horaire</li>
+        <li><span class="voc-code">C</span> Cachet</li>
+      </ul>
+      <div class="voc-tech"><code>periodeSalaire</code> — filtre de recherche.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Origine de l'offre</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> France Travail (interne)</li>
+        <li><span class="voc-code">2</span> Partenaire (sourcée hors FT)</li>
+      </ul>
+      <div class="voc-tech"><code>origineOffre</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Durée hebdo</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">0</span> Non précisée</li>
+        <li><span class="voc-code">1</span> Temps plein</li>
+        <li><span class="voc-code">2</span> Temps partiel</li>
+      </ul>
+      <div class="voc-tech"><code>dureeHebdo</code> — filtre de recherche.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Tri des résultats</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">0</span> Pertinence</li>
+        <li><span class="voc-code">1</span> Date</li>
+        <li><span class="voc-code">2</span> Distance</li>
+      </ul>
+      <div class="voc-tech">Paramètre <code>sort</code> de la recherche.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note" style="margin-top:20px;">
+  <strong>Position dans l'écosystème</strong> — Cette API est le <em>serveur de référentiel</em> principal du SI France Travail côté offres d'emploi : ses catalogues alimentent implicitement les filtres d'autres APIs (<a href="metiers-recherches.html">Métiers recherchés</a>, <a href="metiers-recherches-projets-evolution.html">Projets d'évolution</a>, <a href="formations-professionnelles.html">Formations professionnelles</a>). Pour les métiers, la source canonique est toutefois <a href="rome-4-0-fiches-metiers.html">ROME 4.0</a> (fiches complètes), <a href="rome-4-0-competences.html">compétences</a> et <a href="rome-4-0-contextes-travail.html">contextes de travail</a>.
+</div>
+
+<div class="note" style="margin-top:12px;">
+  <strong>Autres vocabulaires métier</strong> — <a href="rechercher-usager.html#ref">Rechercher usager</a> · <a href="statut-usager.html#ref">Statut usager</a> · <a href="diagnostic-usager.html#ref">Diagnostic</a> · <a href="orientation-usager.html#ref">Orientation</a> · <a href="evenements-france-travail.html#ref">Événements emploi</a> · <a href="conclusions-entretiens.html#ref">Conclusions d'entretiens</a> · <a href="gestion-sanctions-rsa.html#ref">Sanctions RSA</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB 3: COUVERTURE API                               -->
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view" id="v-coverage">
 

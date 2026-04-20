@@ -3,12 +3,16 @@
    Provides: tab switching, hover sync, click-to-scroll, hash routing.
 */
 
-/* ── Tab switching ── */
+/* ── Tab switching ──
+   Generic: works for any number of tabs per page. Each .tb button must have
+   onclick="setTab('xxx')"; the corresponding view has id="v-xxx". */
 function setTab(id, updateHash) {
   document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
-  document.getElementById('v-' + id).classList.add('active');
-  document.querySelectorAll('.tab-group .tb').forEach(function(b, i) {
-    b.classList.toggle('active', (id==='nested'&&i===0)||(id==='coverage'&&i===1)||(id==='example'&&i===2));
+  var view = document.getElementById('v-' + id);
+  if (view) view.classList.add('active');
+  document.querySelectorAll('.tab-group .tb').forEach(function(b) {
+    var m = (b.getAttribute('onclick') || '').match(/setTab\(['"]([\w-]+)['"]\)/);
+    b.classList.toggle('active', !!(m && m[1] === id));
   });
   if (updateHash !== false) { history.replaceState(null, '', '#' + id); }
 }
@@ -55,12 +59,11 @@ document.addEventListener('click', function(e) {
 });
 
 /* ── Hash routing ──
-   Supports #nested, #coverage, #example for direct tab linking.
-   Works on page load and browser back/forward. */
+   Supports any #tab-id that matches a view on the current page. */
 function resolveHash() {
   var hash = location.hash.replace('#', '');
   if (!hash) return;
-  if (hash === 'nested' || hash === 'coverage' || hash === 'example') {
+  if (document.getElementById('v-' + hash)) {
     setTab(hash, false);
   }
 }
