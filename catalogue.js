@@ -139,12 +139,17 @@ function renderCross() {
       var label = api ? api.title : slug;
       chipsHtml += '<button class="cross-api-link" data-slug="' + slug + '">' + escapeHtml(label) + '</button>';
     });
-    html += '<div class="cross-concept">' +
+    var sharedBadge = concept.shared ? '<span class="cross-shared">Vocabulaire partagé</span>' : '';
+    var collisionBadge = concept.collision ? '<span class="cross-collision">Collision de schémas</span>' : '';
+    var descHtml = concept.description ? '<div class="cross-desc">' + escapeHtml(concept.description) + '</div>' : '';
+    html += '<div class="cross-concept' + (concept.shared ? ' cross-concept-shared' : '') + '">' +
       '<div class="cross-head">' +
         '<div class="cross-name">' + escapeHtml(concept.name) + '</div>' +
-        (concept.collision ? '<span class="cross-collision">Collision de schémas</span>' : '') +
+        sharedBadge +
+        collisionBadge +
         '<span class="cross-count">' + concept.apis.length + ' APIs</span>' +
       '</div>' +
+      descHtml +
       '<div class="cross-apis">' + chipsHtml + '</div>' +
     '</div>';
   });

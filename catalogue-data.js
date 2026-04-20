@@ -2322,6 +2322,38 @@ const CATALOGUE = {
   ],
   "crossConcepts": [
     {
+      "name": "Niveau d'étude",
+      "apis": [
+        "orientation-usager",
+        "formations-professionnelles",
+        "offres-emploi"
+      ],
+      "collision": false,
+      "shared": true,
+      "description": "10 codes strictement identiques entre APIs : AFS · CP4 · CFG · C3A · C12 · NV5 · NV4 · NV3 · NV2 · NV1 (du plus faible au plus élevé). Référentiel canonique servi par offres-emploi."
+    },
+    {
+      "name": "Organismes du réseau pour l'emploi",
+      "apis": [
+        "orientation-usager",
+        "rendez-vous-partenaires",
+        "gestion-sanctions-rsa"
+      ],
+      "collision": false,
+      "shared": true,
+      "description": "Codes FT (France Travail) · CD (Conseil départemental) · CAF · ML (Mission locale) · CE (Cap emploi) · IND (Indéterminé). Variations mineures selon le cas d'usage : RDV-partenaires ajoute DCD (délégation CD) et omet CAF ; la décision d'orientation exclut IND."
+    },
+    {
+      "name": "Freins à l'emploi (8 dimensions)",
+      "apis": [
+        "diagnostic-usager",
+        "orientation-usager"
+      ],
+      "collision": false,
+      "shared": true,
+      "description": "Les mêmes 8 dimensions partagées entre les deux APIs : santé · logement · mobilité · famille · finances · numérique · administratif-juridique · français-calcul. Orientation expose un résumé (impact fort / faible / aucun) ; Diagnostic expose le détail (situations constatées + objectifs). C'est la vue grosse maille vs la vue fine maille du même sujet."
+    },
+    {
       "name": "Usager / Individu",
       "apis": [
         "france-travail-connect",
