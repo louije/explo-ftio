@@ -17,6 +17,19 @@ function setTab(id, updateHash) {
   if (updateHash !== false) { history.replaceState(null, '', '#' + id); }
 }
 
+/* ── Version toggle ──
+   Pages with v1/v2 content set data-version on #doc; .verblock CSS shows the
+   active version. No-op on pages without the toggle. */
+function setVersion(ver) {
+  var doc = document.getElementById('doc');
+  if (!doc) return;
+  doc.setAttribute('data-version', ver);
+  document.querySelectorAll('.ver-toggle .vb').forEach(function(b) {
+    var m = (b.getAttribute('onclick') || '').match(/setVersion\(['"](\w+)['"]\)/);
+    b.classList.toggle('active', !!(m && m[1] === ver));
+  });
+}
+
 /* ── Hover highlight ──
    When hovering a [data-section] element in the example tab,
    all elements sharing the same data-section value get highlighted.
