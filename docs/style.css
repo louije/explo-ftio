@@ -153,6 +153,9 @@ header .sub-tech{font-size:0.72rem;color:var(--text-light);margin-top:2px;font-f
 .tag-moyen{background:#fef3c7;color:#92400e;}
 .tag-faible{background:#f0fdfa;color:#115e59;}
 .tag-prio{background:#ede9fe;color:#5b21b6;}
+/* neutral factual yes/no — no good/bad valence (e.g. « bénéficiaire » oui/non) */
+.tag-actif{background:#dbeafe;color:#1e40af;}
+.tag-inactif{background:#f3f2ee;color:#7a7a72;}
 .ex-sub{margin-left:16px;padding-left:14px;border-left:2px solid var(--border);}
 .ex-item{padding:8px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:0.82rem;color:var(--text-dim);line-height:1.5;}
 .ex-item:last-child{border-bottom:none;}
