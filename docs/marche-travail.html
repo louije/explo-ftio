@@ -22,6 +22,7 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
+    <button class="tb" onclick="setTab('famille')">Famille Statistiques</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -123,6 +124,54 @@
 
 <div class="note">
   <strong>Structure commune</strong> &#x2014; Tous les indicateurs (DE_1, DE_5, OFF_1, EMB_1, DYN_1, PERSP_2, SAL_3) retournent le m&#xea;me objet <code>IndicateurRetour</code>. Seuls les champs renseign&#xe9;s changent selon l'indicateur (nombre, taux, montant ou rang). Les r&#xe9;f&#xe9;rentiels (territoire, activit&#xe9;, p&#xe9;riode, nomenclature, caract&#xe9;ristique) sont partag&#xe9;s et consultables via des endpoints GET d&#xe9;di&#xe9;s.
+</div>
+
+</div>
+
+<!-- FAMILLE STATISTIQUES (généré par gen-famille-stats.py) -->
+<div class="view" id="v-famille">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Quatre API statistiques, un même moteur.</strong> France Travail expose ses statistiques via plusieurs API qui partagent <em>exactement</em> le même cadre de requête : on <code>POST</code> un indicateur en croisant territoire × activité × période × caractéristique, et les dimensions sont les mêmes référentiels. Ce qui distingue les API, ce sont les <strong>indicateurs</strong> qu'elles exposent.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Cette API dans la famille Statistiques
+    <span class="rs-count">4 API</span>
+    <span class="rs-tech">même cadre territoire × activité × période</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : même requête, même réponse <code>IndicateurRetour</code>, mêmes référentiels. Choisir l'API revient à choisir <strong>quel angle</strong> on veut sur le territoire ou le métier.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="informations-territoire.html">Informations sur un territoire</a></span><span class="ref-count">5 indicateurs</span></div>
+      <div class="expl"><strong>Comprendre un territoire.</strong> Population (<span class="ev">POP_1</span>), population active (<span class="ev">POP_2</span>), établissements (<span class="ev">ETAB_1</span>), salariés (<span class="ev">SAL_1</span>) et l'indicateur prospectif de dynamisme de l'emploi (<span class="ev">DYN_1</span>). L'angle « contexte socio-économique ».<br><strong>Marché du travail vs Informations territoire :</strong> Informations territoire décrit le contexte (qui vit et travaille ici) ; Marché du travail décrit le marché de l'emploi (offres, demande, tensions).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Marché du travail</span><span class="ref-count">cette page · offre & demande</span></div>
+      <div class="expl">Demandeurs, offres, embauches, tensions de recrutement et salaires, par métier et territoire. L'angle « marché de l'emploi ».</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="acces-emploi-demandeurs-emploi.html">Accès à l'emploi des demandeurs</a></span><span class="ref-count">parcours DE</span></div>
+      <div class="expl">Le taux et les conditions d'accès (ou de retour) à l'emploi des demandeurs d'emploi. L'angle « devenir des demandeurs ».<br><strong>Marché du travail vs Accès demandeurs :</strong> Marché du travail mesure l'offre et la demande à un instant ; Accès demandeurs suit le retour à l'emploi des personnes dans le temps.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="sortants-formation-acces-emploi.html">Sortants de formation & accès à l'emploi</a></span><span class="ref-count">après formation</span></div>
+      <div class="expl">L'accès à l'emploi des personnes à l'issue d'une formation. L'angle « efficacité des formations ».<br><strong>Marché du travail vs Sortants de formation :</strong> Marché du travail couvre tout le marché ; Sortants de formation cible le retour à l'emploi après une formation.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Quelle API appeler ?</strong> Portrait socio-économique d'un territoire → <strong>Informations sur un territoire</strong>. Offres / demande / tensions / salaires par métier → <strong>Marché du travail</strong>. Devenir des demandeurs d'emploi → <strong>Accès à l'emploi des demandeurs</strong>. Retour à l'emploi après formation → <strong>Sortants de formation</strong>.
 </div>
 
 </div>
