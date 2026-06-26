@@ -361,6 +361,7 @@ const STARRED: string[] = [
   "orientation-usager",
   "rendez-vous-partenaires",
   "prestation-partenaire",
+  "declaration-demarche",
 ];
 
 const GROUP_DEFS = [

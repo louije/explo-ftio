@@ -990,7 +990,7 @@ const CATALOGUE = {
         "Lire, créer, modifier",
         "Référentiel des démarches"
       ],
-      "starred": false,
+      "starred": true,
       "isNew": true
     },
     {
@@ -3313,6 +3313,7 @@ const CATALOGUE = {
     "orientation-usager-v2",
     "orientation-usager",
     "rendez-vous-partenaires",
-    "prestation-partenaire"
+    "prestation-partenaire",
+    "declaration-demarche"
   ]
 };
