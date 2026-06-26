@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclaration de démarche — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Déclaration de démarche</h1>
+  <div class="sub">Partager et suivre les actions qu'un usager mène dans son retour à l'emploi — chaque démarche décrite par un triplet pourquoi / quoi / comment, lisible, créable et modifiable.</div>
+  <div class="sub-tech">Déclaration de démarche v1 — 4 endpoints · 14 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/ftconnect-demarches-usager/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Une démarche = un triplet codé.</strong> Chaque action est décrite par trois codes issus d'un référentiel à trois niveaux : <code>codePourquoi</code> (l'objectif), <code>codeQuoi</code> (le type de démarche) et <code>codeComment</code> (le moyen). Le reste — dates, état, commentaire — décrit son avancement.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Liste de démarches <span class="dto">PageDemarchesPartenaireLectureDto</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Réponse paginée de la lecture : les démarches plus les métadonnées de pagination.
+      <div class="fi-tech"><code>demarches[]</code> · <code>page</code> · <code>size</code> · <code>totalElements</code> · <code>hasMore</code> · <code>_links</code></div>
+    </div>
+
+    <div class="n l1-b stack" id="m-demarche">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Démarche <span class="dto">DemarchePartenaireLectureDto</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+
+        <div class="n l1-p" id="m-triplet">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Le triplet pourquoi / quoi / comment</div>
+            <div class="card">3 codes</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Le cœur de la démarche : <strong>pourquoi</strong> (objectif de retour à l'emploi) → <strong>quoi</strong> (type de démarche) → <strong>comment</strong> (moyen). Les libellés se résolvent via le référentiel.
+            <div class="fi-tech"><code>codePourquoi</code> · <code>codeQuoi</code> · <code>codeComment</code> <span class="eg">ex. « Retrouver un emploi » → « Candidater » → « Candidature spontanée »</span></div>
+          </div></div>
+        </div>
+
+        <div class="n l1-n" id="m-suivi">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Avancement</div>
+            <div class="card">état + dates</div>
+          </div>
+          <div class="nb"><div class="fi">
+            L'état de la démarche et son calendrier de vie.
+            <div class="fi-tech"><code>etat</code> — <span class="ev">AC</span> · <span class="ev">RE</span> · <span class="ev">AN</span> (voir Référentiels)
+              <br><code>dateDebut</code> · <code>dateFin</code> · <code>dateCreation</code> · <code>dateModification</code> · <code>dateAbandon</code> · <code>dateAnnulation</code></div>
+          </div></div>
+        </div>
+
+        <div class="n l3" id="m-contexte">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Contexte</div>
+            <div class="card">2 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Un commentaire libre et un lien vers l'objet métier à l'origine de la démarche.
+            <div class="fi-tech"><code>commentaire</code> · <code>url</code> — lien <code>https</code> vers l'objet d'origine</div>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume PE Connect (OAuth utilisateur). L'individu autorise le scope <code>authentification_individu</code> ; l'application accède aux seules démarches de l'usager connecté.
+</div>
+
+<div class="note">
+  Les démarches matérialisent concrètement les engagements de recherche d'emploi formalisés dans le <a href="contrat-engagement.html">contrat d'engagement</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Les trois codes d'une démarche viennent d'un <strong>référentiel à trois niveaux</strong>, consultable via <code>GET /referentiel/demarches</code> et documenté dans le <a href="https://francetravail.io/api-peio/v2/pages-document/fichier/503/referentiel-demarches.pdf" target="_blank" rel="noopener">Référentiel des démarches (PDF)</a>. C'est lui qui donne les valeurs valides de <code>codePourquoi</code>, <code>codeQuoi</code> et <code>codeComment</code>.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Arbre des démarches
+    <span class="rs-count">6 objectifs · 36 types</span>
+    <span class="rs-tech">pourquoi <code>codePourquoi</code> → quoi <code>codeQuoi</code> → comment <code>codeComment</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le référentiel complet, reproduit du <a href="https://francetravail.io/api-peio/v2/pages-document/fichier/503/referentiel-demarches.pdf" target="_blank" rel="noopener">Référentiel des démarches (PDF)</a>. Chaque <strong>objectif</strong> (pourquoi) regroupe des <strong>types de démarche</strong> (quoi), chacun déclinable en <strong>moyens</strong> (comment, en gris sous chaque type). Le PDF et <code>GET /referentiel/demarches</code> font foi.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Mon (nouveau) métier</span><span class="ref-count"><code>P01</code> · 5 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q01</span> Identification de ses points forts et de ses compétences
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C01.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C01.03</span> Avec un bilan de compétences · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C01.04</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C01.05</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q02</span> Information sur un métier ou un secteur d'activité
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C02.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C02.03</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C02.04</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q03</span> Observation en entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C03.01</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q04</span> Enquête métier afin de mieux connaître un métier
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C04.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C04.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q05</span> Participation à un salon ou un forum pour s'informer sur un métier</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Ma formation professionnelle</span><span class="ref-count"><code>P02</code> · 5 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q06</span> Information sur un projet de formation ou de Validation des acquis de l'expérience
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C06.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C06.03</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C06.04</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q37</span> Initiation à l'informatique ou à Internet
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C37.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C37.03</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C37.04</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q07</span> Montage d'un dossier d'inscription à une formation</li>
+        <li><span class="voc-code">Q09</span> Participation à un salon ou un forum formation</li>
+        <li><span class="voc-code">Q10</span> Réalisation d'une démarche de VAE</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Mes candidatures</span><span class="ref-count"><code>P03</code> · 7 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q11</span> Préparation de ses candidatures (CV, lettre de motivation, book)
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C11.02</span> En créant ou en mettant à jour mon CV et/ou ma lettre de motivation · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C11.03</span> En publiant mon profil/mon CV sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C11.04</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C11.05</span> Par un autre moyen · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C11.06</span> Sur internet</div></li>
+        <li><span class="voc-code">Q12</span> Recherche d'offres d'emploi ou d'entreprises
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C12.01</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C12.02</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C12.03</span> Avec une agence d'intérim · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C12.04</span> Avec un cabinet de recrutement · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C12.06</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q13</span> Participation à un salon ou un forum pour rechercher des offres
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C13.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C13.02</span> En présentiel</div></li>
+        <li><span class="voc-code">Q14</span> Réponse à des offres d'emploi</li>
+        <li><span class="voc-code">Q15</span> Candidatures spontanées
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C15.01</span> En utilisant mon réseau personnel · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C15.02</span> En contactant un employeur · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C15.03</span> En déposant une annonce pour trouver un employeur · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C15.04</span> Par un autre moyen · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C15.05</span> Sur internet</div></li>
+        <li><span class="voc-code">Q16</span> Réalisation du suivi de ses candidatures et relance des recruteurs
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C16.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C16.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q42</span> Recherche de missions de service civique</li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Mes entretiens d'embauche</span><span class="ref-count"><code>P04</code> · 4 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q17</span> Préparation des entretiens d'embauche
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C17.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C17.03</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C17.04</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q18</span> Réalisation d'entretiens d'embauche
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C18.05</span> En participant à un Job dating avec France Travail · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C18.02</span> En participant à un Job dating hors France Travail · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C18.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C18.03</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q19</span> Passation de tests de recrutement (concours, casting…)
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C19.01</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q20</span> Relance des recruteurs suite à ses entretiens
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C20.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C20.02</span> Par un autre moyen</div></li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Ma création et reprise d'entreprise</span><span class="ref-count"><code>P05</code> · 14 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q22</span> Recherches pour créer ou reprendre une entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C22.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C22.03</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C22.04</span> Avec la Chambre de Commerce et d'Industrie, la Chambre de Métiers et de l'Artisanat · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C22.05</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q23</span> Réalisation d'une étude de marché auprès de prospects/clients/fournisseurs
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C23.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C23.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q24</span> Participation à un salon ou forum pour s'informer sur la création entreprise</li>
+        <li><span class="voc-code">Q25</span> Réalisation d'un business plan afin de préparer la création de son entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C25.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C25.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q26</span> Prise de RDV avec des organismes financiers</li>
+        <li><span class="voc-code">Q27</span> Réalisation de démarches juridiques de création d'entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C27.01</span> Avec le Centre de Formalité des Entreprises · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C27.02</span> Avec la Chambre de Commerce et d'Industrie ou la Chambre de Métiers et de l'Artisanat · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C27.03</span> Sur Internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C27.04</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q28</span> Réalisation d'actions de communication pour faire connaitre son entreprise</li>
+        <li><span class="voc-code">Q29</span> Prospection pour développer sa clientèle
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C29.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C29.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q30</span> Développement de nouveaux partenariats
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C30.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C30.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q31</span> Mise en œuvre d'actions de fidélisation de ses clients ou utilisateurs</li>
+        <li><span class="voc-code">Q32</span> Organisation de son activité de dirigeant et de gestion de son entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C32.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C32.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q33</span> Diversification de ses activités en proposant de nouveaux services ou produits
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C33.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C33.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q34</span> Développement de son entreprise en procédant à des recrutements
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C34.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C34.02</span> Par un autre moyen</div></li>
+        <li><span class="voc-code">Q35</span> Réalisation d'autres actions pour développer son entreprise
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C35.01</span> Sur internet · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C35.02</span> Par un autre moyen</div></li>
+      </ul>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Mes contraintes personnelles</span><span class="ref-count"><code>P07</code> · 1 démarches</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">Q39</span> Résoudre ses contraintes personnelles
+          <div style="flex-basis:100%;margin:2px 0 5px 16px;font-size:0.74rem;color:var(--text-light);line-height:1.55;"><span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C39.02</span> Avec l'aide d'une personne ou d'une structure · <span style="font-family:'IBM Plex Mono',monospace;color:var(--text-dim);">C39.03</span> Par un autre moyen</div></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    État de la démarche
+    <span class="rs-count">3 codes</span>
+    <span class="rs-tech"><code>etat</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    L'état suit le cycle de vie. À la création, seuls <code>RE</code> et <code>AC</code> sont acceptés ; l'annulation <code>AN</code> ne s'applique qu'à une démarche existante.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Valeurs</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AC</span> En cours / à conduire</li>
+        <li><span class="voc-code">RE</span> Réalisée</li>
+        <li><span class="voc-code">AN</span> Annulée <span class="eg">(modification uniquement)</span></li>
+      </ul>
+      <div class="voc-tech">Création : <code>RE</code> ou <code>AC</code>. Modification : <code>AC</code>, <code>RE</code> ou <code>AN</code>. Les dates <code>dateAbandon</code>/<code>dateAnnulation</code> précisent la sortie. <span class="eg">Libellés interprétés ; le référentiel fait foi.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Formulaires dynamiques
+    <span class="rs-count">par moyen</span>
+    <span class="rs-tech"><code>StructureFormulaireOut</code> · <code>StructureAttribut</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le référentiel ne donne pas que des codes : chaque niveau peut porter une <strong>structure de formulaire</strong> décrivant les champs à saisir pour qualifier finement la démarche.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'attribut</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">LISTE</span> Choix dans une liste (<code>choixListe</code>)</li>
+        <li><span class="voc-code">TEXTE</span> Saisie libre</li>
+        <li><span class="voc-code">NOMBRE</span> Valeur numérique</li>
+      </ul>
+      <div class="voc-tech"><code>StructureAttribut</code> — <code>libelle</code> · <code>placeholder</code> · <code>type</code> · <code>choixListe[]</code> (<code>ElementListeDeChoixAttribut</code> : <code>code</code> · <code>libelle</code>).</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Démarches <span class="dt-human">— lire, créer, modifier</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire les démarches d'un individu</span><div class="ep-human">Liste paginée des démarches de l'usager connecté</div><span class="ep-path">/demarches</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Créer une démarche</span><div class="ep-human">Enregistrer une nouvelle démarche (triplet + dates + état RE/AC)</div><span class="ep-path">/demarches</span></div></div>
+    <div class="ep-row"><span class="ep-method m-patch">PATCH</span><div><span class="ep-desc">Modifier une démarche</span><div class="ep-human">Mettre à jour l'état, les dates ou le commentaire d'une démarche existante</div><span class="ep-path">/demarches/{idDemarche}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Référentiel <span class="dt-human">— la taxonomie des démarches</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel des démarches</span><div class="ep-human">L'arbre pourquoi / quoi / comment et les formulaires associés</div><span class="ep-path">/referentiel/demarches</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">14 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PageDemarchesPartenaireLectureDto</span> <span class="sc-desc">— page de démarches</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DemarchePartenaireLectureDto</span> <span class="sc-desc">— une démarche lue</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DemarchePartenaireCreationDto</span> <span class="sc-desc">— création</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DemarchePartenaireModificationDto</span> <span class="sc-desc">— modification</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ObjectifRetourEmploiReferentiel</span> <span class="sc-desc">— pourquoi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">TypeDemarcheRetourEmploiReferentiel</span> <span class="sc-desc">— quoi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">MoyenRetourEmploiReferentiel</span> <span class="sc-desc">— comment</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">StructureFormulaireOut</span> <span class="sc-desc">— formulaire dynamique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">StructureAttribut</span> <span class="sc-desc">— champ de formulaire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ElementListeDeChoixAttribut</span> <span class="sc-desc">— option de liste</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Link · HalLink</span> <span class="sc-desc">— liens HAL</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">ProblemDetails · CodesErreur</span> <span class="sc-desc">— erreurs</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Déclarer une candidature spontanée</strong> — Une application enregistre la démarche d'un usager : il a candidaté spontanément à des entreprises. La démarche est créée à l'état « réalisée », puis relue dans la liste.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-create"><span class="jc">// POST /demarches</span>
+<span class="jc">// ── OAuth PE Connect · Bearer … ──</span>
+<span class="jc">// Triplet issu du référentiel (PDF / GET référentiel)</span>
+{
+  <span class="jk">"codePourquoi"</span>: <span class="js">"P01"</span>,
+  <span class="jk">"codeQuoi"</span>: <span class="js">"Q03"</span>,
+  <span class="jk">"codeComment"</span>: <span class="js">"C12"</span>,
+  <span class="jk">"commentaire"</span>: <span class="js">"Candidatures spontanées envoyées à 3 entreprises"</span>,
+  <span class="jk">"dateDebut"</span>: <span class="js">"2026-05-02"</span>,
+  <span class="jk">"dateFin"</span>: <span class="js">"2026-05-02"</span>,
+  <span class="jk">"etat"</span>: <span class="js">"RE"</span>,
+  <span class="jk">"url"</span>: <span class="js">"https://app.exemple.fr/demarches/8842"</span>
+}
+<span class="jc">// → 201 Created</span></div>
+<div data-section="s-read"><span class="jc">// GET /demarches</span>
+<span class="jc">// ── Réponse 200 (page) ──</span>
+{
+  <span class="jk">"page"</span>: <span class="jn">0</span>,
+  <span class="jk">"size"</span>: <span class="jn">20</span>,
+  <span class="jk">"totalElements"</span>: <span class="jn">1</span>,
+  <span class="jk">"hasMore"</span>: <span class="jb">false</span>,
+  <span class="jk">"demarches"</span>: [
+    {
+      <span class="jk">"codePourquoi"</span>: <span class="js">"P01"</span>,
+      <span class="jk">"codeQuoi"</span>: <span class="js">"Q03"</span>,
+      <span class="jk">"codeComment"</span>: <span class="js">"C12"</span>,
+      <span class="jk">"commentaire"</span>: <span class="js">"Candidatures spontanées envoyées à 3 entreprises"</span>,
+      <span class="jk">"etat"</span>: <span class="js">"RE"</span>,
+      <span class="jk">"dateDebut"</span>: <span class="js">"2026-05-02"</span>,
+      <span class="jk">"dateCreation"</span>: <span class="js">"2026-05-02T10:14:00"</span>
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-create">
+  <div class="ex-title"><span class="ex-ico">➕</span> Créer la démarche</div>
+  <div class="ex-card">
+    <h4>Candidature spontanée — réalisée</h4>
+    <p>Le triplet qualifie l'action : <strong>pourquoi</strong> (objectif), <strong>quoi</strong> (candidater), <strong>comment</strong> (spontanément). Les codes <code>P01</code>/<code>Q03</code>/<code>C12</code> proviennent du référentiel.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>État</strong> → <span class="ex-tag tag-ok">RE</span> réalisée</div>
+      <div class="ex-item"><strong>url</strong> → lien <code>https</code> vers l'objet d'origine</div>
+    </div>
+    <div class="ex-agent">Codes <em>illustratifs</em> — voir le Référentiel des démarches.</div>
+  </div>
+</div>
+
+<div data-section="s-read">
+  <div class="ex-title"><span class="ex-ico">📋</span> Relire les démarches</div>
+  <div class="ex-card">
+    <h4>Liste paginée</h4>
+    <p>La lecture renvoie une page de démarches. Pour afficher des libellés lisibles à la place des codes, on résout chaque code via <code>GET /referentiel/demarches</code>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>totalElements</strong> → 1 · <strong>hasMore</strong> → false</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Déclaration de démarche v1 · api.francetravail.io · 4 endpoints · 14 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

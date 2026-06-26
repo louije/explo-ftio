@@ -307,6 +307,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Signer ou refuser",
     "État et mentions légales",
   ],
+  "declaration-demarche": [
+    "Triplet pourquoi / quoi / comment",
+    "Lire, créer, modifier",
+    "Référentiel des démarches",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",
