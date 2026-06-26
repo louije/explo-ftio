@@ -130,6 +130,21 @@
   font-size: 0.64rem;
   color: var(--text-light);
 }
+
+/* ── New badge ── */
+.cat-new {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  padding: 1px 7px;
+  line-height: 1.4;
+}
 .cat-card-title-link {
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -144,6 +159,7 @@
   color: var(--text-dim);
   line-height: 1.5;
   margin-bottom: 8px;
+  overflow-wrap: anywhere;
 }
 .cat-card-stats {
   display: flex;

@@ -29,7 +29,68 @@ const CATALOGUE = {
         "Modalité de contact",
         "Conseiller et agence"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "contrat-engagement",
+      "title": "Contrat d'engagement",
+      "version": "v1",
+      "description": "L'API Contrat d'engagement contient les données relatives à la formalisation du Contrat d’engagement.  Grâce à ses différentes ressources, l'API permet pour un usager donné :   - de vérifier l'existence ou non d'un contrat d'engagement - de récupérer dans le contrat le bloc texte des engagements de…",
+      "baseUrl": "api.francetravail.io/partenaire/contrat-engagement/v1",
+      "auth": "agent",
+      "endpointCount": 6,
+      "schemaCount": 9,
+      "group": "usager-agent",
+      "groupLabel": "Dossier usager",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/lecture",
+          "summary": "Lire le contrat d'engagement de l'usager"
+        },
+        {
+          "method": "GET",
+          "path": "/lecture/structure",
+          "summary": "Lire la structure du contrat d'engagement"
+        },
+        {
+          "method": "POST",
+          "path": "/signer",
+          "summary": "Création d'un premier contrat d'engagement signé"
+        },
+        {
+          "method": "PATCH",
+          "path": "/signer",
+          "summary": "Signer un contrat d'engagement existant"
+        },
+        {
+          "method": "POST",
+          "path": "/refuser",
+          "summary": "Création d'un premier contrat d'engagement refusé"
+        },
+        {
+          "method": "PATCH",
+          "path": "/refuser",
+          "summary": "Refuser un contrat d'engagement existant"
+        }
+      ],
+      "schemas": [
+        "ContratEngagement",
+        "Engagements",
+        "Engagement",
+        "MentionLegale",
+        "MentionsLegales",
+        "ProblemDetails",
+        "Structure",
+        "Signature",
+        "Refus"
+      ],
+      "pageId": 431,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "diagnostic-usager",
@@ -228,13 +289,14 @@ const CATALOGUE = {
         "Confiance et capacité à agir",
         "Maîtrise du numérique"
       ],
-      "starred": true
+      "starred": true,
+      "isNew": false
     },
     {
       "slug": "informations-administratives-usager",
       "title": "Informations administratives usager",
       "version": "1.2.0",
-      "description": "Cette API permet de récupérer les données d'un usager (état civil, adresses, email, téléphones et numéro France Travail)  Scopes : api_informations-administrativesv1,informationsadministrativesusager,profil_accedant   Royaume : /agent",
+      "description": "Cette API permet de récupérer les données d'un usager (état civil, adresses, email, téléphones et numéro France Travail)  Scopes : api_informations-administrativesv1, informationsadministrativesusager, profil_accedant   Royaume : /agent",
       "baseUrl": "api.francetravail.io/partenaire/informations-administratives/v1",
       "auth": "agent",
       "endpointCount": 1,
@@ -263,7 +325,8 @@ const CATALOGUE = {
         "Adresses",
         "Coordonnées de contact"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "metiers-recherches-projets-evolution",
@@ -315,7 +378,69 @@ const CATALOGUE = {
         "Mobilité géographique",
         "Projet entrepreneurial"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "orientation-usager-v2",
+      "title": "Orientation Usager",
+      "version": "2.0",
+      "description": "Cette API permet : - de récupérer une proposition de résultat d'orientation d'un usager.  - de récupérer une décision d'orientation d'un usager. - de prendre une décision afin de l'orienter vers un organisme et dans un des trois parcours : Social, Socio-Professionnel, Professionnel. - d'orienter un…",
+      "baseUrl": "api.francetravail.io/partenaire/orientationusager/v2",
+      "auth": "agent",
+      "endpointCount": 5,
+      "schemaCount": 15,
+      "group": "usager-agent",
+      "groupLabel": "Dossier usager",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/calculerOrientation",
+          "summary": "Calculer une orientation"
+        },
+        {
+          "method": "GET",
+          "path": "/lectureOrientation",
+          "summary": "Lire les orientations"
+        },
+        {
+          "method": "POST",
+          "path": "/orientation",
+          "summary": "Orienter un usager"
+        },
+        {
+          "method": "PUT",
+          "path": "/modificationOrientation",
+          "summary": "Modifier le parcours et/ou la structure"
+        },
+        {
+          "method": "POST",
+          "path": "/decisionOrientation",
+          "summary": "Décider une orientation"
+        }
+      ],
+      "schemas": [
+        "OrientationCA",
+        "CriteresOrientationCA_CalculerEntree",
+        "OrientationCA_Calculer",
+        "Structure",
+        "CriteresOrientationCA_Calculer",
+        "Adresse",
+        "OrientationCA_Lecture",
+        "CriteresOrientationCA_Lecture",
+        "DecisionCA_Lecture",
+        "EntiteGeographiqueDto",
+        "OrientationCreationCA_Commun",
+        "DecisionCA",
+        "OrganismeDto",
+        "OrganismeLightDto",
+        "DonneesModifieesDto"
+      ],
+      "pageId": 635,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": true,
+      "isNew": true
     },
     {
       "slug": "orientation-usager",
@@ -371,7 +496,7 @@ const CATALOGUE = {
         "Structure_Commun",
         "DecisionCA"
       ],
-      "pageId": null,
+      "pageId": 433,
       "hasDocPage": true,
       "concepts": [
         "Calcul d'orientation",
@@ -379,13 +504,14 @@ const CATALOGUE = {
         "Parcours et structure",
         "Critères sociaux et professionnels"
       ],
-      "starred": true
+      "starred": true,
+      "isNew": false
     },
     {
       "slug": "rechercher-usager",
       "title": "Rechercher usager",
       "version": "2.0",
-      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager ainsi que le numéro France Travail permettant d'accéder à d'autres API Scope : api_rechercher-usagerv2,rechercheusager,profil_accedant Royaume…",
+      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager ainsi que le numéro France Travail permettant d'accéder à d'autres API Scope : api_rechercher-usagerv2, rechercheusager, profil_accedant…",
       "baseUrl": "api.francetravail.io/partenaire/rechercher-usager/v2",
       "auth": "agent",
       "endpointCount": 2,
@@ -420,7 +546,8 @@ const CATALOGUE = {
         "Recherche par NIR + date de naissance",
         "Recherche par numéro France Travail"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "rendez-vous-partenaires",
@@ -472,7 +599,8 @@ const CATALOGUE = {
         "Lecture — agenda complet",
         "Écriture — RDV du partenaire"
       ],
-      "starred": true
+      "starred": true,
+      "isNew": false
     },
     {
       "slug": "statut-usager",
@@ -504,7 +632,8 @@ const CATALOGUE = {
         "Motif et catégorie",
         "Situation et clôture"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "ajout-competence",
@@ -531,7 +660,8 @@ const CATALOGUE = {
         "Compétences ROME à enregistrer",
         "Réponse partielle (206)"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "coordonnees",
@@ -561,7 +691,8 @@ const CATALOGUE = {
         "Adresse postale",
         "Contact"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "date-naissance",
@@ -589,7 +720,37 @@ const CATALOGUE = {
       "concepts": [
         "Date de naissance"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "experiences-declarees-employeur",
+      "title": "API Expériences  déclarées par l'employeur",
+      "version": "1.0",
+      "description": "Cette API permet de reconstituer la carrière professionnelle d’un individu basée sur les justificatifs employeurs transmis à France Travail.",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-experiencesprofessionellesdeclareesparlemployeur/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 3,
+      "group": "usager-pe",
+      "groupLabel": "PE Connect",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/contrats",
+          "summary": "Expériences professionnelles déclarées par votre employeur"
+        }
+      ],
+      "schemas": [
+        "ContratsResponse",
+        "Contrat",
+        "Entreprise"
+      ],
+      "pageId": 85,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "experiences-professionnelles",
@@ -619,7 +780,8 @@ const CATALOGUE = {
         "Période et durée",
         "Lieu et contexte"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "formations-professionnelles",
@@ -655,7 +817,35 @@ const CATALOGUE = {
         "Niveau et domaine",
         "Permis"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "pe-connect-indemnisations",
+      "title": "API PE Connect - Indemnisations",
+      "version": "1.0.0",
+      "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA). A titre…",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-indemnisations/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 1,
+      "group": "usager-pe",
+      "groupLabel": "PE Connect",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/indemnisation",
+          "summary": "Récupère les informations d'indemnisation d'un individu"
+        }
+      ],
+      "schemas": [
+        "Indemnisation"
+      ],
+      "pageId": 117,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "metiers-recherches",
@@ -701,7 +891,8 @@ const CATALOGUE = {
         "Mobilité géographique",
         "Salaire souhaité"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "statut",
@@ -730,7 +921,104 @@ const CATALOGUE = {
         "Code statut",
         "Libellé statut"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "competences-professionnelles",
+      "title": "Compétences professionnelles",
+      "version": "2.0.0",
+      "description": "Cette API permet de récupérer les compétences, langues et centres d'intérêt d'un individu depuis son profil de compétences.",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-competences/v2",
+      "auth": "peconnect",
+      "endpointCount": 3,
+      "schemaCount": 5,
+      "group": "usager-pe",
+      "groupLabel": "PE Connect",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/competences",
+          "summary": "Lister les compétences d'un individu"
+        },
+        {
+          "method": "GET",
+          "path": "/langues",
+          "summary": "Lister les langues d'un individu"
+        },
+        {
+          "method": "GET",
+          "path": "/interets",
+          "summary": "Lister les centres d'intérêt d'un individu"
+        }
+      ],
+      "schemas": [
+        "Competence",
+        "Niveau",
+        "Langue",
+        "NiveauLangue",
+        "CentreInteret"
+      ],
+      "pageId": 98,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
+    },
+    {
+      "slug": "declaration-demarche",
+      "title": "Déclaration de démarche",
+      "version": "v1",
+      "description": "L'API des démarches vous permet de partager et suivre les actions réalisées par les usagers dans le cadre de leur parcours de retour à l'emploi.  Aide à l'utilisation de l'API Veuillez vous référer au Référentiel des démarches afin d'identifier les paramètres nécessaires en entrée de l'API :…",
+      "baseUrl": "api.francetravail.io/partenaire/ftconnect-demarches-usager/v1",
+      "auth": "peconnect",
+      "endpointCount": 4,
+      "schemaCount": 14,
+      "group": "usager-pe",
+      "groupLabel": "PE Connect",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/demarches",
+          "summary": "Lire les démarches d'un individu"
+        },
+        {
+          "method": "POST",
+          "path": "/demarches",
+          "summary": "Créer une démarche pour un individu"
+        },
+        {
+          "method": "PATCH",
+          "path": "/demarches/{idDemarche}",
+          "summary": "Modifier une démarche pour un individu"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel/demarches",
+          "summary": "Retourne le référentiel des démarches"
+        }
+      ],
+      "schemas": [
+        "Link",
+        "PageDemarchesPartenaireLectureDto",
+        "DemarchePartenaireLectureDto",
+        "DemarchePartenaireCreationDto",
+        "DemarchePartenaireModificationDto",
+        "ElementListeDeChoixAttribut",
+        "StructureAttribut",
+        "StructureFormulaireOut",
+        "MoyenRetourEmploiReferentiel",
+        "TypeDemarcheRetourEmploiReferentiel",
+        "ObjectifRetourEmploiReferentiel",
+        "HalLink",
+        "ProblemDetails",
+        "CodesErreur"
+      ],
+      "pageId": 455,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "france-travail-connect",
@@ -760,13 +1048,14 @@ const CATALOGUE = {
         "Contact",
         "Identifiants techniques"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "jcmo-controle-offre",
       "title": "Je Contrôle Mon Offre - JCMO",
       "version": "1",
-      "description": "Récupération d'une liste d'appellations métier à partir d'un intitulé et d'un contexte.   Scopes : api_jecontrolemonoffrev1,legaliteoffreemploi   Royaume : /partenaire",
+      "description": "Récupération d'une liste d'appellations métier à partir d'un intitulé et d'un contexte.   Scopes : api_jecontrolemonoffrev1, legaliteoffreemploi   Royaume : /partenaire",
       "baseUrl": "api.francetravail.io/partenaire/jecontrolemonoffre",
       "auth": "public",
       "endpointCount": 1,
@@ -792,7 +1081,62 @@ const CATALOGUE = {
         "Critères de contrôle",
         "Alertes de légalité"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "la-bonne-boite",
+      "title": "La Bonne Boite",
+      "version": "2.27.3",
+      "description": "La Bonne Boîte cible les entreprises ayant des perspectives d'embauche élevées et permet d'être plus efficace dans l'envoi de candidatures spontanées. Ce ciblage est rendu possible grâce à l'analyse approfondie de millions d'embauches, dans les entreprises françaises. Les ressources de l'API vous…",
+      "baseUrl": "api.francetravail.io/partenaire/labonneboite/v2",
+      "auth": "public",
+      "endpointCount": 3,
+      "schemaCount": 18,
+      "group": "offres",
+      "groupLabel": "Offres d'emploi",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/recherche",
+          "summary": "Recherche d'entreprise avec potentiel d'embauche à partir d'un métier et d'un emplacement"
+        },
+        {
+          "method": "GET",
+          "path": "/nombreEntreprise",
+          "summary": "Nombre d'entreprise avec potentiel d'embauche à partir d'un métier et d'un emplacement"
+        },
+        {
+          "method": "GET",
+          "path": "/potentielEmbauche",
+          "summary": "Consulter les entreprises à fort potentiel d'embauche par leur numéro de siret."
+        }
+      ],
+      "schemas": [
+        "CustomValidationError",
+        "ForbiddenError",
+        "GeoCoords",
+        "InternalError",
+        "JobItem",
+        "JobType",
+        "LocationItem",
+        "LocationType",
+        "OfficeScoreResponse",
+        "OfficeScoreResponseItem",
+        "ResolvedSearchParams",
+        "SearchCountResponse",
+        "SearchParams",
+        "SearchResponse",
+        "SearchResponseItem",
+        "ValidationErrorDetail",
+        "server__routes__office__schemas__GeoResponse",
+        "server__routes__search__schemas__GeoResponse"
+      ],
+      "pageId": 360,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "offres-emploi",
@@ -929,7 +1273,8 @@ const CATALOGUE = {
         "Salaire et conditions",
         "Expérience et compétences"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "synthese-pages-employeurs",
@@ -998,7 +1343,8 @@ const CATALOGUE = {
         "Entête et identification",
         "Établissements"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "rome-4-0-competences",
@@ -1139,7 +1485,134 @@ const CATALOGUE = {
         "Macro-compétence et objectif",
         "Catégorie de savoirs"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "rome-4-0-metiers",
+      "title": "ROME 4.0 - Métiers",
+      "version": "1",
+      "description": "Référentiel des professions caractérisées par une spécificité exigeant un apprentissage, de l'expérience, etc., et entrant dans un cadre légal.<br/>Un métier est une activité professionnelle pouvant nécessiter une formation professionnelle et des compétences métier et transverses garantissant une…",
+      "baseUrl": "api.francetravail.io/partenaire/rome-metiers",
+      "auth": "public",
+      "endpointCount": 17,
+      "schemaCount": 20,
+      "group": "rome",
+      "groupLabel": "ROME 4.0",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/v1/metiers/appellation",
+          "summary": "Lister les appellations"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/appellation/requete",
+          "summary": "Rechercher une appellation"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/appellation/{code}",
+          "summary": "Lire une appellation"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/centre-interet",
+          "summary": "Lister les centres d'intérêt"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/centre-interet/{code}",
+          "summary": "Lire un centre d'intérêt"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/domaine-professionnel",
+          "summary": "Lister les domaines professionnels"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/domaine-professionnel/{code}",
+          "summary": "Lire un domaine professionnel"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/grand-domaine",
+          "summary": "Lister les grands domaines"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/grand-domaine/{code}",
+          "summary": "Lire un grand domaine"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/metier",
+          "summary": "Lister les métiers"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/metier/requete",
+          "summary": "Rechercher un métier"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/metier/{code}",
+          "summary": "Lire un métier"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/secteur-activite",
+          "summary": "Lister les secteurs d'activités"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/secteur-activite/{code}",
+          "summary": "Lire un secteur d'activités"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/theme",
+          "summary": "Lister les thèmes"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/theme/{code}",
+          "summary": "Lire un thème"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/metiers/version",
+          "summary": "Récupérer la version actuelle du ROME"
+        }
+      ],
+      "schemas": [
+        "Appellation",
+        "AppellationEsco",
+        "CentreInteret",
+        "Competence",
+        "CompetenceCle",
+        "CompetenceDetaillee",
+        "ContexteTravail",
+        "DivisionNaf",
+        "DomaineProfessionnel",
+        "Formacode",
+        "GrandDomaine",
+        "LiaisonEntreMetierEtCentreInteret",
+        "LiaisonEntreMetierEtSecteurActivite",
+        "MacroSavoirEtreProfessionnel",
+        "MacroSavoirFaire",
+        "Metier",
+        "Savoir",
+        "SecteurActivite",
+        "Theme",
+        "VersionRome"
+      ],
+      "pageId": 273,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "rome-4-0-fiches-metiers",
@@ -1190,7 +1663,8 @@ const CATALOGUE = {
         "Groupes de compétences",
         "Groupes de savoirs"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "rome-4-0-contextes-travail",
@@ -1231,7 +1705,8 @@ const CATALOGUE = {
         "Horaires et déplacements",
         "Statut et publics"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "romeo",
@@ -1291,7 +1766,8 @@ const CATALOGUE = {
         "Prédiction compétence",
         "Feedback de performance"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "acces-emploi-demandeurs-emploi",
@@ -1482,7 +1958,216 @@ const CATALOGUE = {
         "Ventilation par caractéristique",
         "Référentiels territoire et activité"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "informations-territoire",
+      "title": "Informations sur un territoire",
+      "version": "1",
+      "description": "Accédez aux statistiques de France Travail - Informations sur un territoire.   Cette API vous permet d'accéder à toutes les données clés pour comprendre un territoire : population, établissements, salariés.  Elle vous fournit également un indicateur prospectif de dynamisme du territoire développé…",
+      "baseUrl": "api.francetravail.io/partenaire/stats-informations-territoire",
+      "auth": "public",
+      "endpointCount": 31,
+      "schemaCount": 32,
+      "group": "stats",
+      "groupLabel": "Statistiques",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-dynamique-emploi",
+          "summary": "Stats sur l'Indicateur global de dynamique de l’emploi sur le territoire sélectionné (DYN_1)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-etablissements",
+          "summary": "Stats sur les établissements d'entreprise (ETAB_1)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-population",
+          "summary": "Stats sur la population totale (POP_1)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-population-active",
+          "summary": "Stats sur la population active (POP_2)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-salaries",
+          "summary": "Stats sur les salariés (SAL_1)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/activite",
+          "summary": "Consulter une activité"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/activites",
+          "summary": "Lister les activités"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/activites/{codeTypeActivite}",
+          "summary": "Lister les activités pour un type d'activité"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-activites",
+          "summary": "Lister les types d'activité"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-activite/{codeTypeActivite}",
+          "summary": "Consulter un type d'activité"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/caracteristique",
+          "summary": "Consulter une caractéristique"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/caracteristiques",
+          "summary": "Lister les caractéristiques"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/caracteristiques/{codeTypeCaracteristique}",
+          "summary": "Lister les caractéristiques par type d'activité"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-caracteristiques",
+          "summary": "Lister les types de caractéristique"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-caracteristique/{codeTypeCaracteristique}",
+          "summary": "Consulter un type de caractéristique"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/details-indicateurs",
+          "summary": "Consulter le détail d'un indicateur."
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/nomenclatures",
+          "summary": "Lister les nomenclatures"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/nomenclatures/{codeTypeNomenclature}",
+          "summary": "Lister les nomenclatures par type de nomenclature"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-nomenclatures",
+          "summary": "Lister les types nomenclatures"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/nomenclature",
+          "summary": "Consulter une nomenclature"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-nomenclature/{codeTypeNomenclature}",
+          "summary": "Consulter un type de nomenclature"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/periodes",
+          "summary": "Lister les périodes"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/periodes/{codeTypePeriode}",
+          "summary": "Lister les périodes par type de période"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-periodes",
+          "summary": "Lister les types périodes"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/periode",
+          "summary": "Consulter une période"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-periode/{codeTypePeriode}",
+          "summary": "Consulter un type de période"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/territoires",
+          "summary": "Lister les territoires"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/territoires/{codeTypeTerritoire}",
+          "summary": "Lister les territoires par type de territoire"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-territoires",
+          "summary": "Lister les types de territoire"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/territoire",
+          "summary": "Consulter un territoire"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/referentiel/type-territoire/{codeTypeTerritoire}",
+          "summary": "Consulter un type de territoire"
+        }
+      ],
+      "schemas": [
+        "CritereIndicateurSansNomenclature",
+        "Caracteristique",
+        "IndicateurRetour",
+        "ValeursParPeriode",
+        "ValeursParCaracteristique",
+        "Activite",
+        "ListeActivite",
+        "ListeTypeActivite",
+        "TypeActivite",
+        "ListeCaracteristique",
+        "ListeTypeCaracteristique",
+        "TypeCaracteristique",
+        "ListeDetailIndicateur",
+        "DetailIndicateur",
+        "TypeValeur",
+        "TypeTerritoire",
+        "TypePeriodeIndicateur",
+        "TypeNomenclatureIndicateur",
+        "ValeurNomenclatureIndicateur",
+        "CroisementIndicateur",
+        "CaracteristiqueIndicateur",
+        "ListeNomenclature",
+        "Nomenclature",
+        "ListeTypeNomenclature",
+        "TypeNomenclature",
+        "ListePeriode",
+        "Periode",
+        "ListeTypePeriode",
+        "TypePeriode",
+        "ListeTerritoire",
+        "Territoire",
+        "ListeTypeTerritoire"
+      ],
+      "pageId": 232,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "marche-travail",
@@ -1733,7 +2418,8 @@ const CATALOGUE = {
         "Ventilation par caractéristique",
         "Référentiels territoire et activité"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     },
     {
       "slug": "sortants-formation-acces-emploi",
@@ -1930,7 +2616,72 @@ const CATALOGUE = {
         "Ventilation par caractéristique",
         "Référentiels territoire et activité"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "gestion-activites-operationnelles",
+      "title": "Gestion activités opérationnelles",
+      "version": "2.1",
+      "description": "Cette API permet de récupérer simplement l'ensemble des activités opérationnelles à traiter pour une structure partenaire donnée. Les activités opérationnelles sont des tâches à réaliser par un agent pour faire avancer un processus métier, suite à une rupture temporelle ou un changement d'acteur…",
+      "baseUrl": "api.francetravail.io/partenaire/activites-operationnelles/v2",
+      "auth": "agent",
+      "endpointCount": 7,
+      "schemaCount": 8,
+      "group": "partenaire",
+      "groupLabel": "Gestion partenaire",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/activites/chercher",
+          "summary": "Récupérer la liste des activités d'une structure"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites",
+          "summary": "Récupérer l'entièreté des activités du référentiel"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites/activites/{codeActivite}",
+          "summary": "Récupérer le code et libellé d'une activité"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites/domaines/{codeDomaine}",
+          "summary": "Récupérer le code et libellé d'un domaine"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites/domaines/{codeDomaine}/detail",
+          "summary": "Récupérer le détail d'un domaine"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites/familles/{codeFamille}",
+          "summary": "Récupérer le code et libellé d'une famille"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel-activites/familles/{codeFamille}/detail",
+          "summary": "Récupérer le détail d'une famille"
+        }
+      ],
+      "schemas": [
+        "Activite",
+        "ActivitePage",
+        "ActiviteReferentiel",
+        "AttributSpecifique",
+        "DomaineReferentiel",
+        "Erreur",
+        "FamilleReferentiel",
+        "Usager"
+      ],
+      "pageId": 617,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "prestation-partenaire",
@@ -2129,7 +2880,8 @@ const CATALOGUE = {
         "Rendez-vous et présence",
         "Résultats et livrables"
       ],
-      "starred": true
+      "starred": true,
+      "isNew": false
     },
     {
       "slug": "gestion-sanctions-rsa",
@@ -2190,7 +2942,35 @@ const CATALOGUE = {
         "Conséquences de sanction",
         "Événements de traitement"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "cadre-vie-communes",
+      "title": "API Cadre de vie des communes",
+      "version": "1.0.0",
+      "description": "API permettant de récupérer des informations sur les communes françaises, leurs équipements et leurs caractéristiques.",
+      "baseUrl": "api.francetravail.io/partenaire/eterritoire/v1",
+      "auth": "public",
+      "endpointCount": 1,
+      "schemaCount": 1,
+      "group": "standalone",
+      "groupLabel": "Services",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/cadre-de-vie.php",
+          "summary": "Récupérer une liste de communes et leurs infrastructures"
+        }
+      ],
+      "schemas": [
+        "Commune"
+      ],
+      "pageId": 91,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "evenements-france-travail",
@@ -2245,7 +3025,49 @@ const CATALOGUE = {
         "Événements emploi",
         "Publics et objectifs"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "open-formation",
+      "title": "API Open Formation",
+      "version": "1.0",
+      "description": "API permettant aux organismes de formation et financeurs de consulter les rendez-vous et plages de candidature des formations.",
+      "baseUrl": "api.francetravail.io/partenaire/openformation/v1",
+      "auth": "public",
+      "endpointCount": 3,
+      "schemaCount": 5,
+      "group": "standalone",
+      "groupLabel": "Services",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/sessions/{numeroSession}/{numeroAction}/{numeroFormation}",
+          "summary": "Lister les dates de rendez-vous (RDV) d'une formation"
+        },
+        {
+          "method": "GET",
+          "path": "/rendez-vous/{idRdv}",
+          "summary": "Consulter le détail d'un rendez-vous (RDV)"
+        },
+        {
+          "method": "GET",
+          "path": "/plage-pre-inscription/session/{numeroSession}/action/{numeroAction}/formation/{numeroFormation}",
+          "summary": "Lister les plages de candidature d'une formation"
+        }
+      ],
+      "schemas": [
+        "RendezVous",
+        "RendezVousDetail",
+        "PlagePreInscription",
+        "Adresse",
+        "Origine"
+      ],
+      "pageId": 106,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
     },
     {
       "slug": "referentiel-agences",
@@ -2280,7 +3102,8 @@ const CATALOGUE = {
         "Adresse et localisation",
         "Horaires d'ouverture"
       ],
-      "starred": false
+      "starred": false,
+      "isNew": false
     }
   ],
   "groups": [
@@ -2491,6 +3314,7 @@ const CATALOGUE = {
   ],
   "starred": [
     "diagnostic-usager",
+    "orientation-usager-v2",
     "orientation-usager",
     "rendez-vous-partenaires",
     "prestation-partenaire"

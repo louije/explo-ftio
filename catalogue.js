@@ -103,11 +103,13 @@ function renderCards() {
       : '<div class="cat-card-title">' + escapeHtml(api.title) + '</div>';
 
     var starHtml = api.starred ? '<div class="cat-star" title="Recommandée">\u2605</div>' : '';
+    var newHtml = api.isNew ? '<span class="cat-new" title="Nouvelle API">new</span>' : '';
 
-    html += '<div class="cat-card' + (api.starred ? ' starred' : '') + '" data-slug="' + api.slug + '" data-group="' + api.group + '" data-auth="' + api.auth + '">' +
+    html += '<div class="cat-card' + (api.starred ? ' starred' : '') + (api.isNew ? ' is-new' : '') + '" data-slug="' + api.slug + '" data-group="' + api.group + '" data-auth="' + api.auth + '">' +
       starHtml +
       '<div class="cat-card-head">' +
         titleHtml +
+        newHtml +
         '<div class="cat-card-version">v' + escapeHtml(api.version) + '</div>' +
       '</div>' +
       '<div class="cat-card-desc">' + escapeHtml(api.description) + '</div>' +
