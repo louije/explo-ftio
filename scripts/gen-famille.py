@@ -11,10 +11,10 @@ Source of truth: catalogue-data.js (grouping, titles, versions, stars) + the
 ROLES / BOUNDARY / ORDER tables below. Idempotent / re-runnable:
     python3 gen-famille.py
 """
-import json, re, html
+import json, re, html, os
 from collections import defaultdict
 
-ROOT = "/Users/louije/Development/gip/ftio/"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/"
 D = ROOT + "docs/"
 
 cat = open(ROOT + "catalogue-data.js", encoding="utf-8").read()
@@ -199,6 +199,7 @@ def inject(current):
     fline = s.rfind(nl, 0, f) + len(nl)
     s = s[:fline] + view + nl + nl + s[fline:]
 
+    s = re.sub(r"(\r?\n){3,}", nl + nl, s)  # collapse accumulated blank lines (idempotency)
     open(path, "wb").write(s.encode("utf-8"))
     return path
 

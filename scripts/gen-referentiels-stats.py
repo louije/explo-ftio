@@ -10,9 +10,9 @@ matrix (required/optional criteria per indicator).
 Single source of truth = SHARED_MAILLES + PER_API below. Idempotent. To add a
 FUTURE stats page, add an entry to PER_API and run:  python3 gen-referentiels-stats.py
 """
-import re
+import re, os
 
-D = "/Users/louije/Development/gip/ftio/docs/"
+D = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/docs/"
 
 # Shared across all four APIs (Smart Emploi territory referential).
 SHARED_MAILLES = [
@@ -203,16 +203,17 @@ def inject(slug):
         pre = re.sub(r"(\s*<!--[^\n]*-->)+\s*$", "", pre)
         s = pre + nl + post
 
-    # insert button right after the Famille Statistiques button
-    m = re.search(r"<button class=\"tb\" onclick=\"setTab\('famille'\)\">.*?</button>", s)
-    assert m, "Famille button not found in " + path
+    # insert button right after the Modèle tab (stable position, independent of Famille)
+    m = re.search(r"<button class=\"tb active\" onclick=\"setTab\('nested'\)\">.*?</button>", s)
+    assert m, "Modèle button not found in " + path
     s = s[:m.end()] + nl + button + s[m.end():]
 
-    # insert the Référentiels view right after the Famille view
-    fs = view_span(s, "famille")
-    assert fs, "v-famille not found in " + path
-    s = s[:fs[1]] + nl + nl + view + s[fs[1]:]
+    # insert the Référentiels view right after the Modèle (v-nested) view
+    ns = view_span(s, "nested")
+    assert ns, "v-nested not found in " + path
+    s = s[:ns[1]] + nl + nl + view + s[ns[1]:]
 
+    s = re.sub(r"(\r?\n){3,}", nl + nl, s)  # collapse accumulated blank lines (idempotency)
     open(path, "wb").write(s.encode("utf-8"))
     return path
 
