@@ -30,6 +30,15 @@ function buildCorpus() {
     });
     api.schemas.forEach(function(s) { parts.push(s); });
     if (api.concepts) api.concepts.forEach(function(c) { parts.push(c); });
+    // Make APIs findable by the shared concepts they belong to (e.g. "frein", "santé")
+    if (CATALOGUE.crossConcepts) {
+      CATALOGUE.crossConcepts.forEach(function(c) {
+        if (c.apis && c.apis.indexOf(api.slug) !== -1) {
+          parts.push(c.name);
+          if (c.description) parts.push(c.description);
+        }
+      });
+    }
     searchCorpus[api.slug] = normalize(parts.join(" "));
   });
 }
