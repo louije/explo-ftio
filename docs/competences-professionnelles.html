@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compétences professionnelles — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Compétences professionnelles</h1>
+  <div class="sub">Les compétences, langues et centres d'intérêt qu'un individu a saisis dans son profil de compétences sur francetravail.fr.</div>
+  <div class="sub-tech">Compétences professionnelles v2.0.0 — 3 endpoints · 5 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-competences/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('profil')">Profil de compétences</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Trois facettes, trois endpoints.</strong> L'API expose séparément les <code>/competences</code>, les <code>/langues</code> et les <code>/interets</code> de l'individu. Chacun renvoie une liste indépendante — il n'y a pas d'objet « profil » englobant.
+</div>
+
+<div class="n l1-b stack" id="m-competences">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Compétences <span class="dto">Competence[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une compétence déclarée. Elle peut venir du référentiel ROME ou être saisie librement, et porte un niveau de maîtrise auto-évalué.
+      <div class="fi-tech"><code>libelle</code> · <code>code</code> — code ROME, présent uniquement si la compétence vient du référentiel
+        <br><code>type</code> — <span class="ev">S</span> issue du ROME · <span class="ev">L</span> saisie libre · <span class="ev">Q</span> savoir-être professionnel
+        <br><code>niveau</code> <span class="at">@ Niveau</span> — <span class="ev">0</span> à <span class="ev">3</span> (Non évalué → Avancé)</div>
+    </div>
+  </div>
+</div>
+
+<div class="n l1-p stack" id="m-langues">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Langues <span class="dto">Langue[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Les langues maîtrisées par l'individu, avec un niveau propre (échelle différente de celle des compétences).
+      <div class="fi-tech"><code>code</code> · <code>libelle</code> <span class="eg">ex. Anglais</span>
+        <br><code>niveau</code> <span class="at">@ NiveauLangue</span> — <span class="ev">1</span> Débutant · <span class="ev">2</span> Intermédiaire · <span class="ev">3</span> Courant</div>
+    </div>
+  </div>
+</div>
+
+<div class="n l1-n stack" id="m-interets">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Centres d'intérêt <span class="dto">CentreInteret[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Les centres d'intérêt déclarés, en texte libre — pas de référentiel ni de niveau ici.
+      <div class="fi-tech"><code>intitule</code> <span class="eg">ex. Randonnée</span> · <code>complement</code> — précision facultative</div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume PE Connect (OAuth utilisateur). L'individu se connecte avec son compte France Travail et autorise le scope <code>authentification_individu</code>. L'application accède aux seules données de l'usager connecté.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: PROFIL DE COMPÉTENCES (disambiguation)         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-profil">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Une facette du profil de compétences.</strong> Le « profil de compétences » que l'individu remplit sur francetravail.fr est exposé par plusieurs API PE Connect, chacune sur un pan différent. Cette API couvre <em>compétences, langues et centres d'intérêt</em> — en <strong>lecture</strong>. Pour écrire, ou pour les autres pans, voyez ci-dessous.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Cette API dans le profil de compétences
+    <span class="rs-count">lecture · 3 facettes</span>
+    <span class="rs-tech">royaume PE Connect</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : ici on <strong>lit</strong> ce que l'individu a déclaré (compétences / langues / intérêts). D'autres API écrivent dans ce même profil, ou en exposent d'autres pans, ou décrivent le référentiel derrière les compétences ROME.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Compétences professionnelles</span><span class="ref-count">cette page · lecture</span></div>
+      <div class="expl">Lit les <strong>compétences, langues et centres d'intérêt</strong> du profil. Les compétences peuvent être issues du ROME (<code>type</code> <span class="ev">S</span>, avec <code>code</code> ROME) ou saisies librement (<span class="ev">L</span>, <span class="ev">Q</span>).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="ajout-competence.html">Ajout de compétence</a></span><span class="ref-count">écriture</span></div>
+      <div class="expl">Le pendant en <strong>écriture</strong> : <code>POST /competences/enregistrer</code> ajoute des compétences au portefeuille.<br><strong>Lecture vs écriture :</strong> Compétences professionnelles lit le portefeuille ; Ajout de compétence y écrit. Même donnée, deux sens.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-competences.html">ROME 4.0 — Compétences</a></span><span class="ref-count">référentiel</span></div>
+      <div class="expl">Le <strong>référentiel</strong> derrière les compétences de type <span class="ev">S</span>.<br><strong>Individu vs référentiel :</strong> ici le <code>code</code> ROME identifie la compétence de l'individu ; ROME Compétences en donne la définition complète, indépendamment de toute personne.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Autres pans du profil</span><span class="ref-count">PE Connect</span></div>
+      <div class="expl">Le même profil expose aussi, par d'autres API PE Connect : les <a href="experiences-professionnelles.html">expériences professionnelles</a>, les <a href="metiers-recherches.html">métiers recherchés</a> et les <a href="formations-professionnelles.html">formations</a>. Chacune se consomme séparément, avec son propre scope.</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Deux échelles de niveau distinctes (compétences vs langues) et un typage des compétences. Le référentiel des compétences ROME elles-mêmes est servi par l'<a href="rome-4-0-competences.html">API ROME Compétences</a>.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Vocabulaires
+    <span class="rs-count">3 enums</span>
+    <span class="rs-tech">Competence · Niveau · NiveauLangue</span>
+  </h2>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de compétence</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">S</span> Issue du référentiel ROME (porte un <code>code</code> ROME)</li>
+        <li><span class="voc-code">L</span> Saisie librement par l'individu</li>
+        <li><span class="voc-code">Q</span> Savoir-être professionnel</li>
+      </ul>
+      <div class="voc-tech"><code>Competence.type</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveau de compétence</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">0</span> Non évalué</li>
+        <li><span class="voc-code">1</span> Débutant</li>
+        <li><span class="voc-code">2</span> Intermédiaire</li>
+        <li><span class="voc-code">3</span> Avancé</li>
+      </ul>
+      <div class="voc-tech"><code>Niveau.code</code> · <code>Niveau.libelle</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveau de langue</span><span class="ref-count">3</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">1</span> Débutant</li>
+        <li><span class="voc-code">2</span> Intermédiaire</li>
+        <li><span class="voc-code">3</span> Courant</li>
+      </ul>
+      <div class="voc-tech"><code>NiveauLangue.code</code> — échelle propre aux langues, distincte de celle des compétences.</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Profil de compétences <span class="dt-human">— les trois facettes de l'individu connecté</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les compétences d'un individu</span><div class="ep-human">Compétences du profil, avec type (ROME / libre / savoir-être) et niveau</div><span class="ep-path">/competences</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les langues d'un individu</span><div class="ep-human">Langues maîtrisées et leur niveau</div><span class="ep-path">/langues</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les centres d'intérêt d'un individu</span><div class="ep-human">Centres d'intérêt déclarés, en texte libre</div><span class="ep-path">/interets</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">5 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Competence</span> <span class="sc-desc">— compétence déclarée (type, niveau)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Niveau</span> <span class="sc-desc">— niveau de compétence (0–3)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Langue</span> <span class="sc-desc">— langue maîtrisée</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">NiveauLangue</span> <span class="sc-desc">— niveau de langue (1–3)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">CentreInteret</span> <span class="sc-desc">— centre d'intérêt en texte libre</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Le profil d'un développeur en reconversion</strong> — Une application lit les trois facettes du profil d'un usager connecté : ses compétences (mêlant ROME et saisie libre), ses langues, et ses centres d'intérêt.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-comp"><span class="jc">// GET /competences</span>
+<span class="jc">// ── OAuth PE Connect · Bearer … ──</span>
+[
+  {
+    <span class="jk">"libelle"</span>: <span class="js">"Concevoir une application web"</span>,
+    <span class="jk">"code"</span>: <span class="js">"123456"</span>,
+    <span class="jk">"type"</span>: <span class="js">"S"</span>,
+    <span class="jk">"niveau"</span>: { <span class="jk">"code"</span>: <span class="js">"3"</span>, <span class="jk">"libelle"</span>: <span class="js">"Avancé"</span> }
+  },
+  {
+    <span class="jk">"libelle"</span>: <span class="js">"Veille technologique"</span>,
+    <span class="jk">"type"</span>: <span class="js">"L"</span>,
+    <span class="jk">"niveau"</span>: { <span class="jk">"code"</span>: <span class="js">"2"</span>, <span class="jk">"libelle"</span>: <span class="js">"Intermédiaire"</span> }
+  },
+  {
+    <span class="jk">"libelle"</span>: <span class="js">"Travail en équipe"</span>,
+    <span class="jk">"type"</span>: <span class="js">"Q"</span>,
+    <span class="jk">"niveau"</span>: { <span class="jk">"code"</span>: <span class="js">"0"</span>, <span class="jk">"libelle"</span>: <span class="js">"Non évalué"</span> }
+  }
+]</div>
+<div data-section="s-lang"><span class="jc">// GET /langues</span>
+[
+  { <span class="jk">"libelle"</span>: <span class="js">"Anglais"</span>, <span class="jk">"niveau"</span>: { <span class="jk">"code"</span>: <span class="js">"3"</span>, <span class="jk">"libelle"</span>: <span class="js">"Courant"</span> } },
+  { <span class="jk">"libelle"</span>: <span class="js">"Espagnol"</span>, <span class="jk">"niveau"</span>: { <span class="jk">"code"</span>: <span class="js">"1"</span>, <span class="jk">"libelle"</span>: <span class="js">"Débutant"</span> } }
+]</div>
+<div data-section="s-int"><span class="jc">// GET /interets</span>
+[
+  { <span class="jk">"intitule"</span>: <span class="js">"Randonnée"</span>, <span class="jk">"complement"</span>: <span class="js">"Montagne et trail"</span> },
+  { <span class="jk">"intitule"</span>: <span class="js">"Open source"</span> }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-comp">
+  <div class="ex-title"><span class="ex-ico">🧠</span> Compétences — trois origines</div>
+  <div class="ex-card">
+    <h4>ROME, libre et savoir-être</h4>
+    <p>Les trois types coexistent dans un même profil :</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Concevoir une application web</strong> → <span class="ex-tag tag-ok">S</span> ROME (code 123456) · niveau Avancé</div>
+      <div class="ex-item"><strong>Veille technologique</strong> → <span class="ex-tag tag-besoin">L</span> saisie libre (pas de code) · Intermédiaire</div>
+      <div class="ex-item"><strong>Travail en équipe</strong> → <span class="ex-tag tag-prio">Q</span> savoir-être · Non évalué</div>
+    </div>
+    <div class="ex-agent">Seules les compétences de type S portent un <code>code</code> ROME.</div>
+  </div>
+</div>
+
+<div data-section="s-lang">
+  <div class="ex-title"><span class="ex-ico">🌍</span> Langues — échelle dédiée</div>
+  <div class="ex-card">
+    <h4>Anglais courant, espagnol débutant</h4>
+    <p>Les langues utilisent leur propre échelle <strong>1–3</strong> (Débutant → Courant), à ne pas confondre avec le 0–3 des compétences.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Anglais</strong> → Courant (3)</div>
+      <div class="ex-item"><strong>Espagnol</strong> → Débutant (1)</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-int">
+  <div class="ex-title"><span class="ex-ico">🎯</span> Centres d'intérêt — texte libre</div>
+  <div class="ex-card">
+    <h4>Sans référentiel ni niveau</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Randonnée</strong> → complément « Montagne et trail »</div>
+      <div class="ex-item"><strong>Open source</strong> → sans complément</div>
+    </div>
+    <div class="ex-agent">Le <code>complement</code> est facultatif.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 — Compétences professionnelles v2.0.0 · api.francetravail.io · 3 endpoints · 5 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -917,8 +917,13 @@ const CATALOGUE = {
         "CentreInteret"
       ],
       "pageId": 98,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Compétences (ROME / libre / savoir-être)",
+        "Langues et niveaux",
+        "Centres d'intérêt",
+        "Profil de compétences"
+      ],
       "starred": false,
       "isNew": true
     },

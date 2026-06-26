@@ -233,6 +233,12 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Compétences ROME à enregistrer",
     "Réponse partielle (206)",
   ],
+  "competences-professionnelles": [
+    "Compétences (ROME / libre / savoir-être)",
+    "Langues et niveaux",
+    "Centres d'intérêt",
+    "Profil de compétences",
+  ],
   "metiers-recherches": [
     "Métier ROME et appellation",
     "Contrats et temps de travail",
