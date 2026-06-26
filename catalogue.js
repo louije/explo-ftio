@@ -491,6 +491,11 @@ function renderStats() {
   });
   document.getElementById("total-endpoints").textContent = totalEndpoints;
   document.getElementById("total-schemas").textContent = totalSchemas;
+  var n = CATALOGUE.apis.length;
+  var set = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+  set("total-apis", n);
+  set("footer-apis", n);
+  set("search-meta", n + " API" + (n > 1 ? "s" : ""));
 }
 
 // ── Init ──
