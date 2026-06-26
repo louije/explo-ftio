@@ -290,6 +290,12 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Ventilation par caractéristique",
     "Référentiels territoire et activité",
   ],
+  "informations-territoire": [
+    "Population et population active",
+    "Établissements et salariés",
+    "Dynamique de l'emploi (DYN_1)",
+    "Famille Statistiques",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",

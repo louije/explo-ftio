@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informations sur un territoire — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Informations sur un territoire</h1>
+  <div class="sub">Les données clés pour comprendre un territoire : population, population active, établissements, salariés — plus un indicateur prospectif de dynamisme de l'emploi propre à France Travail.</div>
+  <div class="sub-tech">Informations sur un territoire v1 — 31 endpoints · 32 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-informations-territoire</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('famille')">Famille Statistiques</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Un cadre commun aux statistiques France Travail.</strong> On <code>POST</code> des critères (territoire, activité, période) sur un indicateur, et on reçoit une enveloppe <code>IndicateurRetour</code> avec des valeurs ventilées par période puis par caractéristique. Les dimensions (territoire, activité, période, caractéristique) sont des référentiels consultables séparément.
+</div>
+
+<div class="n l0" id="m-indicateur">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Réponse statistique <span class="dto">IndicateurRetour</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Enveloppe commune à tous les indicateurs. Identifie l'indicateur et le territoire, et porte les valeurs ventilées par période.
+      <div class="fi-tech"><code>codeIndicateur</code> · <code>codeFamille</code> · <code>libIndicateur</code> · <code>libTerritoire</code> · <code>datMaj</code>
+        <br><span class="ev">POP_1</span> Population · <span class="ev">POP_2</span> Population active · <span class="ev">ETAB_1</span> Établissements · <span class="ev">SAL_1</span> Salariés · <span class="ev">DYN_1</span> Dynamique de l'emploi</div>
+    </div>
+
+    <div class="n l1-b stack" id="m-valeurs-periode">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Valeurs par période <span class="dto">listeValeursParPeriode[] · ValeursParPeriode</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Chaque entrée est une combinaison territoire × activité × période. La valeur principale prend la forme adaptée à l'indicateur — un nombre, un taux, un montant ou un rang.
+          <div class="fi-tech"><code>codeTerritoire</code> · <code>libTerritoire</code> · <code>codeActivite</code> · <code>libActivite</code> · <code>codePeriode</code> · <code>libPeriode</code>
+            <br><code>valeurPrincipaleNombre</code> · <code>valeurPrincipaleTaux</code> · <code>valeurPrincipaleMontant</code> · <code>valeurPrincipaleRang</code>
+            <br><code>valeurSecondaireNombre</code> · <code>valeurSecondairePourcentage</code> · <code>valeurSecondaireTaux</code></div>
+        </div>
+
+        <div class="n l2c stack" id="m-valeurs-caract">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Ventilation par caractéristique <span class="dto">listeValeurParCaract[] · ValeursParCaracteristique</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb">
+            <div class="fi">Détail par caractéristique (genre, tranche d'âge…). Chaque ligne donne nombre, pourcentage, et éventuellement un montant ou un taux.
+              <div class="fi-tech"><code>codeTypeCaract</code> · <code>codeCaract</code> · <code>libCaract</code> · <code>nombre</code> · <code>pourcentage</code> · <code>montant</code> · <code>taux</code></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l3" id="m-critere">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Critères de recherche <span class="dto">CritereIndicateurSansNomenclature</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Corps de la requête <code>POST</code> d'un indicateur. Obligatoires : territoire, activité, période. Facultatifs : limiter à la dernière période, choisir des périodes précises, exclure ou cibler des caractéristiques.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> <span class="ev">NAT</span> <span class="ev">REG</span> <span class="ev">DEP</span> · <code>codeTerritoire</code>
+        <br><code>codeTypeActivite</code> <span class="ev">ROME</span> <span class="ev">NAF88</span> <span class="ev">CUMUL</span> <span class="ev">MOYENNE</span> · <code>codeActivite</code>
+        <br><code>codeTypePeriode</code> <span class="ev">ANNEE</span> <span class="ev">TRIMESTRE</span>
+        <br><code>dernierePeriode</code> · <code>listeCodePeriode[]</code> · <code>sansCaracteristiques</code> · <code>listeCaracteristiques[]</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+
+<div class="n l1-n" id="m-ref-territoire">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Référentiel territoire <span class="dto">Territoire · TypeTerritoire</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">La maille géographique, chaque territoire rattaché à un parent hiérarchique. Le <code>codeTypeTerritoire</code> fixe le niveau ; <code>GET /referentiel/type-territoires</code> en donne la liste complète et le catalogue <code>details-indicateurs</code> précise les mailles acceptées par chaque indicateur.
+      <div class="fi-tech"><code>codeTypeTerritoire</code> — <span class="ev">NAT</span> national · <span class="ev">REG</span> région · <span class="ev">DEP</span> département <span class="eg">+ autres mailles selon le référentiel</span>
+        <br><code>codeTerritoire</code> · <code>libelleTerritoire</code> · <code>codeTerritoireParent</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="n l1-n" id="m-ref-activite">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Référentiel activité · caractéristique <span class="dto">Activite · Caracteristique</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Les axes d'activité et les caractéristiques de ventilation, à croiser avec le catalogue des indicateurs. <code>ROME</code>/<code>NAF88</code> ciblent un métier ou un secteur ; <code>CUMUL</code>/<code>MOYENNE</code> sont des modes d'agrégation (tous secteurs).
+      <div class="fi-tech"><code>codeTypeActivite</code> — <span class="ev">ROME</span> métier · <span class="ev">NAF88</span> secteur · <span class="ev">CUMUL</span> · <span class="ev">MOYENNE</span> · <code>codeActivite</code> · <code>libelleActivite</code>
+        <br><code>codeTypeCaracteristique</code> · <code>codeCaracteristique</code> · <code>libelleCaracteristique</code></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> — API publique du royaume <code>partenaire</code>. Accès par <em>client credentials</em> uniquement ; aucun contexte utilisateur ni <code>ft-jeton-usager</code>.
+</div>
+
+<div class="note">
+  <strong>Structure commune</strong> — Les cinq indicateurs (POP_1, POP_2, ETAB_1, SAL_1, DYN_1) retournent le même <code>IndicateurRetour</code> ; seuls les champs de valeur renseignés changent. Les référentiels (territoire, activité, période, nomenclature, caractéristique) sont partagés et consultables via des endpoints <code>GET</code>. Le <a href="#coverage" onclick="setTab('coverage')">catalogue des indicateurs</a> (<code>details-indicateurs</code>) liste les croisements disponibles.
+</div>
+
+</div>
+
+<!-- FAMILLE STATISTIQUES (généré par gen-famille-stats.py) -->
+<div class="view" id="v-famille">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Quatre API statistiques, un même moteur.</strong> France Travail expose ses statistiques via plusieurs API qui partagent <em>exactement</em> le même cadre de requête : on <code>POST</code> un indicateur en croisant territoire × activité × période × caractéristique, et les dimensions sont les mêmes référentiels. Ce qui distingue les API, ce sont les <strong>indicateurs</strong> qu'elles exposent.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Cette API dans la famille Statistiques
+    <span class="rs-count">4 API</span>
+    <span class="rs-tech">même cadre territoire × activité × période</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : même requête, même réponse <code>IndicateurRetour</code>, mêmes référentiels. Choisir l'API revient à choisir <strong>quel angle</strong> on veut sur le territoire ou le métier.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Informations sur un territoire</span><span class="ref-count">cette page · 5 indicateurs</span></div>
+      <div class="expl"><strong>Comprendre un territoire.</strong> Population (<span class="ev">POP_1</span>), population active (<span class="ev">POP_2</span>), établissements (<span class="ev">ETAB_1</span>), salariés (<span class="ev">SAL_1</span>) et l'indicateur prospectif de dynamisme de l'emploi (<span class="ev">DYN_1</span>). L'angle « contexte socio-économique ».</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="marche-travail.html">Marché du travail</a></span><span class="ref-count">offre & demande</span></div>
+      <div class="expl">Demandeurs, offres, embauches, tensions de recrutement et salaires, par métier et territoire. L'angle « marché de l'emploi ».<br><strong>Informations territoire vs Marché du travail :</strong> Informations territoire décrit le contexte (qui vit et travaille ici) ; Marché du travail décrit le marché de l'emploi (offres, demande, tensions).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="acces-emploi-demandeurs-emploi.html">Accès à l'emploi des demandeurs</a></span><span class="ref-count">parcours DE</span></div>
+      <div class="expl">Le taux et les conditions d'accès (ou de retour) à l'emploi des demandeurs d'emploi. L'angle « devenir des demandeurs ».<br><strong>Informations territoire vs Accès demandeurs :</strong> L'un photographie la population active du territoire ; l'autre suit le devenir des demandeurs d'emploi.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="sortants-formation-acces-emploi.html">Sortants de formation & accès à l'emploi</a></span><span class="ref-count">après formation</span></div>
+      <div class="expl">L'accès à l'emploi des personnes à l'issue d'une formation. L'angle « efficacité des formations ».<br><strong>Informations territoire vs Sortants de formation :</strong> Même cadre statistique ; ici l'angle est le portrait du territoire, là l'efficacité des formations sur le retour à l'emploi.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Quelle API appeler ?</strong> Portrait socio-économique d'un territoire → <strong>Informations sur un territoire</strong>. Offres / demande / tensions / salaires par métier → <strong>Marché du travail</strong>. Devenir des demandeurs d'emploi → <strong>Accès à l'emploi des demandeurs</strong>. Retour à l'emploi après formation → <strong>Sortants de formation</strong>.
+</div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Indicateurs <span class="dt-human">— données du territoire (POST de critères)</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Population totale (POP_1)</span><div class="ep-human">Population du territoire</div><span class="ep-path">/v1/indicateur/stat-population</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Population active (POP_2)</span><div class="ep-human">Population active du territoire</div><span class="ep-path">/v1/indicateur/stat-population-active</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Établissements (ETAB_1)</span><div class="ep-human">Établissements d'entreprise sur le territoire</div><span class="ep-path">/v1/indicateur/stat-etablissements</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Salariés (SAL_1)</span><div class="ep-human">Effectifs salariés sur le territoire</div><span class="ep-path">/v1/indicateur/stat-salaries</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Dynamique de l'emploi (DYN_1)</span><div class="ep-human">Indicateur prospectif de dynamisme de l'emploi (propre à France Travail)</div><span class="ep-path">/v1/indicateur/stat-dynamique-emploi</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Référentiels <span class="dt-human">— les dimensions partagées (GET)</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Territoires</span><div class="ep-human">Consulter / lister les territoires et leurs types</div><span class="ep-path">/v1/referentiel/territoire(s) · type-territoire(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Activités</span><div class="ep-human">Consulter / lister les activités et leurs types</div><span class="ep-path">/v1/referentiel/activite(s) · type-activite(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Caractéristiques</span><div class="ep-human">Axes de ventilation (genre, âge…) et leurs types</div><span class="ep-path">/v1/referentiel/caracteristique(s) · type-caracteristique(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Nomenclatures</span><div class="ep-human">Nomenclatures et leurs types</div><span class="ep-path">/v1/referentiel/nomenclature(s) · type-nomenclature(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Périodes</span><div class="ep-human">Périodes disponibles et leurs types</div><span class="ep-path">/v1/referentiel/periode(s) · type-periode(s)</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Catalogue des indicateurs</span><div class="ep-human">Détail des indicateurs et croisements disponibles</div><span class="ep-path">/v1/referentiel/details-indicateurs</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">32 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Réponse</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Requête</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">IndicateurRetour</span> <span class="sc-desc">— enveloppe réponse statistique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParPeriode</span> <span class="sc-desc">— valeurs d'un croisement</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ValeursParCaracteristique</span> <span class="sc-desc">— détail par caractéristique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CritereIndicateurSansNomenclature</span> <span class="sc-desc">— critères de la requête</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Territoire · TypeTerritoire</span> <span class="sc-desc">— code géographique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Activite · TypeActivite</span> <span class="sc-desc">— axe d'activité</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Caracteristique · TypeCaracteristique</span> <span class="sc-desc">— axe de ventilation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Nomenclature · TypeNomenclature</span> <span class="sc-desc">— nomenclature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Periode · TypePeriode</span> <span class="sc-desc">— période temporelle</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DetailIndicateur</span> <span class="sc-desc">— catalogue des indicateurs</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CroisementIndicateur</span> <span class="sc-desc">— croisement disponible</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Liste* · TypeValeur</span> <span class="sc-desc">— enveloppes de liste &amp; type de valeur</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>La population active d'un département</strong> — Un partenaire interroge l'indicateur POP_2 sur le Vaucluse (département 84), dernière période disponible, ventilé par genre.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// POST /v1/indicateur/stat-population-active</span>
+<span class="jc">// ── client credentials (partenaire) ──</span>
+<span class="jc">// ──────────────────────────────────────</span>
+{
+  <span class="jk">"codeTypeTerritoire"</span>: <span class="js">"DEP"</span>,
+  <span class="jk">"codeTerritoire"</span>: <span class="js">"84"</span>,
+  <span class="jk">"codeTypeActivite"</span>: <span class="js">"CUMUL"</span>,
+  <span class="jk">"codeActivite"</span>: <span class="js">"CUMUL"</span>,
+  <span class="jk">"codeTypePeriode"</span>: <span class="js">"ANNEE"</span>,
+  <span class="jk">"dernierePeriode"</span>: <span class="jb">true</span>,
+  <span class="jk">"listeCaracteristiques"</span>: [<span class="js">"GENRE"</span>]
+}</div>
+<div data-section="s-reponse"><span class="jc">// ── Réponse 200 OK ──</span>
+{
+  <span class="jk">"codeIndicateur"</span>: <span class="js">"POP_2"</span>,
+  <span class="jk">"codeFamille"</span>: <span class="js">"POPULATION"</span>,
+  <span class="jk">"libIndicateur"</span>: <span class="js">"Population active"</span>,
+  <span class="jk">"libTerritoire"</span>: <span class="js">"VAUCLUSE"</span>,
+  <span class="jk">"datMaj"</span>: <span class="js">"2026-01-10T08:00:00+01:00"</span>,
+  <span class="jk">"listeValeursParPeriode"</span>: [
+    {
+      <span class="jk">"libTerritoire"</span>: <span class="js">"VAUCLUSE"</span>,
+      <span class="jk">"codePeriode"</span>: <span class="js">"2024"</span>,
+      <span class="jk">"libPeriode"</span>: <span class="js">"Année 2024"</span>,
+      <span class="jk">"valeurPrincipaleNom"</span>: <span class="js">"Population active"</span>,
+      <span class="jk">"valeurPrincipaleNombre"</span>: <span class="jn">258000</span>,</div>
+<div data-section="s-caract">      <span class="jk">"listeValeurParCaract"</span>: [
+        { <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>, <span class="jk">"codeCaract"</span>: <span class="js">"H"</span>, <span class="jk">"libCaract"</span>: <span class="js">"Homme"</span>, <span class="jk">"nombre"</span>: <span class="jn">133000</span>, <span class="jk">"pourcentage"</span>: <span class="jn">51.6</span> },
+        { <span class="jk">"codeTypeCaract"</span>: <span class="js">"GENRE"</span>, <span class="jk">"codeCaract"</span>: <span class="js">"F"</span>, <span class="jk">"libCaract"</span>: <span class="js">"Femme"</span>, <span class="jk">"nombre"</span>: <span class="jn">125000</span>, <span class="jk">"pourcentage"</span>: <span class="jn">48.4</span> }
+      ]
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">🔍</span> Requête</div>
+  <div class="ex-card">
+    <h4>Population active — Vaucluse</h4>
+    <p>Indicateur POP_2 sur le département 84, ensemble des activités, dernière année disponible, ventilé par genre.</p>
+    <div class="ex-agent">Mêmes critères que pour n'importe quel indicateur de la famille.</div>
+  </div>
+</div>
+
+<div data-section="s-reponse">
+  <div class="ex-title"><span class="ex-ico">📊</span> Résultat</div>
+  <div class="ex-card">
+    <h4>Année 2024</h4>
+    <p><span class="ex-tag tag-prio">258 000 actifs</span> dans le Vaucluse sur la dernière année disponible.</p>
+    <div class="ex-agent">La valeur principale est un <code>nombre</code> ici ; un autre indicateur renverrait un taux, un montant ou un rang.</div>
+  </div>
+</div>
+
+<div data-section="s-caract">
+  <div class="ex-title"><span class="ex-ico">👥</span> Ventilation</div>
+  <div class="ex-card">
+    <h4>Répartition par genre</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Hommes</strong> → 133 000 · 51,6%</div>
+      <div class="ex-item"><strong>Femmes</strong> → 125 000 · 48,4%</div>
+    </div>
+    <div class="ex-agent">Valeurs et codes <em>illustratifs</em>.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — Informations sur un territoire v1 · api.francetravail.io · 31 endpoints · 32 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

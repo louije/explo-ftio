@@ -2134,8 +2134,13 @@ const CATALOGUE = {
         "ListeTypeTerritoire"
       ],
       "pageId": 232,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Population et population active",
+        "Établissements et salariés",
+        "Dynamique de l'emploi (DYN_1)",
+        "Famille Statistiques"
+      ],
       "starred": false,
       "isNew": true
     },
