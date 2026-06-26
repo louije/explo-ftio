@@ -51,11 +51,14 @@ header .sub-tech{font-size:0.72rem;color:var(--text-light);margin-top:2px;font-f
 .card-tech{font-family:'IBM Plex Mono',monospace;font-size:0.54rem;opacity:.6;margin-left:4px;}
 .nb{padding:10px 12px;}
 .nb .fi{font-size:0.8rem;color:var(--text-dim);line-height:1.6;margin-bottom:8px;padding:0 2px;}
-.fi code{background:rgba(0,0,0,.04);padding:1px 4px;border-radius:3px;font-size:0.64rem;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.fi > .n:first-of-type{margin-top:14px;}
+.fi code{background:rgba(0,0,0,.07);padding:1px 5px;border-radius:3px;font-size:0.74rem;font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;}
 .fi-tech{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--text-light);margin-top:4px;line-height:1.5;}
-.fi-tech code{font-size:inherit;color:var(--text-dim);}
+.fi-tech code{font-size:0.66rem;color:var(--text);font-weight:600;}
 .fi-tech .at{font-size:0.6rem;}
-.ev{display:inline;font-size:0.74rem;padding:2px 7px;border-radius:4px;background:rgba(0,0,0,.04);color:var(--text-dim);}
+.ev{display:inline;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:1px 6px;border-radius:4px;background:rgba(5,150,105,.10);color:#047857;font-weight:500;}
+/* illustrative example value — NOT a contract token: italic prose, no chip */
+.eg{font-family:'Source Sans 3',sans-serif;font-style:italic;font-weight:400;color:var(--text-light);}
 .at{display:inline-block;font-size:0.72rem;padding:2px 7px;border:1px solid var(--border);border-radius:3px;color:var(--text-dim);background:rgba(0,0,0,.01);}
 
 /* ── Level colors ──
@@ -91,6 +94,11 @@ header .sub-tech{font-size:0.72rem;color:var(--text-light);margin-top:2px;font-f
 
 .note{margin-top:16px;padding:10px 14px;font-size:0.82rem;line-height:1.55;border:1px solid var(--border);border-radius:8px;color:var(--text-dim);background:#fff;}
 .note strong{color:var(--text);}
+/* code in notes = readable concept chip (matches .fi code) */
+.note code{background:rgba(0,0,0,.07);padding:1px 6px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:0.76rem;color:var(--text);font-weight:600;}
+/* chip list — scannable set of tokens (no middot run) */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;}
+.chips code{margin:0;}
 
 /* ── Tab 2: Coverage ── */
 .domain{margin-bottom:18px;}
