@@ -22,9 +22,9 @@
 <div class="controls">
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
-    <button class="tb" onclick="setTab('famille')">Famille ROME</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
+    <button class="tb" onclick="setTab('famille')">Famille</button>
   </div>
 </div>
 
@@ -120,58 +120,6 @@
 
 </div>
 
-<!-- FAMILLE ROME (généré par gen-famille-rome.py) -->
-<div class="view" id="v-famille">
-
-<div class="note" style="margin-bottom:20px;">
-  <strong>Le ROME 4.0 est éclaté en plusieurs API.</strong> Aucune n'est une version d'une autre : ce sont des <em>angles</em> différents sur le même référentiel. Savoir laquelle appeler évite de dupliquer des appels.
-</div>
-
-<div class="ref-section">
-  <h2 class="ref-section-title">
-    <span class="rs-dot" style="background:#0d9488;"></span>
-    Cette API dans la famille ROME 4.0
-    <span class="rs-count">5 API</span>
-    <span class="rs-tech">classification ROME 4.0</span>
-  </h2>
-  <div class="ref-section-intro">
-    Le fil conducteur : <strong>Métiers</strong> répond à « quels métiers existent et comment sont-ils reliés ? ». Les autres décrivent en détail un métier, une compétence ou un contexte déjà identifié.
-  </div>
-  <div class="ref-families">
-
-    <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-metiers.html">ROME 4.0 — Métiers</a></span><span class="ref-count">17 endpoints</span></div>
-      <div class="expl">Le référentiel navigable : parcourir l'arbre des métiers, rechercher, filtrer par RIASEC / NAF / compétence, et lire les métadonnées d'un métier (ISCO/ESCO, transitions, mobilité).<br><strong>Romeo vs ROME 4.0 — Métiers :</strong> Romeo prédit un code à partir de texte libre ; Métiers explore ensuite ce code dans le référentiel.</div>
-    </div>
-
-    <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-fiches-metiers.html">Fiches ROME</a></span><span class="ref-count">3 endpoints</span></div>
-      <div class="expl">La fiche métier assemblée : pour un code ROME, les compétences groupées par enjeu et les savoirs groupés par catégorie.<br><strong>Romeo vs Fiches ROME :</strong> Romeo trouve le code métier à partir de texte ; Fiches ROME en donne ensuite la fiche compétences-savoirs.</div>
-    </div>
-
-    <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-competences.html">ROME 4.0 — Compétences</a></span><span class="ref-count">21 endpoints</span></div>
-      <div class="expl">Le référentiel des compétences : chaque compétence avec son type, sa correspondance ESCO, ses macro-compétences et savoirs.<br><strong>Romeo vs ROME 4.0 — Compétences :</strong> Romeo prédit un code compétence à partir de texte ; Compétences en donne le détail.</div>
-    </div>
-
-    <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-contextes-travail.html">ROME 4.0 — Situations de travail</a></span><span class="ref-count">3 endpoints</span></div>
-      <div class="expl">Le référentiel des situations de travail : contextes et conditions d'exercice (horaires, environnement, statuts).<br><strong>Romeo vs ROME 4.0 — Situations de travail :</strong> Romeo mappe du texte vers des codes ROME ; Situations de travail est le référentiel des contextes de travail.</div>
-    </div>
-
-    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
-      <div class="ref-head"><span class="ref-title">Romeo</span><span class="ref-count">cette page · prédiction · 4 endpoints</span></div>
-      <div class="expl">Le moteur de prédiction : à partir d'un texte libre, prédit le code métier ou compétence ROME le plus probable.</div>
-    </div>
-
-  </div>
-</div>
-
-<div class="note">
-  <strong>Quelle API appeler ?</strong> Texte libre à mapper → <strong>Romeo</strong>. Naviguer / rechercher / filtrer des métiers → <strong>Métiers</strong>. Afficher la fiche compétences-savoirs d'un métier → <strong>Fiches ROME</strong>. Détailler une compétence → <strong>Compétences</strong>. Décrire un contexte de travail → <strong>Situations de travail</strong>.
-</div>
-
-</div>
 
 <!-- ═══════════════════════════════════════════════════ -->
 <!-- TAB 2: COUVERTURE API                               -->
@@ -359,6 +307,53 @@
 </div>
 
 </div><!-- .example-split -->
+</div>
+
+<!-- FAMILLE (généré par gen-famille.py) -->
+<div class="view" id="v-famille">
+
+<div class="note" style="margin-bottom:20px;">
+  Cette API fait partie de la famille <strong>« ROME 4.0 »</strong> (5 API). Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction. <a href="../index.html">Voir toutes les familles</a> dans le catalogue.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    La famille ROME 4.0
+    <span class="rs-count">5 API</span>
+    <span class="rs-tech">navigation</span>
+  </h2>
+  <div class="ref-section-intro">Toutes décrivent le référentiel ROME 4.0 sous un angle différent ; chaque carte précise ce qui la distingue.</div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-competences.html">ROME 4.0 - Compétences</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">Le référentiel des compétences : chaque compétence avec son type, sa correspondance ESCO, ses macro-compétences et savoirs.<br><strong>Romeo vs Compétences :</strong> Romeo prédit un code compétence à partir de texte ; Compétences en donne le détail.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-metiers.html">ROME 4.0 - Métiers</a></span><span class="ref-count">v1  <span class="at">nouveau</span></span></div>
+      <div class="expl">Le référentiel navigable : parcourir l'arbre des métiers, rechercher, filtrer par RIASEC / NAF / compétence, et lire les métadonnées d'un métier (ISCO/ESCO, transitions, mobilité).<br><strong>Romeo vs Métiers :</strong> Romeo prédit un code à partir de texte libre ; Métiers explore ensuite ce code dans le référentiel.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-fiches-metiers.html">ROME V4.0 - Fiches ROME</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">La fiche métier assemblée : pour un code ROME, les compétences groupées par enjeu et les savoirs groupés par catégorie.<br><strong>Romeo vs Fiches ROME :</strong> Romeo trouve le code métier à partir de texte ; Fiches ROME en donne ensuite la fiche compétences-savoirs.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-contextes-travail.html">ROME V4.0 - Situations de travail</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">Le référentiel des situations de travail : contextes et conditions d'exercice (horaires, environnement, statuts).<br><strong>Romeo vs Situations de travail :</strong> Romeo mappe du texte vers des codes ROME ; Situations de travail est le référentiel des contextes de travail.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Romeo</span><span class="ref-count">cette page</span></div>
+      <div class="expl">Le moteur de prédiction : à partir d'un texte libre, prédit le code métier ou compétence ROME le plus probable.</div>
+    </div>
+
+  </div>
+</div>
+
 </div>
 
 <footer>
