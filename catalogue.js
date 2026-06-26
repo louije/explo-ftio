@@ -95,7 +95,7 @@ function renderCards() {
     if (api.pageId) {
       linksHtml += '<a href="https://francetravail.io/data/api/' + api.slug + '?tabgroup-api=documentation" class="cat-link cat-link-ext" target="_blank" rel="noopener">francetravail.io</a>';
     }
-    linksHtml += '<a href="schemas/' + api.slug + '.json" class="cat-link">OpenAPI JSON</a>';
+    linksHtml += '<a href="schemas/' + (api.jsonSlug || api.slug) + '.json" class="cat-link">OpenAPI JSON</a>';
 
     // Title: link with arrow when exploration exists, plain text otherwise
     var titleHtml = hasExploration
@@ -110,7 +110,7 @@ function renderCards() {
       '<div class="cat-card-head">' +
         titleHtml +
         newHtml +
-        '<div class="cat-card-version">v' + escapeHtml(api.version) + '</div>' +
+        '<div class="cat-card-version">' + (api.versions ? api.versions.map(function(x){return 'v'+escapeHtml(x.label);}).join(' \u00b7 ') : 'v'+escapeHtml(api.version)) + '</div>' +
       '</div>' +
       '<div class="cat-card-desc">' + escapeHtml(api.description) + '</div>' +
       '<div class="cat-card-stats">' +

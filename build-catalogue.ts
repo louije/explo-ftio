@@ -184,8 +184,8 @@ const DOC_CONCEPTS: Record<string, string[]> = {
   "orientation-usager": [
     "Calcul d'orientation",
     "Décision d'orientation",
-    "Parcours et structure",
-    "Critères sociaux et professionnels",
+    "Acteurs et structures",
+    "Comparatif v1 → v2",
   ],
   "referentiel-agences": [
     "Identité et type",
@@ -299,7 +299,6 @@ const NEW: string[] = [
   "contrat-engagement",
   "declaration-demarche",
   "gestion-activites-operationnelles",
-  "orientation-usager-v2",
 ];
 
 // Starred APIs — appear first on the catalogue when no filter is active
@@ -320,6 +319,20 @@ const GROUP_DEFS = [
   { id: "partenaire", label: "Gestion partenaire", description: "Prestations sous-traitées, sanctions RSA" },
   { id: "standalone", label: "Services", description: "Référentiels et événements" },
 ];
+
+// Version groups — fold several version files into ONE catalogue entry.
+// The card shows `primary` (the default version); `versions` lists all of them.
+const VERSION_GROUPS: Record<string, { primary: string; versions: { label: string; pageId: number; slug: string }[] }> = {
+  "orientation-usager": {
+    primary: "orientation-usager-v2",
+    versions: [
+      { label: "2.0", pageId: 635, slug: "orientation-usager-v2" },
+      { label: "1.0", pageId: 433, slug: "orientation-usager" },
+    ],
+  },
+};
+// Files folded into a version group's primary entry — no standalone card.
+const MERGED_AWAY = new Set<string>(["orientation-usager-v2"]);
 
 // ── Helpers ──
 
@@ -363,8 +376,12 @@ async function main() {
 
   for (const file of files) {
     const slug = file.replace(".json", "");
-    const raw = await Bun.file(join(SCHEMAS_DIR, file)).text();
-    const schema = JSON.parse(raw);
+    if (MERGED_AWAY.has(slug)) continue;   // folded into its version group's primary entry
+    const grp = VERSION_GROUPS[slug];
+
+    // For a version group, the card displays the primary (default) version's schema.
+    const primaryFile = grp ? `${grp.primary}.json` : file;
+    const schema = JSON.parse(await Bun.file(join(SCHEMAS_DIR, primaryFile)).text());
 
     const info = schema.info || {};
     const paths = schema.paths || {};
@@ -403,11 +420,13 @@ async function main() {
       groupLabel: group[1],
       endpoints,
       schemas,
-      pageId: PAGE_IDS[slug] || null,
+      pageId: grp ? grp.versions[0].pageId : (PAGE_IDS[slug] || null),
       hasDocPage,
       concepts: DOC_CONCEPTS[slug] || [],
       starred: STARRED.includes(slug),
-      isNew: NEW.includes(slug),
+      isNew: grp ? true : NEW.includes(slug),
+      versions: grp ? grp.versions : undefined,
+      jsonSlug: grp ? grp.primary : undefined,
     });
   }
 

@@ -382,7 +382,7 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "orientation-usager-v2",
+      "slug": "orientation-usager",
       "title": "Orientation Usager",
       "version": "2.0",
       "description": "Cette API permet : - de récupérer une proposition de résultat d'orientation d'un usager.  - de récupérer une décision d'orientation d'un usager. - de prendre une décision afin de l'orienter vers un organisme et dans un des trois parcours : Social, Socio-Professionnel, Professionnel. - d'orienter un…",
@@ -437,75 +437,28 @@ const CATALOGUE = {
         "DonneesModifieesDto"
       ],
       "pageId": 635,
-      "hasDocPage": false,
-      "concepts": [],
-      "starred": true,
-      "isNew": true
-    },
-    {
-      "slug": "orientation-usager",
-      "title": "Orientation Usager",
-      "version": "1.0",
-      "description": "Cette API permet : - de récupérer une proposition de résultat d'orientation d'un usager. - de prendre une décision afin de l'orienter vers un organisme et dans un des trois parcours : Social, Socio-Professionnel, Professionnel. - d'orienter un usager sans avoir à détailler les critères de…",
-      "baseUrl": "api.francetravail.io/partenaire/orientationusager/v1",
-      "auth": "agent",
-      "endpointCount": 5,
-      "schemaCount": 14,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
-      "endpoints": [
-        {
-          "method": "POST",
-          "path": "/calculOrientation",
-          "summary": "Calculer une orientation"
-        },
-        {
-          "method": "GET",
-          "path": "/lectureOrientation",
-          "summary": "Lire les orientations"
-        },
-        {
-          "method": "POST",
-          "path": "/orientation",
-          "summary": "Orienter un usager"
-        },
-        {
-          "method": "PUT",
-          "path": "/modificationOrientation",
-          "summary": "Modifier le parcours et/ou la structure"
-        },
-        {
-          "method": "POST",
-          "path": "/decisionOrientation",
-          "summary": "Décider une orientation"
-        }
-      ],
-      "schemas": [
-        "OrientationCA",
-        "CriteresOrientationCA_CalculerEntree",
-        "OrientationCA_Calculer",
-        "Structure",
-        "StructureDecision",
-        "CriteresOrientationCA_Calculer",
-        "Adresse",
-        "OrientationCA_Lecture",
-        "Structure_Lecture",
-        "CriteresOrientationCA_Lecture",
-        "DecisionCA_Lecture",
-        "OrientationCreationCA_Commun",
-        "Structure_Commun",
-        "DecisionCA"
-      ],
-      "pageId": 433,
       "hasDocPage": true,
       "concepts": [
         "Calcul d'orientation",
         "Décision d'orientation",
-        "Parcours et structure",
-        "Critères sociaux et professionnels"
+        "Acteurs et structures",
+        "Comparatif v1 → v2"
       ],
       "starred": true,
-      "isNew": false
+      "isNew": true,
+      "versions": [
+        {
+          "label": "2.0",
+          "pageId": 635,
+          "slug": "orientation-usager-v2"
+        },
+        {
+          "label": "1.0",
+          "pageId": 433,
+          "slug": "orientation-usager"
+        }
+      ],
+      "jsonSlug": "orientation-usager-v2"
     },
     {
       "slug": "rechercher-usager",
