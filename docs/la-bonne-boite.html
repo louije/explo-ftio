@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Bonne Boîte — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>La Bonne Boîte</h1>
+  <div class="sub">Trouver les entreprises qui ont le plus de chances de recruter dans les 6 prochains mois — pour cibler ses candidatures spontanées, même là où aucune offre n'est publiée.</div>
+  <div class="sub-tech">La Bonne Boîte v2.27.3 — 3 endpoints · potentiel d'embauche</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/labonneboite/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('vs')">Offres vs entreprises</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Un moteur de ciblage, pas un catalogue d'offres.</strong> On recherche par métier + lieu, et l'API classe les <em>entreprises</em> selon un score de potentiel d'embauche calculé à partir de millions d'embauches passées. Aucune offre n'est nécessaire — l'idée est la candidature spontanée.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Réponse de recherche <span class="dto">SearchResponse</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Enveloppe : le nombre de résultats, le rappel des paramètres, et la liste des entreprises.
+      <div class="fi-tech"><code>hits</code> — nombre de résultats · <code>params</code> · <code>resolved_params</code> — métier &amp; lieu résolus <span class="at">@ JobItem · LocationItem</span> · <code>items</code></div>
+    </div>
+
+    <div class="n l1-b stack" id="m-item">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Entreprise <span class="dto">SearchResponseItem</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Une entreprise ciblée, avec son identité, sa taille, son secteur et sa localisation.
+          <div class="fi-tech"><code>siret</code> · <code>company_name</code> · <code>office_name</code> — nom d'agence/boutique · <code>headcount_min</code> · <code>headcount_max</code> — fourchette d'effectif
+            <br><code>naf</code> · <code>naf_label</code> — secteur · <code>rome</code> — métier rattaché</div>
+        </div>
+
+        <div class="n l1-p" id="m-potentiel">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Potentiel d'embauche <span class="dto">hiring_potential</span></div>
+            <div class="card">le cœur de l'API</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Le score qui justifie tout le reste : une valeur transformée de <strong>0 à 100</strong> estimant la probabilité que l'entreprise recrute, plus un drapeau « fort potentiel ».
+            <div class="fi-tech"><code>hiring_potential</code> — entier 0–100 · <code>is_high_potential</code> — booléen</div>
+          </div></div>
+        </div>
+
+        <div class="n l3" id="m-localisation">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Localisation</div>
+            <div class="card">6 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Où se trouve l'entreprise — la ville (avec son code INSEE), le département, la région et les coordonnées.
+            <div class="fi-tech"><code>city</code> · <code>citycode</code> — code INSEE · <code>postcode</code> · <code>department</code> · <code>region</code> · <code>location</code> — géo (lat/lon)</div>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l3" id="m-params">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Critères de recherche <span class="dto">SearchParams (query)</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">La recherche se fait sur deux axes — un <strong>métier</strong> et un <strong>lieu</strong> — exprimables de plusieurs façons, du texte libre au code précis.
+      <div class="fi-tech"><strong>Métier</strong> : <code>job</code> <span class="eg">texte libre</span> · <code>rome</code> · <code>domain</code> · <code>granddomain</code> · <code>naf</code>
+        <br><strong>Lieu</strong> : <code>location</code> <span class="eg">texte libre</span> · <code>city</code>/<code>citycode</code>/<code>postcode</code> · <code>department</code>(<code>_number</code>) · <code>region</code>(<code>_number</code>) · <code>latitude</code>+<code>longitude</code>+<code>distance</code> · <code>bbox</code>
+        <br><strong>Tri &amp; pagination</strong> : <code>sort_by</code> · <code>sort_direction</code> · <code>page</code> · <code>page_size</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> — API publique du royaume <code>partenaire</code> (client credentials). Aucun contexte utilisateur ni <code>ft-jeton-usager</code>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: OFFRES VS ENTREPRISES (disambiguation)         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-vs">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Deux façons d'approcher l'emploi.</strong> Pour aider quelqu'un à postuler, deux API se complètent : l'une liste les <em>offres publiées</em>, l'autre les <em>entreprises susceptibles de recruter</em> même sans offre. Les deux se cherchent par métier + lieu — mais ne renvoient pas la même chose.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Candidature spontanée vs réponse à une offre
+    <span class="rs-count">2 approches</span>
+    <span class="rs-tech">royaume partenaire</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : <strong>La Bonne Boîte</strong> répond à « quelles entreprises démarcher ? » ; <strong>Offres d'emploi</strong> répond à « à quelles annonces répondre ? ».
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">La Bonne Boîte</span><span class="ref-count">cette page · entreprises</span></div>
+      <div class="expl">Cible des <strong>entreprises à fort potentiel d'embauche</strong> (score <code>hiring_potential</code> 0–100), calculé sur l'historique des embauches. Renvoie des <em>employeurs</em> à démarcher en candidature spontanée — il n'y a pas forcément d'offre ouverte. On obtient SIRET, effectif, secteur et localisation.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="offres-emploi.html">Offres d'emploi</a></span><span class="ref-count">annonces</span></div>
+      <div class="expl">Le catalogue des <strong>offres réellement publiées</strong> : intitulé, contrat, salaire, compétences, entreprise.<br><strong>La Bonne Boîte vs Offres d'emploi :</strong> La Bonne Boîte prédit <em>qui va recruter</em> (pour postuler spontanément) ; Offres d'emploi liste <em>les postes ouverts</em> (pour répondre à une annonce). Mêmes axes de recherche (ROME + lieu), résultats de nature opposée : un employeur vs une annonce.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Quand utiliser quoi ?</strong> Élargir la prospection au-delà des annonces, ou cibler la candidature spontanée → <strong>La Bonne Boîte</strong>. Répondre à des postes concrets et détaillés (salaire, contrat) → <strong>Offres d'emploi</strong>. Les deux se combinent : repérer les employeurs porteurs, puis vérifier s'ils ont aussi des offres publiées.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Recherche d'entreprises <span class="dt-human">— ciblage par métier et lieu</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Recherche d'entreprises à potentiel d'embauche</span><div class="ep-human">Liste paginée et triable des entreprises ciblées par métier + emplacement</div><span class="ep-path">/recherche</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Nombre d'entreprises</span><div class="ep-human">Compte les entreprises correspondant aux critères (sans la liste)</div><span class="ep-path">/nombreEntreprise</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Potentiel d'embauche par SIRET</span><div class="ep-human">Consulter le potentiel d'une ou plusieurs entreprises connues par leur SIRET</div><span class="ep-path">/potentielEmbauche</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Réponse</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Paramètres / résolution</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Erreurs</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SearchResponse</span> <span class="sc-desc">— résultats de /recherche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SearchResponseItem</span> <span class="sc-desc">— une entreprise + potentiel</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SearchCountResponse</span> <span class="sc-desc">— résultat de /nombreEntreprise</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OfficeScoreResponse</span> <span class="sc-desc">— résultat de /potentielEmbauche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">OfficeScoreResponseItem</span> <span class="sc-desc">— entreprise par SIRET</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">SearchParams</span> <span class="sc-desc">— paramètres de recherche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ResolvedSearchParams</span> <span class="sc-desc">— métier &amp; lieu résolus</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">JobItem · JobType</span> <span class="sc-desc">— métier résolu</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">LocationItem · LocationType</span> <span class="sc-desc">— lieu résolu</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">GeoCoords</span> <span class="sc-desc">— coordonnées</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">CustomValidationError · ForbiddenError · InternalError</span> <span class="sc-desc">— erreurs</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Où postuler en boulangerie autour d'Avignon ?</strong> — Une application cherche les boulangeries-pâtisseries (ROME D1102) à fort potentiel d'embauche dans un rayon de 10 km autour d'Avignon, pour orienter des candidatures spontanées.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// GET /recherche</span>
+<span class="jc">//   ?rome=D1102&citycode=84007&distance=10</span>
+<span class="jc">//   &sort_by=potential&sort_direction=desc</span>
+<span class="jc">// ── client credentials (partenaire) ──</span>
+<span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// ── Réponse 200 ──</span>
+{
+  <span class="jk">"hits"</span>: <span class="jn">47</span>,
+  <span class="jk">"resolved_params"</span>: {
+    <span class="jk">"jobs"</span>: [{ <span class="jk">"type"</span>: <span class="js">"rome"</span>, <span class="jk">"value"</span>: <span class="js">"D1102"</span>, <span class="jk">"display"</span>: <span class="js">"Boulangerie - viennoiserie"</span> }],
+    <span class="jk">"locations"</span>: [{ <span class="jk">"type"</span>: <span class="js">"city"</span>, <span class="jk">"value"</span>: <span class="js">"84007"</span>, <span class="jk">"display"</span>: <span class="js">"Avignon"</span> }]
+  },</div>
+<div data-section="s-item">  <span class="jk">"items"</span>: [
+    {
+      <span class="jk">"siret"</span>: <span class="js">"38012345600025"</span>,
+      <span class="jk">"company_name"</span>: <span class="js">"AUX DELICES DU FOURNIL"</span>,
+      <span class="jk">"headcount_min"</span>: <span class="jn">10</span>,
+      <span class="jk">"headcount_max"</span>: <span class="jn">19</span>,
+      <span class="jk">"naf"</span>: <span class="js">"1071C"</span>,
+      <span class="jk">"naf_label"</span>: <span class="js">"Boulangerie et boulangerie-pâtisserie"</span>,
+      <span class="jk">"rome"</span>: <span class="js">"D1102"</span>,
+      <span class="jk">"city"</span>: <span class="js">"Avignon"</span>,
+      <span class="jk">"citycode"</span>: <span class="js">"84007"</span>,
+      <span class="jk">"postcode"</span>: <span class="js">"84000"</span>,
+      <span class="jk">"hiring_potential"</span>: <span class="jn">87</span>,
+      <span class="jk">"is_high_potential"</span>: <span class="jb">true</span>
+    },
+    {
+      <span class="jk">"siret"</span>: <span class="js">"41098765400013"</span>,
+      <span class="jk">"company_name"</span>: <span class="js">"LE PETRIN PROVENCAL"</span>,
+      <span class="jk">"headcount_min"</span>: <span class="jn">3</span>,
+      <span class="jk">"headcount_max"</span>: <span class="jn">5</span>,
+      <span class="jk">"naf_label"</span>: <span class="js">"Boulangerie et boulangerie-pâtisserie"</span>,
+      <span class="jk">"city"</span>: <span class="js">"Le Pontet"</span>,
+      <span class="jk">"hiring_potential"</span>: <span class="jn">62</span>,
+      <span class="jk">"is_high_potential"</span>: <span class="jb">false</span>
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-requete">
+  <div class="ex-title"><span class="ex-ico">🔍</span> La requête, résolue</div>
+  <div class="ex-card">
+    <h4>Boulangerie autour d'Avignon</h4>
+    <p>L'API résout les paramètres : le métier ROME <code>D1102</code> et la ville (code INSEE <code>84007</code>) sont renvoyés dans <code>resolved_params</code> — pratique pour confirmer ce qui a été compris.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>47 entreprises</strong> correspondent dans un rayon de 10 km</div>
+      <div class="ex-item"><strong>Tri</strong> → par potentiel décroissant</div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-item">
+  <div class="ex-title"><span class="ex-ico">🏢</span> Les entreprises ciblées</div>
+  <div class="ex-card">
+    <h4>Classées par potentiel d'embauche</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Aux Délices du Fournil</strong> (10–19 sal.) → <span class="ex-tag tag-prio">potentiel 87</span> · fort potentiel</div>
+      <div class="ex-item"><strong>Le Pétrin Provençal</strong> (3–5 sal.) → <span class="ex-tag tag-faible">potentiel 62</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Aucune offre n'est listée ici — ce sont des <strong>employeurs à démarcher</strong>. Le SIRET permet ensuite de vérifier, via <a href="offres-emploi.html">Offres d'emploi</a>, s'ils ont aussi des postes publiés.</p>
+    <div class="ex-agent">SIRET, effectifs et scores <em>illustratifs</em>.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.1.0 — La Bonne Boîte v2.27.3 · api.francetravail.io · 3 endpoints
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

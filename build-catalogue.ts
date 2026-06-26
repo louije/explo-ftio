@@ -296,6 +296,12 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Dynamique de l'emploi (DYN_1)",
     "Famille Statistiques",
   ],
+  "la-bonne-boite": [
+    "Entreprises à fort potentiel d'embauche",
+    "Recherche métier + lieu",
+    "Candidature spontanée",
+    "Offres vs entreprises",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",

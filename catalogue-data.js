@@ -1098,8 +1098,13 @@ const CATALOGUE = {
         "server__routes__search__schemas__GeoResponse"
       ],
       "pageId": 360,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Entreprises à fort potentiel d'embauche",
+        "Recherche métier + lieu",
+        "Candidature spontanée",
+        "Offres vs entreprises"
+      ],
       "starred": false,
       "isNew": true
     },
