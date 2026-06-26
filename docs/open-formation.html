@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Formation — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Open Formation</h1>
+  <div class="sub">Pour une formation donnée, consulter ses rendez-vous d'information et ses plages de candidature — l'agenda d'entrée en formation, à destination des organismes de formation et des financeurs.</div>
+  <div class="sub-tech">API Open Formation v1.0 — 3 endpoints · 5 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/openformation/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Pas le catalogue de formations — son agenda d'entrée.</strong> L'API ne décrit pas le contenu d'une formation (ça, c'est le catalogue InterCarif), mais deux choses concrètes pour y entrer : les <em>rendez-vous d'information</em> et les <em>plages de candidature</em>. Une formation est désignée par son triplet InterCarif.
+</div>
+
+<div class="n l3" id="m-cle">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Clé InterCarif <span class="dto">numeroSession · numeroAction · numeroFormation</span></div>
+    <div class="card">3 identifiants</div>
+  </div>
+  <div class="nb"><div class="fi">
+    Une formation se référence par trois numéros InterCarif (le standard national des organismes Carif-Oref). Ils paramètrent les endpoints de liste.
+    <div class="fi-tech"><code>numeroSession</code> · <code>numeroAction</code> · <code>numeroFormation</code></div>
+  </div></div>
+</div>
+
+<div class="n l1-b stack" id="m-rdv">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Rendez-vous d'information <span class="dto">RendezVous · RendezVousDetail</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une séance d'information sur la formation — collective ou individuelle, avec ou sans positionnement. Avec ses places, son lieu et ses pièces à fournir.
+      <div class="fi-tech"><code>idRdv</code> · <code>typeRdv</code> <span class="ev">ICO</span> <span class="ev">ICOP</span> <span class="ev">RDVI</span> <span class="ev">RDVIP</span> <span class="ev">RPI</span> · <code>positionnement</code> (booléen)
+        <br><code>dateDebutRdv</code> · <code>dateFinRdv</code> · <code>dureeMinuteRdv</code> · <code>etat</code> <span class="ev">A</span> actif · <span class="ev">H</span> historisé · <code>echue</code>
+        <br><code>nbTotalPlaces</code> · <code>nbPlacesDisponible</code> · <code>placesReservees</code>
+        <br><code>libellePieceJustificative1..3</code> · <code>codeOrigine</code> / <code>libelleOrigine</code></div>
+    </div>
+
+    <div class="n l2t" id="m-adresse">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Lieu <span class="dto">Adresse</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        L'adresse du rendez-vous, avec géolocalisation et code commune.
+        <div class="fi-tech"><code>adresseLigne1..4</code> · <code>codePostal</code> · <code>ville</code> · <code>codeINSEEcommune</code> · <code>codeDepartement</code> · <code>codeRegion</code> · <code>latitude</code> · <code>longitude</code></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="n l1-n stack" id="m-plage">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Plage de candidature <span class="dto">PlagePreInscription</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">La fenêtre pendant laquelle on peut candidater à la session, avec son quota de places.
+      <div class="fi-tech"><code>idPlagePreInscription</code> · <code>idSession</code> · <code>dateDebut</code> · <code>dateFin</code> · <code>placesTotal</code> · <code>placesDisponibles</code> · <code>commentaire</code> · <code>origine</code> <span class="at">@ Origine</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> — API publique du royaume <code>partenaire</code> (client credentials). Aucun contexte utilisateur ni <code>ft-jeton-usager</code> : elle s'adresse aux organismes de formation et aux financeurs.
+</div>
+
+<div class="note">
+  À ne pas confondre avec l'API <a href="formations-professionnelles.html">Formations professionnelles</a> (PE Connect) qui expose les formations <em>déclarées par un individu</em> dans son profil. Open Formation, elle, expose la <strong>logistique d'entrée</strong> (RDV, candidature) des formations du catalogue.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Les vocabulaires de l'API tiennent en trois enums : le <strong>type de rendez-vous</strong>, l'<strong>origine</strong> de la donnée et l'<strong>état</strong>. Les formations elles-mêmes sont identifiées par les numéros InterCarif.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Type de rendez-vous
+    <span class="rs-count">5 types</span>
+    <span class="rs-tech"><code>typeRdv</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Deux axes : collectif ou individuel, et avec ou sans <strong>positionnement</strong> (évaluation du candidat). Le booléen <code>positionnement</code> est vrai pour les variantes ICOP et RDVIP.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Valeurs</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ICO</span> Information collective</li>
+        <li><span class="voc-code">ICOP</span> Information collective avec positionnement</li>
+        <li><span class="voc-code">RDVI</span> Rendez-vous individuel</li>
+        <li><span class="voc-code">RDVIP</span> Rendez-vous individuel avec positionnement</li>
+        <li><span class="voc-code">RPI</span> Réunion de pré-inscription</li>
+      </ul>
+      <div class="voc-tech"><code>typeRdv</code> — les libellés des pièces justificatives à apporter sont dans <code>libellePieceJustificative1..3</code>.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Origine &amp; état
+    <span class="rs-count">2 enums</span>
+    <span class="rs-tech"><code>codeOrigine</code> · <code>etat</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    L'origine indique qui a créé la donnée (RDV ou plage) ; l'état distingue les enregistrements actifs des historisés.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Origine</span><span class="ref-count">8</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">C</span> Carif</li>
+        <li><span class="voc-code">O</span> OFAA</li>
+        <li><span class="voc-code">P</span> France Travail</li>
+        <li><span class="voc-code">R</span> Organisme de formation</li>
+        <li><span class="voc-code">I</span> · <span class="voc-code">A</span> · <span class="voc-code">X</span> · <span class="voc-code">M</span> autres origines</li>
+      </ul>
+      <div class="voc-tech"><code>codeOrigine</code> — le <code>libelleOrigine</code> accompagne toujours le code (8 valeurs au total).</div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">État du rendez-vous</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">A</span> Actif</li>
+        <li><span class="voc-code">H</span> Historisé</li>
+      </ul>
+      <div class="voc-tech"><code>etat</code> · le drapeau <code>echue</code> indique en plus si la formation est passée.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Rendez-vous &amp; candidature <span class="dt-human">— l'agenda d'entrée d'une formation</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les RDV d'une formation</span><div class="ep-human">Les rendez-vous d'information d'une formation, par triplet InterCarif</div><span class="ep-path">/sessions/{numeroSession}/{numeroAction}/{numeroFormation}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Détail d'un RDV</span><div class="ep-human">Le détail complet d'un rendez-vous par son identifiant</div><span class="ep-path">/rendez-vous/{idRdv}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les plages de candidature</span><div class="ep-human">Les fenêtres de candidature d'une session de formation</div><span class="ep-path">/plage-pre-inscription/session/{...}/action/{...}/formation/{...}</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">5 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">RendezVous</span> <span class="sc-desc">— RDV (vue liste)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">RendezVousDetail</span> <span class="sc-desc">— RDV (vue détail)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">PlagePreInscription</span> <span class="sc-desc">— fenêtre de candidature</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Adresse</span> <span class="sc-desc">— lieu du RDV</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Origine</span> <span class="sc-desc">— origine de la donnée</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Les réunions d'info d'une formation</strong> — Un organisme interroge les rendez-vous d'une formation par son triplet InterCarif. La réponse liste une information collective avec positionnement, à venir, avec places et lieu.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-rdv"><span class="jc">// GET /sessions/{numeroSession}</span>
+<span class="jc">//      /{numeroAction}/{numeroFormation}</span>
+<span class="jc">// ── client credentials (partenaire) ──</span>
+<span class="jc">// ── Réponse 200 (tableau) ──</span>
+[
+  {
+    <span class="jk">"idRdv"</span>: <span class="jn">90231</span>,
+    <span class="jk">"typeRdv"</span>: <span class="js">"ICOP"</span>,
+    <span class="jk">"positionnement"</span>: <span class="jb">true</span>,
+    <span class="jk">"dateDebutRdv"</span>: <span class="js">"2026-06-15T09:30:00"</span>,
+    <span class="jk">"dureeMinuteRdv"</span>: <span class="jn">120</span>,
+    <span class="jk">"nbTotalPlaces"</span>: <span class="jn">20</span>,
+    <span class="jk">"nbPlacesDisponible"</span>: <span class="jn">7</span>,
+    <span class="jk">"etat"</span>: <span class="js">"A"</span>,
+    <span class="jk">"echue"</span>: <span class="jb">false</span>,
+    <span class="jk">"libellePieceJustificative1"</span>: <span class="js">"Pièce d'identité"</span>,
+    <span class="jk">"codeOrigine"</span>: <span class="js">"R"</span>,
+    <span class="jk">"libelleOrigine"</span>: <span class="js">"Organisme de formation"</span>,</div>
+<div data-section="s-adresse">    <span class="jk">"adresse"</span>: {
+      <span class="jk">"adresseLigne1"</span>: <span class="js">"Centre de formation Provence"</span>,
+      <span class="jk">"adresseLigne4"</span>: <span class="js">"12 avenue de la Gare"</span>,
+      <span class="jk">"codePostal"</span>: <span class="js">"84000"</span>,
+      <span class="jk">"ville"</span>: <span class="js">"Avignon"</span>,
+      <span class="jk">"codeINSEEcommune"</span>: <span class="js">"84007"</span>,
+      <span class="jk">"latitude"</span>: <span class="js">"43.949"</span>,
+      <span class="jk">"longitude"</span>: <span class="js">"4.806"</span>
+    },
+    <span class="jk">"numeroSession"</span>: <span class="js">"123456"</span>,
+    <span class="jk">"numeroAction"</span>: <span class="js">"7890"</span>,
+    <span class="jk">"numeroFormation"</span>: <span class="js">"246810"</span>
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-rdv">
+  <div class="ex-title"><span class="ex-ico">📅</span> Le rendez-vous d'information</div>
+  <div class="ex-card">
+    <h4>Information collective avec positionnement</h4>
+    <p><span class="ex-tag tag-encours">ICOP</span> Le 15 juin 2026, 2 h. <code>positionnement: true</code> → la séance évalue aussi les candidats.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Places</strong> → 7 disponibles sur 20</div>
+      <div class="ex-item"><strong>État</strong> → <span class="ex-tag tag-actif">A</span> actif · non échu</div>
+      <div class="ex-item"><strong>À apporter</strong> → pièce d'identité</div>
+      <div class="ex-item"><strong>Origine</strong> → R (organisme de formation)</div>
+    </div>
+    <div class="ex-agent">Formation désignée par son triplet InterCarif 123456 / 7890 / 246810.</div>
+  </div>
+</div>
+
+<div data-section="s-adresse">
+  <div class="ex-title"><span class="ex-ico">📍</span> Le lieu</div>
+  <div class="ex-card">
+    <h4>Centre de formation Provence — Avignon</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Adresse</strong> → 12 avenue de la Gare, 84000 Avignon</div>
+      <div class="ex-item"><strong>Commune</strong> → INSEE 84007 · géolocalisé</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Pour les fenêtres de candidature, on appelle <code>/plage-pre-inscription/…</code>. Identifiants et valeurs <em>illustratifs</em>.</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — API Open Formation v1.0 · api.francetravail.io · 3 endpoints · 5 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -317,6 +317,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Référentiel Domaine / Famille / Activité",
     "Attributs de contexte",
   ],
+  "open-formation": [
+    "Rendez-vous d'information (ICO/RDVI)",
+    "Plages de candidature",
+    "Formation par triplet InterCarif",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",

@@ -3060,8 +3060,12 @@ const CATALOGUE = {
         "Origine"
       ],
       "pageId": 106,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Rendez-vous d'information (ICO/RDVI)",
+        "Plages de candidature",
+        "Formation par triplet InterCarif"
+      ],
       "starred": false,
       "isNew": true
     },
