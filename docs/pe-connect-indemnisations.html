@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PE Connect — Indemnisations — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>PE Connect — Indemnisations</h1>
+  <div class="sub">Savoir, en deux booléens, si un individu perçoit une allocation chômage ou des minima sociaux — sans détailler les montants. Typiquement pour ouvrir des aides liées au type de ressources.</div>
+  <div class="sub-tech">API PE Connect - Indemnisations v1.0.0 — 1 endpoint · 1 schéma</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-indemnisations/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Une réponse minimale et volontairement non détaillée.</strong> L'API ne dit pas <em>combien</em> ni <em>quelle</em> allocation précise : juste deux drapeaux oui/non. C'est une réponse pensée pour la confidentialité — assez pour déclencher une aide, pas assez pour profiler les ressources.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Indemnisation <span class="dto">Indemnisation</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-chomage">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Assurance chômage <span class="dto">beneficiaireAssuranceChomage</span></div>
+        <div class="card">booléen</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Vrai si l'individu perçoit une allocation de l'assurance chômage — l'<span class="ev">ARE</span> (retour à l'emploi) ou l'<span class="ev">ASP</span> (sécurisation professionnelle).
+        <div class="fi-tech"><code>beneficiaireAssuranceChomage</code> — boolean</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-solidarite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Prestations de solidarité <span class="dto">beneficiairePrestationSolidarite</span></div>
+        <div class="card">booléen</div>
+      </div>
+      <div class="nb"><div class="fi">
+        Vrai si l'individu bénéficie d'un ou plusieurs minima sociaux — <span class="ev">AAH</span>, <span class="ev">ASS</span>, <span class="ev">RSA</span> ou <span class="ev">AER</span>.
+        <div class="fi-tech"><code>beneficiairePrestationSolidarite</code> — boolean</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume PE Connect (OAuth utilisateur). L'individu se connecte avec son compte France Travail et autorise le scope <code>authentification_individu</code>. L'application accède aux seules données de l'usager connecté.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Les deux booléens regroupent chacun plusieurs dispositifs. L'API ne distingue pas lequel : elle indique seulement la <em>catégorie</em>. Voici ce que chaque drapeau recouvre.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Dispositifs couverts
+    <span class="rs-count">2 catégories</span>
+    <span class="rs-tech">schéma <code>Indemnisation</code></span>
+  </h2>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Assurance chômage</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ARE</span> Allocation d'aide au retour à l'emploi</li>
+        <li><span class="voc-code">ASP</span> Allocation de sécurisation professionnelle</li>
+      </ul>
+      <div class="voc-tech"><code>beneficiaireAssuranceChomage</code> = <code>true</code> si l'un de ces dispositifs s'applique.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Minima sociaux</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">AAH</span> Allocation aux adultes handicapés</li>
+        <li><span class="voc-code">ASS</span> Allocation de solidarité spécifique</li>
+        <li><span class="voc-code">RSA</span> Revenu de solidarité active</li>
+        <li><span class="voc-code">AER</span> Allocation équivalent retraite</li>
+      </ul>
+      <div class="voc-tech"><code>beneficiairePrestationSolidarite</code> = <code>true</code> si l'un de ces dispositifs s'applique.</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Indemnisation <span class="dt-human">— statut de ressources de l'individu connecté</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les informations d'indemnisation d'un individu</span><div class="ep-human">Deux booléens : bénéficiaire de l'assurance chômage et/ou de minima sociaux</div><span class="ep-path">/indemnisation</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Schéma <span class="dt-human">— type de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Indemnisation</span> <span class="sc-desc">— deux booléens (assurance chômage · solidarité)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Deux situations, deux réponses</strong> — Une application d'aides vérifie le type de ressources de l'usager connecté. Selon le cas, elle débloque une aide réservée aux allocataires de minima sociaux.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-are"><span class="jc">// GET /indemnisation</span>
+<span class="jc">// ── OAuth PE Connect · Bearer … ──</span>
+<span class="jc">// Cas 1 : demandeur d'emploi indemnisé</span>
+{
+  <span class="jk">"beneficiaireAssuranceChomage"</span>: <span class="jb">true</span>,
+  <span class="jk">"beneficiairePrestationSolidarite"</span>: <span class="jb">false</span>
+}</div>
+<div data-section="s-rsa"><span class="jc">// GET /indemnisation</span>
+<span class="jc">// Cas 2 : allocataire du RSA</span>
+{
+  <span class="jk">"beneficiaireAssuranceChomage"</span>: <span class="jb">false</span>,
+  <span class="jk">"beneficiairePrestationSolidarite"</span>: <span class="jb">true</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-are">
+  <div class="ex-title"><span class="ex-ico">💼</span> Cas 1 — indemnisé par l'assurance chômage</div>
+  <div class="ex-card">
+    <h4>Demandeur d'emploi percevant l'ARE</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Assurance chômage</strong> → <span class="ex-tag tag-actif">oui</span></div>
+      <div class="ex-item"><strong>Minima sociaux</strong> → <span class="ex-tag tag-inactif">non</span></div>
+    </div>
+    <div class="ex-agent">L'API ne précise pas s'il s'agit d'ARE ou d'ASP — seulement la catégorie.</div>
+  </div>
+</div>
+
+<div data-section="s-rsa">
+  <div class="ex-title"><span class="ex-ico">🤝</span> Cas 2 — allocataire de minima sociaux</div>
+  <div class="ex-card">
+    <h4>Bénéficiaire du RSA</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Assurance chômage</strong> → <span class="ex-tag tag-inactif">non</span></div>
+      <div class="ex-item"><strong>Minima sociaux</strong> → <span class="ex-tag tag-actif">oui</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Suffisant pour débloquer une aide réservée aux minima sociaux, sans exposer le montant ni le dispositif exact.</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 — API PE Connect - Indemnisations v1.0.0 · api.francetravail.io · 1 endpoint · 1 schéma
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

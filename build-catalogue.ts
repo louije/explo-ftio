@@ -239,6 +239,10 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Centres d'intérêt",
     "Profil de compétences",
   ],
+  "pe-connect-indemnisations": [
+    "Assurance chômage (ARE/ASP)",
+    "Minima sociaux (AAH/ASS/RSA/AER)",
+  ],
   "metiers-recherches": [
     "Métier ROME et appellation",
     "Contrats et temps de travail",

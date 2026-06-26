@@ -799,8 +799,11 @@ const CATALOGUE = {
         "Indemnisation"
       ],
       "pageId": 117,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Assurance chômage (ARE/ASP)",
+        "Minima sociaux (AAH/ASS/RSA/AER)"
+      ],
       "starred": false,
       "isNew": true
     },
