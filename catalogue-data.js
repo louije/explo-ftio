@@ -2666,8 +2666,12 @@ const CATALOGUE = {
         "Usager"
       ],
       "pageId": 617,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Activités à traiter d'une structure",
+        "Référentiel Domaine / Famille / Activité",
+        "Attributs de contexte"
+      ],
       "starred": false,
       "isNew": true
     },

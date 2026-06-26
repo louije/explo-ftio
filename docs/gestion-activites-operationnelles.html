@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion activités opérationnelles — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Gestion activités opérationnelles</h1>
+  <div class="sub">La liste des tâches à traiter par une structure partenaire — les activités opérationnelles qui font avancer un processus métier après une rupture ou un changement d'acteur entre deux étapes.</div>
+  <div class="sub-tech">Gestion activités opérationnelles v2.1 — 7 endpoints · 8 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/activites-operationnelles/v2</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Une « to-do list » de structure.</strong> L'API liste les activités opérationnelles à traiter pour la structure identifiée — chaque activité étant une tâche datée, rattachée à un usager, avec des attributs de contexte. La pagination se fait par <em>curseur</em>.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Page d'activités <span class="dto">ActivitePage</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Réponse paginée par curseur : la portion d'activités plus de quoi demander la suite.
+      <div class="fi-tech"><code>activites[]</code> · <code>size</code> · <code>hasMore</code> · <code>cursor</code> — à repasser pour lire la suite</div>
+    </div>
+
+    <div class="n l1-b stack" id="m-activite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Activité <span class="dto">Activite</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Une tâche à traiter. Identifiée, typée par un code, rattachée à un usager, avec ses échéances.
+          <div class="fi-tech"><code>identifiantActivite</code> · <code>codeActivite</code> <span class="eg">ex. ACT382</span> — type d'activité (voir Référentiels)
+            <br><code>dateCreation</code> · <code>dateEcheance</code> · <code>dateEcheanceProche</code> — alerte d'échéance imminente</div>
+        </div>
+
+        <div class="n l1-p" id="m-usager">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Usager concerné <span class="dto">Usager</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            L'usager au cœur de la tâche.
+            <div class="fi-tech"><code>identifiant</code> · <code>typeIdentifiant</code> <span class="eg">ex. numéro France Travail</span></div>
+          </div></div>
+        </div>
+
+        <div class="n l2c stack" id="m-attributs">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Attributs spécifiques <span class="dto">AttributSpecifique</span></div>
+            <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            Des paires nom/valeur qui contextualisent l'activité — et la relient aux autres processus (orientation, sanctions).
+            <div class="fi-tech"><code>nom</code> — <span class="ev">typeParcours</span> · <span class="ev">typeOrganismeAccompagnateur</span> · <span class="ev">idConsequenceSanction</span> · <span class="ev">motif</span> · <span class="ev">codeInseeCommune</span> · <code>valeur</code></div>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume <code>/agent</code> (client credentials). Les headers d'identification agent <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code> sont obligatoires. La recherche est <strong>scopée à la structure</strong> identifiée, avec un filtre optionnel par <code>numeroFranceTravail</code> de l'usager.
+</div>
+
+<div class="note">
+  Les attributs spécifiques font le pont avec d'autres API du parcours : <code>typeParcours</code> / <code>typeOrganismeAccompagnateur</code> renvoient à l'<a href="orientation-usager.html">orientation</a>, <code>idConsequenceSanction</code> aux <a href="gestion-sanctions-rsa.html">sanctions</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Les types d'activité sont organisés sur trois niveaux — <strong>Domaine → Famille → Activité</strong> — consultables via les endpoints <code>/referentiel-activites</code>. Les libellés des codes <code>ACTxxx</code> se résolvent dans ce référentiel.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Le référentiel des activités
+    <span class="rs-count">3 niveaux</span>
+    <span class="rs-tech">Domaine → Famille → Activité</span>
+  </h2>
+  <div class="ref-section-intro">
+    Une hiérarchie classe les types d'activité : un <strong>domaine</strong> regroupe des <strong>familles</strong>, qui regroupent des <strong>activités</strong>. On peut filtrer la recherche à chacun de ces niveaux.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Domaine</span><span class="ref-count"><code>codeDomaine</code></span></div>
+      <ul class="ref-list voc-list"><li>3 lettres majuscules — regroupe des familles</li></ul>
+      <div class="voc-tech"><span class="at">@ DomaineReferentiel</span> — <code>code</code> · <code>libelle</code> · <code>familles[]</code></div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Famille</span><span class="ref-count"><code>codeFamille</code></span></div>
+      <ul class="ref-list voc-list"><li>Regroupe des activités d'un domaine</li></ul>
+      <div class="voc-tech"><span class="at">@ FamilleReferentiel</span> — <code>code</code> · <code>libelle</code> · <code>codeDomaine</code> · <code>activites[]</code></div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Activité</span><span class="ref-count"><code>codeActivite</code></span></div>
+      <ul class="ref-list voc-list"><li>Le type de tâche précis</li></ul>
+      <div class="voc-tech"><span class="at">@ ActiviteReferentiel</span> — <code>code</code> · <code>libelle</code> · <code>codeFamille</code> · <code>codeDomaine</code></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Codes d'activité &amp; attributs
+    <span class="rs-count">2 enums</span>
+    <span class="rs-tech"><code>codeActivite</code> · <code>AttributSpecifique.nom</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les valeurs déclarées dans le schéma. Les libellés des codes d'activité ne sont pas dans l'OpenAPI — ils se lisent dans le référentiel.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Codes d'activité</span><span class="ref-count">7</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ACT366</span></li>
+        <li><span class="voc-code">ACT367</span></li>
+        <li><span class="voc-code">ACT369</span></li>
+        <li><span class="voc-code">ACT370</span></li>
+        <li><span class="voc-code">ACT380</span></li>
+        <li><span class="voc-code">ACT382</span></li>
+        <li><span class="voc-code">ACT395</span></li>
+      </ul>
+      <div class="voc-tech"><code>codeActivite</code> — libellés via <code>GET /referentiel-activites/activites/{codeActivite}</code>.</div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Noms d'attribut spécifique</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">typeParcours</span> Parcours d'orientation lié</li>
+        <li><span class="voc-code">typeOrganismeAccompagnateur</span> Organisme accompagnateur</li>
+        <li><span class="voc-code">idConsequenceSanction</span> Conséquence de sanction liée</li>
+        <li><span class="voc-code">motif</span> Motif de l'activité</li>
+        <li><span class="voc-code">codeInseeCommune</span> Commune (code INSEE)</li>
+      </ul>
+      <div class="voc-tech"><code>AttributSpecifique.nom</code> — chaque activité porte les attributs pertinents à son type.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Activités <span class="dt-human">— les tâches de la structure</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupérer la liste des activités d'une structure</span><div class="ep-human">Recherche paginée (curseur), filtrable par domaine, famille, code d'activité ou usager</div><span class="ep-path">/activites/chercher</span></div></div>
+  </div>
+  <div class="note" style="margin-top:10px;">
+    <strong>Filtres</strong>
+    <div class="chips"><code>codeDomaine</code><code>codeFamille</code><code>codeActivite</code><code>numeroFranceTravail</code><code>cursor</code></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Référentiel des activités <span class="dt-human">— l'arbre Domaine → Famille → Activité</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel complet</span><div class="ep-human">L'entièreté des activités du référentiel</div><span class="ep-path">/referentiel-activites</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Une activité</span><div class="ep-human">Code et libellé d'une activité</div><span class="ep-path">/referentiel-activites/activites/{codeActivite}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Un domaine (+ détail)</span><div class="ep-human">Code et libellé, ou détail complet d'un domaine</div><span class="ep-path">/referentiel-activites/domaines/{codeDomaine} · /detail</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Une famille (+ détail)</span><div class="ep-human">Code et libellé, ou détail complet d'une famille</div><span class="ep-path">/referentiel-activites/familles/{codeFamille} · /detail</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">8 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ActivitePage</span> <span class="sc-desc">— page d'activités (curseur)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Activite</span> <span class="sc-desc">— une tâche</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Usager</span> <span class="sc-desc">— usager concerné</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AttributSpecifique</span> <span class="sc-desc">— attribut de contexte</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DomaineReferentiel</span> <span class="sc-desc">— domaine</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">FamilleReferentiel</span> <span class="sc-desc">— famille</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ActiviteReferentiel</span> <span class="sc-desc">— activité (référentiel)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Erreur</span> <span class="sc-desc">— erreur</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Les tâches en attente d'une mission locale</strong> — Un agent interroge les activités opérationnelles de sa structure. La réponse, paginée par curseur, liste les tâches à traiter avec leur échéance et leur contexte.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-page"><span class="jc">// GET /activites/chercher</span>
+<span class="jc">// Headers : pa-nom-agent · pa-prenom-agent · pa-identifiant-agent</span>
+<span class="jc">// ── Réponse 200 ──</span>
+{
+  <span class="jk">"size"</span>: <span class="jn">2</span>,
+  <span class="jk">"hasMore"</span>: <span class="jb">true</span>,
+  <span class="jk">"cursor"</span>: <span class="js">"eyJvZmZzZXQiOjJ9"</span>,</div>
+<div data-section="s-activite">  <span class="jk">"activites"</span>: [
+    {
+      <span class="jk">"identifiantActivite"</span>: <span class="js">"a1b2c3d4"</span>,
+      <span class="jk">"codeActivite"</span>: <span class="js">"ACT382"</span>,
+      <span class="jk">"usager"</span>: { <span class="jk">"identifiant"</span>: <span class="js">"1234567A"</span>, <span class="jk">"typeIdentifiant"</span>: <span class="js">"NUMERO_FRANCE_TRAVAIL"</span> },
+      <span class="jk">"dateCreation"</span>: <span class="js">"2026-05-04"</span>,
+      <span class="jk">"dateEcheance"</span>: <span class="js">"2026-05-20"</span>,
+      <span class="jk">"dateEcheanceProche"</span>: <span class="jb">true</span>,</div>
+<div data-section="s-attributs">      <span class="jk">"attributsSpecifiques"</span>: [
+        { <span class="jk">"nom"</span>: <span class="js">"typeParcours"</span>, <span class="jk">"valeur"</span>: <span class="js">"PSP"</span> },
+        { <span class="jk">"nom"</span>: <span class="js">"typeOrganismeAccompagnateur"</span>, <span class="jk">"valeur"</span>: <span class="js">"ML"</span> },
+        { <span class="jk">"nom"</span>: <span class="js">"codeInseeCommune"</span>, <span class="jk">"valeur"</span>: <span class="js">"84007"</span> }
+      ]
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-page">
+  <div class="ex-title"><span class="ex-ico">📥</span> La file d'activités</div>
+  <div class="ex-card">
+    <h4>2 tâches, et il y en a d'autres</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>hasMore</strong> → true · <strong>cursor</strong> → à repasser pour la suite</div>
+    </div>
+    <div class="ex-agent">Pagination par curseur, pas par numéro de page.</div>
+  </div>
+</div>
+
+<div data-section="s-activite">
+  <div class="ex-title"><span class="ex-ico">⏰</span> Une tâche à échéance proche</div>
+  <div class="ex-card">
+    <h4>Activité ACT382 — usager 1234567A</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Échéance</strong> → 20 mai 2026 · <span class="ex-tag tag-besoin">échéance proche</span></div>
+      <div class="ex-item"><strong>Type</strong> → ACT382 (libellé via le référentiel)</div>
+    </div>
+    <div class="ex-agent">Codes et identifiants <em>illustratifs</em>.</div>
+  </div>
+</div>
+
+<div data-section="s-attributs">
+  <div class="ex-title"><span class="ex-ico">🔗</span> Le contexte, via les attributs</div>
+  <div class="ex-card">
+    <h4>Ce qui relie la tâche au parcours</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>typeParcours</strong> → PSP (socio-professionnel)</div>
+      <div class="ex-item"><strong>typeOrganismeAccompagnateur</strong> → ML (mission locale)</div>
+      <div class="ex-item"><strong>codeInseeCommune</strong> → 84007</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Ces attributs raccrochent l'activité à l'<a href="orientation-usager.html">orientation</a> de l'usager — même vocabulaire de parcours et d'organisme.</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 — Gestion activités opérationnelles v2.1 · api.francetravail.io · 7 endpoints · 8 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

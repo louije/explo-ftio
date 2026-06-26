@@ -312,6 +312,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Lire, créer, modifier",
     "Référentiel des démarches",
   ],
+  "gestion-activites-operationnelles": [
+    "Activités à traiter d'une structure",
+    "Référentiel Domaine / Famille / Activité",
+    "Attributs de contexte",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",
