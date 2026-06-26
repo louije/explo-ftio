@@ -19,7 +19,8 @@
 
 <div class="controls">
   <div class="tab-group">
-    <button class="tb active" onclick="setView('cards')">Catalogue</button>
+    <button class="tb active" onclick="setView('familles')">Familles d'API</button>
+    <button class="tb" onclick="setView('cards')">Catalogue</button>
     <button class="tb" onclick="setView('cross')">Concepts partagés</button>
   </div>
 </div>
@@ -30,10 +31,12 @@
     <div class="cat-search-meta" id="search-meta">30 APIs</div>
   </div>
 
-  <div class="cat-filters" id="filters"></div>
+  <div class="cat-filters" id="filters" style="display:none;"></div>
 </div>
 
-<div class="view active" id="v-cards">
+<div class="view active" id="v-familles"></div>
+
+<div class="view" id="v-cards">
   <div class="cat-grid" id="api-grid"></div>
 </div>
 

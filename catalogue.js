@@ -3,7 +3,7 @@
    Reads the CATALOGUE global from catalogue-data.js.
 */
 
-var state = { query: "", group: "all", auths: new Set(), view: "cards" };
+var state = { query: "", group: "all", auths: new Set(), view: "familles" };
 
 var AUTH_LABELS = { peconnect: "PE Connect", agent: "Agent", public: "Public" };
 
@@ -293,6 +293,7 @@ function bindSearch() {
     timer = setTimeout(function() {
       state.query = input.value;
       applyFilters();
+      applyFamillesFilter();
       updateHash();
     }, 120);
   });
@@ -354,17 +355,69 @@ function bindCrossLinks() {
   });
 }
 
+// ── Familles d'API ──
+
+function renderFamilles() {
+  var container = document.getElementById("v-familles");
+  var html = '<div class="fam-grid">';
+  CATALOGUE.groups.forEach(function(g) {
+    var apis = CATALOGUE.apis.filter(function(a) { return a.group === g.id; });
+    apis.sort(function(a, b) { if (a.starred !== b.starred) return a.starred ? -1 : 1; return a.title.localeCompare(b.title, "fr"); });
+    var links = "";
+    apis.forEach(function(a) {
+      links += '<a class="fam-api" href="docs/' + a.slug + '.html" data-slug="' + a.slug + '">' +
+        (a.starred ? '<span class="fam-star">\u2605</span> ' : "") +
+        '<span class="fam-api-name">' + escapeHtml(a.title) + '</span>' +
+        ' <span class="fam-ver">v' + escapeHtml(a.version) + '</span>' +
+        (a.isNew ? ' <span class="fam-new">new</span>' : "") +
+      '</a>';
+    });
+    html += '<div class="fam-card"><div class="fam-card-body">' +
+      '<div class="fam-left"><div class="fam-title">' + escapeHtml(g.label) + '<span class="fam-count">' + apis.length + '</span></div>' +
+      '<div class="fam-desc">' + escapeHtml(g.description) + '</div></div>' +
+      '<div class="fam-right">' + links + '</div>' +
+    '</div></div>';
+  });
+  html += "</div>";
+  container.innerHTML = html;
+}
+
+function applyFamillesFilter() {
+  var tokens = state.query ? normalize(state.query).split(" ").filter(Boolean) : [];
+  document.querySelectorAll("#v-familles mark").forEach(function(m) {
+    var par = m.parentNode; par.replaceChild(document.createTextNode(m.textContent), m); par.normalize();
+  });
+  document.querySelectorAll("#v-familles .fam-card").forEach(function(card) {
+    var anyVisible = false;
+    card.querySelectorAll(".fam-api").forEach(function(btn) {
+      var api = CATALOGUE.apis.find(function(a) { return a.slug === btn.getAttribute("data-slug"); });
+      var show = !state.query || (api && matchesSearch(api));
+      btn.hidden = !show;
+      if (show) anyVisible = true;
+    });
+    card.hidden = !anyVisible;
+  });
+  if (tokens.length) {
+    document.querySelectorAll("#v-familles .fam-api:not([hidden]) .fam-api-name").forEach(function(el) {
+      highlightInElement(el, tokens);
+    });
+  }
+}
+
 // ── View switching ──
 
 function setView(id) {
   document.querySelectorAll(".view").forEach(function(v) { v.classList.remove("active"); });
   document.getElementById("v-" + id).classList.add("active");
-  document.querySelectorAll(".tab-group .tb").forEach(function(b, i) {
-    b.classList.toggle("active", (id === "cards" && i === 0) || (id === "cross" && i === 1));
+  document.querySelectorAll(".tab-group .tb").forEach(function(b) {
+    var m = (b.getAttribute("onclick") || "").match(/setView\(['"]([\w-]+)['"]\)/);
+    b.classList.toggle("active", !!(m && m[1] === id));
   });
   // Hide search + filters when on cross view
   var controls = document.getElementById("cards-controls");
-  if (controls) controls.style.display = (id === "cards") ? "" : "none";
+  if (controls) controls.style.display = (id === "cross") ? "none" : "";
+  var filters = document.getElementById("filters");
+  if (filters) filters.style.display = (id === "cards") ? "" : "none";
   state.view = id;
   updateHash();
 }
@@ -373,7 +426,7 @@ function setView(id) {
 
 function updateHash() {
   var parts = [];
-  if (state.view !== "cards") parts.push("view=" + state.view);
+  if (state.view !== "familles") parts.push("view=" + state.view);
   if (state.group !== "all") parts.push("group=" + state.group);
   if (state.auths.size) parts.push("auth=" + Array.from(state.auths).join(","));
   if (state.query) parts.push("q=" + encodeURIComponent(state.query));
@@ -392,6 +445,7 @@ function resolveHash() {
   });
 
   if (params.view) state.view = params.view;
+  else if (params.group || params.auth || params.q) state.view = "cards";
   if (params.group) state.group = params.group;
   if (params.auth) {
     params.auth.split(",").forEach(function(a) { state.auths.add(a); });
@@ -402,7 +456,7 @@ function resolveHash() {
   }
 
   // Apply view
-  if (state.view !== "cards") setView(state.view);
+  setView(state.view);
 
   // Apply group filter UI
   document.querySelectorAll(".cat-filter:not(.cat-filter-auth)").forEach(function(b) {
@@ -415,6 +469,7 @@ function resolveHash() {
   });
 
   applyFilters();
+  applyFamillesFilter();
 }
 
 // ── Stats ──
@@ -437,6 +492,7 @@ function init() {
   renderFilters();
   renderCards();
   renderCross();
+  renderFamilles();
   bindSearch();
   bindFilters();
   bindCrossLinks();
@@ -445,6 +501,6 @@ function init() {
 
 document.addEventListener("DOMContentLoaded", init);
 window.addEventListener("hashchange", function() {
-  state = { query: "", group: "all", auths: new Set(), view: "cards" };
+  state = { query: "", group: "all", auths: new Set(), view: "familles" };
   resolveHash();
 });

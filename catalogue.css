@@ -372,3 +372,28 @@
     gap: 6px;
   }
 }
+
+/* ── Familles d'API view ── */
+.fam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.fam-card { container-type: inline-size; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.fam-card-body { display: flex; align-items: flex-start; gap: 14px 22px; }
+.fam-left { flex: 0 0 230px; }
+.fam-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+.fam-count { display: inline-block; margin-left: 0.25rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--text-light); background: rgba(0,0,0,.05); padding: 1px 7px; border-radius: 999px; }
+.fam-desc { font-size: 0.84rem; color: var(--text-dim); line-height: 1.5; margin-top: 7px; }
+.fam-right { flex: 1 1 300px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.fam-api { font-family: inherit; font-size: 0.8rem; color: var(--text); background: #f7f6f3; border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; cursor: pointer; transition: background .12s, border-color .12s; display: inline-flex; align-items: center; gap: 6px; text-align: left; text-decoration: none; }
+.fam-api:hover { background: #fff; border-color: var(--text); }
+.fam-api[hidden], .fam-card[hidden] { display: none; }
+.fam-star { color: #d97706; font-size: 0.78rem; line-height: 1; }
+.fam-ver { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--text-light); }
+.fam-api mark { background: #fde68a; color: inherit; border-radius: 2px; padding: 0 1px; }
+.fam-new { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 999px; padding: 0 5px; }
+.cat-card.cat-jump { box-shadow: 0 0 0 2px var(--text); transition: box-shadow .2s; }
+/* 2 columns down to 864px, then a single column */
+@media (max-width: 864px) { .fam-grid { grid-template-columns: 1fr; } }
+/* when a card itself is narrow, stack its buttons under the description */
+@container (max-width: 640px) {
+  .fam-card-body { flex-direction: column; }
+  .fam-left, .fam-right { flex: none; }
+}
