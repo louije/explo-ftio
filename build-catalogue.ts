@@ -58,48 +58,62 @@ const PAGE_IDS: Record<string, number> = {
 };
 
 const GROUPS: Record<string, [string, string]> = {
-  "france-travail-connect":              ["usager-pe", "PE Connect"],
-  "coordonnees":                         ["usager-pe", "PE Connect"],
-  "date-naissance":                      ["usager-pe", "PE Connect"],
-  "statut":                              ["usager-pe", "PE Connect"],
-  "experiences-professionnelles":        ["usager-pe", "PE Connect"],
-  "formations-professionnelles":         ["usager-pe", "PE Connect"],
-  "metiers-recherches":                  ["usager-pe", "PE Connect"],
-  "ajout-competence":                    ["usager-pe", "PE Connect"],
-  "rechercher-usager":                   ["usager-agent", "Dossier usager"],
-  "informations-administratives-usager": ["usager-agent", "Dossier usager"],
-  "statut-usager":                       ["usager-agent", "Dossier usager"],
-  "conclusions-entretiens":              ["usager-agent", "Dossier usager"],
-  "diagnostic-usager":                   ["usager-agent", "Dossier usager"],
-  "metiers-recherches-projets-evolution":["usager-agent", "Dossier usager"],
-  "rendez-vous-partenaires":             ["usager-agent", "Dossier usager"],
-  "orientation-usager":                   ["usager-agent", "Dossier usager"],
-  "orientation-usager-v2":                ["usager-agent", "Dossier usager"],
-  "contrat-engagement":                  ["usager-agent", "Dossier usager"],
-  "experiences-declarees-employeur":     ["usager-pe", "PE Connect"],
-  "competences-professionnelles":        ["usager-pe", "PE Connect"],
-  "pe-connect-indemnisations":           ["usager-pe", "PE Connect"],
-  "declaration-demarche":                ["usager-pe", "PE Connect"],
-  "gestion-sanctions-rsa":               ["partenaire", "Gestion partenaire"],
-  "prestation-partenaire":               ["partenaire", "Gestion partenaire"],
-  "gestion-activites-operationnelles":   ["partenaire", "Gestion partenaire"],
-  "offres-emploi":                       ["offres", "Offres d'emploi"],
-  "jcmo-controle-offre":                 ["offres", "Offres d'emploi"],
-  "synthese-pages-employeurs":           ["offres", "Offres d'emploi"],
-  "la-bonne-boite":                      ["offres", "Offres d'emploi"],
+  // Connexion & identité (PE Connect)
+  "france-travail-connect":              ["identite", "Connexion & identité"],
+  "coordonnees":                         ["identite", "Connexion & identité"],
+  "date-naissance":                      ["identite", "Connexion & identité"],
+  "statut":                              ["identite", "Connexion & identité"],
+  "pe-connect-indemnisations":           ["identite", "Connexion & identité"],
+  // Profil de compétences (PE Connect)
+  "experiences-professionnelles":        ["profil", "Profil de compétences"],
+  "experiences-declarees-employeur":     ["profil", "Profil de compétences"],
+  "competences-professionnelles":        ["profil", "Profil de compétences"],
+  "formations-professionnelles":         ["profil", "Profil de compétences"],
+  "metiers-recherches":                  ["profil", "Profil de compétences"],
+  "ajout-competence":                    ["profil", "Profil de compétences"],
+  // Dossier usager (agent)
+  "rechercher-usager":                   ["dossier", "Dossier usager"],
+  "informations-administratives-usager": ["dossier", "Dossier usager"],
+  "statut-usager":                       ["dossier", "Dossier usager"],
+  "diagnostic-usager":                   ["dossier", "Dossier usager"],
+  "conclusions-entretiens":              ["dossier", "Dossier usager"],
+  "metiers-recherches-projets-evolution":["dossier", "Dossier usager"],
+  // Parcours d'accompagnement (loi plein emploi — multi-réalm)
+  "orientation-usager":                   ["parcours", "Parcours d'accompagnement"],
+  "orientation-usager-v2":                ["parcours", "Parcours d'accompagnement"],
+  "contrat-engagement":                  ["parcours", "Parcours d'accompagnement"],
+  "rendez-vous-partenaires":             ["parcours", "Parcours d'accompagnement"],
+  "declaration-demarche":                ["parcours", "Parcours d'accompagnement"],
+  "gestion-sanctions-rsa":               ["parcours", "Parcours d'accompagnement"],
+  // Offres & recrutement
+  "offres-emploi":                       ["offres", "Offres & recrutement"],
+  "la-bonne-boite":                      ["offres", "Offres & recrutement"],
+  "jcmo-controle-offre":                 ["offres", "Offres & recrutement"],
+  "synthese-pages-employeurs":           ["offres", "Offres & recrutement"],
+  // ROME 4.0
   "rome-4-0-fiches-metiers":             ["rome", "ROME 4.0"],
   "rome-4-0-competences":                ["rome", "ROME 4.0"],
   "rome-4-0-contextes-travail":          ["rome", "ROME 4.0"],
   "rome-4-0-metiers":                    ["rome", "ROME 4.0"],
   "romeo":                               ["rome", "ROME 4.0"],
+  // Statistiques
   "marche-travail":                      ["stats", "Statistiques"],
   "acces-emploi-demandeurs-emploi":      ["stats", "Statistiques"],
   "sortants-formation-acces-emploi":     ["stats", "Statistiques"],
   "informations-territoire":             ["stats", "Statistiques"],
-  "referentiel-agences":                 ["standalone", "Services"],
-  "evenements-france-travail":           ["standalone", "Services"],
-  "cadre-vie-communes":                  ["standalone", "Services"],
-  "open-formation":                      ["standalone", "Services"],
+  // Gestion partenaire
+  "prestation-partenaire":               ["partenaire", "Gestion partenaire"],
+  "gestion-activites-operationnelles":   ["partenaire", "Gestion partenaire"],
+  // Référentiels & services
+  "referentiel-agences":                 ["services", "Référentiels & services"],
+  "cadre-vie-communes":                  ["services", "Référentiels & services"],
+  "open-formation":                      ["services", "Référentiels & services"],
+  "evenements-france-travail":           ["services", "Référentiels & services"],
+};
+
+// Display title overrides (schema titles that are too long/unclear)
+const TITLE_OVERRIDES: Record<string, string> = {
+  "metiers-recherches-projets-evolution": "Métiers recherchés et projets",
 };
 
 // Auth overrides for schemas without securitySchemes
@@ -370,13 +384,15 @@ const STARRED: string[] = [
 ];
 
 const GROUP_DEFS = [
-  { id: "usager-agent", label: "Dossier usager", description: "APIs agent pour accéder au dossier complet d'un demandeur d'emploi" },
-  { id: "usager-pe", label: "PE Connect", description: "APIs usager via France Travail Connect (OAuth individu)" },
-  { id: "offres", label: "Offres d'emploi", description: "Recherche d'offres, contrôle, pages employeur" },
-  { id: "rome", label: "ROME 4.0", description: "Classification des métiers et compétences" },
-  { id: "stats", label: "Statistiques", description: "Indicateurs marché du travail, accès emploi, formation" },
-  { id: "partenaire", label: "Gestion partenaire", description: "Prestations sous-traitées, sanctions RSA" },
-  { id: "standalone", label: "Services", description: "Référentiels et événements" },
+  { id: "dossier", label: "Dossier usager", description: "Accès agent au dossier d'un demandeur d'emploi via jeton usager : identité, statut, diagnostic, entretiens." },
+  { id: "parcours", label: "Parcours d'accompagnement", description: "Le parcours « loi plein emploi » : orientation, contrat d'engagement, rendez-vous, démarches et sanctions." },
+  { id: "identite", label: "Connexion & identité", description: "Connexion France Travail (PE Connect) et données d'identité, de statut et de droits de l'usager connecté." },
+  { id: "profil", label: "Profil de compétences", description: "Le portefeuille de l'usager : expériences, compétences, langues, formations et métiers recherchés (PE Connect)." },
+  { id: "offres", label: "Offres & recrutement", description: "Offres d'emploi, entreprises à fort potentiel d'embauche, contrôle des offres et pages employeur." },
+  { id: "rome", label: "ROME 4.0", description: "Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction." },
+  { id: "stats", label: "Statistiques", description: "Indicateurs du marché du travail, accès à l'emploi, sortants de formation et portrait de territoire." },
+  { id: "partenaire", label: "Gestion partenaire", description: "Outils de gestion pour les structures partenaires : prestations sous-traitées, activités opérationnelles." },
+  { id: "services", label: "Référentiels & services", description: "Référentiels et services transverses : agences, communes, formations, événements emploi." },
 ];
 
 // Version groups — fold several version files into ONE catalogue entry.
@@ -468,7 +484,7 @@ async function main() {
 
     apis.push({
       slug,
-      title: info.title || slug,
+      title: TITLE_OVERRIDES[slug] || info.title || slug,
       version: info.version || "?",
       description: truncate(stripMarkdown(info.description || ""), 300),
       baseUrl: (schema.servers?.[0]?.url || "").replace("https://", ""),

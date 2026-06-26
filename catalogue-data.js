@@ -10,7 +10,7 @@ const CATALOGUE = {
       "auth": "agent",
       "endpointCount": 1,
       "schemaCount": 1,
-      "group": "usager-agent",
+      "group": "dossier",
       "groupLabel": "Dossier usager",
       "endpoints": [
         {
@@ -33,70 +33,6 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "contrat-engagement",
-      "title": "Contrat d'engagement",
-      "version": "v1",
-      "description": "L'API Contrat d'engagement contient les données relatives à la formalisation du Contrat d’engagement.  Grâce à ses différentes ressources, l'API permet pour un usager donné :   - de vérifier l'existence ou non d'un contrat d'engagement - de récupérer dans le contrat le bloc texte des engagements de…",
-      "baseUrl": "api.francetravail.io/partenaire/contrat-engagement/v1",
-      "auth": "agent",
-      "endpointCount": 6,
-      "schemaCount": 9,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/lecture",
-          "summary": "Lire le contrat d'engagement de l'usager"
-        },
-        {
-          "method": "GET",
-          "path": "/lecture/structure",
-          "summary": "Lire la structure du contrat d'engagement"
-        },
-        {
-          "method": "POST",
-          "path": "/signer",
-          "summary": "Création d'un premier contrat d'engagement signé"
-        },
-        {
-          "method": "PATCH",
-          "path": "/signer",
-          "summary": "Signer un contrat d'engagement existant"
-        },
-        {
-          "method": "POST",
-          "path": "/refuser",
-          "summary": "Création d'un premier contrat d'engagement refusé"
-        },
-        {
-          "method": "PATCH",
-          "path": "/refuser",
-          "summary": "Refuser un contrat d'engagement existant"
-        }
-      ],
-      "schemas": [
-        "ContratEngagement",
-        "Engagements",
-        "Engagement",
-        "MentionLegale",
-        "MentionsLegales",
-        "ProblemDetails",
-        "Structure",
-        "Signature",
-        "Refus"
-      ],
-      "pageId": 431,
-      "hasDocPage": true,
-      "concepts": [
-        "Contrat réciproque (usager / conseiller)",
-        "Signer ou refuser",
-        "État et mentions légales"
-      ],
-      "starred": false,
-      "isNew": true
-    },
-    {
       "slug": "diagnostic-usager",
       "title": "Diagnostic Usager",
       "version": "4.0",
@@ -105,7 +41,7 @@ const CATALOGUE = {
       "auth": "agent",
       "endpointCount": 25,
       "schemaCount": 49,
-      "group": "usager-agent",
+      "group": "dossier",
       "groupLabel": "Dossier usager",
       "endpoints": [
         {
@@ -305,7 +241,7 @@ const CATALOGUE = {
       "auth": "agent",
       "endpointCount": 1,
       "schemaCount": 6,
-      "group": "usager-agent",
+      "group": "dossier",
       "groupLabel": "Dossier usager",
       "endpoints": [
         {
@@ -334,14 +270,14 @@ const CATALOGUE = {
     },
     {
       "slug": "metiers-recherches-projets-evolution",
-      "title": "Métiers recherchés, projets d'évolution et projets de création, reprise et franchise d'entreprise",
+      "title": "Métiers recherchés et projets",
       "version": "1.0.40",
       "description": "Cette API permet de récupérer : - la liste des métiers recherchés par l'usager, - les projets d'évolution professionnelle souhaités par l'usager - et les projets de création, reprise ou franchise d'entreprise de l'usager    Les données retournées proviennent du profil de compétences de l'usager au…",
       "baseUrl": "api.francetravail.io/partenaire/metiers-projets-entreprises/v2",
       "auth": "agent",
       "endpointCount": 2,
       "schemaCount": 17,
-      "group": "usager-agent",
+      "group": "dossier",
       "groupLabel": "Dossier usager",
       "endpoints": [
         {
@@ -386,6 +322,266 @@ const CATALOGUE = {
       "isNew": false
     },
     {
+      "slug": "rechercher-usager",
+      "title": "Rechercher usager",
+      "version": "2.0",
+      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager ainsi que le numéro France Travail permettant d'accéder à d'autres API Scope : api_rechercher-usagerv2, rechercheusager, profil_accedant…",
+      "baseUrl": "api.francetravail.io/partenaire/rechercher-usager/v2",
+      "auth": "agent",
+      "endpointCount": 2,
+      "schemaCount": 7,
+      "group": "dossier",
+      "groupLabel": "Dossier usager",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/usagers/par-datenaissance-et-nir",
+          "summary": "Rechercher un usager par date de naissance et numéro de sécurité sociale (NIR)"
+        },
+        {
+          "method": "POST",
+          "path": "/usagers/par-numero-francetravail",
+          "summary": "Rechercher un usager par numéro France Travail"
+        }
+      ],
+      "schemas": [
+        "ParDateNaissanceEtNirDTO",
+        "ResultatDTO",
+        "Resultat400DTO",
+        "Resultat403DTO",
+        "Resultat500DTO",
+        "Resultat503DTO",
+        "ParNumeroFTDTO"
+      ],
+      "pageId": 465,
+      "hasDocPage": true,
+      "concepts": [
+        "Identification de l'agent",
+        "Recherche par NIR + date de naissance",
+        "Recherche par numéro France Travail"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "statut-usager",
+      "title": "Statut Usager",
+      "version": "2.0",
+      "description": "Cette API permet de restituer le statut, la durée, le motif et la catégorie d’inscription ainsi que la situation au regard de l’emploi de l’usager",
+      "baseUrl": "api.francetravail.io/partenaire/contrat-usager/v2",
+      "auth": "agent",
+      "endpointCount": 1,
+      "schemaCount": 2,
+      "group": "dossier",
+      "groupLabel": "Dossier usager",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/contrat",
+          "summary": "Récupère les données du contrat d'un usager"
+        }
+      ],
+      "schemas": [
+        "ContratResponse",
+        "Contrat"
+      ],
+      "pageId": 466,
+      "hasDocPage": true,
+      "concepts": [
+        "Statut d'inscription",
+        "Durée d'inscription",
+        "Motif et catégorie",
+        "Situation et clôture"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "contrat-engagement",
+      "title": "Contrat d'engagement",
+      "version": "v1",
+      "description": "L'API Contrat d'engagement contient les données relatives à la formalisation du Contrat d’engagement.  Grâce à ses différentes ressources, l'API permet pour un usager donné :   - de vérifier l'existence ou non d'un contrat d'engagement - de récupérer dans le contrat le bloc texte des engagements de…",
+      "baseUrl": "api.francetravail.io/partenaire/contrat-engagement/v1",
+      "auth": "agent",
+      "endpointCount": 6,
+      "schemaCount": 9,
+      "group": "parcours",
+      "groupLabel": "Parcours d'accompagnement",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/lecture",
+          "summary": "Lire le contrat d'engagement de l'usager"
+        },
+        {
+          "method": "GET",
+          "path": "/lecture/structure",
+          "summary": "Lire la structure du contrat d'engagement"
+        },
+        {
+          "method": "POST",
+          "path": "/signer",
+          "summary": "Création d'un premier contrat d'engagement signé"
+        },
+        {
+          "method": "PATCH",
+          "path": "/signer",
+          "summary": "Signer un contrat d'engagement existant"
+        },
+        {
+          "method": "POST",
+          "path": "/refuser",
+          "summary": "Création d'un premier contrat d'engagement refusé"
+        },
+        {
+          "method": "PATCH",
+          "path": "/refuser",
+          "summary": "Refuser un contrat d'engagement existant"
+        }
+      ],
+      "schemas": [
+        "ContratEngagement",
+        "Engagements",
+        "Engagement",
+        "MentionLegale",
+        "MentionsLegales",
+        "ProblemDetails",
+        "Structure",
+        "Signature",
+        "Refus"
+      ],
+      "pageId": 431,
+      "hasDocPage": true,
+      "concepts": [
+        "Contrat réciproque (usager / conseiller)",
+        "Signer ou refuser",
+        "État et mentions légales"
+      ],
+      "starred": false,
+      "isNew": true
+    },
+    {
+      "slug": "declaration-demarche",
+      "title": "Déclaration de démarche",
+      "version": "v1",
+      "description": "L'API des démarches vous permet de partager et suivre les actions réalisées par les usagers dans le cadre de leur parcours de retour à l'emploi.  Aide à l'utilisation de l'API Veuillez vous référer au Référentiel des démarches afin d'identifier les paramètres nécessaires en entrée de l'API :…",
+      "baseUrl": "api.francetravail.io/partenaire/ftconnect-demarches-usager/v1",
+      "auth": "peconnect",
+      "endpointCount": 4,
+      "schemaCount": 14,
+      "group": "parcours",
+      "groupLabel": "Parcours d'accompagnement",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/demarches",
+          "summary": "Lire les démarches d'un individu"
+        },
+        {
+          "method": "POST",
+          "path": "/demarches",
+          "summary": "Créer une démarche pour un individu"
+        },
+        {
+          "method": "PATCH",
+          "path": "/demarches/{idDemarche}",
+          "summary": "Modifier une démarche pour un individu"
+        },
+        {
+          "method": "GET",
+          "path": "/referentiel/demarches",
+          "summary": "Retourne le référentiel des démarches"
+        }
+      ],
+      "schemas": [
+        "Link",
+        "PageDemarchesPartenaireLectureDto",
+        "DemarchePartenaireLectureDto",
+        "DemarchePartenaireCreationDto",
+        "DemarchePartenaireModificationDto",
+        "ElementListeDeChoixAttribut",
+        "StructureAttribut",
+        "StructureFormulaireOut",
+        "MoyenRetourEmploiReferentiel",
+        "TypeDemarcheRetourEmploiReferentiel",
+        "ObjectifRetourEmploiReferentiel",
+        "HalLink",
+        "ProblemDetails",
+        "CodesErreur"
+      ],
+      "pageId": 455,
+      "hasDocPage": true,
+      "concepts": [
+        "Triplet pourquoi / quoi / comment",
+        "Lire, créer, modifier",
+        "Référentiel des démarches"
+      ],
+      "starred": true,
+      "isNew": true
+    },
+    {
+      "slug": "gestion-sanctions-rsa",
+      "title": "Gestion des sanctions RSA",
+      "version": "1.1",
+      "description": "Cette API met à disposition les propositions sur les sanctions des bénéficiaires du RSA accompagnés par France Travail, afin de statuer sur ces dernières propositions. <br>Elle permet également de transmettre des décisions de sanctions RSA pour un bénéficiaire RSA non accompagné par France Travail…",
+      "baseUrl": "api.francetravail.io/partenaire/gestion-sanctions-rsa/v1",
+      "auth": "agent",
+      "endpointCount": 4,
+      "schemaCount": 17,
+      "group": "parcours",
+      "groupLabel": "Parcours d'accompagnement",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/detailManquement",
+          "summary": "Restituer le détail d'un manquement"
+        },
+        {
+          "method": "POST",
+          "path": "/evenementSanctionRSA",
+          "summary": "Transmettre un événement sur une conséquence de sanction RSA"
+        },
+        {
+          "method": "POST",
+          "path": "/decisionSanctionRSAPartenaire",
+          "summary": "Transmettre une décision de sanction RSA pour un bRSA accompagné par un partenaire"
+        },
+        {
+          "method": "POST",
+          "path": "/demandeRadiation",
+          "summary": "Transmettre une demande de radiation de la liste des DE pour un bRSA"
+        }
+      ],
+      "schemas": [
+        "DetailManquement",
+        "Individu",
+        "FaisceauIndice",
+        "DetailAttribut",
+        "DetailSanction",
+        "DetailEvenementSanction",
+        "ErreurDetailManquement",
+        "TraitementSanctionRsa",
+        "Evenement",
+        "RetourTraitementRsaOTD",
+        "ErreurTraitementSanctionRsa",
+        "DecisionSanctionRsa",
+        "RetourDecisionSanctionRSA",
+        "ErreurDecisionSanctionRsa",
+        "DemandeRadiation",
+        "RetourDemandeRadiation",
+        "ErreurDemandeRadiation"
+      ],
+      "pageId": 497,
+      "hasDocPage": true,
+      "concepts": [
+        "Manquement — fait reproché",
+        "Conséquences de sanction",
+        "Événements de traitement"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
       "slug": "orientation-usager",
       "title": "Orientation Usager",
       "version": "2.0",
@@ -394,8 +590,8 @@ const CATALOGUE = {
       "auth": "agent",
       "endpointCount": 5,
       "schemaCount": 15,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
+      "group": "parcours",
+      "groupLabel": "Parcours d'accompagnement",
       "endpoints": [
         {
           "method": "POST",
@@ -465,48 +661,6 @@ const CATALOGUE = {
       "jsonSlug": "orientation-usager-v2"
     },
     {
-      "slug": "rechercher-usager",
-      "title": "Rechercher usager",
-      "version": "2.0",
-      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager ainsi que le numéro France Travail permettant d'accéder à d'autres API Scope : api_rechercher-usagerv2, rechercheusager, profil_accedant…",
-      "baseUrl": "api.francetravail.io/partenaire/rechercher-usager/v2",
-      "auth": "agent",
-      "endpointCount": 2,
-      "schemaCount": 7,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
-      "endpoints": [
-        {
-          "method": "POST",
-          "path": "/usagers/par-datenaissance-et-nir",
-          "summary": "Rechercher un usager par date de naissance et numéro de sécurité sociale (NIR)"
-        },
-        {
-          "method": "POST",
-          "path": "/usagers/par-numero-francetravail",
-          "summary": "Rechercher un usager par numéro France Travail"
-        }
-      ],
-      "schemas": [
-        "ParDateNaissanceEtNirDTO",
-        "ResultatDTO",
-        "Resultat400DTO",
-        "Resultat403DTO",
-        "Resultat500DTO",
-        "Resultat503DTO",
-        "ParNumeroFTDTO"
-      ],
-      "pageId": 465,
-      "hasDocPage": true,
-      "concepts": [
-        "Identification de l'agent",
-        "Recherche par NIR + date de naissance",
-        "Recherche par numéro France Travail"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
       "slug": "rendez-vous-partenaires",
       "title": "Rendez-vous partenaire",
       "version": "1.0.0",
@@ -515,8 +669,8 @@ const CATALOGUE = {
       "auth": "agent",
       "endpointCount": 4,
       "schemaCount": 9,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
+      "group": "parcours",
+      "groupLabel": "Parcours d'accompagnement",
       "endpoints": [
         {
           "method": "POST",
@@ -560,67 +714,6 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "statut-usager",
-      "title": "Statut Usager",
-      "version": "2.0",
-      "description": "Cette API permet de restituer le statut, la durée, le motif et la catégorie d’inscription ainsi que la situation au regard de l’emploi de l’usager",
-      "baseUrl": "api.francetravail.io/partenaire/contrat-usager/v2",
-      "auth": "agent",
-      "endpointCount": 1,
-      "schemaCount": 2,
-      "group": "usager-agent",
-      "groupLabel": "Dossier usager",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/contrat",
-          "summary": "Récupère les données du contrat d'un usager"
-        }
-      ],
-      "schemas": [
-        "ContratResponse",
-        "Contrat"
-      ],
-      "pageId": 466,
-      "hasDocPage": true,
-      "concepts": [
-        "Statut d'inscription",
-        "Durée d'inscription",
-        "Motif et catégorie",
-        "Situation et clôture"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
-      "slug": "ajout-competence",
-      "title": "API Ajout de Compétence",
-      "version": "1.0.0",
-      "description": "Cette API permet d'enregistrer des compétences dans le portefeuille de compétences.",
-      "baseUrl": "api.francetravail.io/partenaire/peconnect-gestion-profilcompetences/v1",
-      "auth": "peconnect",
-      "endpointCount": 1,
-      "schemaCount": 0,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
-      "endpoints": [
-        {
-          "method": "POST",
-          "path": "/competences/enregistrer",
-          "summary": "Enregistrer des compétences"
-        }
-      ],
-      "schemas": [],
-      "pageId": 320,
-      "hasDocPage": true,
-      "concepts": [
-        "Compétences ROME à enregistrer",
-        "Réponse partielle (206)"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
       "slug": "coordonnees",
       "title": "API Coordonnées",
       "version": "1.0",
@@ -629,8 +722,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 1,
       "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "identite",
+      "groupLabel": "Connexion & identité",
       "endpoints": [
         {
           "method": "GET",
@@ -660,8 +753,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 1,
       "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "identite",
+      "groupLabel": "Connexion & identité",
       "endpoints": [
         {
           "method": "GET",
@@ -681,6 +774,125 @@ const CATALOGUE = {
       "isNew": false
     },
     {
+      "slug": "pe-connect-indemnisations",
+      "title": "API PE Connect - Indemnisations",
+      "version": "1.0.0",
+      "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA). A titre…",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-indemnisations/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 1,
+      "group": "identite",
+      "groupLabel": "Connexion & identité",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/indemnisation",
+          "summary": "Récupère les informations d'indemnisation d'un individu"
+        }
+      ],
+      "schemas": [
+        "Indemnisation"
+      ],
+      "pageId": 117,
+      "hasDocPage": true,
+      "concepts": [
+        "Assurance chômage (ARE/ASP)",
+        "Minima sociaux (AAH/ASS/RSA/AER)"
+      ],
+      "starred": false,
+      "isNew": true
+    },
+    {
+      "slug": "statut",
+      "title": "API Statut",
+      "version": "1.0.0",
+      "description": "L’API Statut permet de déterminer si l'utilisateur connecté à votre application est un demandeur d'emploi ou non.",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-statut/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 1,
+      "group": "identite",
+      "groupLabel": "Connexion & identité",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/statut",
+          "summary": "Récupère le statut de l'individu"
+        }
+      ],
+      "schemas": [
+        "StatutResponse"
+      ],
+      "pageId": 135,
+      "hasDocPage": true,
+      "concepts": [
+        "Code statut",
+        "Libellé statut"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "france-travail-connect",
+      "title": "France Travail Connect",
+      "version": "1.0.0",
+      "description": "L'API France Travail Connect permet à un utilisateur (demandeur d'emploi ou candidat) de se connecter à votre application avec son compte France Travail. La solution repose sur la cinématique d'authentification utilisateur proposée par France Travail Access Management. Attention : La licence de…",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-individu/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 1,
+      "group": "identite",
+      "groupLabel": "Connexion & identité",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/userinfo",
+          "summary": "Récupérer les informations de l'utilisateur connecté"
+        }
+      ],
+      "schemas": [
+        "UserInfo"
+      ],
+      "pageId": 51,
+      "hasDocPage": true,
+      "concepts": [
+        "Identité",
+        "Contact",
+        "Identifiants techniques"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
+      "slug": "ajout-competence",
+      "title": "API Ajout de Compétence",
+      "version": "1.0.0",
+      "description": "Cette API permet d'enregistrer des compétences dans le portefeuille de compétences.",
+      "baseUrl": "api.francetravail.io/partenaire/peconnect-gestion-profilcompetences/v1",
+      "auth": "peconnect",
+      "endpointCount": 1,
+      "schemaCount": 0,
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/competences/enregistrer",
+          "summary": "Enregistrer des compétences"
+        }
+      ],
+      "schemas": [],
+      "pageId": 320,
+      "hasDocPage": true,
+      "concepts": [
+        "Compétences ROME à enregistrer",
+        "Réponse partielle (206)"
+      ],
+      "starred": false,
+      "isNew": false
+    },
+    {
       "slug": "experiences-declarees-employeur",
       "title": "API Expériences  déclarées par l'employeur",
       "version": "1.0",
@@ -689,8 +901,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 1,
       "schemaCount": 3,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
       "endpoints": [
         {
           "method": "GET",
@@ -722,8 +934,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 1,
       "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
       "endpoints": [
         {
           "method": "GET",
@@ -753,8 +965,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 2,
       "schemaCount": 2,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
       "endpoints": [
         {
           "method": "GET",
@@ -782,36 +994,6 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "pe-connect-indemnisations",
-      "title": "API PE Connect - Indemnisations",
-      "version": "1.0.0",
-      "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA). A titre…",
-      "baseUrl": "api.francetravail.io/partenaire/peconnect-indemnisations/v1",
-      "auth": "peconnect",
-      "endpointCount": 1,
-      "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/indemnisation",
-          "summary": "Récupère les informations d'indemnisation d'un individu"
-        }
-      ],
-      "schemas": [
-        "Indemnisation"
-      ],
-      "pageId": 117,
-      "hasDocPage": true,
-      "concepts": [
-        "Assurance chômage (ARE/ASP)",
-        "Minima sociaux (AAH/ASS/RSA/AER)"
-      ],
-      "starred": false,
-      "isNew": true
-    },
-    {
       "slug": "metiers-recherches",
       "title": "API PE Connect - Métiers Recherchés",
       "version": "1.0.0",
@@ -820,8 +1002,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 1,
       "schemaCount": 16,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
       "endpoints": [
         {
           "method": "GET",
@@ -859,36 +1041,6 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "statut",
-      "title": "API Statut",
-      "version": "1.0.0",
-      "description": "L’API Statut permet de déterminer si l'utilisateur connecté à votre application est un demandeur d'emploi ou non.",
-      "baseUrl": "api.francetravail.io/partenaire/peconnect-statut/v1",
-      "auth": "peconnect",
-      "endpointCount": 1,
-      "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/statut",
-          "summary": "Récupère le statut de l'individu"
-        }
-      ],
-      "schemas": [
-        "StatutResponse"
-      ],
-      "pageId": 135,
-      "hasDocPage": true,
-      "concepts": [
-        "Code statut",
-        "Libellé statut"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
       "slug": "competences-professionnelles",
       "title": "Compétences professionnelles",
       "version": "2.0.0",
@@ -897,8 +1049,8 @@ const CATALOGUE = {
       "auth": "peconnect",
       "endpointCount": 3,
       "schemaCount": 5,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
+      "group": "profil",
+      "groupLabel": "Profil de compétences",
       "endpoints": [
         {
           "method": "GET",
@@ -935,96 +1087,6 @@ const CATALOGUE = {
       "isNew": true
     },
     {
-      "slug": "declaration-demarche",
-      "title": "Déclaration de démarche",
-      "version": "v1",
-      "description": "L'API des démarches vous permet de partager et suivre les actions réalisées par les usagers dans le cadre de leur parcours de retour à l'emploi.  Aide à l'utilisation de l'API Veuillez vous référer au Référentiel des démarches afin d'identifier les paramètres nécessaires en entrée de l'API :…",
-      "baseUrl": "api.francetravail.io/partenaire/ftconnect-demarches-usager/v1",
-      "auth": "peconnect",
-      "endpointCount": 4,
-      "schemaCount": 14,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/demarches",
-          "summary": "Lire les démarches d'un individu"
-        },
-        {
-          "method": "POST",
-          "path": "/demarches",
-          "summary": "Créer une démarche pour un individu"
-        },
-        {
-          "method": "PATCH",
-          "path": "/demarches/{idDemarche}",
-          "summary": "Modifier une démarche pour un individu"
-        },
-        {
-          "method": "GET",
-          "path": "/referentiel/demarches",
-          "summary": "Retourne le référentiel des démarches"
-        }
-      ],
-      "schemas": [
-        "Link",
-        "PageDemarchesPartenaireLectureDto",
-        "DemarchePartenaireLectureDto",
-        "DemarchePartenaireCreationDto",
-        "DemarchePartenaireModificationDto",
-        "ElementListeDeChoixAttribut",
-        "StructureAttribut",
-        "StructureFormulaireOut",
-        "MoyenRetourEmploiReferentiel",
-        "TypeDemarcheRetourEmploiReferentiel",
-        "ObjectifRetourEmploiReferentiel",
-        "HalLink",
-        "ProblemDetails",
-        "CodesErreur"
-      ],
-      "pageId": 455,
-      "hasDocPage": true,
-      "concepts": [
-        "Triplet pourquoi / quoi / comment",
-        "Lire, créer, modifier",
-        "Référentiel des démarches"
-      ],
-      "starred": true,
-      "isNew": true
-    },
-    {
-      "slug": "france-travail-connect",
-      "title": "France Travail Connect",
-      "version": "1.0.0",
-      "description": "L'API France Travail Connect permet à un utilisateur (demandeur d'emploi ou candidat) de se connecter à votre application avec son compte France Travail. La solution repose sur la cinématique d'authentification utilisateur proposée par France Travail Access Management. Attention : La licence de…",
-      "baseUrl": "api.francetravail.io/partenaire/peconnect-individu/v1",
-      "auth": "peconnect",
-      "endpointCount": 1,
-      "schemaCount": 1,
-      "group": "usager-pe",
-      "groupLabel": "PE Connect",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/userinfo",
-          "summary": "Récupérer les informations de l'utilisateur connecté"
-        }
-      ],
-      "schemas": [
-        "UserInfo"
-      ],
-      "pageId": 51,
-      "hasDocPage": true,
-      "concepts": [
-        "Identité",
-        "Contact",
-        "Identifiants techniques"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
       "slug": "jcmo-controle-offre",
       "title": "Je Contrôle Mon Offre - JCMO",
       "version": "1",
@@ -1034,7 +1096,7 @@ const CATALOGUE = {
       "endpointCount": 1,
       "schemaCount": 4,
       "group": "offres",
-      "groupLabel": "Offres d'emploi",
+      "groupLabel": "Offres & recrutement",
       "endpoints": [
         {
           "method": "POST",
@@ -1067,7 +1129,7 @@ const CATALOGUE = {
       "endpointCount": 3,
       "schemaCount": 18,
       "group": "offres",
-      "groupLabel": "Offres d'emploi",
+      "groupLabel": "Offres & recrutement",
       "endpoints": [
         {
           "method": "GET",
@@ -1126,7 +1188,7 @@ const CATALOGUE = {
       "endpointCount": 18,
       "schemaCount": 22,
       "group": "offres",
-      "groupLabel": "Offres d'emploi",
+      "groupLabel": "Offres & recrutement",
       "endpoints": [
         {
           "method": "GET",
@@ -1264,7 +1326,7 @@ const CATALOGUE = {
       "endpointCount": 4,
       "schemaCount": 25,
       "group": "offres",
-      "groupLabel": "Offres d'emploi",
+      "groupLabel": "Offres & recrutement",
       "endpoints": [
         {
           "method": "GET",
@@ -2876,68 +2938,6 @@ const CATALOGUE = {
       "isNew": false
     },
     {
-      "slug": "gestion-sanctions-rsa",
-      "title": "Gestion des sanctions RSA",
-      "version": "1.1",
-      "description": "Cette API met à disposition les propositions sur les sanctions des bénéficiaires du RSA accompagnés par France Travail, afin de statuer sur ces dernières propositions. <br>Elle permet également de transmettre des décisions de sanctions RSA pour un bénéficiaire RSA non accompagné par France Travail…",
-      "baseUrl": "api.francetravail.io/partenaire/gestion-sanctions-rsa/v1",
-      "auth": "agent",
-      "endpointCount": 4,
-      "schemaCount": 17,
-      "group": "partenaire",
-      "groupLabel": "Gestion partenaire",
-      "endpoints": [
-        {
-          "method": "GET",
-          "path": "/detailManquement",
-          "summary": "Restituer le détail d'un manquement"
-        },
-        {
-          "method": "POST",
-          "path": "/evenementSanctionRSA",
-          "summary": "Transmettre un événement sur une conséquence de sanction RSA"
-        },
-        {
-          "method": "POST",
-          "path": "/decisionSanctionRSAPartenaire",
-          "summary": "Transmettre une décision de sanction RSA pour un bRSA accompagné par un partenaire"
-        },
-        {
-          "method": "POST",
-          "path": "/demandeRadiation",
-          "summary": "Transmettre une demande de radiation de la liste des DE pour un bRSA"
-        }
-      ],
-      "schemas": [
-        "DetailManquement",
-        "Individu",
-        "FaisceauIndice",
-        "DetailAttribut",
-        "DetailSanction",
-        "DetailEvenementSanction",
-        "ErreurDetailManquement",
-        "TraitementSanctionRsa",
-        "Evenement",
-        "RetourTraitementRsaOTD",
-        "ErreurTraitementSanctionRsa",
-        "DecisionSanctionRsa",
-        "RetourDecisionSanctionRSA",
-        "ErreurDecisionSanctionRsa",
-        "DemandeRadiation",
-        "RetourDemandeRadiation",
-        "ErreurDemandeRadiation"
-      ],
-      "pageId": 497,
-      "hasDocPage": true,
-      "concepts": [
-        "Manquement — fait reproché",
-        "Conséquences de sanction",
-        "Événements de traitement"
-      ],
-      "starred": false,
-      "isNew": false
-    },
-    {
       "slug": "cadre-vie-communes",
       "title": "API Cadre de vie des communes",
       "version": "1.0.0",
@@ -2946,8 +2946,8 @@ const CATALOGUE = {
       "auth": "public",
       "endpointCount": 1,
       "schemaCount": 1,
-      "group": "standalone",
-      "groupLabel": "Services",
+      "group": "services",
+      "groupLabel": "Référentiels & services",
       "endpoints": [
         {
           "method": "GET",
@@ -2977,8 +2977,8 @@ const CATALOGUE = {
       "auth": "public",
       "endpointCount": 5,
       "schemaCount": 6,
-      "group": "standalone",
-      "groupLabel": "Services",
+      "group": "services",
+      "groupLabel": "Référentiels & services",
       "endpoints": [
         {
           "method": "GET",
@@ -3033,8 +3033,8 @@ const CATALOGUE = {
       "auth": "public",
       "endpointCount": 3,
       "schemaCount": 5,
-      "group": "standalone",
-      "groupLabel": "Services",
+      "group": "services",
+      "groupLabel": "Référentiels & services",
       "endpoints": [
         {
           "method": "GET",
@@ -3078,8 +3078,8 @@ const CATALOGUE = {
       "auth": "public",
       "endpointCount": 2,
       "schemaCount": 1,
-      "group": "standalone",
-      "groupLabel": "Services",
+      "group": "services",
+      "groupLabel": "Référentiels & services",
       "endpoints": [
         {
           "method": "GET",
@@ -3108,39 +3108,49 @@ const CATALOGUE = {
   ],
   "groups": [
     {
-      "id": "usager-agent",
+      "id": "dossier",
       "label": "Dossier usager",
-      "description": "APIs agent pour accéder au dossier complet d'un demandeur d'emploi"
+      "description": "Accès agent au dossier d'un demandeur d'emploi via jeton usager : identité, statut, diagnostic, entretiens."
     },
     {
-      "id": "usager-pe",
-      "label": "PE Connect",
-      "description": "APIs usager via France Travail Connect (OAuth individu)"
+      "id": "parcours",
+      "label": "Parcours d'accompagnement",
+      "description": "Le parcours « loi plein emploi » : orientation, contrat d'engagement, rendez-vous, démarches et sanctions."
+    },
+    {
+      "id": "identite",
+      "label": "Connexion & identité",
+      "description": "Connexion France Travail (PE Connect) et données d'identité, de statut et de droits de l'usager connecté."
+    },
+    {
+      "id": "profil",
+      "label": "Profil de compétences",
+      "description": "Le portefeuille de l'usager : expériences, compétences, langues, formations et métiers recherchés (PE Connect)."
     },
     {
       "id": "offres",
-      "label": "Offres d'emploi",
-      "description": "Recherche d'offres, contrôle, pages employeur"
+      "label": "Offres & recrutement",
+      "description": "Offres d'emploi, entreprises à fort potentiel d'embauche, contrôle des offres et pages employeur."
     },
     {
       "id": "rome",
       "label": "ROME 4.0",
-      "description": "Classification des métiers et compétences"
+      "description": "Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction."
     },
     {
       "id": "stats",
       "label": "Statistiques",
-      "description": "Indicateurs marché du travail, accès emploi, formation"
+      "description": "Indicateurs du marché du travail, accès à l'emploi, sortants de formation et portrait de territoire."
     },
     {
       "id": "partenaire",
       "label": "Gestion partenaire",
-      "description": "Prestations sous-traitées, sanctions RSA"
+      "description": "Outils de gestion pour les structures partenaires : prestations sous-traitées, activités opérationnelles."
     },
     {
-      "id": "standalone",
-      "label": "Services",
-      "description": "Référentiels et événements"
+      "id": "services",
+      "label": "Référentiels & services",
+      "description": "Référentiels et services transverses : agences, communes, formations, événements emploi."
     }
   ],
   "crossConcepts": [
