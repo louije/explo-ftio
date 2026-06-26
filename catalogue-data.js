@@ -1562,8 +1562,13 @@ const CATALOGUE = {
         "VersionRome"
       ],
       "pageId": 273,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Arbre de classification",
+        "Métier et appellations",
+        "Profil RIASEC",
+        "Famille ROME 4.0"
+      ],
       "starred": false,
       "isNew": true
     },

@@ -249,6 +249,12 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Groupes de compétences",
     "Groupes de savoirs",
   ],
+  "rome-4-0-metiers": [
+    "Arbre de classification",
+    "Métier et appellations",
+    "Profil RIASEC",
+    "Famille ROME 4.0",
+  ],
   "romeo": [
     "Prédiction métier",
     "Prédiction compétence",

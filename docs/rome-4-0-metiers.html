@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROME 4.0 — Métiers — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>ROME 4.0 — Métiers</h1>
+  <div class="sub">Le référentiel navigable des métiers : parcourir et rechercher l'arbre des métiers ROME, leurs appellations, et tout ce qui s'y rattache (compétences, secteurs, centres d'intérêt, profil RIASEC, transitions).</div>
+  <div class="sub-tech">ROME 4.0 - Métiers v1 — 17 endpoints · 20 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rome-metiers</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('famille')">Famille ROME</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Une classification en arbre.</strong> Le ROME organise les professions sur quatre niveaux :
+  <code>Grand domaine</code> → <code>Domaine professionnel</code> → <code>Métier</code> → <code>Appellation</code>.
+  Chaque niveau a ses propres endpoints (lister / lire / rechercher). Le <strong>Métier</strong> est l'objet central — le modèle ci-dessous le détaille ; les autres niveaux et les facettes (secteurs, centres d'intérêt, thèmes) s'y rattachent.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Métier ROME <span class="dto">Metier</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-identite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identité et place dans la classification <span class="dto">code · domaineProfessionnel</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Le métier, son libellé, sa définition, ses conditions d'accès, et son rattachement dans l'arbre (domaine professionnel, puis grand domaine).
+          <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>definition</code> · <code>accesEmploi</code> · <code>label</code> · <code>codeIsco</code>
+            <br><code>domaineProfessionnel</code> <span class="at">@ DomaineProfessionnel</span> → <code>grandDomaine</code> <span class="at">@ GrandDomaine</span>
+            <br>Drapeaux : <code>emploiCadre</code> · <code>emploiReglemente</code> · <code>obsolete</code> · <code>dateFin</code>
+            <br><code>codeIsco</code> — correspondance internationale ISCO / CITP</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-c stack" id="m-appellations">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Appellations <span class="dto">Appellation</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les intitulés concrets du métier — ce que recouvre vraiment un code ROME. Une appellation est soit l'intitulé de référence, soit un synonyme, et porte sa correspondance européenne ESCO.
+          <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>libelleCourt</code> · <code>romeParent</code> · <code>secondaire</code>
+            <br><code>classification</code> — <span class="ev">PRINCIPALE</span> · <span class="ev">SYNONYME</span>
+            <br><code>appellationEsco</code> <span class="at">@ AppellationEsco</span> (<code>libelle</code> · <code>uri</code>) — mapping ESCO européen
+            <br><code>competencesCles</code> <span class="at">@ CompetenceCle</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n stack" id="m-competences">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Compétences mobilisées <span class="dto">CompetenceCle · Competence</span></div>
+        <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les compétences associées au métier, distinguées entre principales et émergentes, chacune avec une fréquence d'observation (0–100). Le <em>détail</em> de chaque compétence (par enjeu/catégorie) relève de l'API Fiches ROME et de l'API Compétences.
+          <div class="fi-tech"><code>competencesMobiliseesPrincipales</code> · <code>competencesMobiliseesEmergentes</code>
+            <br><span class="at">@ CompetenceCle</span> = <code>competence</code> + <code>frequence</code> (0–100)
+            <br><code>competence.type</code> — <span class="ev">MACRO-SAVOIR-FAIRE</span> · <span class="ev">MACRO-SAVOIR-ETRE-PROFESSIONNEL</span> · <span class="ev">COMPETENCE-DETAILLEE</span> · <span class="ev">SAVOIR</span>
+            <br><code>contextesTravail</code> <span class="at">@ ContexteTravail</span> (catégorie · libellé)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-profil">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Profil et rattachements <span class="dto">RIASEC · secteurs · thèmes</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les axes qui permettent de retrouver et de regrouper le métier : son profil d'intérêt RIASEC, ses centres d'intérêt, ses thèmes, ses secteurs d'activité et ses rattachements NAF.
+          <div class="fi-tech"><code>riasecMajeur</code> · <code>riasecMineur</code> — <span class="ev">R</span> <span class="ev">I</span> <span class="ev">A</span> <span class="ev">S</span> <span class="ev">E</span> <span class="ev">C</span> (codes de Holland)
+            <br><code>centresInterets</code> <span class="at">@ CentreInteret</span> · <code>themes</code> <span class="at">@ Theme</span>
+            <br><code>secteursActivites</code> <span class="at">@ SecteurActivite</span> (avec <code>sousSecteurs</code>) · <code>divisionsNaf</code> <span class="at">@ DivisionNaf</span> · <code>formacodes</code> <span class="at">@ Formacode</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l2t stack" id="m-mobilite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Mobilité professionnelle <span class="dto">metiersEnProximite</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les métiers vers lesquels une transition est envisageable. <span class="at">À utiliser</span> <code>metiersEnProximite</code> est la mobilité actuelle ; <code>metiersProches</code> et <code>metiersEnvisageables</code> sont conservés pour compatibilité ascendante mais dépréciés.
+          <div class="fi-tech"><code>metiersEnProximite</code> — mobilité courante
+            <br><code>metiersProches</code> · <code>metiersEnvisageables</code> — <strong>dépréciés</strong>
+            <br><code>appellationsProches</code> · <code>appellationsEnvisageables</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3o" id="m-transitions">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Transitions <span class="dto">3 drapeaux</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Indique si le métier est concerné par l'une des trois grandes transitions suivies par France Travail.
+          <div class="fi-tech"><code>transitionEcologique</code> (+ <code>transitionEcologiqueDetaillee</code>) · <code>transitionNumerique</code> · <code>transitionDemographique</code> — booléens</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume <code>partenaire</code> (client credentials). Aucun <code>ft-jeton-usager</code> n'est requis : c'est un référentiel public, on n'accède à aucune donnée d'usager. Tous les endpoints sont en lecture (<code>GET</code>).
+</div>
+
+</div>
+
+<!-- FAMILLE ROME (généré par gen-famille-rome.py) -->
+<div class="view" id="v-famille">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Le ROME 4.0 est éclaté en plusieurs API.</strong> Aucune n'est une version d'une autre : ce sont des <em>angles</em> différents sur le même référentiel. Savoir laquelle appeler évite de dupliquer des appels.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Cette API dans la famille ROME 4.0
+    <span class="rs-count">5 API</span>
+    <span class="rs-tech">classification ROME 4.0</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : <strong>Métiers</strong> répond à « quels métiers existent et comment sont-ils reliés ? ». Les autres décrivent en détail un métier, une compétence ou un contexte déjà identifié.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">ROME 4.0 — Métiers</span><span class="ref-count">cette page · 17 endpoints</span></div>
+      <div class="expl">Le référentiel navigable : parcourir l'arbre des métiers, rechercher, filtrer par RIASEC / NAF / compétence, et lire les métadonnées d'un métier (ISCO/ESCO, transitions, mobilité).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-fiches-metiers.html">Fiches ROME</a></span><span class="ref-count">3 endpoints</span></div>
+      <div class="expl">La fiche métier assemblée : pour un code ROME, les compétences groupées par enjeu et les savoirs groupés par catégorie.<br><strong>ROME 4.0 — Métiers vs Fiches ROME :</strong> Métiers liste quels métiers existent et leurs compétences à plat ; Fiches ROME structure compétences et savoirs (par enjeu et catégorie) pour un métier connu.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-competences.html">ROME 4.0 — Compétences</a></span><span class="ref-count">21 endpoints</span></div>
+      <div class="expl">Le référentiel des compétences : chaque compétence avec son type, sa correspondance ESCO, ses macro-compétences et savoirs.<br><strong>ROME 4.0 — Métiers vs ROME 4.0 — Compétences :</strong> Métiers liste les compétences mobilisées par métier ; Compétences décrit chaque compétence en profondeur, indépendamment des métiers.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-contextes-travail.html">ROME 4.0 — Situations de travail</a></span><span class="ref-count">3 endpoints</span></div>
+      <div class="expl">Le référentiel des situations de travail : contextes et conditions d'exercice (horaires, environnement, statuts).<br><strong>ROME 4.0 — Métiers vs ROME 4.0 — Situations de travail :</strong> Métiers expose les contextes de travail rattachés à un métier ; Situations de travail fournit le référentiel complet des contextes.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="romeo.html">Romeo</a></span><span class="ref-count">prédiction · 4 endpoints</span></div>
+      <div class="expl">Le moteur de prédiction : à partir d'un texte libre, prédit le code métier ou compétence ROME le plus probable.<br><strong>ROME 4.0 — Métiers vs Romeo :</strong> Romeo prédit un code à partir de texte libre ; Métiers explore ensuite ce code dans le référentiel.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Quelle API appeler ?</strong> Texte libre à mapper → <strong>Romeo</strong>. Naviguer / rechercher / filtrer des métiers → <strong>Métiers</strong>. Afficher la fiche compétences-savoirs d'un métier → <strong>Fiches ROME</strong>. Détailler une compétence → <strong>Compétences</strong>. Décrire un contexte de travail → <strong>Situations de travail</strong>.
+</div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="xref-banner">
+  <strong>Concepts partagés</strong> — <a href="../index.html#view=cross">Voir les concepts croisés entre APIs</a> dans le catalogue
+</div>
+
+<div class="note" style="margin-bottom:20px;">
+  Cette API <em>est</em> un référentiel : l'essentiel de ses valeurs sont des codes de classification (métiers, domaines, secteurs…) servis par les endpoints eux-mêmes. Les vocabulaires ci-dessous sont les <code>enum</code> et conventions transverses à connaître pour interpréter et interroger les données.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Profil RIASEC
+    <span class="rs-count">6 codes · codes de Holland</span>
+    <span class="rs-tech"><code>riasecMajeur</code> · <code>riasecMineur</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le modèle RIASEC (typologie de Holland) décrit les intérêts professionnels. Chaque métier porte un code majeur et un code mineur, aussi utilisables comme filtres sur <code>GET /metier</code>.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Les 6 types</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">R</span> Réaliste — concret, manuel, technique</li>
+        <li><span class="voc-code">I</span> Investigateur — analyse, recherche, résolution</li>
+        <li><span class="voc-code">A</span> Artistique — création, expression, originalité</li>
+        <li><span class="voc-code">S</span> Social — aide, enseignement, soin</li>
+        <li><span class="voc-code">E</span> Entreprenant — direction, persuasion, vente</li>
+        <li><span class="voc-code">C</span> Conventionnel — organisation, données, méthode</li>
+      </ul>
+      <div class="voc-tech">Filtres : <code>riasec-majeur</code> · <code>riasec-mineur</code> sur <code>GET /v1/metiers/metier</code>.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Vocabulaires de structure
+    <span class="rs-count">3 enums</span>
+    <span class="rs-tech">appellations · compétences · transitions</span>
+  </h2>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Classification d'appellation</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">PRINCIPALE</span> Intitulé de référence du métier</li>
+        <li><span class="voc-code">SYNONYME</span> Variante d'intitulé renvoyant au même métier</li>
+      </ul>
+      <div class="voc-tech"><code>Appellation.classification</code></div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de compétence</span><span class="ref-count">4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">MACRO-SAVOIR-FAIRE</span> Macro savoir-faire</li>
+        <li><span class="voc-code">MACRO-SAVOIR-ETRE-PROFESSIONNEL</span> Macro savoir-être professionnel</li>
+        <li><span class="voc-code">COMPETENCE-DETAILLEE</span> Compétence détaillée</li>
+        <li><span class="voc-code">SAVOIR</span> Savoir</li>
+      </ul>
+      <div class="voc-tech"><code>Competence.type</code> — le détail relève des API Fiches ROME et Compétences.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Transitions</span><span class="ref-count">3 drapeaux</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">transitionEcologique</span> Métier concerné par la transition écologique</li>
+        <li><span class="voc-code">transitionNumerique</span> … par la transition numérique</li>
+        <li><span class="voc-code">transitionDemographique</span> … par la transition démographique</li>
+      </ul>
+      <div class="voc-tech">Booléens sur <code>Metier</code> (et <code>Appellation</code>). <code>transitionEcologiqueDetaillee</code> précise le cas échéant.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Syntaxe de requête
+    <span class="rs-count">recherche &amp; sélection</span>
+    <span class="rs-tech">endpoints <code>/requete</code> et paramètre <code>champs</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les endpoints <code>metier/requete</code> et <code>appellation/requete</code> exposent une recherche plein texte de type Solr. Tous les endpoints acceptent <code>champs</code> pour ne renvoyer que les attributs voulus.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Paramètres</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">q</span> Le(s) mot(s) ou début(s) de mot recherché(s)</li>
+        <li><span class="voc-code">qf</span> Index de recherche (par défaut : code et libellé)</li>
+        <li><span class="voc-code">fq</span> Filtres, ex. <code>fq=code:1 AND (code:2 OR libelle:app)</code></li>
+        <li><span class="voc-code">op</span> Opérateur entre mots multiples — <span class="ev">OR</span> (au moins un) ou <span class="ev">AND</span> (tous)</li>
+        <li><span class="voc-code">champs</span> Sélecteur de champs retournés · <span class="voc-code">date</span> version du ROME à une date donnée</li>
+      </ul>
+      <div class="voc-tech"><code>GET /v1/metiers/version</code> renvoie la version courante du ROME (<code>VersionRome</code> : <code>version</code> · <code>lastModifiedDate</code>).</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Classification <span class="dt-human">— l'arbre des métiers, du plus large au plus fin</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Grands domaines</span><div class="ep-human">Lister / lire les grands domaines (niveau le plus large)</div><span class="ep-path">/v1/metiers/grand-domaine · /{code}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Domaines professionnels</span><div class="ep-human">Lister / lire les domaines professionnels (sous les grands domaines)</div><span class="ep-path">/v1/metiers/domaine-professionnel · /{code}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Métiers</span><div class="ep-human">Lister (filtres RIASEC, NAF, compétence), lire, ou rechercher un métier</div><span class="ep-path">/v1/metiers/metier · /requete · /{code}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Appellations</span><div class="ep-human">Lister, lire, ou rechercher une appellation (intitulé concret)</div><span class="ep-path">/v1/metiers/appellation · /requete · /{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Facettes <span class="dt-human">— les axes de regroupement transverses</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Centres d'intérêt</span><div class="ep-human">Lister / lire les centres d'intérêt et leurs métiers liés</div><span class="ep-path">/v1/metiers/centre-interet · /{code}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Secteurs d'activité</span><div class="ep-human">Lister / lire les secteurs (avec sous-secteurs et métiers liés)</div><span class="ep-path">/v1/metiers/secteur-activite · /{code}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Thèmes</span><div class="ep-human">Lister / lire les thèmes et leurs métiers</div><span class="ep-path">/v1/metiers/theme · /{code}</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Service <span class="dt-human">— métadonnée</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Version</span><div class="ep-human">Version courante du référentiel ROME et date de dernière modification</div><span class="ep-path">/v1/metiers/version</span></div></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">20 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Entité de classification</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Facette / rattachement</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">GrandDomaine</span> <span class="sc-desc">— niveau 1 de l'arbre</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">DomaineProfessionnel</span> <span class="sc-desc">— niveau 2</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Metier</span> <span class="sc-desc">— niveau 3, objet central</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Appellation</span> <span class="sc-desc">— niveau 4, intitulé concret</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">AppellationEsco</span> <span class="sc-desc">— mapping ESCO européen</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">CentreInteret</span> <span class="sc-desc">— centre d'intérêt</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">SecteurActivite</span> <span class="sc-desc">— secteur (avec sous-secteurs)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Theme</span> <span class="sc-desc">— thème</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">DivisionNaf</span> <span class="sc-desc">— rattachement NAF</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Formacode</span> <span class="sc-desc">— rattachement formation</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">ContexteTravail</span> <span class="sc-desc">— contexte de travail</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Competence</span> <span class="sc-desc">— compétence (code, type)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">CompetenceCle</span> <span class="sc-desc">— compétence + fréquence</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">CompetenceDetaillee</span> <span class="sc-desc">— compétence détaillée</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">MacroSavoirFaire</span> <span class="sc-desc">— macro savoir-faire</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">MacroSavoirEtreProfessionnel</span> <span class="sc-desc">— macro savoir-être</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Savoir</span> <span class="sc-desc">— savoir</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">LiaisonEntreMetierEtCentreInteret</span> <span class="sc-desc">— lien métier ↔ centre d'intérêt</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">LiaisonEntreMetierEtSecteurActivite</span> <span class="sc-desc">— lien métier ↔ secteur</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">VersionRome</span> <span class="sc-desc">— version du référentiel</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Du mot-clé au métier détaillé</strong> — Une application veut afficher la fiche d'un métier du numérique. Elle recherche d'abord « développeur » parmi les métiers, puis lit le métier retenu en demandant les champs utiles : appellations, profil RIASEC, compétences mobilisées et mobilité.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-search"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// 1) Rechercher un métier</span>
+<span class="jc">// GET /v1/metiers/metier/requete</span>
+<span class="jc">//      ?q=développeur&champs=code,libelle</span>
+<span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// ─ Réponse 200 (tableau) ──────────────</span>
+[
+  { <span class="jk">"code"</span>: <span class="js">"M1805"</span>, <span class="jk">"libelle"</span>: <span class="js">"Études et développement informatique"</span> },
+  { <span class="jk">"code"</span>: <span class="js">"M1806"</span>, <span class="jk">"libelle"</span>: <span class="js">"Conseil et maîtrise d'ouvrage en systèmes d'information"</span> }
+]</div>
+<div data-section="s-metier"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// 2) Lire le métier retenu</span>
+<span class="jc">// GET /v1/metiers/metier/M1805</span>
+<span class="jc">//   ?champs=code,libelle,riasecMajeur,riasecMineur,</span>
+<span class="jc">//    transitionNumerique,appellations,</span>
+<span class="jc">//    competencesMobiliseesPrincipales,metiersEnProximite</span>
+<span class="jc">// ──────────────────────────────────────</span>
+{
+  <span class="jk">"code"</span>: <span class="js">"M1805"</span>,
+  <span class="jk">"libelle"</span>: <span class="js">"Études et développement informatique"</span>,
+  <span class="jk">"codeIsco"</span>: <span class="js">"2512"</span>,
+  <span class="jk">"riasecMajeur"</span>: <span class="js">"I"</span>,
+  <span class="jk">"riasecMineur"</span>: <span class="js">"R"</span>,
+  <span class="jk">"transitionNumerique"</span>: <span class="jb">true</span>,
+  <span class="jk">"transitionEcologique"</span>: <span class="jb">false</span>,
+  <span class="jk">"domaineProfessionnel"</span>: {
+    <span class="jk">"code"</span>: <span class="js">"M18"</span>,
+    <span class="jk">"libelle"</span>: <span class="js">"Systèmes d'information et de télécommunication"</span>,
+    <span class="jk">"grandDomaine"</span>: { <span class="jk">"code"</span>: <span class="js">"M"</span>, <span class="jk">"libelle"</span>: <span class="js">"Support à l'entreprise"</span> }
+  },
+  <span class="jk">"appellations"</span>: [
+    {
+      <span class="jk">"code"</span>: <span class="js">"404442"</span>,
+      <span class="jk">"libelle"</span>: <span class="js">"Développeur / Développeuse web"</span>,
+      <span class="jk">"classification"</span>: <span class="js">"PRINCIPALE"</span>,
+      <span class="jk">"appellationEsco"</span>: { <span class="jk">"libelle"</span>: <span class="js">"développeur web"</span>, <span class="jk">"uri"</span>: <span class="js">"http://data.europa.eu/esco/occupation/…"</span> }
+    },
+    { <span class="jk">"code"</span>: <span class="js">"404449"</span>, <span class="jk">"libelle"</span>: <span class="js">"Ingénieur / Ingénieure DevOps"</span>, <span class="jk">"classification"</span>: <span class="js">"PRINCIPALE"</span> }
+  ],
+  <span class="jk">"competencesMobiliseesPrincipales"</span>: [
+    { <span class="jk">"competence"</span>: { <span class="jk">"libelle"</span>: <span class="js">"Concevoir une application web"</span>, <span class="jk">"type"</span>: <span class="js">"MACRO-SAVOIR-FAIRE"</span> }, <span class="jk">"frequence"</span>: <span class="jn">92</span> },
+    { <span class="jk">"competence"</span>: { <span class="jk">"libelle"</span>: <span class="js">"Réaliser des tests d'intégration"</span>, <span class="jk">"type"</span>: <span class="js">"COMPETENCE-DETAILLEE"</span> }, <span class="jk">"frequence"</span>: <span class="jn">74</span> }
+  ],
+  <span class="jk">"metiersEnProximite"</span>: [
+    { <span class="jk">"code"</span>: <span class="js">"M1806"</span>, <span class="jk">"libelle"</span>: <span class="js">"Conseil et maîtrise d'ouvrage en SI"</span> }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-search">
+  <div class="ex-title"><span class="ex-ico">🔎</span> 1 — Recherche plein texte</div>
+  <div class="ex-card">
+    <h4>« développeur » → deux métiers candidats</h4>
+    <p>La recherche renvoie les métiers dont le libellé correspond, ici limités au <code>code</code> et au <code>libelle</code> via <code>champs</code>. L'application retient <strong>M1805</strong>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>M1805</strong> → Études et développement informatique</div>
+      <div class="ex-item"><strong>M1806</strong> → Conseil et maîtrise d'ouvrage en SI</div>
+    </div>
+    <div class="ex-agent">Endpoint : <code>metier/requete?q=développeur</code></div>
+  </div>
+</div>
+
+<div data-section="s-metier">
+  <div class="ex-title"><span class="ex-ico">🧩</span> 2 — Le métier en détail</div>
+  <div class="ex-card">
+    <h4>M1805 — Études et développement informatique</h4>
+    <p>On lit le métier en demandant uniquement les champs utiles. Il se situe dans le grand domaine <strong>M — Support à l'entreprise</strong>, domaine <strong>M18</strong>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Profil RIASEC</strong> → <span class="ex-tag tag-prio">I</span> Investigateur · <span class="ex-tag tag-prio">R</span> Réaliste</div>
+      <div class="ex-item"><strong>Transition</strong> → <span class="ex-tag tag-encours">numérique</span></div>
+      <div class="ex-item"><strong>ISCO</strong> → 2512 (correspondance internationale)</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;">Les <strong>appellations</strong> donnent les intitulés concrets — « Développeur web » (avec son mapping <strong>ESCO</strong> européen), « Ingénieur DevOps » — toutes deux <span class="ex-tag tag-ok">PRINCIPALE</span>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Concevoir une application web</strong> → fréquence 92 · macro-savoir-faire</div>
+      <div class="ex-item"><strong>Réaliser des tests d'intégration</strong> → fréquence 74 · compétence détaillée</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">La <strong>mobilité</strong> (<code>metiersEnProximite</code>) suggère M1806 comme évolution. Pour la fiche compétences-savoirs structurée par enjeu, on enchaînerait sur l'API <a href="rome-4-0-fiches-metiers.html">Fiches ROME</a>.</p>
+  </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — ROME 4.0 - Métiers v1 · api.francetravail.io · 17 endpoints · 20 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
