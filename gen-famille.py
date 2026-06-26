@@ -131,13 +131,12 @@ def render(current):
     gid = g["id"]
     members = ordered_members(gid)
     cards = "\n\n".join(card(gid, current, s) for s in members)
-    intro = INTRO.get(gid, INTRO_DEFAULT)
+    intro_parts = [esc(g["description"])]
+    if gid in INTRO:
+        intro_parts.append(INTRO[gid])
+    intro_html = " ".join(intro_parts) + ' <a href="../index.html">Voir toutes les familles</a> dans le catalogue.'
     view = '''<!-- FAMILLE (généré par gen-famille.py) -->
 <div class="view" id="v-famille">
-
-<div class="note" style="margin-bottom:20px;">
-  Cette API fait partie de la famille <strong>« %s »</strong> (%d API). %s <a href="../index.html">Voir toutes les familles</a> dans le catalogue.
-</div>
 
 <div class="ref-section">
   <h2 class="ref-section-title">
@@ -154,7 +153,7 @@ def render(current):
   </div>
 </div>
 
-</div>''' % (esc(g["label"]), len(members), esc(g["description"]), esc(g["label"]), len(members), intro, cards)
+</div>''' % (esc(g["label"]), len(members), intro_html, cards)
     button = "    <button class=\"tb\" onclick=\"setTab('famille')\">Famille</button>"
     return button, view
 
