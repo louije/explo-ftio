@@ -2937,8 +2937,12 @@ const CATALOGUE = {
         "Commune"
       ],
       "pageId": 91,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Communes d'un département",
+        "Équipements par catégorie",
+        "Communes à proximité"
+      ],
       "starred": false,
       "isNew": true
     },

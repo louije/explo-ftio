@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadre de vie des communes — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Cadre de vie des communes</h1>
+  <div class="sub">Pour un département donné, la liste de ses communes avec leur population, leurs coordonnées GPS, le nombre d'équipements par catégorie, et leurs communes voisines. Données issues d'eTerritoire.fr.</div>
+  <div class="sub-tech">API Cadre de vie des communes v1.0.0 — 1 endpoint · 1 schéma</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/eterritoire/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Une recherche par département.</strong> On interroge un département (<code>dep</code>) et l'API renvoie un tableau de communes. Chaque commune décrit son <em>cadre de vie</em> : combien d'équipements de chaque type, où elle se situe, et ce qu'il y a autour.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Communes <span class="dto">Commune[]</span></div>
+    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b" id="m-identite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Identité et localisation</div>
+        <div class="card">5 champs</div>
+      </div>
+      <div class="nb"><div class="fi">
+        L'identification de la commune et sa position. Le code INSEE est la clé pour la croiser avec d'autres référentiels.
+        <div class="fi-tech"><code>idinsee</code> <span class="eg">ex. 84001</span> · <code>nom</code> <span class="eg">ex. Althen-des-Paluds</span> · <code>pop</code> — population <span class="eg">ex. 2671</span>
+          <br><code>gps</code> — tableau <span class="eg">[latitude, longitude]</span> · <code>url</code> — fiche commune sur eTerritoire.fr</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-n" id="m-equipements">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Équipements <span class="dto">equipements</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Le nombre d'équipements de la commune, ventilé en cinq catégories. Ce sont des <strong>compteurs</strong> (entiers), pas la liste détaillée des équipements.
+        <div class="fi-tech"><code>Équipements sportifs</code> · <code>Santé</code> · <code>Éducation</code> · <code>Loisirs</code> · <code>Services publics</code> — chacun un entier</div>
+      </div></div>
+    </div>
+
+    <div class="n l2t stack" id="m-proxycom">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Communes à proximité <span class="dto">proxycom</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Les communes voisines, retournées <strong>uniquement</strong> si le paramètre <code>proxycom</code> est passé. Chaque voisine porte son nom, code postal et distance.
+        <div class="fi-tech"><code>ncom</code> — nom <span class="eg">ex. Entraigues-sur-la-Sorgue</span> · <code>cp</code> — code postal <span class="eg">ex. 84320</span> · <code>dista</code> — distance</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume <code>partenaire</code> (client credentials). Aucun <code>ft-jeton-usager</code> : ce sont des données publiques de territoire.
+</div>
+
+<div class="note">
+  <strong>Croiser par commune</strong> — le <code>idinsee</code> est la clé pour relier cette commune à d'autres API où la commune est un objet de premier plan : le <a href="offres-emploi.html">référentiel des communes d'Offres d'emploi</a> (codes canoniques) · les <a href="marche-travail.html">statistiques du marché du travail</a> par commune · les données de territoire (population active, établissements) via <a href="informations-territoire.html">Informations sur un territoire</a>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Cadre de vie <span class="dt-human">— communes d'un département et leurs infrastructures</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupérer une liste de communes et leurs infrastructures</span><div class="ep-human">Toutes les communes d'un département, avec équipements, GPS et voisines optionnelles</div><span class="ep-path">/cadre-de-vie.php</span></div></div>
+  </div>
+  <div class="note" style="margin-top:10px;">
+    <strong>Paramètres</strong>
+    <div class="chips"><code>dep</code><code>proxycom</code></div>
+    <span style="display:block;margin-top:6px;font-size:.8rem;"><code>dep</code> (requis) — numéro de département <span class="eg">ex. 84 (Vaucluse)</span>. <code>proxycom</code> (optionnel) — joint les communes à proximité (10 km, max 30).</span>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Schéma <span class="dt-human">— type de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Commune</span> <span class="sc-desc">— identité, équipements, GPS, voisines</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Le cadre de vie d'une commune du Vaucluse</strong> — Une application interroge le département 84 avec les communes voisines. Premier résultat : Althen-des-Paluds, une commune de 2 671 habitants.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-commune"><span class="jc">// GET /cadre-de-vie.php?dep=84&proxycom=5</span>
+<span class="jc">// ── client credentials (partenaire) ──</span>
+<span class="jc">// ── Réponse 200 (tableau) ──</span>
+[
+  {
+    <span class="jk">"idinsee"</span>: <span class="js">"84001"</span>,
+    <span class="jk">"nom"</span>: <span class="js">"Althen-des-Paluds"</span>,
+    <span class="jk">"pop"</span>: <span class="js">"2671"</span>,
+    <span class="jk">"url"</span>: <span class="js">"/territoires/.../althen-des-paluds/84001/34080"</span>,
+    <span class="jk">"gps"</span>: [<span class="jn">43.9847</span>, <span class="jn">4.9469</span>],</div>
+<div data-section="s-equip">    <span class="jk">"equipements"</span>: {
+      <span class="jk">"Équipements sportifs"</span>: <span class="jn">6</span>,
+      <span class="jk">"Santé"</span>: <span class="jn">19</span>,
+      <span class="jk">"Éducation"</span>: <span class="jn">3</span>,
+      <span class="jk">"Loisirs"</span>: <span class="jn">4</span>,
+      <span class="jk">"Services publics"</span>: <span class="jn">2</span>
+    },</div>
+<div data-section="s-proxy">    <span class="jk">"proxycom"</span>: [
+      { <span class="jk">"ncom"</span>: <span class="js">"Entraigues-sur-la-Sorgue"</span>, <span class="jk">"cp"</span>: <span class="jn">84320</span>, <span class="jk">"dista"</span>: <span class="jn">3.2</span> },
+      { <span class="jk">"ncom"</span>: <span class="js">"Monteux"</span>, <span class="jk">"cp"</span>: <span class="jn">84170</span>, <span class="jk">"dista"</span>: <span class="jn">4.1</span> }
+    ]
+  }
+]</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-commune">
+  <div class="ex-title"><span class="ex-ico">📍</span> La commune</div>
+  <div class="ex-card">
+    <h4>Althen-des-Paluds (84001)</h4>
+    <p>2 671 habitants, dans le Vaucluse. Le code INSEE <code>84001</code> permet de la croiser avec n'importe quel autre référentiel territorial.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Position</strong> → 43.98, 4.95 (lat, lon)</div>
+      <div class="ex-item"><strong>Fiche</strong> → page eTerritoire.fr via <code>url</code></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-equip">
+  <div class="ex-title"><span class="ex-ico">🏟️</span> Les équipements</div>
+  <div class="ex-card">
+    <h4>Cinq compteurs</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Sportifs</strong> → 6 · <strong>Santé</strong> → 19 · <strong>Éducation</strong> → 3</div>
+      <div class="ex-item"><strong>Loisirs</strong> → 4 · <strong>Services publics</strong> → 2</div>
+    </div>
+    <div class="ex-agent">Des nombres, pas la liste détaillée des équipements.</div>
+  </div>
+</div>
+
+<div data-section="s-proxy">
+  <div class="ex-title"><span class="ex-ico">🧭</span> Les voisines</div>
+  <div class="ex-card">
+    <h4>Communes à proximité</h4>
+    <p>Présentes car <code>proxycom</code> a été demandé. Sinon, ce tableau est absent.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Entraigues-sur-la-Sorgue</strong> → 84320 · 3,2 km</div>
+      <div class="ex-item"><strong>Monteux</strong> → 84170 · 4,1 km</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.0 — API Cadre de vie des communes v1.0.0 · api.francetravail.io · 1 endpoint · 1 schéma
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

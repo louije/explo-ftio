@@ -243,6 +243,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Assurance chômage (ARE/ASP)",
     "Minima sociaux (AAH/ASS/RSA/AER)",
   ],
+  "cadre-vie-communes": [
+    "Communes d'un département",
+    "Équipements par catégorie",
+    "Communes à proximité",
+  ],
   "metiers-recherches": [
     "Métier ROME et appellation",
     "Contrats et temps de travail",
