@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrat d'engagement — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Contrat d'engagement</h1>
+  <div class="sub">Lire, signer ou refuser le contrat d'engagement réciproque d'un usager — le document qui formalise, depuis la loi pour le plein emploi, les engagements de l'usager et de son organisme référent.</div>
+  <div class="sub-tech">Contrat d'engagement v1 — 6 endpoints · 9 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/contrat-engagement/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Un contrat réciproque.</strong> Le contrat lie deux parties : ce à quoi <em>l'usager</em> s'engage, et ce à quoi <em>l'organisme</em> (le conseiller référent) s'engage en retour. L'API permet de le lire, de récupérer le modèle vierge, et de le signer ou le refuser.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Contrat d'engagement <span class="dto">ContratEngagement</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">L'état du contrat, ses dates clés et l'organisme signataire.
+      <div class="fi-tech"><code>etat</code> — <span class="ev">A_SIGNER</span> · <span class="ev">EN_ATTENTE_SIGNATURE</span> · <span class="ev">SIGNE</span> · <span class="ev">REFUSE</span> · <span class="ev">SUSPENDU</span>
+        <br><code>dateSignature</code> · <code>dateRefus</code> · <code>dateSuspension</code> — renseignées selon l'état · <code>organisme</code> — nom de l'organisme signataire</div>
+    </div>
+
+    <div class="n l1-b" id="m-engagements">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Engagements <span class="dto">Engagements</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Le cœur réciproque du contrat : deux collections d'engagements en vis-à-vis.
+          <div class="fi-tech"><code>engagementsUsager[]</code> — ce que l'usager s'engage à faire · <code>engagementsConseiller[]</code> — ce que l'organisme s'engage à faire</div>
+        </div>
+
+        <div class="n l3 stack" id="m-engagement">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Engagement <span class="dto">Engagement</span></div>
+            <div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            Chaque engagement est un thème avec une liste de formulations.
+            <div class="fi-tech"><code>titre</code> <span class="eg">ex. Réaliser des actes de recherche d'emploi</span> · <code>libelles[]</code> — les formulations détaillées</div>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-mentions">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Mentions légales <span class="dto">MentionsLegales</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Pas du remplissage : la <code>mention</code> porte le <strong>texte légal réellement présenté à l'usager</strong> — les conséquences d'un non-respect (radiation, suppression des allocations, transmission au Conseil départemental pour le RSA) — et <code>voiesRecours</code> le droit de contester. Seuls les champs <em>structurés</em> de sanction restent vides pour l'instant.
+          <div class="fi-tech"><code>mentions[]</code> <span class="at">@ MentionLegale</span> (<code>titre</code> · <code>mention</code> — le texte · <code>notes[]</code>) · <code>voiesRecours</code> — même forme
+            <br><code>niveauSanction</code> · <code>sanctions[]</code> · <code>articles[]</code> <span class="eg">— déclarés mais vides pour le moment</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume <code>/agent</code> (client credentials). Chaque appel nécessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+</div>
+
+<div class="note">
+  <strong>Dans le parcours « loi plein emploi »</strong> — le contrat d'engagement fait suite à l'<a href="orientation-usager.html">orientation</a> de l'usager vers un organisme. En cas de non-respect des engagements, les <a href="gestion-sanctions-rsa.html">sanctions</a> relèvent d'une API dédiée.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Le vocabulaire métier de l'API tient pour l'essentiel dans l'<strong>état du contrat</strong>, qui pilote le flux signer / refuser. Plusieurs champs juridiques (sanctions, articles, niveau de sanction) sont déclarés mais <em>non renseignés pour le moment</em>.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    État du contrat
+    <span class="rs-count">5 états</span>
+    <span class="rs-tech"><code>ContratEngagement.etat</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    L'état détermine ce qu'on peut faire : un contrat <code>A_SIGNER</code> attend une première décision ; une fois <code>SIGNE</code> ou <code>REFUSE</code>, il peut être re-signé ou re-refusé.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Valeurs</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">A_SIGNER</span> Contrat à signer (première décision attendue)</li>
+        <li><span class="voc-code">EN_ATTENTE_SIGNATURE</span> En attente de signature</li>
+        <li><span class="voc-code">SIGNE</span> Signé par l'usager</li>
+        <li><span class="voc-code">REFUSE</span> Refusé par l'usager</li>
+        <li><span class="voc-code">SUSPENDU</span> Contrat suspendu</li>
+      </ul>
+      <div class="voc-tech">Les dates (<code>dateSignature</code> · <code>dateRefus</code> · <code>dateSuspension</code>) sont renseignées en cohérence avec l'état.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Lecture <span class="dt-human">— consulter le contrat et son modèle</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire le contrat d'engagement de l'usager</span><div class="ep-human">L'état, les engagements réciproques et les mentions légales du contrat existant</div><span class="ep-path">/lecture</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lire la structure du contrat</span><div class="ep-human">Le modèle (engagements types) — utile avant une première signature</div><span class="ep-path">/lecture/structure</span></div></div>
+  </div>
+</div>
+
+<div class="domain">
+  <div class="domain-title">Signer / Refuser <span class="dt-human">— POST pour un premier contrat, PATCH pour un contrat existant</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Créer un premier contrat signé</span><div class="ep-human">Première signature : crée le contrat</div><span class="ep-path">/signer</span></div></div>
+    <div class="ep-row"><span class="ep-method m-patch">PATCH</span><div><span class="ep-desc">Signer un contrat existant</span><div class="ep-human">Re-signer un contrat déjà créé</div><span class="ep-path">/signer</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Créer un premier contrat refusé</span><div class="ep-human">Premier refus : crée le contrat à l'état refusé</div><span class="ep-path">/refuser</span></div></div>
+    <div class="ep-row"><span class="ep-method m-patch">PATCH</span><div><span class="ep-desc">Refuser un contrat existant</span><div class="ep-human">Re-refuser un contrat déjà créé</div><span class="ep-path">/refuser</span></div></div>
+  </div>
+  <div class="note" style="margin-top:10px;">La règle est constante : <code>POST</code> pour le <strong>premier</strong> contrat (création), <code>PATCH</code> pour un contrat <strong>déjà existant</strong>.</div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">9 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Divers</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ContratEngagement</span> <span class="sc-desc">— le contrat (état, engagements, mentions)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Engagements</span> <span class="sc-desc">— usager + conseiller</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Engagement</span> <span class="sc-desc">— titre + libellés</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">MentionsLegales</span> <span class="sc-desc">— cadre juridique</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">MentionLegale</span> <span class="sc-desc">— une mention</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Structure</span> <span class="sc-desc">— modèle vierge des engagements</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Signature</span> <span class="sc-desc">— corps de signer</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">Refus</span> <span class="sc-desc">— corps de refuser</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">ProblemDetails</span> <span class="sc-desc">— erreur (RFC 7807)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Un contrat signé, lu par le conseiller</strong> — Après l'orientation de l'usager, l'agent lit son contrat d'engagement : il est signé, et porte les engagements réciproques de l'usager et de France Travail.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-contrat"><span class="jc">// GET /lecture</span>
+<span class="jc">// Headers : ft-jeton-usager + pa-*-agent</span>
+<span class="jc">// ── Réponse 200 ──</span>
+{
+  <span class="jk">"etat"</span>: <span class="js">"SIGNE"</span>,
+  <span class="jk">"dateSignature"</span>: <span class="js">"2026-04-15"</span>,
+  <span class="jk">"organisme"</span>: <span class="js">"France Travail"</span>,</div>
+<div data-section="s-engagements">  <span class="jk">"engagements"</span>: {
+    <span class="jk">"engagementsUsager"</span>: [
+      {
+        <span class="jk">"titre"</span>: <span class="js">"Réaliser des actes de recherche d'emploi"</span>,
+        <span class="jk">"libelles"</span>: [<span class="js">"Effectuer des candidatures régulières"</span>, <span class="js">"Participer aux entretiens proposés"</span>]
+      },
+      {
+        <span class="jk">"titre"</span>: <span class="js">"Être assidu aux actions du parcours"</span>,
+        <span class="jk">"libelles"</span>: [<span class="js">"Suivre les ateliers et formations convenus"</span>]
+      }
+    ],
+    <span class="jk">"engagementsConseiller"</span>: [
+      {
+        <span class="jk">"titre"</span>: <span class="js">"Accompagner l'usager"</span>,
+        <span class="jk">"libelles"</span>: [<span class="js">"Assurer un suivi régulier"</span>, <span class="js">"Proposer des offres et actions adaptées"</span>]
+      }
+    ]
+  },</div>
+<div data-section="s-mentions">  <span class="jk">"mentionsLegales"</span>: {
+    <span class="jk">"mentions"</span>: [
+      {
+        <span class="jk">"titre"</span>: <span class="js">"Respect du contrat"</span>,
+        <span class="jk">"mention"</span>: <span class="js">"Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu'à la radiation de la liste des demandeurs d'emploi et la suppression de vos allocations. Si vous percevez le RSA, la décision de radiation est transmise au Président du Conseil départemental qui pourra suspendre le paiement."</span>,
+        <span class="jk">"notes"</span>: [<span class="js">"*L'autorité compétente peut varier selon le territoire (CAF, président de collectivité…)."</span>]
+      }
+    ],
+    <span class="jk">"voiesRecours"</span>: {
+      <span class="jk">"titre"</span>: <span class="js">"Voies de recours"</span>,
+      <span class="jk">"mention"</span>: <span class="js">"Vous pourrez présenter vos observations avant toute décision de sanction, et contester la sanction auprès de l'autorité compétente."</span>
+    },
+    <span class="jk">"niveauSanction"</span>: <span class="jnull">null</span>,
+    <span class="jk">"articles"</span>: []
+  }
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-contrat">
+  <div class="ex-title"><span class="ex-ico">📝</span> Le contrat</div>
+  <div class="ex-card">
+    <h4>Contrat signé — 15 avril 2026</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>État</strong> → <span class="ex-tag tag-ok">SIGNE</span></div>
+      <div class="ex-item"><strong>Organisme</strong> → France Travail</div>
+    </div>
+    <div class="ex-agent">L'état pilote le flux : ici signé, donc re-signable via <code>PATCH /signer</code>.</div>
+  </div>
+</div>
+
+<div data-section="s-engagements">
+  <div class="ex-title"><span class="ex-ico">🤝</span> Les engagements réciproques</div>
+  <div class="ex-card">
+    <h4>Côté usager</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Recherche d'emploi</strong> → candidatures régulières, entretiens</div>
+      <div class="ex-item"><strong>Assiduité</strong> → ateliers et formations convenus</div>
+    </div>
+    <h4 style="margin-top:12px;">Côté organisme</h4>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Accompagnement</strong> → suivi régulier, offres et actions adaptées</div>
+    </div>
+    <div class="ex-agent">Chaque engagement = un <code>titre</code> + des <code>libelles</code>.</div>
+  </div>
+</div>
+
+<div data-section="s-mentions">
+  <div class="ex-title"><span class="ex-ico">⚖️</span> Les mentions légales</div>
+  <div class="ex-card">
+    <h4>Ce que le contrat dit des sanctions</h4>
+    <p>La mention « Respect du contrat » est explicite : un non-respect expose à la <strong>radiation</strong> et à la <strong>suppression des allocations</strong> ; pour un allocataire du RSA, la radiation est transmise au <strong>Conseil départemental</strong>, qui peut suspendre le versement.</p>
+    <p>Les <strong>voies de recours</strong> garantissent le droit de présenter ses observations et de contester.</p>
+    <div class="ex-agent">Texte réel issu du schéma. Les champs structurés <code>sanctions[]</code> / <code>articles[]</code> sont encore vides.</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.3 — Contrat d'engagement v1 · api.francetravail.io · 6 endpoints · 9 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

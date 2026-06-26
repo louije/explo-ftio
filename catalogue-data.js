@@ -87,8 +87,12 @@ const CATALOGUE = {
         "Refus"
       ],
       "pageId": 431,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Contrat réciproque (usager / conseiller)",
+        "Signer ou refuser",
+        "État et mentions légales"
+      ],
       "starred": false,
       "isNew": true
     },

@@ -302,6 +302,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Candidature spontanée",
     "Offres vs entreprises",
   ],
+  "contrat-engagement": [
+    "Contrat réciproque (usager / conseiller)",
+    "Signer ou refuser",
+    "État et mentions légales",
+  ],
   "acces-emploi-demandeurs-emploi": [
     "Accès emploi demandeurs",
     "Ventilation par caractéristique",
