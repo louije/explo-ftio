@@ -23,6 +23,7 @@
   <div class="tab-group">
     <button class="tb active" onclick="setTab('nested')">Mod&#xe8;le</button>
     <button class="tb" onclick="setTab('famille')">Famille Statistiques</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
     <button class="tb" onclick="setTab('coverage')">Couverture API</button>
     <button class="tb" onclick="setTab('example')">Exemple</button>
   </div>
@@ -172,6 +173,96 @@
 
 <div class="note">
   <strong>Quelle API appeler ?</strong> Portrait socio-économique d'un territoire → <strong>Informations sur un territoire</strong>. Offres / demande / tensions / salaires par métier → <strong>Marché du travail</strong>. Devenir des demandeurs d'emploi → <strong>Accès à l'emploi des demandeurs</strong>. Retour à l'emploi après formation → <strong>Sortants de formation</strong>.
+</div>
+
+</div>
+
+<!-- RÉFÉRENTIELS (généré par gen-referentiels-stats.py) -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Toutes les dimensions de requête viennent du <strong>Référentiel Smart Emploi</strong>, consultable via les endpoints <code>GET /referentiel/*</code>. Les valeurs ci-dessous sont les principales ; la liste <em>complète et à jour</em>, ainsi que les combinaisons réellement autorisées <strong>pour chaque indicateur</strong>, sont données par <code>GET /referentiel/details-indicateurs</code> (le catalogue des indicateurs).
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Maille territoriale
+    <span class="rs-count">6 niveaux</span>
+    <span class="rs-tech"><code>codeTypeTerritoire</code> · référentiel <code>type-territoires</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Le niveau géographique de l'analyse, du plus large au plus fin. Les mailles fines (bassin, EPCI, CLPE) sont au cœur du pilotage territorial de la loi pour le plein emploi.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Niveaux disponibles</span><span class="ref-count">6</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">NAT</span> National</li>
+        <li><span class="voc-code">REG</span> Région</li>
+        <li><span class="voc-code">DEP</span> Département</li>
+        <li><span class="voc-code">BASSIN</span> Bassin d'emploi France Travail</li>
+        <li><span class="voc-code">EPCI</span> Intercommunalité</li>
+        <li><span class="voc-code">CLPE</span> Comité local pour l'emploi</li>
+      </ul>
+      <div class="voc-tech">Codes attestés : <code>NAT</code>, <code>REG</code>, <code>DEP</code>. Les libellés des mailles fines sont confirmés ; leurs codes exacts et leur disponibilité par indicateur sont servis par <code>GET /referentiel/type-territoires</code> et <code>details-indicateurs</code>.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Dimensions de croisement
+    <span class="rs-count">3</span>
+    <span class="rs-tech"><code>codeTypeActivite</code> · <code>codeTypePeriode</code> · <code>codeTypeNomenclature</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les axes que l'on croise avec le territoire : <strong>sur quoi</strong> porte la statistique (activité), à <strong>quel pas de temps</strong> (période), et selon quels découpages (nomenclatures).
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type d'activité</span><span class="ref-count">1</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">ROME</span> Métier recherché (code ROME)</li>
+      </ul>
+      <div class="voc-tech"><code>codeTypeActivite</code> — liste complète et combinaisons valides via <code>details-indicateurs</code>.</div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Type de période</span><span class="ref-count">1</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">TRIMESTRE</span> Donnée trimestrielle</li>
+      </ul>
+      <div class="voc-tech"><code>codeTypePeriode</code> — <code>dernierePeriode=true</code> pour la plus récente, sinon <code>listeCodePeriode</code>.</div>
+    </div>
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nomenclatures</span><span class="ref-count">1</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">DUREEEMP</span> Durée d'emploi / délai d'accès</li>
+      </ul>
+      <div class="voc-tech"><code>codeTypeNomenclature</code> — axes de découpage propres à certains indicateurs.</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#7c3aed;"></span>
+    Indicateurs &amp; requêtes possibles
+    <span class="rs-count">1</span>
+    <span class="rs-tech">un appel par indicateur</span>
+  </h2>
+  <div class="ref-section-intro">
+    Chaque indicateur accepte un jeu de critères précis. <strong>Territoire</strong> est toujours obligatoire ; les autres critères varient — le catalogue <code>details-indicateurs</code> fait foi.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Accès à l'emploi à 6 mois</span><span class="ref-count"><span class="ev">ACC_1</span></span></div>
+      <div class="expl"><code>stat-acces-emploi</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> délai d'accès, périodes, caractéristiques. <em>Demandeurs catégories A et B, par métier recherché.</em></div>
+    </div>
+
+  </div>
 </div>
 
 </div>
