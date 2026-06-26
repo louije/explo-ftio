@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expériences déclarées par l'employeur — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Expériences déclarées par l'employeur</h1>
+  <div class="sub">Reconstitue la carrière professionnelle d'un individu à partir des justificatifs transmis par ses employeurs à France Travail — les contrats officiels, pas le CV saisi par la personne.</div>
+  <div class="sub-tech">API Expériences déclarées par l'employeur v1.0 — 1 endpoint · 3 schémas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/peconnect-experiencesprofessionellesdeclareesparlemployeur/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('sources')">Profil vs employeur</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Contrats déclarés <span class="dto">ContratsResponse</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+
+    <div class="n l1-b stack" id="m-contrat">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Contrat <span class="dto">Contrat</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Un justificatif d'emploi transmis par un employeur. Chaque contrat reconstitue une ligne de carrière à partir des déclarations officielles.
+
+        <div class="n l1-p" id="m-poste">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Poste et nature du contrat</div>
+            <div class="card">3 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            L'intitulé du poste, la nature du contrat et le niveau de qualification, tels que déclarés par l'employeur.
+            <div class="fi-tech"><code>intitulePoste</code> <span class="eg">ex. Employé de commerce qualifié</span> · <code>natureContrat</code> <span class="eg">ex. CDD, CDI</span> · <code>niveauQualification</code> <span class="eg">ex. Non cadre</span></div>
+          </div></div>
+        </div>
+
+        <div class="n l1-n" id="m-periode">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Période et temps de travail</div>
+            <div class="card">4 champs</div>
+          </div>
+          <div class="nb"><div class="fi">
+            Les dates de l'activité, la durée du contrat et la quantité de travail. <span class="at">Format de date</span> les dates sont au format <code>AAAAMMJJ</code> sans séparateur (ex. <code>20130311</code>).
+            <div class="fi-tech"><code>dateDebut</code> · <code>dateFin</code> — format <code>yyyyMMdd</code> <span class="eg">ex. 20130311</span>
+              <br><code>dureeContrat</code> · <code>quantiteTravail</code> (entier) — quantité interprétée selon l'unité passée en filtre (<code>uniteDureeTravail</code>)</div>
+          </div></div>
+        </div>
+
+        <div class="n l2t" id="m-entreprise">
+          <div class="nh"><div class="dot"></div>
+            <div class="name">Entreprise <span class="dto">Entreprise</span></div>
+            <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+          </div>
+          <div class="nb"><div class="fi">
+            L'employeur identifié officiellement — c'est ce qui distingue cette source du CV déclaratif : on a le SIRET, le code APE et le secteur réels.
+            <div class="fi-tech"><code>nom</code> · <code>siret</code> · <code>codeApe</code> <span class="eg">ex. 5629B</span> · <code>secteur</code> <span class="eg">ex. Privé</span> · <code>regime</code> <span class="eg">ex. Régime Général</span></div>
+          </div></div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Prérequis</strong> — API du royaume PE Connect (OAuth utilisateur). L'usager se connecte avec son compte France Travail et autorise le scope <code>api_peconnect-experiencesprofessionellesdeclareesparlemployeurv1</code>. L'application accède alors aux seules données de l'usager connecté.
+</div>
+
+<div class="note">
+  Les filtres de <code>GET /contrats</code> permettent de restreindre la carrière retournée : <code>dateDebutPeriode</code> / <code>dateFinPeriode</code>, <code>natureContrat</code>, et <code>dureeTravailMin</code> avec son <code>uniteDureeTravail</code>.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: PROFIL VS EMPLOYEUR (disambiguation)           -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-sources">
+
+<div class="note" style="margin-bottom:20px;">
+  <strong>Deux sources pour un même parcours.</strong> France Travail expose les expériences professionnelles d'un individu par deux API PE Connect distinctes. Elles ne se remplacent pas : l'une est <em>déclarative</em>, l'autre repose sur des <em>justificatifs</em>. Selon votre besoin — afficher un CV ou vérifier une carrière — vous appellerez l'une, l'autre, ou les deux.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Profil de l'usager vs déclarations employeur
+    <span class="rs-count">2 sources</span>
+    <span class="rs-tech">royaume PE Connect</span>
+  </h2>
+  <div class="ref-section-intro">
+    Le fil conducteur : <strong>« ce que la personne dit »</strong> (son CV) versus <strong>« ce que France Travail a sur pièces »</strong> (les contrats déclarés par les employeurs).
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Expériences déclarées par l'employeur</span><span class="ref-count">cette page · 1 endpoint</span></div>
+      <div class="expl">La carrière reconstituée à partir des <strong>justificatifs employeurs</strong> transmis à France Travail. Données <strong>structurées et vérifiables</strong> : nature de contrat, niveau de qualification, et surtout l'employeur identifié (<code>siret</code>, <code>codeApe</code>, secteur, régime). Filtrable par période, nature de contrat et durée de travail. C'est la source à utiliser pour <em>reconstituer ou contrôler</em> un parcours sur pièces.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="experiences-professionnelles.html">Expériences professionnelles (profil)</a></span><span class="ref-count">1 endpoint</span></div>
+      <div class="expl">Le parcours <strong>saisi par l'usager</strong> dans son profil de compétences sur francetravail.fr. Données <strong>déclaratives et libres</strong> : description rédigée des missions, lieu, indicateur étranger, et même le bénévolat — des choses qu'un justificatif employeur n'a pas. Alimente le rapprochement CV ↔ offres.<br><strong>Employeur vs Profil :</strong> l'employeur fournit des contrats officiels, factuels et datés au format administratif ; le profil fournit le récit que la personne a choisi de mettre en avant. L'un vérifie, l'autre valorise.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Quelle API appeler ?</strong> Reconstituer / contrôler une carrière sur pièces, avec employeurs identifiés → <strong>Expériences déclarées par l'employeur</strong>. Afficher le CV tel que rédigé par la personne (descriptions, lieux, bénévolat) → <strong>Expériences professionnelles</strong>. Les deux partagent le même royaume PE Connect : l'usager autorise chaque API séparément.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Contrats <span class="dt-human">— la carrière déclarée par les employeurs</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Expériences professionnelles déclarées par votre employeur</span><div class="ep-human">Lister les contrats déclarés pour l'usager connecté, filtrables par période, nature et durée de travail</div><span class="ep-path">/contrats</span></div></div>
+  </div>
+  <div class="note" style="margin-top:10px;">
+    <strong>Filtres</strong>
+    <div class="chips"><code>dateDebutPeriode</code><code>dateFinPeriode</code><code>natureContrat</code><code>dureeTravailMin</code><code>uniteDureeTravail</code></div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">3 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ContratsResponse</span> <span class="sc-desc">— enveloppe : liste de contrats</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Contrat</span> <span class="sc-desc">— un justificatif d'emploi</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Entreprise</span> <span class="sc-desc">— l'employeur (SIRET, APE, secteur)</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Deux lignes de carrière sur pièces</strong> — Une application veut afficher le parcours vérifié d'un usager qui a autorisé l'accès. L'API renvoie les contrats déclarés par ses employeurs : un CDD dans la restauration collective, puis un CDI dans le commerce.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-cdd"><span class="jc">// GET /contrats</span>
+<span class="jc">// ── OAuth PE Connect ──</span>
+<span class="jc">// Authorization: Bearer eyJhbGciOi…</span>
+<span class="jc">// Scope: api_peconnect-experiencesprofess…employeurv1</span>
+<span class="jc">// ── Réponse 200 ──</span>
+{
+  <span class="jk">"contrats"</span>: [
+    {
+      <span class="jk">"intitulePoste"</span>: <span class="js">"Employé de commerce qualifié"</span>,
+      <span class="jk">"natureContrat"</span>: <span class="js">"CDD"</span>,
+      <span class="jk">"niveauQualification"</span>: <span class="js">"Non cadre"</span>,
+      <span class="jk">"dateDebut"</span>: <span class="js">"20130311"</span>,
+      <span class="jk">"dateFin"</span>: <span class="js">"20130321"</span>,
+      <span class="jk">"dureeContrat"</span>: <span class="js">"11"</span>,
+      <span class="jk">"quantiteTravail"</span>: <span class="jn">56</span>,
+      <span class="jk">"entreprise"</span>: {
+        <span class="jk">"nom"</span>: <span class="js">"CAISSE CENTRALE ACTIVITE SOCIALE"</span>,
+        <span class="jk">"siret"</span>: <span class="js">"77569474807916"</span>,
+        <span class="jk">"codeApe"</span>: <span class="js">"5629B"</span>,
+        <span class="jk">"secteur"</span>: <span class="js">"Privé"</span>,
+        <span class="jk">"regime"</span>: <span class="js">"Régime Général"</span>
+      }
+    },</div>
+<div data-section="s-cdi">    {
+      <span class="jk">"intitulePoste"</span>: <span class="js">"Vendeur en équipement de la personne"</span>,
+      <span class="jk">"natureContrat"</span>: <span class="js">"CDI"</span>,
+      <span class="jk">"niveauQualification"</span>: <span class="js">"Non cadre"</span>,
+      <span class="jk">"dateDebut"</span>: <span class="js">"20140602"</span>,
+      <span class="jk">"dateFin"</span>: <span class="jnull">null</span>,
+      <span class="jk">"dureeContrat"</span>: <span class="jnull">null</span>,
+      <span class="jk">"quantiteTravail"</span>: <span class="jn">151</span>,
+      <span class="jk">"entreprise"</span>: {
+        <span class="jk">"nom"</span>: <span class="js">"DISTRIBUTION CASINO FRANCE"</span>,
+        <span class="jk">"siret"</span>: <span class="js">"42876848000291"</span>,
+        <span class="jk">"codeApe"</span>: <span class="js">"4711F"</span>,
+        <span class="jk">"secteur"</span>: <span class="js">"Privé"</span>,
+        <span class="jk">"regime"</span>: <span class="js">"Régime Général"</span>
+      }
+    }
+  ]
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-cdd">
+  <div class="ex-title"><span class="ex-ico">📄</span> Contrat 1 — CDD restauration collective</div>
+  <div class="ex-card">
+    <h4>Employé de commerce qualifié</h4>
+    <p><span class="ex-tag tag-besoin">CDD</span> Mars 2013 — un contrat court, déclaré par l'employeur.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Employeur</strong> → Caisse Centrale Activité Sociale · SIRET 775694748…</div>
+      <div class="ex-item"><strong>Code APE</strong> → 5629B (autres services de restauration)</div>
+      <div class="ex-item"><strong>Qualification</strong> → Non cadre · secteur privé · Régime Général</div>
+    </div>
+    <div class="ex-agent">Dates au format administratif <code>yyyyMMdd</code> — 20130311 → 20130321</div>
+  </div>
+</div>
+
+<div data-section="s-cdi">
+  <div class="ex-title"><span class="ex-ico">📄</span> Contrat 2 — CDI dans le commerce</div>
+  <div class="ex-card">
+    <h4>Vendeur en équipement de la personne</h4>
+    <p><span class="ex-tag tag-encours">CDI</span> Depuis juin 2014 — <code>dateFin</code> et <code>dureeContrat</code> à <code>null</code> : contrat toujours en cours.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Employeur</strong> → Distribution Casino France · SIRET 428768480…</div>
+      <div class="ex-item"><strong>Code APE</strong> → 4711F (hypermarchés)</div>
+      <div class="ex-item"><strong>Quantité de travail</strong> → 151 (selon l'unité demandée)</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Tout ici vient de l'employeur : aucune description rédigée, aucun lieu libre — pour cela, il faudrait l'API <a href="experiences-professionnelles.html">Expériences professionnelles</a> (profil de l'usager).</p>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — API Expériences déclarées par l'employeur v1.0 · api.francetravail.io · 1 endpoint · 3 schémas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

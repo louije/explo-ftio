@@ -214,6 +214,11 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Période et durée",
     "Lieu et contexte",
   ],
+  "experiences-declarees-employeur": [
+    "Contrats déclarés employeur",
+    "Employeur (SIRET, APE)",
+    "Profil vs employeur",
+  ],
   "formations-professionnelles": [
     "Intitulé et diplôme",
     "Niveau et domaine",

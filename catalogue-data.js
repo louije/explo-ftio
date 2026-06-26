@@ -700,8 +700,12 @@ const CATALOGUE = {
         "Entreprise"
       ],
       "pageId": 85,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Contrats déclarés employeur",
+        "Employeur (SIRET, APE)",
+        "Profil vs employeur"
+      ],
       "starred": false,
       "isNew": true
     },
