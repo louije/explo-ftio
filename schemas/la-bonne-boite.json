@@ -1,0 +1,2836 @@
+{
+  "openapi": "3.1.0",
+  "x-stoplight": {
+    "id": "jmjaao1xo3usi"
+  },
+  "info": {
+    "title": "La Bonne Boite",
+    "description": "La Bonne Boîte cible les entreprises ayant des perspectives d'embauche élevées et permet d'être plus efficace dans l'envoi de candidatures spontanées.\n\nCe ciblage est rendu possible grâce à l'analyse approfondie de millions d'embauches, dans les entreprises françaises.\n\nLes ressources de l'API vous permettent :\n\n- De rechercher des entreprises qui envisagent de recruter dans les 6 prochains mois ;\n- D'obtenir directement le nombre d'entreprises prévoyant de recruter dans cette période ;\n- D'accéder à des informations détaillées sur les entreprises présentant un fort potentiel de recrutement.",
+    "version": "2.27.3"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/labonneboite/v2"
+    }
+  ],
+  "paths": {
+    "/recherche": {
+      "get": {
+        "tags": [
+          "Recherche"
+        ],
+        "summary": "Recherche d'entreprise avec potentiel d'embauche à partir d'un métier et d'un emplacement",
+        "description": "Cette ressource permet de récupérer les entreprises à fort potentiel d'embauche (par ordre de score décroissant).",
+        "operationId": "search_search__get",
+        "parameters": [
+          {
+            "name": "job",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Métier",
+              "description": "Recherche libre de métier. La recherche tentera de trouver une correspondance dans les libelles de:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+              "examples": [
+                "Boul"
+              ]
+            },
+            "description": "Recherche libre de métier. La recherche tentera de trouver une correspondance dans les libelles de:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche d'un métier commançant par `Boul`",
+                "value": "Boul"
+              }
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Domaine",
+              "description": "Recherche par domaine d'activité professionnel",
+              "examples": [
+                "A14"
+              ]
+            },
+            "description": "Recherche par domaine d'activité professionnel",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les domaines 'Production' et 'Instruments de musique'",
+                "value": [
+                  "A14",
+                  "B15"
+                ]
+              }
+            }
+          },
+          {
+            "name": "granddomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Grand Domaine",
+              "description": "Recherche par grand domaine d'activité professionnel",
+              "examples": [
+                "A"
+              ]
+            },
+            "description": "Recherche par grand domaine d'activité professionnel",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les grand domaines `Agriculture et Pêche, Espaces naturels et Espaces verts, Soins aux animaux` et `Arts et Façonnage d'ouvrages d'art`",
+                "value": [
+                  "A",
+                  "B"
+                ]
+              }
+            }
+          },
+          {
+            "name": "rome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "ROME",
+              "description": "Recherche par code ROME. Référentiel: [Fiche métier France Travail](https://www.francetravail.fr/candidat/decouvrir-le-marche-du-travail/les-fiches-metiers/les-fiches-metiers-sont-regroupe.html)\n            ",
+              "examples": [
+                "D1102"
+              ]
+            },
+            "description": "Recherche par code ROME. Référentiel: [Fiche métier France Travail](https://www.francetravail.fr/candidat/decouvrir-le-marche-du-travail/les-fiches-metiers/les-fiches-metiers-sont-regroupe.html)\n            ",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche le code rome `Boulangerie - viennoiserie`",
+                "value": [
+                  "D1102"
+                ]
+              }
+            }
+          },
+          {
+            "name": "naf",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "NAF",
+              "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+              "examples": [
+                "9499Z"
+              ]
+            },
+            "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche les codes naf  `Autres organisations fonctionnant par adhésion volontaire` et `Restauration de type rapide`",
+                "value": [
+                  "9499Z",
+                  "5610C"
+                ]
+              }
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Lieu",
+              "description": "Recherche libre de lieu. La recherche tentera de trouver une correspondance dans les noms de villes, départements ou régions. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Met"
+              ]
+            },
+            "description": "Recherche libre de lieu. La recherche tentera de trouver une correspondance dans les noms de villes, départements ou régions. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche d'un lieu commançant par 'Met'",
+                "value": "Met"
+              }
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Nom de la Région",
+              "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Pays de la Loire"
+              ]
+            },
+            "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans la région `Pays de Loire`",
+                "value": [
+                  "Pays de la Loire"
+                ]
+              }
+            }
+          },
+          {
+            "name": "region_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "title": "Numéro de la Région",
+              "description": "Numéro de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                32
+              ]
+            },
+            "description": "Numéro de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans la région `Hauts de France`",
+                "value": [
+                  32
+                ]
+              }
+            }
+          },
+          {
+            "name": "department",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Département",
+              "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Moselle"
+              ]
+            },
+            "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les départements `Moselle` et `Loire Atlantique`",
+                "value": [
+                  "Loire-Atlantique",
+                  "Moselle"
+                ]
+              }
+            }
+          },
+          {
+            "name": "department_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "title": "Numéro de département",
+              "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                57
+              ]
+            },
+            "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les départements `Moselle` et `Loire Atlantique`",
+                "value": [
+                  57,
+                  44
+                ]
+              }
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Ville",
+              "description": "Nom exact de la ville recherchée",
+              "examples": [
+                "Metz"
+              ]
+            },
+            "description": "Nom exact de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "Metz"
+                ]
+              }
+            }
+          },
+          {
+            "name": "citycode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Code INSEE",
+              "description": "Code INSEE de la ville recherchée",
+              "examples": [
+                "57463"
+              ]
+            },
+            "description": "Code INSEE de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "57463"
+                ]
+              }
+            }
+          },
+          {
+            "name": "postcode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Code Postal",
+              "description": "Code postal de la ville recherchée",
+              "examples": [
+                "57000"
+              ]
+            },
+            "description": "Code postal de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "57000"
+                ]
+              }
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Latitude",
+              "description": "Latitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+              "examples": [
+                47.21837
+              ]
+            },
+            "description": "Latitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche à `Nantes`",
+                "value": 47.21837
+              }
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Longitude",
+              "description": "Longitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+              "examples": [
+                -1.55362
+              ]
+            },
+            "description": "Longitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche à `Nantes`",
+                "value": -1.55362
+              }
+            }
+          },
+          {
+            "name": "distance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Distance",
+              "description": "Périmètre du rayon de recherche (en kilomètres).\n\nLongitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n**Utilisation**:\nCe paramètre (en **km**) s'utilise en combinaison avec:\n\n- `latitude` & `longitude`\n- `citycode`\n\nSi les coordonnées `latitude` / `longitude` sont utilisées, il s'agit du rayon du cercle autour du point géographique défini par le couple\n`longitude` / `latitude`.\nSinon, une recherche est effectué autour des coordonnées géographique des mairies pour les villes dans la recherche (citycode).\n\nLa distance doit être comprise entre ] 0, 200km [",
+              "examples": [
+                25
+              ],
+              "lte": 200
+            },
+            "description": "Périmètre du rayon de recherche (en kilomètres).\n\nLongitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n**Utilisation**:\nCe paramètre (en **km**) s'utilise en combinaison avec:\n\n- `latitude` & `longitude`\n- `citycode`\n\nSi les coordonnées `latitude` / `longitude` sont utilisées, il s'agit du rayon du cercle autour du point géographique défini par le couple\n`longitude` / `latitude`.\nSinon, une recherche est effectué autour des coordonnées géographique des mairies pour les villes dans la recherche (citycode).\n\nLa distance doit être comprise entre ] 0, 200km [",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans un rayon de 25km",
+                "value": 25
+              }
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "BBOX",
+              "description": "Ce paramètre permet de définir un rectangle géographique pour définir la zone de recherche.\n\n**Référentiel**: https://wiki.openstreetmap.org/wiki/Bounding_box\n\n**Utilisation**:\nPour utiliser ce paramètre, il faut préciser obligatoirement 4 valeurs séparées par des `|` :\n\n    left|bottom|right|top\n\n    - left: longitude du bord gauche\n    - bottom: latitude du bord en bas\n    - right: longitude du bord droit\n    - top:  latitude du bord en haut",
+              "examples": [
+                "-1.5|47.2|-1.6|47.3"
+              ]
+            },
+            "description": "Ce paramètre permet de définir un rectangle géographique pour définir la zone de recherche.\n\n**Référentiel**: https://wiki.openstreetmap.org/wiki/Bounding_box\n\n**Utilisation**:\nPour utiliser ce paramètre, il faut préciser obligatoirement 4 valeurs séparées par des `|` :\n\n    left|bottom|right|top\n\n    - left: longitude du bord gauche\n    - bottom: latitude du bord en bas\n    - right: longitude du bord droit\n    - top:  latitude du bord en haut",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans un rectangle autour de Nantes",
+                "value": "-1.5|47.2|-1.6|47.3"
+              }
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Critère du tri",
+              "description": "Element de l'index elastic search sur lequel effectuer le tri. Les valeurs possible sont romes.hiring_potential, hiring_potential",
+              "examples": [
+                "romes.hiring_score"
+              ],
+              "default": "hiring_potential"
+            },
+            "description": "Element de l'index elastic search sur lequel effectuer le tri. Les valeurs possible sont romes.hiring_potential, hiring_potential",
+            "examples": {
+              "default": {
+                "summary": "Tri par score de ROME",
+                "description": "tri par score de code rome (défaut)",
+                "value": "romes.hiring_score"
+              },
+              "normal": {
+                "summary": "Trie par score entreprise",
+                "description": "tri par score d'entreprise",
+                "value": "hiring_score"
+              }
+            }
+          },
+          {
+            "name": "sort_direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Sens du tri",
+              "description": "Sens du tri",
+              "examples": [
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "description": "Sens du tri",
+            "examples": {
+              "normal": {
+                "summary": "Ascendant",
+                "description": "tri du plus grand au plus petit (défaut)",
+                "value": "asc"
+              },
+              "desc": {
+                "summary": "Descendant",
+                "description": "tri du plus petit au plus grand",
+                "value": "desc"
+              }
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Page",
+              "description": "Numéro de la page demandée (à partir de 1).",
+              "examples": [
+                1
+              ],
+              "default": 1
+            },
+            "description": "Numéro de la page demandée (à partir de 1).",
+            "examples": {
+              "normal": {
+                "summary": "Exemple 1",
+                "description": "Obtenir la première page",
+                "value": 1
+              }
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Page",
+              "description": "Nombre de résultats par page. Valeur par défaut 20. La valeur maximale est 100.",
+              "examples": [
+                50
+              ],
+              "default": 10
+            },
+            "description": "Nombre de résultats par page. Valeur par défaut 20. La valeur maximale est 100.",
+            "examples": {
+              "normal": {
+                "summary": "Exemple 1",
+                "description": "Obtenir 50 résultats par requête",
+                "value": 50
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succès de la requête.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "hits": 0,
+                      "params": {
+                        "citycode": [
+                          "57463"
+                        ],
+                        "department": [
+                          ""
+                        ],
+                        "page": 1,
+                        "page_size": 2,
+                        "postcode": [
+                          "44000"
+                        ],
+                        "rome": [
+                          "D1102"
+                        ],
+                        "sort_by": "",
+                        "sort_direction": ""
+                      },
+                      "resolved_params": {
+                        "jobs": [
+                          {
+                            "display": "Boulangerie - viennoiserie",
+                            "selection": "",
+                            "type": "rome",
+                            "value": "D1102"
+                          }
+                        ],
+                        "locations": [
+                          {
+                            "display": "Metz",
+                            "geo": {
+                              "latitude": 49.1196,
+                              "longitude": 6.1764
+                            },
+                            "selection": "",
+                            "type": "city",
+                            "value": "57463"
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "city": "Metz",
+                          "citycode": "57463",
+                          "company_name": "MAISON NICOLAS",
+                          "department": "Moselle",
+                          "department_number": 57,
+                          "headcount_max": "5",
+                          "headcount_min": "3",
+                          "hiring_potential": 2.4201609999999993,
+                          "id": 4636621,
+                          "is_high_potential": false,
+                          "location": {
+                            "lat": 49.1196,
+                            "lon": 6.17373
+                          },
+                          "naf": "4781Z",
+                          "naf_label": "Commerce de détail alimentaire sur éventaires et marchés",
+                          "office_name": "",
+                          "postcode": "57000",
+                          "region": "Grand Est",
+                          "rome": "D1102",
+                          "siret": "30509416100034"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "example": {
+                "description": "\n**GET** https://api.francetravail.io/partenaire/labonneboite/v1/company/?distance=30&latitude=49.119146&longitude=6.17602&rome_codes=M1607\n\n**Authorization**: Bearer [Access token]\n",
+                "parameters": {
+                  "distance": "30",
+                  "latitude": "49.119146",
+                  "longitude": "6.17602",
+                  "rome": "M1607"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Non authorisé.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur de validation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomValidationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur interne.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalError"
+                }
+              }
+            }
+          }
+        },
+          "security": [
+            {
+              "authentification_partenaire": ["search","office", "api_labonneboitev2"]
+            }
+          ],
+        "x-stoplight": {
+          "id": "rc3z3pyirry8c"
+        }
+      },
+      "parameters": []
+    },
+    "/nombreEntreprise": {
+      "get": {
+        "tags": [
+          "Recherche"
+        ],
+        "summary": "Nombre d'entreprise avec potentiel d'embauche à partir d'un métier et d'un emplacement",
+        "description": "Cette ressource permet de récupérer le nombre d'entreprises susceptibles de recruter dans les 6 prochains mois.",
+        "operationId": "search_count_search_count__get",
+        "parameters": [
+          {
+            "name": "job",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Métier",
+              "description": "Recherche libre de métier. La recherche tentera de trouver une correspondance dans les libelles de:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+              "examples": [
+                "Boul"
+              ]
+            },
+            "description": "Recherche libre de métier. La recherche tentera de trouver une correspondance dans les libelles de:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche d'un métier commançant par `Boul`",
+                "value": "Boul"
+              }
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Domaine",
+              "description": "Recherche par domaine d'activité professionnel",
+              "examples": [
+                "A14"
+              ]
+            },
+            "description": "Recherche par domaine d'activité professionnel",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les domaines 'Production' et 'Instruments de musique'",
+                "value": [
+                  "A14",
+                  "B15"
+                ]
+              }
+            }
+          },
+          {
+            "name": "granddomain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Grand Domaine",
+              "description": "Recherche par grand domaine d'activité professionnel",
+              "examples": [
+                "A"
+              ]
+            },
+            "description": "Recherche par grand domaine d'activité professionnel",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les grand domaines `Agriculture et Pêche, Espaces naturels et Espaces verts, Soins aux animaux` et `Arts et Façonnage d'ouvrages d'art`",
+                "value": [
+                  "A",
+                  "B"
+                ]
+              }
+            }
+          },
+          {
+            "name": "rome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "ROME",
+              "description": "Recherche par code ROME. Référentiel: [Fiche métier France Travail](https://www.francetravail.fr/candidat/decouvrir-le-marche-du-travail/les-fiches-metiers/les-fiches-metiers-sont-regroupe.html)\n            ",
+              "examples": [
+                "D1102"
+              ]
+            },
+            "description": "Recherche par code ROME. Référentiel: [Fiche métier France Travail](https://www.francetravail.fr/candidat/decouvrir-le-marche-du-travail/les-fiches-metiers/les-fiches-metiers-sont-regroupe.html)\n            ",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche le code rome `Boulangerie - viennoiserie`",
+                "value": [
+                  "D1102"
+                ]
+              }
+            }
+          },
+          {
+            "name": "naf",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "NAF",
+              "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+              "examples": [
+                "9499Z"
+              ]
+            },
+            "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche les codes naf  `Autres organisations fonctionnant par adhésion volontaire` et `Restauration de type rapide`",
+                "value": [
+                  "9499Z",
+                  "5610C"
+                ]
+              }
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Lieu",
+              "description": "Recherche libre de lieu. La recherche tentera de trouver une correspondance dans les noms de villes, départements ou régions. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Met"
+              ]
+            },
+            "description": "Recherche libre de lieu. La recherche tentera de trouver une correspondance dans les noms de villes, départements ou régions. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche d'un lieu commançant par 'Met'",
+                "value": "Met"
+              }
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Nom de la Région",
+              "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Pays de la Loire"
+              ]
+            },
+            "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans la région `Pays de Loire`",
+                "value": [
+                  "Pays de la Loire"
+                ]
+              }
+            }
+          },
+          {
+            "name": "region_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "title": "Numéro de la Région",
+              "description": "Numéro de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                32
+              ]
+            },
+            "description": "Numéro de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans la région `Hauts de France`",
+                "value": [
+                  32
+                ]
+              }
+            }
+          },
+          {
+            "name": "department",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Département",
+              "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                "Moselle"
+              ]
+            },
+            "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les départements `Moselle` et `Loire Atlantique`",
+                "value": [
+                  "Loire-Atlantique",
+                  "Moselle"
+                ]
+              }
+            }
+          },
+          {
+            "name": "department_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "title": "Numéro de département",
+              "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+              "examples": [
+                57
+              ]
+            },
+            "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans les départements `Moselle` et `Loire Atlantique`",
+                "value": [
+                  57,
+                  44
+                ]
+              }
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Ville",
+              "description": "Nom exact de la ville recherchée",
+              "examples": [
+                "Metz"
+              ]
+            },
+            "description": "Nom exact de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "Metz"
+                ]
+              }
+            }
+          },
+          {
+            "name": "citycode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Code INSEE",
+              "description": "Code INSEE de la ville recherchée",
+              "examples": [
+                "57463"
+              ]
+            },
+            "description": "Code INSEE de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "57463"
+                ]
+              }
+            }
+          },
+          {
+            "name": "postcode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Code Postal",
+              "description": "Code postal de la ville recherchée",
+              "examples": [
+                "57000"
+              ]
+            },
+            "description": "Code postal de la ville recherchée",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans `Metz`",
+                "value": [
+                  "57000"
+                ]
+              }
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Latitude",
+              "description": "Latitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+              "examples": [
+                47.21837
+              ]
+            },
+            "description": "Latitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche à `Nantes`",
+                "value": 47.21837
+              }
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Longitude",
+              "description": "Longitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+              "examples": [
+                -1.55362
+              ]
+            },
+            "description": "Longitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche à `Nantes`",
+                "value": -1.55362
+              }
+            }
+          },
+          {
+            "name": "distance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Distance",
+              "description": "Périmètre du rayon de recherche (en kilomètres).\n\nLongitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n**Utilisation**:\nCe paramètre (en **km**) s'utilise en combinaison avec:\n\n- `latitude` & `longitude`\n- `citycode`\n\nSi les coordonnées `latitude` / `longitude` sont utilisées, il s'agit du rayon du cercle autour du point géographique défini par le couple\n`longitude` / `latitude`.\nSinon, une recherche est effectué autour des coordonnées géographique des mairies pour les villes dans la recherche (citycode).\n\nLa distance doit être comprise entre ] 0, 200km [",
+              "examples": [
+                25
+              ],
+              "lte": 200
+            },
+            "description": "Périmètre du rayon de recherche (en kilomètres).\n\nLongitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n**Utilisation**:\nCe paramètre (en **km**) s'utilise en combinaison avec:\n\n- `latitude` & `longitude`\n- `citycode`\n\nSi les coordonnées `latitude` / `longitude` sont utilisées, il s'agit du rayon du cercle autour du point géographique défini par le couple\n`longitude` / `latitude`.\nSinon, une recherche est effectué autour des coordonnées géographique des mairies pour les villes dans la recherche (citycode).\n\nLa distance doit être comprise entre ] 0, 200km [",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans un rayon de 25km",
+                "value": 25
+              }
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "BBOX",
+              "description": "Ce paramètre permet de définir un rectangle géographique pour définir la zone de recherche.\n\n**Référentiel**: https://wiki.openstreetmap.org/wiki/Bounding_box\n\n**Utilisation**:\nPour utiliser ce paramètre, il faut préciser obligatoirement 4 valeurs séparées par des `|` :\n\n    left|bottom|right|top\n\n    - left: longitude du bord gauche\n    - bottom: latitude du bord en bas\n    - right: longitude du bord droit\n    - top:  latitude du bord en haut",
+              "examples": [
+                "-1.5|47.2|-1.6|47.3"
+              ]
+            },
+            "description": "Ce paramètre permet de définir un rectangle géographique pour définir la zone de recherche.\n\n**Référentiel**: https://wiki.openstreetmap.org/wiki/Bounding_box\n\n**Utilisation**:\nPour utiliser ce paramètre, il faut préciser obligatoirement 4 valeurs séparées par des `|` :\n\n    left|bottom|right|top\n\n    - left: longitude du bord gauche\n    - bottom: latitude du bord en bas\n    - right: longitude du bord droit\n    - top:  latitude du bord en haut",
+            "examples": {
+              "normal": {
+                "summary": "Example 1",
+                "description": "Recherche dans un rectangle autour de Nantes",
+                "value": "-1.5|47.2|-1.6|47.3"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succès de la requête.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchCountResponse"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "hits": 0,
+                      "params": {
+                        "citycode": [
+                          "57463"
+                        ],
+                        "department": [
+                          ""
+                        ],
+                        "page": 1,
+                        "page_size": 2,
+                        "postcode": [
+                          "44000"
+                        ],
+                        "rome": [
+                          "D1102"
+                        ],
+                        "sort_by": "",
+                        "sort_direction": ""
+                      },
+                      "resolved_params": {
+                        "jobs": [
+                          {
+                            "display": "Boulangerie - viennoiserie",
+                            "selection": "",
+                            "type": "rome",
+                            "value": "D1102"
+                          }
+                        ],
+                        "locations": [
+                          {
+                            "display": "Metz",
+                            "geo": {
+                              "latitude": 49.1196,
+                              "longitude": 6.1764
+                            },
+                            "selection": "",
+                            "type": "city",
+                            "value": "57463"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "example": {
+                "description": "\n**GET** https://api.francetravail.io/partenaire/labonneboite/v1/company/count/?distance=30&latitude=49.119146&longitude=6.17602&rome_codes=M1607\n\n**Authorization**: Bearer [Access token]\n",
+                "parameters": {
+                  "distance": "30",
+                  "latitude": "49.119146",
+                  "longitude": "6.17602",
+                  "rome": "M1607"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Non authorisé.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur de validation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomValidationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur interne.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalError"
+                }
+              }
+            }
+          }
+        },
+          "security": [
+            {
+              "authentification_partenaire": ["search","office", "api_labonneboitev2"]
+            }
+          ],
+        "x-stoplight": {
+          "id": "kdezkce3z7jqy"
+        }
+      },
+      "parameters": []
+    },
+    "/potentielEmbauche": {
+      "get": {
+        "tags": [
+          "Entreprise"
+        ],
+        "summary": "Consulter les entreprises à fort potentiel d'embauche par leur numéro de siret.",
+        "description": "Recherche d'information pour des sirets avec potentiel d'embauche",
+        "operationId": "with_scores_company_scores__get",
+        "parameters": [
+          {
+            "name": "siret",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Métier",
+              "description": "Numéro de siret exact de l'entreprise recherché.",
+              "examples": [
+                "13000548100010"
+              ],
+              "required": true
+            },
+            "description": "Numéro de siret exact de l'entreprise recherché.",
+            "examples": {
+              "normal": {
+                "summary": "Exemple 1",
+                "description": "Recherche des sirets `82193994900045` et `13000548100010`",
+                "value": [
+                  "13000548100010",
+                  "82193994900045"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succès de la requête.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfficeScoreResponse"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "hits": 1,
+                      "items": [
+                        {
+                          "city": "Paris",
+                          "citycode": "75120",
+                          "company_name": "POLE EMPLOI",
+                          "department": "Paris",
+                          "department_number": 75,
+                          "headcount_max": "1999",
+                          "headcount_min": "1000",
+                          "hiring_potential": 91.38373304856015,
+                          "id": 12905309,
+                          "is_high_potential": true,
+                          "location": {
+                            "lat": 48.8778,
+                            "lon": 2.40989
+                          },
+                          "naf": "8413Z",
+                          "naf_label": "Administration publique (tutelle) des activités économiques",
+                          "office_name": "",
+                          "postcode": "75020",
+                          "region": "Île-de-France",
+                          "siret": "13000548100010"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "example": {
+                "description": "\n**GET** GET https://api.francetravail.io/partenaire/labonneboite/v2/company/scores/?siret=13000548100010\n\n**Authorization**: Bearer [Access token]\n",
+                "parameters": {
+                  "siret": "13000548100010"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Non authorisé.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erreur de validation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomValidationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur interne.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalError"
+                }
+              }
+            }
+          }
+        },
+          "security": [
+            {
+              "authentification_partenaire": ["search","office", "api_labonneboitev2"]
+            }
+          ],
+        "x-stoplight": {
+          "id": "ln57z1mmngtyc"
+        }
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomValidationError": {
+        "properties": {
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorDetail"
+            },
+            "type": "array",
+            "title": "Errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "title": "CustomValidationError",
+        "x-stoplight": {
+          "id": "oyzninkxy756j"
+        }
+      },
+      "ForbiddenError": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Non authorisé",
+            "description": "Message d'erreur dans le cas d'une erreur 403",
+            "examples": [
+              "Vous n'avez pas le droit d'accéder à la ressource demandée"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ForbiddenError",
+        "x-stoplight": {
+          "id": "tgytag5k6x2zg"
+        }
+      },
+      "GeoCoords": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "title": "Latitude",
+            "description": "Latitude de l'entreprise.",
+            "examples": [
+              49.1196
+            ]
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude",
+            "description": "Longitude de l'entreprise.",
+            "examples": [
+              6.1764
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "title": "GeoCoords",
+        "example": {
+          "latitude": 49.1196,
+          "longitude": 6.1764
+        },
+        "x-stoplight": {
+          "id": "awt1ekmev1cql"
+        }
+      },
+      "InternalError": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Erreur interne du serveur",
+            "description": "Message d'erreur dans le cas d'une erreur 500",
+            "examples": [
+              "Une erreur est survenue."
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "InternalError",
+        "x-stoplight": {
+          "id": "s2xugls99jv1b"
+        }
+      },
+      "JobItem": {
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JobType"
+              }
+            ],
+            "title": "Type de métier",
+            "description": "Il peut être de l'une de ces catégories:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+            "examples": [
+              "rome"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "title": "Code du métier",
+            "description": "En fonction du type du métier, cette valeur peut varier. Mais elle représente le code et non l'appellation",
+            "examples": [
+              "D1102"
+            ]
+          },
+          "display": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appellation du métier",
+            "description": "Ceci est l'appellation du métier",
+            "default": "",
+            "examples": [
+              "Boulangerie - viennoiserie"
+            ]
+          },
+          "selection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Autre Appellation du métier",
+            "description": "Ce champ a été mis en place pour les besoins du site La Bonne Boite et peut être ignoré.",
+            "default": "",
+            "examples": [
+              ""
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "JobItem",
+        "example": {
+          "display": "Boulangerie - viennoiserie",
+          "selection": "",
+          "type": "rome",
+          "value": "D1102"
+        },
+        "x-stoplight": {
+          "id": "5ylwqs5566k66"
+        }
+      },
+      "JobType": {
+        "type": "string",
+        "enum": [
+          "naf",
+          "rome",
+          "domain",
+          "granddomain"
+        ],
+        "title": "JobType",
+        "x-stoplight": {
+          "id": "8ha9wtlw536pv"
+        }
+      },
+      "LocationItem": {
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationType"
+              }
+            ],
+            "title": "Type du lieu",
+            "description": "Il peut être de l'une de ces catégories:\n        - city\n        - region\n        - department",
+            "examples": [
+              "city"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "title": "Code du lieu",
+            "description": "En fonction du type du métier, cette valeur peut varier. Mais elle représente le code INSEE, le code région ou le code du département. ",
+            "examples": [
+              "57463"
+            ]
+          },
+          "display": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom du lieu",
+            "description": "Ceci est la dénomination du lieu ",
+            "default": "",
+            "examples": [
+              "Metz"
+            ]
+          },
+          "selection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Autre Appellation du lieu",
+            "description": "Ce champ a été mis en place pour les besoins du site La Bonne Boite et peut être ignoré.",
+            "default": "",
+            "examples": [
+              ""
+            ]
+          },
+          "geo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeoCoords"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coordonnée Mairie",
+            "description": "Dans le cadre d'une recherche par code INSEE, c'est l'emplacement géographique de la mairie",
+            "examples": [
+              {
+                "latitude": 49.1196,
+                "longitude": 6.1764
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "LocationItem",
+        "example": {
+          "display": "Metz",
+          "geo": {
+            "latitude": 49.1196,
+            "longitude": 6.1764
+          },
+          "selection": "",
+          "type": "city",
+          "value": "57463"
+        },
+        "x-stoplight": {
+          "id": "rm3xtyaev7mzc"
+        }
+      },
+      "LocationType": {
+        "type": "string",
+        "enum": [
+          "city",
+          "region",
+          "department"
+        ],
+        "title": "LocationType",
+        "x-stoplight": {
+          "id": "3hd6mvsv52x1o"
+        }
+      },
+      "OfficeScoreResponse": {
+        "properties": {
+          "hits": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre de résultats",
+            "description": "Nombre de résultats pour la recherche en cours",
+            "examples": [
+              150
+            ]
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/OfficeScoreResponseItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "OfficeScoreResponse",
+        "example": {
+          "hits": 1,
+          "items": [
+            {
+              "city": "Paris",
+              "citycode": "75120",
+              "company_name": "POLE EMPLOI",
+              "department": "Paris",
+              "department_number": 75,
+              "headcount_max": "1999",
+              "headcount_min": "1000",
+              "hiring_potential": 91.38373304856015,
+              "id": 12905309,
+              "is_high_potential": true,
+              "location": {
+                "lat": 48.8778,
+                "lon": 2.40989
+              },
+              "naf": "8413Z",
+              "naf_label": "Administration publique (tutelle) des activités économiques",
+              "office_name": "",
+              "postcode": "75020",
+              "region": "Île-de-France",
+              "siret": "13000548100010"
+            }
+          ]
+        },
+        "x-stoplight": {
+          "id": "rc09mfnehpl7t"
+        }
+      },
+      "OfficeScoreResponseItem": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "siret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "SIRET",
+            "description": "Numéro de SIRET de l'entreprise."
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom",
+            "description": "Nom de l'entreprise",
+            "examples": [
+              "Leclerc"
+            ]
+          },
+          "office_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom Emplacement",
+            "description": "Nom d'emplacement de l'entreprise (Nom d'une agence ou nom d'une boutique).",
+            "examples": [
+              "Leclerc Paridis"
+            ]
+          },
+          "headcount_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre d'employé minimum",
+            "description": "Nombre d'employé minimum de l'entreprise",
+            "examples": [
+              50
+            ]
+          },
+          "headcount_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre d'employé maximum",
+            "description": "Nombre d'employé maximum de l'entreprise",
+            "examples": [
+              99
+            ]
+          },
+          "naf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "NAF",
+            "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": [
+              "5610C"
+            ]
+          },
+          "naf_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label Naf",
+            "description": "Description du code NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": [
+              "Restauration de type rapide"
+            ]
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/server__routes__office__schemas__GeoResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ville",
+            "description": "Nom exact de la ville",
+            "examples": [
+              "Metz"
+            ]
+          },
+          "citycode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code INSEE",
+            "description": "Code INSEE de la ville",
+            "examples": [
+              "57463"
+            ]
+          },
+          "postcode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Postal",
+            "description": "Code postal de la ville",
+            "examples": [
+              "57000"
+            ]
+          },
+          "department": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Département",
+            "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              "Moselle"
+            ]
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom de la Région",
+            "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              "Pays de la Loire"
+            ]
+          },
+          "department_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Numéro de département",
+            "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              57
+            ]
+          },
+          "hiring_potential": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Potentiel d'embauche",
+            "description": "Potentiel d'embauche de l'entreprise entre 0 et 100. C'est une valeur transformée depuis les données fournies par ADS.\n\n- Si le mode de recherche est par code NAF alors le potentiel d'embauche est celui de l'entreprise\n- Sinon, le potentiel d'embauche est celui du code ROME pour ce NAF.",
+            "examples": [
+              74.2658
+            ]
+          },
+          "is_high_potential": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "A fort potentiel d'embauche",
+            "description": "Est ce que l'entreprise est considéré comme ayant un fort potentiel d'embauche.",
+            "examples": [
+              true
+            ]
+          }
+        },
+        "type": "object",
+        "title": "OfficeScoreResponseItem",
+        "x-stoplight": {
+          "id": "jx75ukj2pmt4w"
+        }
+      },
+      "ResolvedSearchParams": {
+        "properties": {
+          "jobs": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/JobItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jobs"
+          },
+          "locations": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LocationItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locations"
+          }
+        },
+        "type": "object",
+        "title": "ResolvedSearchParams",
+        "x-stoplight": {
+          "id": "ezi5157zh8vy6"
+        }
+      },
+      "SearchCountResponse": {
+        "properties": {
+          "hits": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre de résultats",
+            "description": "Nombre de résultats pour la recherche en cours",
+            "examples": [
+              151
+            ]
+          },
+          "params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SearchParams"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paramètres de recherche utilisé",
+            "description": "Retour des paramètres utilisés pour effectuer la recherche."
+          },
+          "resolved_params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResolvedSearchParams"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Résolution de paramètres",
+            "description": "Certains paramètres font l'objet d'une résolution notamment pour les lieux et les métiers."
+          }
+        },
+        "type": "object",
+        "title": "SearchCountResponse",
+        "x-stoplight": {
+          "id": "swzsni1awcemw"
+        }
+      },
+      "SearchParams": {
+        "properties": {
+          "job": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Métier",
+            "description": "Recherche libre de métier. La recherche tentera de trouver une correspondance dans les libelles de:\n        - rome\n        - domain\n        - granddomain\n        - naf",
+            "default": [
+              null
+            ],
+            "examples": [
+              "Boul"
+            ]
+          },
+          "domain": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Domaine",
+            "description": "Recherche par domaine d'activité professionnel",
+            "default": [
+              null
+            ],
+            "examples": [
+              "A14"
+            ]
+          },
+          "granddomain": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Grand Domaine",
+            "description": "Recherche par grand domaine d'activité professionnel",
+            "default": [
+              null
+            ],
+            "examples": [
+              "A"
+            ]
+          },
+          "rome": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "ROME",
+            "description": "Recherche par code ROME. Référentiel: [Fiche métier France Travail](https://www.francetravail.fr/candidat/decouvrir-le-marche-du-travail/les-fiches-metiers/les-fiches-metiers-sont-regroupe.html)\n            ",
+            "default": [
+              null
+            ],
+            "examples": [
+              "D1102"
+            ]
+          },
+          "naf": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "NAF",
+            "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "default": [
+              null
+            ],
+            "examples": [
+              "9499Z"
+            ]
+          },
+          "location": {
+            "type": "string",
+            "title": "Lieu",
+            "description": "Recherche libre de lieu. La recherche tentera de trouver une correspondance dans les noms de villes, départements ou régions. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "default": [
+              null
+            ],
+            "examples": [
+              "Met"
+            ]
+          },
+          "region": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Nom de la Région",
+            "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "default": [
+              null
+            ],
+            "examples": [
+              "Pays de la Loire"
+            ]
+          },
+          "region_number": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Numéro de la Région",
+            "description": "Numéro de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "default": [
+              null
+            ],
+            "examples": [
+              32
+            ]
+          },
+          "department": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Département",
+            "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "default": [
+              null
+            ],
+            "examples": [
+              "Moselle"
+            ]
+          },
+          "department_number": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Numéro de département",
+            "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "default": [
+              null
+            ],
+            "examples": [
+              57
+            ]
+          },
+          "city": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ville",
+            "description": "Nom exact de la ville recherchée",
+            "default": [
+              null
+            ],
+            "examples": [
+              "Metz"
+            ]
+          },
+          "citycode": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Code INSEE",
+            "description": "Code INSEE de la ville recherchée",
+            "default": [
+              null
+            ],
+            "examples": [
+              "57463"
+            ]
+          },
+          "postcode": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Code Postal",
+            "description": "Code postal de la ville recherchée",
+            "default": [
+              null
+            ],
+            "examples": [
+              "57000"
+            ]
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude",
+            "description": "Latitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "default": [
+              null
+            ],
+            "examples": [
+              47.21837
+            ]
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude",
+            "description": "Longitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n    Pour utiliser ce paramètre, il faut préciser obligatoirement `latitude`, `longitude`et `distance`",
+            "default": [
+              null
+            ],
+            "examples": [
+              -1.55362
+            ]
+          },
+          "distance": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance",
+            "description": "Périmètre du rayon de recherche (en kilomètres).\n\nLongitude du point géographique à proximité duquel on recherche des entreprises à fort potentiel d'embauche.\n\n**Utilisation**:\nCe paramètre (en **km**) s'utilise en combinaison avec:\n\n- `latitude` & `longitude`\n- `citycode`\n\nSi les coordonnées `latitude` / `longitude` sont utilisées, il s'agit du rayon du cercle autour du point géographique défini par le couple\n`longitude` / `latitude`.\nSinon, une recherche est effectué autour des coordonnées géographique des mairies pour les villes dans la recherche (citycode).\n\nLa distance doit être comprise entre ] 0, 200km [",
+            "default": [
+              null
+            ],
+            "examples": [
+              25
+            ],
+            "lte": 200
+          },
+          "bbox": {
+            "type": "string",
+            "title": "BBOX",
+            "description": "Ce paramètre permet de définir un rectangle géographique pour définir la zone de recherche.\n\n**Référentiel**: https://wiki.openstreetmap.org/wiki/Bounding_box\n\n**Utilisation**:\nPour utiliser ce paramètre, il faut préciser obligatoirement 4 valeurs séparées par des `|` :\n\n    left|bottom|right|top\n\n    - left: longitude du bord gauche\n    - bottom: latitude du bord en bas\n    - right: longitude du bord droit\n    - top:  latitude du bord en haut",
+            "default": [
+              null
+            ],
+            "examples": [
+              "-1.5|47.2|-1.6|47.3"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "SearchParams",
+        "example": {
+          "citycode": [
+            "57463"
+          ],
+          "department": [
+            ""
+          ],
+          "page": 1,
+          "page_size": 2,
+          "postcode": [
+            "44000"
+          ],
+          "rome": [
+            "D1102"
+          ],
+          "sort_by": "",
+          "sort_direction": ""
+        },
+        "x-stoplight": {
+          "id": "bdpg41zmhrpc1"
+        }
+      },
+      "SearchResponse": {
+        "properties": {
+          "hits": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre de résultats",
+            "description": "Nombre de résultats pour la recherche en cours",
+            "examples": [
+              151
+            ]
+          },
+          "params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SearchParams"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paramètres de recherche utilisé",
+            "description": "Retour des paramètres utilisés pour effectuer la recherche."
+          },
+          "resolved_params": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResolvedSearchParams"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Résolution de paramètres",
+            "description": "Certains paramètres font l'objet d'une résolution notamment pour les lieux et les métiers."
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SearchResponseItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "SearchResponse",
+        "x-stoplight": {
+          "id": "y1qhs0gn4sv74"
+        }
+      },
+      "SearchResponseItem": {
+        "properties": {
+          "rome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Métier",
+            "description": "Code rome",
+            "examples": [
+              "D1102"
+            ]
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Id de l'entreprise",
+            "examples": [
+              4636621
+            ]
+          },
+          "siret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "SIRET",
+            "description": "Numéro de SIRET de l'entreprise.",
+            "examples": [
+              "30509416100034"
+            ]
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom",
+            "description": "Nom de l'entreprise",
+            "examples": [
+              "MAISON NICOLAS"
+            ]
+          },
+          "office_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom Emplacement",
+            "description": "Nom d'emplacement de l'entreprise (Nom d'une agence ou nom d'une boutique).",
+            "examples": [
+              "MAISON NICOLAS"
+            ]
+          },
+          "headcount_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre d'employé minimum",
+            "description": "Nombre d'employé minimum de l'entreprise",
+            "examples": [
+              3
+            ]
+          },
+          "headcount_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre d'employé maximum",
+            "description": "Nombre d'employé maximum de l'entreprise",
+            "examples": [
+              5
+            ]
+          },
+          "naf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "NAF",
+            "description": "Code métier NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": [
+              "4781Z"
+            ]
+          },
+          "naf_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label Naf",
+            "description": "Description du code NAF associés aux entreprises. [Nomenclature d'activités française de l'Insee (rév. 2, 2008 - Niveau 2 - Liste des divisions)](https://www.insee.fr/fr/information/2406147)",
+            "examples": [
+              "Commerce de détail alimentaire sur éventaires et marchés"
+            ]
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/server__routes__search__schemas__GeoResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ville",
+            "description": "Nom exact de la ville",
+            "examples": [
+              "Metz"
+            ]
+          },
+          "citycode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code INSEE",
+            "description": "Code INSEE de la ville",
+            "examples": [
+              "57463"
+            ]
+          },
+          "postcode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Postal",
+            "description": "Code postal de la ville",
+            "examples": [
+              "57000"
+            ]
+          },
+          "department": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Département",
+            "description": "Nom du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              "Moselle"
+            ]
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nom de la Région",
+            "description": "Nom de la région. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              "Grand Est"
+            ]
+          },
+          "department_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Numéro de département",
+            "description": "Numéro du département. Les noms des villes, département et régions proviennent de [geo.api.gouv.fr](https://geo.api.gouv.fr/)",
+            "examples": [
+              "57"
+            ]
+          },
+          "hiring_potential": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Potentiel d'embauche",
+            "description": "Potentiel d'embauche de l'entreprise entre 0 et 100. C'est une valeur transformée depuis les données fournies par ADS.\n\n- Si le mode de recherche est par code NAF alors le potentiel d'embauche est celui de l'entreprise\n- Sinon, le potentiel d'embauche est celui du code ROME pour ce NAF."
+          },
+          "is_high_potential": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "A fort potentiel d'embauche",
+            "description": "Longitude de l'entreprise.",
+            "examples": [
+              true
+            ]
+          }
+        },
+        "type": "object",
+        "title": "SearchResponseItem",
+        "example": {
+          "city": "Metz",
+          "citycode": "57463",
+          "company_name": "MAISON NICOLAS",
+          "department": "Moselle",
+          "department_number": 57,
+          "headcount_max": "5",
+          "headcount_min": "3",
+          "hiring_potential": 2.4201609999999993,
+          "id": 4636621,
+          "is_high_potential": false,
+          "location": {
+            "lat": 49.1196,
+            "lon": 6.17373
+          },
+          "naf": "4781Z",
+          "naf_label": "Commerce de détail alimentaire sur éventaires et marchés",
+          "office_name": "",
+          "postcode": "57000",
+          "region": "Grand Est",
+          "rome": "D1102",
+          "siret": "30509416100034"
+        },
+        "x-stoplight": {
+          "id": "vogsnhyf6jq7n"
+        }
+      },
+      "ValidationErrorDetail": {
+        "properties": {
+          "param": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Paramètre en erreur",
+            "description": "Emplacement dans le schéma du paramètre en erreur",
+            "examples": [
+              "distance"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Message décrivant l'erreur",
+            "examples": [
+              "distance parameter cannot be above 200km"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "param",
+          "message"
+        ],
+        "title": "ValidationErrorDetail",
+        "x-stoplight": {
+          "id": "l6ict780t8asn"
+        }
+      },
+      "server__routes__office__schemas__GeoResponse": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "title": "Latitude",
+            "description": "Latitude de l'entreprise.",
+            "examples": [
+              47.21837
+            ]
+          },
+          "lon": {
+            "type": "number",
+            "title": "Longitude",
+            "description": "Longitude de l'entreprise.",
+            "examples": [
+              -1.55362
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "title": "GeoResponse",
+        "x-stoplight": {
+          "id": "nb1zrir78vg2k"
+        }
+      },
+      "server__routes__search__schemas__GeoResponse": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "title": "Latitude",
+            "description": "Latitude de l'entreprise.",
+            "examples": [
+              49.1196
+            ]
+          },
+          "lon": {
+            "type": "number",
+            "title": "Longitude",
+            "description": "Longitude de l'entreprise.",
+            "examples": [
+              6.1764
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "title": "GeoResponse",
+        "example": {
+          "lat": 49.1196,
+          "lon": 6.1764
+        },
+        "x-stoplight": {
+          "id": "ob2yrovz1rfgs"
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "search": "Obligatoire",
+              "office": "Obligatoire",
+              "api_labonneboitev2": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

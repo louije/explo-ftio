@@ -1,0 +1,381 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "2.0.0",
+    "title": "Compétences professionnelles",
+    "description": "Cette API permet de récupérer les compétences, langues et centres d'intérêt d'un individu depuis son profil de compétences.",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-competences/v2"
+    }
+  ],
+  "paths": {
+    "/competences": {
+      "get": {
+        "tags": [
+          "Compétences"
+        ],
+        "summary": "Lister les compétences d'un individu",
+        "description": "Retourne la liste des compétences saisies dans le profil de compétences d'un individu.",
+        "responses": {
+          "200": {
+            "description": "Liste des compétences de l'individu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Competence"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "value": [
+                      {
+                        "code": "104167",
+                        "libelle": "Caractéristiques des produits d'entretien",
+                        "niveau": {
+                          "code": "2",
+                          "libelle": "Intermédiaire"
+                        },
+                        "type": "S"
+                      },
+                      {
+                        "libelle": "Développement",
+                        "niveau": {
+                          "code": "2",
+                          "libelle": "Intermédiaire"
+                        },
+                        "type": "L"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé (jeton invalide ou scope manquant)"
+          },
+          "403": {
+            "description": "Accès refusé"
+          },
+          "500": {
+            "description": "Erreur interne du serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-competencesv2",
+              "pfccompetences",
+              "pfclangues",
+              "pfccentresinteret"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-competences/v2"
+          }
+        ]
+      }
+    },
+    "/langues": {
+      "get": {
+        "tags": [
+          "Langues"
+        ],
+        "summary": "Lister les langues d'un individu",
+        "description": "Retourne la liste des langues maîtrisées par un individu avec leur niveau.",
+        "responses": {
+          "200": {
+            "description": "Liste des langues de l'individu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Langue"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "value": [
+                      {
+                        "code": "FR",
+                        "libelle": "Français",
+                        "niveau": {
+                          "code": "3",
+                          "libelle": "Courant"
+                        }
+                      },
+                      {
+                        "code": "AN",
+                        "libelle": "Anglais",
+                        "niveau": {
+                          "code": "1",
+                          "libelle": "Débutant"
+                        },
+                        "[object Object]": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé (jeton invalide ou scope manquant)"
+          },
+          "403": {
+            "description": "Accès refusé"
+          },
+          "500": {
+            "description": "Erreur interne du serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-competencesv2",
+              "pfccompetences",
+              "pfclangues",
+              "pfccentresinteret"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-competences/v2"
+          }
+        ]
+      }
+    },
+    "/interets": {
+      "get": {
+        "tags": [
+          "Centres d'intérêt"
+        ],
+        "summary": "Lister les centres d'intérêt d'un individu",
+        "description": "Retourne la liste des centres d'intérêt d'un individu.",
+        "responses": {
+          "200": {
+            "description": "Liste des centres d'intérêt de l'individu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CentreInteret"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "value": [
+                      {
+                        "complement": "enregistrement de cd",
+                        "intitule": "guitare"
+                      },
+                      {
+                        "complement": "pratique régulière",
+                        "intitule": "voile"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé (jeton invalide ou scope manquant)"
+          },
+          "403": {
+            "description": "Accès refusé"
+          },
+          "500": {
+            "description": "Erreur interne du serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-competencesv2",
+              "pfccompetences",
+              "pfclangues",
+              "pfccentresinteret"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-competences/v2"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "scopes": {
+              "api_peconnect-competencesv2": "Obligatoire",
+              "pfccompetences": "Obligatoire",
+              "pfclangues": "Obligatoire",
+              "pfccentresinteret": "Obligatoire"
+            },
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Competence": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code Rome de la compétence. Le référentiel des compétences issues du Rome est disponible dans l'API ROME. Ce paramètre est renseigné si la compétence est issue du Rome, en effet lorsque l'individu saisit ses compétences sur son profil, il peut sélectionner des compétences dans le référentiel Rome ou saisir librement d'autres éléments.",
+            "maxLength": 6,
+            "example": "104167"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la compétence. Si la compétence provient du référentiel Rome, alors il s'agit du libellé associé au code ci-dessus. S'il s'agit d'une compétence saisie librement par l'individu, le champ contient les éléments saisis par l'individu.",
+            "maxLength": 50,
+            "example": "Caractéristiques des produits d'entretien"
+          },
+          "niveau": {
+            "$ref": "#/components/schemas/Niveau",
+            "example": "Eléments contenant les informations relatives au niveau renseigné par l'individu sur la compétence."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "S",
+              "L",
+              "Q"
+            ],
+            "description": "Type de la compétence. Valeurs possibles: S → Indique que la compétence est issues du référentiel Rome, L → Indique que la compétence a été saisie librement par l'individu, Q → Indique que la compétence correspond à un savoir-être professionnels"
+          }
+        },
+        "required": [
+          "libelle",
+          "niveau",
+          "type"
+        ]
+      },
+      "Niveau": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "description": "Code correspondant au niveau de la compétence. Ce champ est en lien avec le champ niveau.code ci-dessous . Valeurs possibles : 0 → Non évalué, 1 → Débutant, 2 → Intermédiaire,  → Avancé",
+            "example": "2"
+          },
+          "libelle": {
+            "type": "string",
+            "enum": [
+              "Non évalué",
+              "Débutant",
+              "Intermédiaire",
+              "Avancé"
+            ],
+            "description": "Libellé correspondant au niveau de la compétence. Ce champ est en lien avec le champ niveau.libellé ci-dessus. Valeurs possibles : Non évalué, Débutant, Intermédiaire, Avancé",
+            "example": "Intermédiaire"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "Langue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code de la langue basée sur le référentiel des langues (2 caractères).",
+            "maxLength": 2,
+            "example": "FR"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la langue associé au code ci-dessus.",
+            "maxLength": 50,
+            "example": "Français"
+          },
+          "niveau": {
+            "$ref": "#/components/schemas/NiveauLangue",
+            "example": "Éléments contenant les informations relatives au niveau renseigné par l'individu sur la langue."
+          }
+        },
+        "required": [
+          "libelle"
+        ]
+      },
+      "NiveauLangue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "description": "Code correspondant au niveau de la langue. Ce champ est en lien avec le champ niveau.code ci-dessous. Valeurs possibles : [code] → [libelle], 1 → Débutant, 2 → Intermédiaire, 3 → Courant",
+            "example": "3"
+          },
+          "libelle": {
+            "type": "string",
+            "enum": [
+              "Débutant",
+              "Intermédiaire",
+              "Courant"
+            ],
+            "description": "Libellé correspondant au niveau de la langue. Ce champ est en lien avec le champ niveau.libellé ci-dessus. Valeurs possibles : voir ci-dessus",
+            "example": "Courant"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "CentreInteret": {
+        "type": "object",
+        "properties": {
+          "complement": {
+            "type": "string",
+            "description": "Complément saisi par l'individu.",
+            "maxLength": 50,
+            "example": "enregistrement de cd"
+          },
+          "intitule": {
+            "type": "string",
+            "description": "Intitulé de l'expérience saisi par l'individu.",
+            "maxLength": 50,
+            "example": "guitare"
+          }
+        },
+        "required": [
+          "intitule"
+        ]
+      }
+    }
+  }
+}

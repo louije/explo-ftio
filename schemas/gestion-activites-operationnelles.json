@@ -1,0 +1,1277 @@
+{
+   "openapi":"3.0.0",
+   "info":{
+      "title":"Gestion activités opérationnelles",
+      "description":"\t\nCette API permet de récupérer simplement l'ensemble des activités opérationnelles à traiter pour une structure partenaire donnée.\n\nLes activités opérationnelles sont des tâches à réaliser par un agent pour faire avancer un processus métier, suite à une rupture temporelle ou un changement d'acteur entre deux étapes.\n\nL'API donne une visibilité générique sur l'ensemble des activités de la structure identifiée. Les attributs qu'elle remonte permettent de prioriser les activités et de faire le lien avec des API spécifiques à chaque acte métier.\n\nLe principe est donc de\n\n - commencer par lister les activités d'une structure afin de les afficher à un utilisateur avec tous les éléments de priorisation opportuns\n\n - permettre à l'utilisateur de réaliser son acte métier (les attributs de l'activité permettent de placer l'utilisateur dans le bon contexte de traitement, sur le bon dossier, en sollicitant éventuellement une autre API de lecture avec un identifiant spécifique)\n\n - informer le SI plateforme de l'action réalisée au travers d'API de mise à jour spécifiques. Les conséquences sont tirées sur les processus métier (activité terminée, création de nouvelle activité…)\n\n - afficher une nouvelle liste rafraîchie à l'utilisateur pour qu'il traite les autres activités\n\n",
+      "contact":{
+         "name":"Support API",
+         "url":"https://francetravail.io/contact"
+      },
+      "version":"2.1"
+   },
+   "servers":[
+      {
+         "url":"https://api.francetravail.io/partenaire/activites-operationnelles/v2"
+      }
+   ],
+   "tags":[
+      {
+         "name":"Recherche des activités",
+         "description":"Ensemble de services sur le référentiel des activités"
+      },
+      {
+         "name":"Référentiel activités opérationnelles",
+         "description":"Ensemble de services sur le référentiel des activités"
+      }
+   ],
+   "paths":{
+      "/activites/chercher":{
+         "get":{
+            "tags":[
+               "Recherche des activités"
+            ],
+            "summary":"Récupérer la liste des activités d'une structure",
+            "description":"Récupération de la liste des activités opérationnelles d'une structure.\n\nUne liste des **1000 activités** les plus prioritaires (classées par date échéance ascendante) est retournée en fonction des critères d'appel :\n\n-les activités correspondant au *codeActivite* fourni en paramètre\n\n-les activités appartenant à la famille renseignée par le *codeFamille*\n\n-les activités appartenant au domaine renseigné par le *codeDomaine*.\n\nUne recherche pour les activités de Sanctions s'effectue avec le *codeFamille* **GLI100**. En retour les activités possibles dans ce contexte seront :\n\n-**ACT366 Proposition suspension RSA à instruire** avec un attribut **idConsequenceSanction** à fournir en entrée des API Sanctions\n\n-**ACT367 Proposition suspension RSA à traiter** avec un attribut **idConsequenceSanction** à fournir en entrée des API Sanctions\n\n-**ACT369 Proposition levée de suspension RSA à traiter** avec un attribut **idConsequenceSanction** à fournir en entrée des API Sanctions\n\n-**ACT370 Proposition suppression RSA à traiter** avec un attribut **idConsequenceSanction** à fournir en entrée des API Sanctions.\n\nUne recherche pour les activités d'Orientation s'effectue avec le *codeFamille* **INSEA**. En retour les activités possibles dans ce contexte seront :\n\n-**ACT382 Décision d'orientation à prendre** sans attribut spécifique à fournir en entrée de l'API Orientation usager.\n\n-**ACT414 Décision de Réorientation à prendre** sans attribut spécifique à fournir en entrée de l'API Orientation usager.\n\nPrésence d'attributs spécifiques pour prioriser :\n\n -**typeOrganismeAccompagnateur** : qui peut prendre les valeurs :  FT, CAF, DCD, ML, CE, CD ou IND.\n\n -**codeInseeCommune** : le code Insee Commune du bénéficaire.\n\n -**typeParcours** : le type de parcours qui peut prendre les valeurs : PED, PSP, PSO, EO ou IND.\n\n Une recherche pour les activités de Rendez-vous s'effectue avec le *codeFamille* **MSACC**. En retour les activités possibles dans ce contexte seront :\n\n-**ACT380 1er RDV d'accompagnement à prendre** avec un attribut **motif**  à fournir en entrée de l'API Rendez-Vous partenaire.\n\n Une recherche pour les activités de Gestion de portefeuilles s'effectue avec le *codeFamille* **ACC100**. En retour les activités possibles dans ce contexte seront :\n\n-**ACT395 Modification diagnostic socio-professionnel à valider** sans attribut spécifique à fournir en entrée de l'API Diagnostic Usager.\n",
+            "operationId":"getListActivites",
+            "parameters":[
+               {
+                  "name":"codeActivite",
+                  "in":"query",
+                  "description":"Code de l'activité. String de caractères alphanumériques en majuscules.",
+                  "required":false,
+                  "style":"form",
+                  "explode":true,
+                  "schema":{
+                     
+                  },
+                  "example":"ACT366"
+               },
+               {
+                  "name":"codeDomaine",
+                  "in":"query",
+                  "description":"Code du domaine. String de 3 caractères alphabétiques en majuscules.",
+                  "required":false,
+                  "style":"form",
+                  "explode":true,
+                  "schema":{
+                     
+                  },
+                  "example":"ACC"
+               },
+               {
+                  "name":"codeFamille",
+                  "in":"query",
+                  "description":"Code de la famille. String de caractères alphanumériques en majuscules.",
+                  "required":false,
+                  "style":"form",
+                  "explode":true,
+                  "schema":{
+                     
+                  },
+                  "example":"INSEA"
+               },
+               {
+                  "name":"numeroFranceTravail",
+                  "in":"query",
+                  "description":"Numero France Travail de l'usager sur lequel on recherche des activités.",
+                  "required":false,
+                  "style":"form",
+                  "explode":true,
+                  "schema":{
+                     
+                  },
+                  "example":"12345678901"
+               },
+               {
+                  "name":"cursor",
+                  "in":"query",
+                  "description":"Curseur du dernier appel. Permet de lire la suite de la liste en enrichissant ce paramètre et en laissant les paramètres du dernier appel",
+                  "required":false,
+                  "style":"form",
+                  "explode":true,
+                  "schema":{
+                     
+                  },
+                  "example":"e2N1cnNldXJEczogWzE3NTc1MDc2MDE5MzIsICJ0YXNrIiwiMTYwODA0OTExIl1jdXJzZXVyU286IFsxNzU1ODEzNjMwMDAwLCAiQGJwbXBzLXN2ci1wcm9kNHotZ3JlZW4iLCI1MjA4MDU2NjgiXX0="
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "$ref" : "#/components/schemas/ActivitePage"
+                        },
+                        "examples":{
+                           "Liste Sanction":{
+                              "value":{
+                                 "size":2,
+                                 "activites":[
+                                    {
+                                       "identifiantActivite":"52898$a4638d98-d8e6-4d7d-83ec-9e5ca522b812",
+                                       "codeActivite":"ACT366",
+                                       "usager":{
+                                          "identifiant":"12345678901",
+                                          "typeIdentifiant":"numeroFranceTravail"
+                                       },
+                                       "dateCreation":"2024-05-22T12:13:20.000Z",
+                                       "dateEcheance":"2024-05-27T12:13:20.000Z",
+                                       "dateEcheanceProche":"2024-05-22T12:13:20.000Z",
+                                       "attributsSpecifiques":[
+                                          {
+                                             "nom":"idConsequenceSanction",
+                                             "valeur":"78787P45475845M"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "identifiantActivite":"52899$a4638d98-d8e6-4d7d-83ec-9e5ca522b812",
+                                       "codeActivite":"ACT367",
+                                       "usager":{
+                                          "identifiant":"12345678901",
+                                          "typeIdentifiant":"numeroFranceTravail"
+                                       },
+                                       "dateCreation":"2024-05-22T12:13:20.000Z",
+                                       "dateEcheance":"2024-05-27T12:13:20.000Z",
+                                       "dateEcheanceProche":"2024-05-22T12:13:20.000Z",
+                                       "attributsSpecifiques":[
+                                          {
+                                             "nom":"idConsequenceSanction",
+                                             "valeur":"78787P45475845M"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "hasMore":true,
+                                 "cursor":"e2N1cnNldXJEczogWzE3NTc1MDc2MDE5MzIsICJ0YXNrIiwiMTYwODA0OTExIl1jdXJzZXVyU286IFsxNzU1ODEzNjMwMDAwLCAiQGJwbXBzLXN2ci1wcm9kNHotZ3JlZW4iLCI1MjA4MDU2NjgiXX0="
+                              }
+                           },
+                           "Liste Orientation":{
+                              "value":{
+                                 "size":1,
+                                 "activites":[
+                                    {
+                                       "identifiantActivite":"52898$a4638d98-d8e6-4d7d-83ec-9e5ca522b812",
+                                       "codeActivite":"ACT382",
+                                       "usager":{
+                                          "identifiant":"12345678901",
+                                          "typeIdentifiant":"numeroFranceTravail"
+                                       },
+                                       "dateCreation":"2024-05-22T12:13:20.000Z",
+                                       "dateEcheance":"2024-05-27T12:13:20.000Z",
+                                       "dateEcheanceProche":"2024-05-22T12:13:20.000Z",
+                                       "attributsSpecifiques":[
+                                          {
+                                             "nom":"typeOrganismeAccompagnateur",
+                                             "valeur":"CD"
+                                          },
+                                          {
+                                             "nom":"codeInseeCommune",
+                                             "valeur":"33063"
+                                          },
+                                          {
+                                             "nom":"typeParcours",
+                                             "valeur":"EO"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "hasMore":false
+                              }
+                           },
+                           "Liste Rendez-vous":{
+                              "value":{
+                                 "size":1,
+                                 "activites":[
+                                    {
+                                       "identifiantActivite":"52898$a4638d98-d8e6-4d7d-83ec-9e5ca522b812",
+                                       "codeActivite":"ACT380",
+                                       "usager":{
+                                          "identifiant":"12345678901",
+                                          "typeIdentifiant":"numeroFranceTravail"
+                                       },
+                                       "dateCreation":"2024-05-22T12:13:20.000Z",
+                                       "dateEcheance":"2024-05-27T12:13:20.000Z",
+                                       "dateEcheanceProche":"2024-05-22T12:13:20.000Z",
+                                       "attributsSpecifiques":[
+                                          {
+                                             "nom":"motif",
+                                             "valeur":"ACC"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "hasMore":false
+                              }
+                           },
+                           "Liste Diagnostic":{
+                              "value":{
+                                 "size":1,
+                                 "activites":[
+                                    {
+                                       "identifiantActivite":"52898$a4638d98-d8e6-4d7d-83ec-9e5ca522b812",
+                                       "codeActivite":"ACT395",
+                                       "usager":{
+                                          "identifiant":"12345678901",
+                                          "typeIdentifiant":"numeroFranceTravail"
+                                       },
+                                       "dateCreation":"2024-05-12T12:13:20.000Z",
+                                       "dateEcheance":"2024-05-27T12:13:20.000Z",
+                                       "dateEcheanceProche":"2024-05-24T12:13:20.000Z"
+                                    }
+                                 ],
+                                 "hasMore":false
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "400":{
+                  "description":"Une erreur fonctionnelle a été détectée",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        },
+                        "examples":{
+                           "Erreur Paramètre":{
+                              "value":{
+                                 "code":"PARAM_INCOHERENT",
+                                 "message":"Il faut renseigner exactement un paramètre.",
+                                 "details":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           },
+                           "Erreur Paramètre 2":{
+                              "value":{
+                                 "code":"PARAM_INCOHERENT",
+                                 "message":"Il faut renseigner exactement un paramètre.",
+                                 "details":{
+                                    "codeFamille":"GDD100",
+                                    "codeActivite":"ACT001",
+                                    "codeDomaine":null
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "500":{
+                  "description":"Problème serveur."
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "activitesCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "activitesCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer l'entièreté des activités du référentiel",
+            "description":"Récupération du détail de toutes les activités du référentiel. Sont remontés tous les libellés et codes des domaines existants, les libellés et codes des familles de ces domaines, ainsi que les libellés et codes des activités de ces familles.",
+            "operationId":"getReferentiel",
+            "parameters":[
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "items":{
+                              "$ref":"#/components/schemas/DomaineReferentiel"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites/activites/{codeActivite}":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer le code et libellé d'une activité",
+            "description":"Récupération du libellé de l'activité en plus de son code spécifié en paramètre.",
+            "operationId":"getActivite",
+            "parameters":[
+               {
+                  "name":"codeActivite",
+                  "in":"path",
+                  "description":"Code de l'activité. String de caractères alphanumériques en majuscules.",
+                  "required":true,
+                  "style":"simple",
+                  "explode":false,
+                  "schema":{
+                     
+                  },
+                  "example":"ACT284 ou IELAFFA1ID"
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "$ref":"#/components/schemas/ActiviteReferentiel"
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites/domaines/{codeDomaine}":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer le code et libellé d'un domaine",
+            "description":"Récupération du libellé du domaine en plus de son code spécifié en paramètre.",
+            "operationId":"getDomaine",
+            "parameters":[
+               {
+                  "name":"codeDomaine",
+                  "in":"path",
+                  "description":"Code du domaine. String de 3 caractères alphabétiques en majuscules.",
+                  "required":true,
+                  "style":"simple",
+                  "explode":false,
+                  "schema":{
+                     
+                  },
+                  "example":"GDD"
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "description":"code du domaine",
+                                 "example":"GDD"
+                              },
+                              "libelle":{
+                                 "description":"libelle du domaine",
+                                 "example":"Indemnisation"
+                              },
+                              "familles":{
+                                 "description":"familles du domaine",
+                                 "items":{
+                                    "$ref":"#/components/schemas/FamilleReferentiel"
+                                 }
+                              }
+                           }
+                        },
+                        "examples":{
+                           "GDD-Indemnisation":{
+                              "value":{
+                                 "code":"GDD",
+                                 "libelle":"Indemnisation"
+                              }
+                           },
+                           "PRE-Formation":{
+                              "value":{
+                                 "code":"PRE",
+                                 "libelle":"Formation"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites/domaines/{codeDomaine}/detail":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer le détail d'un domaine",
+            "description":"Récupération du détail du domaine correspondant au \"codeDomaine\" fourni. Sont remontés son code et son libellé, ainsi que les codes et libellés des familles et activités qu'il contient.",
+            "operationId":"getDomaineDetail",
+            "parameters":[
+               {
+                  "name":"codeDomaine",
+                  "in":"path",
+                  "description":"Code du domaine. String de 3 caractères alphabétiques en majuscules.",
+                  "required":true,
+                  "style":"simple",
+                  "explode":false,
+                  "schema":{
+                     
+                  },
+                  "example":"GDD"
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "$ref":"#/components/schemas/DomaineReferentiel"
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites/familles/{codeFamille}":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer le code et libellé d'une famille",
+            "description":"Récupération du libellé de la famille en plus de son code spécifié en paramètre.",
+            "operationId":"getFamille",
+            "parameters":[
+               {
+                  "name":"codeFamille",
+                  "in":"path",
+                  "description":"Code de la famille. String de caractères alphanumériques en majuscules.",
+                  "required":true,
+                  "style":"simple",
+                  "explode":false,
+                  "schema":{
+                     
+                  },
+                  "example":"GDD500 ou INSEA"
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"idAgent"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "$ref":"#/components/schemas/FamilleReferentiel"
+                        },
+                        "examples":{
+                           "FAM001-Inscription formation":{
+                              "value":{
+                                 "code":"FAM001",
+                                 "libelle":"Inscription formation"
+                              }
+                           },
+                           "FAM002-Financement de la formationFormation":{
+                              "value":{
+                                 "code":"FAM002",
+                                 "libelle":"Financement de la formation"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+               {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      },
+      "/referentiel-activites/familles/{codeFamille}/detail":{
+         "get":{
+            "tags":[
+               "Référentiel activités opérationnelles"
+            ],
+            "summary":"Récupérer le détail d'une famille",
+            "description":"Récupération du détail de la famille correspondant au \"codeFamille\" fourni. Sont remontés son code et son libellé, ainsi que les codes et libellés des activités qu'elle contient.",
+            "operationId":"getFamilleDetail",
+            "parameters":[
+               {
+                  "name":"codeFamille",
+                  "in":"path",
+                  "description":"Code de la famille. String de caractères alphanumériques en majuscules.",
+                  "required":true,
+                  "style":"simple",
+                  "explode":false,
+                  "schema":{
+                     
+                  },
+                  "example":"GDD500 ou INSEA"
+               },
+               {
+                  "name":"pa-nom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Nom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"NOM"
+               },
+               {
+                  "name":"pa-prenom-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\n.Prénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  },
+                  "example":"Prénom"
+               },
+               {
+                  "name":"pa-identifiant-agent",
+                  "in":"header",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**\n\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.\n\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"",
+                  "allowEmptyValue":false,
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"La requête ne s'est pas bien déroulée.",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "properties":{
+                              "code":{
+                                 "example":"PARAM_INCOHERENT"
+                              },
+                              "message":{
+                                 "example":"Il faut renseigner exactement un paramètre."
+                              },
+                              "details":{
+                                 "additionalProperties":{
+                                    
+                                 },
+                                 "example":{
+                                    "codeFamille":"GDD100",
+                                    "codeDomaine":"GDD"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "204":{
+                  "description":"Aucun résultat."
+               },
+               "500":{
+                  "description":"Problème serveur."
+               },
+               "200":{
+                  "description":"Ok, la requête s'est déroulée correctement",
+                  "content":{
+                     "application/json; charset=UTF-8":{
+                        "schema":{
+                           "$ref":"#/components/schemas/FamilleReferentiel"
+                        }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               },
+                 {
+                  "authentification_agent-clientCredentials":[
+                     "referentielCD",
+                     "profil_accedant",
+                     "api_activites-operationnellesv2"
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "components":{
+      "schemas":{
+         "Activite":{
+            "properties":{
+               "identifiantActivite":{
+                  "description":"Identifitant de l'activite",
+                  "example":"52898$a4638d98-d8e6-4d7d-83ec-9e5ca522b812"
+               },
+               "codeActivite":{
+                  "description":"Code de l'activite",
+                  "example":"ACT366",
+                  "enum":[
+                     "ACT366",
+                     "ACT367",
+                     "ACT369",
+                     "ACT370",
+                     "ACT380",
+                     "ACT382",
+                     "ACT395"
+                  ]
+               },
+               "usager":{
+                  "$ref":"#/components/schemas/Usager"
+               },
+               "dateCreation":{
+                  "description":"Date de création de l'activité",
+                  "format":"date-time",
+                  "example":"2024-05-22T12:13:20.000Z"
+               },
+               "dateEcheance":{
+                  "description":"Date d'échéance de l'activité",
+                  "format":"date-time",
+                  "example":"2024-05-27T12:13:20.000Z"
+               },
+               "dateEcheanceProche":{
+                  "description":"Date d'échéance proche de l'activité",
+                  "format":"date-time",
+                  "example":"2024-05-22T12:13:20.000Z"
+               },
+               "attributsSpecifiques":{
+                  "description":"Liste des attributs spécifiques propre à l'activité",
+                  "items":{
+                     "$ref":"#/components/schemas/AttributSpecifique"
+                  }
+               }
+            }
+         },
+         "ActivitePage":{
+            "properties":{
+               "size":{
+                  "description":"Taille de la collection",
+                  "format":"int32",
+                  "example":1000
+               },
+               "activites":{
+                  "items":{
+                     "$ref":"#/components/schemas/Activite"
+                  }
+               },
+               "hasMore":{
+                  "description":"Boolean si d'autre activité existe et qu'un appel supplémentaire est à faire",
+                  "example":true
+               },
+               "cursor":{
+                  "description":"Curseur du dernier élément de la liste",
+                  "example":"e2N1cnNldXJEczogWzE3NTc1MDc2MDE5MzIsICJ0YXNrIiwiMTYwODA0OTExIl1jdXJzZXVyU286IFsxNzU1ODEzNjMwMDAwLCAiQGJwbXBzLXN2ci1wcm9kNHotZ3JlZW4iLCI1MjA4MDU2NjgiXX0="
+               }
+            }
+         },
+         "ActiviteReferentiel":{
+            "properties":{
+               "code":{
+                  "description":"code de l'activité",
+                  "example":"ACC101"
+               },
+               "libelle":{
+                  "description":"libellé de l'activité",
+                  "example":"DE en accompagnement à vérifier"
+               },
+               "codeFamille":{
+                  "description":"code de la famille à laquelle appartient l'activité",
+                  "example":"ACC100"
+               },
+               "libelleFamille":{
+                  "description":"libellé de la famille à laquelle appartient l'activité",
+                  "example":"Gestion Portefeuille"
+               },
+               "codeDomaine":{
+                  "description":"code du domaine auquel appartient l'activité",
+                  "example":"GDD"
+               },
+               "libelleDomaine":{
+                  "description":"libellé du domaine auquel appartient l'activité",
+                  "example":"Indemnisation"
+               }
+            }
+         },
+         "AttributSpecifique":{
+            "properties":{
+               "nom":{
+                  "description":"Nom de l'attribut",
+                  "example":"idConsequenceSanction",
+                  "enum":[
+                     "idConsequenceSanction",
+                     "motif",
+                     "typeOrganismeAccompagnateur",
+                     "codeInseeCommune",
+                     "typeParcours"
+                  ]
+               },
+               "valeur":{
+                  "description":"Valeur de l'attribut",
+                  "example":"78787P45475845M"
+               }
+            }
+         },
+         "DomaineReferentiel":{
+            "properties":{
+               "code":{
+                  "description":"code du domaine",
+                  "example":"GDD"
+               },
+               "libelle":{
+                  "description":"libelle du domaine",
+                  "example":"Indemnisation"
+               },
+               "familles":{
+                  "description":"familles du domaine",
+                  "items":{
+                     "$ref":"#/components/schemas/FamilleReferentiel"
+                  }
+               }
+            }
+         },
+         "Erreur":{
+            "properties":{
+               "code":{
+                  "example":"PARAM_INCOHERENT"
+               },
+               "message":{
+                  "example":"Il faut renseigner exactement un paramètre."
+               },
+               "details":{
+                  "additionalProperties":{
+                     
+                  },
+                  "example":{
+                     "codeFamille":"GDD100",
+                     "codeDomaine":"GDD"
+                  }
+               }
+            }
+         },
+         "FamilleReferentiel":{
+            "properties":{
+               "code":{
+                  "description":"code de la famille",
+                  "example":"ACC100"
+               },
+               "libelle":{
+                  "description":"libelle de la famille",
+                  "example":"Gestion de Portefeuille"
+               },
+               "codeDomaine":{
+                  "description":"code du domaine auquel appartient la famille",
+                  "example":"GDD"
+               },
+               "libelleDomaine":{
+                  "description":"libelle du domaine auquel appartient la famille",
+                  "example":"Indemnisation"
+               },
+               "activites":{
+                  "description":"activités de la famille",
+                  "items":{
+                     "$ref":"#/components/schemas/ActiviteReferentiel"
+                  }
+               }
+            }
+         },
+         "Usager":{
+            "properties":{
+               "identifiant":{
+                  "description":"identifiant de l'usager",
+                  "example":"12345678901"
+               },
+               "typeIdentifiant":{
+                  "description":"typeIdentifiant de l'usager",
+                  "example":"numeroFranceTravail"
+               }
+            }
+         }
+      },
+      "securitySchemes":{
+         "authentification_agent":{
+            "type":"oauth2",
+            "flows":{
+               "authorizationCode":{
+                  "authorizationUrl":"https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+                  "tokenUrl":"https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token",
+                  "scopes":{
+                     "activitesCD":"Obligatoire",
+                     "referentielCD":"Obligatoire",
+                     "profil_accedant":"Obligatoire",
+                     "api_activites-operationnellesv2":"Obligatoire"
+                  }
+               }
+            },
+         "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail"
+         },
+        "authentification_agent-clientCredentials": {
+         "type": "oauth2",
+         "flows": {
+           "clientCredentials": {
+             "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent",
+             "scopes": {
+               "activitesCD":"Obligatoire",
+                     "referentielCD":"Obligatoire",
+                     "profil_accedant":"Obligatoire",
+                     "api_activites-operationnellesv2":"Obligatoire"
+              }
+            }
+          }
+        } 
+      }
+   }
+}

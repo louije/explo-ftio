@@ -1,0 +1,240 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Cadre de vie des communes",
+    "description": "API permettant de récupérer des informations sur les communes françaises, leurs équipements et leurs caractéristiques.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/eterritoire/v1"
+    }
+  ],
+  "paths": {
+    "/cadre-de-vie.php": {
+      "get": {
+        "summary": "Récupérer une liste de communes et leurs infrastructures",
+        "description": "Cette ressource permet de réaliser une recherche de communes sur un département et retourne :\n\nCode INSEE de la commune\nNom de la commune\nURL correspondant à la page commune du site eTerritoire.fr, qui donne de nombreuses informations sur les 36000 communes de France\nCoordonnées GPS de la commune\nDonnées sur le nombre d’équipements sportifs, de santé, d’éducation, de loisirs, et de services publics présents dans la commune\nNom des communes à proximité",
+        "parameters": [
+          {
+            "name": "dep",
+            "in": "query",
+            "description": "numéro du département à appeler (84 = Département du Vaucluse)",
+            "required": true,
+            "example": "84",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "proxycom",
+            "in": "query",
+            "description": "5 communes à proximité, sur une distance de 10km (30 communes est le maximum)",
+            "required": false,
+            "example": "5,10",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commune"
+                  }
+                },
+                "example": [
+                  {
+                    "idinsee": "84001",
+                    "nom": "Althen-des-Paluds",
+                    "url": "/territoires/provence-alpes-cote-d-azur/vaucluse/althen-des-paluds/84001/34080#a2",
+                    "pop": "2671",
+                    "equipements": {
+                      "Équipements sportifs": 6,
+                      "Santé": 19,
+                      "Éducation": 3,
+                      "Loisirs": 2,
+                      "Services publics": 1
+                    },
+                    "gps": [
+                      44.004444122314,
+                      4.9577779769897
+                    ],
+                    "proxycom": [
+                      {
+                        "ncom": "Entraigues-sur-la-Sorgue",
+                        "cp": 84320,
+                        "distance": 2.44,
+                        "pop": 8230
+                      },
+                      {
+                        "ncom": "Monteux",
+                        "cp": 84170,
+                        "distance": 4.72,
+                        "pop": 12537
+                      },
+                      {
+                        "ncom": "Vedène",
+                        "cp": 84270,
+                        "distance": 5.13,
+                        "pop": 11045
+                      },
+                      {
+                        "ncom": "Saint-Saturnin-lès-Avignon",
+                        "cp": 84450,
+                        "distance": 5.59,
+                        "pop": 4830
+                      },
+                      {
+                        "ncom": "Bédarrides",
+                        "cp": 84370,
+                        "distance": 6.19,
+                        "pop": 5010
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_eterritoirev1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Commune": {
+        "type": "object",
+        "properties": {
+          "idinsee": {
+            "type": "string",
+            "description": "code INSEE de la commune",
+            "example": "84001"
+          },
+          "nom": {
+            "type": "string",
+            "description": "nom de la commune",
+            "example": "Althen-des-Paluds"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL de la page commune du site eterritoire.fr",
+            "example": "/territoires/provence-alpes-cote-d-azur/vaucluse/althen-des-paluds/84001/34080#a2"
+          },
+          "pop": {
+            "type": "string",
+            "description": "population de la commune",
+            "example": "2671"
+          },
+          "equipements": {
+            "type": "object",
+            "description": "nombre d’équipements dans la commune",
+            "properties": {
+              "Équipements sportifs": {
+                "type": "integer",
+                "description": "nombre d’équipements sportifs",
+                "example": 6
+              },
+              "Santé": {
+                "type": "integer",
+                "description": "nombre d’équipements de santé",
+                "example": 19
+              },
+              "Éducation": {
+                "type": "integer",
+                "description": "nombre d’équipements d’éducation",
+                "example": 3
+              },
+              "Loisirs": {
+                "type": "integer",
+                "description": "nombre d’équipements de loisirs",
+                "example": 2
+              },
+              "Services publics": {
+                "type": "integer",
+                "description": "nombre d’équipements de services publics",
+                "example": 1
+              }
+            }
+          },
+          "gps": {
+            "type": "array",
+            "description": "coordonnées GPS de la commune",
+            "items": {
+              "type": "number",
+              "format": "double"
+            },
+            "example": [
+              44.004444122314,
+              4.9577779769897
+            ]
+          },
+          "proxycom": {
+            "type": "array",
+            "description": "communes à proximité (selon paramètre défini)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ncom": {
+                  "type": "string",
+                  "description": "nom de la n-ième commune à proximité",
+                  "example": "Entraigues-sur-la-Sorgue"
+                },
+                "cp": {
+                  "type": "integer",
+                  "description": "code postal de la n-ième commune à proximité",
+                  "example": 84320
+                },
+                "distance": {
+                  "type": "number",
+                  "description": "distance en km de la n-ième commune à proximité",
+                  "example": 2.44
+                },
+                "pop": {
+                  "type": "integer",
+                  "description": "population de la n-ième commune à proximité",
+                  "example": 8230
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "api_eterritoirev1": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

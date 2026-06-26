@@ -1,0 +1,1728 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "v1",
+    "title": "Contrat d'engagement",
+    "description": "L'API Contrat d'engagement contient les données relatives à la formalisation du Contrat d’engagement. \nGrâce à ses différentes ressources, l'API permet pour un usager donné :  \n- de vérifier l'existence ou non d'un contrat d'engagement\n- de récupérer dans le contrat le bloc texte des engagements de l'usager et du référent \n- de signer ou de refuser un premier contrat \n- de re-signer ou de refuser un contrat déjà existant\n\nAinsi, grâce à cette API, il sera possible de vérifier que pour tout usager inscrit ou réinscrit à France Travail à compter du 1er janvier 2025, un contrat a été signé ou refusé, à telle date avec tel organisme.",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+    	"email": "contact@francetravail.fr"
+				}
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+    }
+  ],
+  "paths": {
+    "/lecture": {
+      "get": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Lire le contrat d'engagement de l'usager",
+        "description": "Lecture du contrat d'engagement de l'usager",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46d-PwRS4DcGVVjfsmaevPSln"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratEngagement"
+                },
+                "examples": {
+                  "contrat-signe": {
+                    "value": {
+                      "etat": "SIGNE",
+                      "dateSignature": "2024-06-01T15:35:00.000Z",
+                      "organisme": "France Travail",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  },
+                  "contrat-suspendu": {
+                    "value": {
+                      "etat": "SUSPENDU",
+                      "dateSuspension": "2024-10-01T15:00:00.000Z"
+                    }
+                  },
+                  "contrat-refuse": {
+                    "value": {
+                      "etat": "REFUSE",
+                      "dateRefus": "2024-06-01T15:35:00.000Z",
+                      "organisme": "France Travail",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "contrat-a-signer-precedement-signe": {
+                    "value": {
+                      "etat": "A_SIGNER",
+                      "dateSignature": "2024-06-01T15:35:00.000Z",
+                      "organisme": "France Travail",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "contrat-a-signer-precedement-refuse": {
+                    "value": {
+                      "etat": "A_SIGNER",
+                      "dateRefus": "2024-06-01T15:35:00.000Z",
+                      "organisme": "France Travail",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Pas de contrat d'engagement"
+          },
+          "400": {
+            "description": "Donnee en entree invalide",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Le header 'ft-jeton-usager' est obligatoire dans ce context"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Habilitation requise",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "HabilitationException",
+                      "detail": "Vous n'êtes pas habilité à signer ce contrat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      }
+    },
+    "/lecture/structure": {
+      "get": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Lire la structure du contrat d'engagement",
+        "description": "Lecture de la structure du contrat d'engagement",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Structure"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          },
+                          {
+                            "titre": "Je construis avec mon référent mon plan d’action",
+                            "libelles": [
+                              "Je participe au choix des actions",
+                              "Je propose des actions"
+                            ]
+                          },
+                          {
+                            "titre": "Je me présente à mes rendez-vous ou je préviens en cas d’indisponibilité",
+                            "libelles": []
+                          },
+                          {
+                            "titre": "Je communique avec mon référent",
+                            "libelles": [
+                              "J'informe l'organisme qui m’accompagne de tout changement dans ma situation",
+                              "Je fournis les documents nécessaires pour un suivi efficace"
+                            ]
+                          },
+                          {
+                            "titre": "Je respecte les règles et procédures de l’organisme qui m’accompagne",
+                            "libelles": []
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          },
+                          {
+                            "titre": "Je mobilise les services d’accompagnement",
+                            "libelles": [
+                              "Je mobilise les outils d'insertion adaptés à votre situation",
+                              "Je peux mobiliser l'offre de formation"
+                            ]
+                          },
+                          {
+                            "titre": "Je prends en compte la réalisation de vos actions tout au long de votre parcours",
+                            "libelles": [
+                              "Je coconstruis avec vous et nous ajustons votre plan d'action en fonction de votre situation"
+                            ]
+                          },
+                          {
+                            "titre": "J’informe et je communique",
+                            "libelles": [
+                              "Je communique clairement sur les services proposés, les dispositifs disponibles et les offres d'emploi pour vous permettre d'être acteur de votre parcours"
+                            ]
+                          },
+                          {
+                            "titre": "Je garantis la confidentialité des informations dans le cadre d’une relation de confiance basée sur le respect mutuel",
+                            "libelles": []
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      }
+    },
+    "/signer": {
+      "post": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Création d'un premier contrat d'engagement signé",
+        "description": "Création d'un premier contrat d'engagement signé",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46d-PwRS4DcGVVjfsmaevPSln"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information de signature du contrat d'engagement",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signature"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "dateSignature": "2024-06-01T15:35:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK (Dans la prochaine version majeure le code HTTP sera modifié en 201)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratEngagement"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "etat": "SIGNE",
+                      "dateSignature": "2024-06-01T15:35:00.000Z",
+                      "organisme": "Cap Emploi",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  ]
+                },
+                "examples": {
+                  "JetonUsagerInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Le header 'ft-jeton-usager' est obligatoire dans ce context"
+                    }
+                  },
+                  "dateSignatureInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "La date de signature doit être antérieur ou égale à la date du jour."
+                    }
+                  },
+                  "formatDateSignatureInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Format de date de signature invalide, format attendu yyyy-MM-dd'T'HH:mm:ssZ."
+                    }
+                  },
+                  "actionInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "SignatureException",
+                      "detail": "Un contrat d'engagement est déjà existant, impossible de créer un contrat d'engagmeent à l'état signé."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Habilitation requise",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "HabilitationException",
+                      "detail": "Vous n'êtes pas habilité à signer ce contrat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Signer un contrat d'engagement existant",
+        "description": "Signer un contrat d'engagement existant",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46d-PwRS4DcGVVjfsmaevPSln"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information de signature du contrat d'engagement",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signature"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "dateSignature": "2024-06-01T16:35:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratEngagement"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "etat": "SIGNE",
+                      "dateSignature": "2024-06-01T16:35:00.000Z",
+                      "organisme": "Cap Emploi",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "JetonUsagerInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Le header 'ft-jeton-usager' est obligatoire dans ce context"
+                    }
+                  },
+                  "dateSignatureInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "La date de signature doit être antérieur ou égale à la date du jour."
+                    }
+                  },
+                  "formatDateSignatureInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Format de date de signature invalide, format attendu yyyy-MM-dd'T'HH:mm:ssZ."
+                    }
+                  },
+                  "actionInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "SignatureException",
+                      "detail": "Impossible de signer un contrat d'engagemenet déjà signé."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Habilitation requise",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "HabilitationException",
+                      "detail": "Vous n'êtes pas habilité à signer ce contrat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  },
+                  "contrat-suspendu": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Un contrat d'engagement existe déjà à l'état suspendu, impossible de signer le contrat."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      }
+    },
+    "/refuser": {
+      "post": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Création d'un premier contrat d'engagement refusé",
+        "description": "Création d'un premier contrat d'engagement refusé",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46d-PwRS4DcGVVjfsmaevPSln"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information de signature du contrat d'engagement",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Refus"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "dateRefus": "2024-06-12T14:18:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK (Dans la prochaine version majeure le code HTTP sera modifié en 201)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratEngagement"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "etat": "REFUSE",
+                      "dateRefus": "2024-06-12T14:18:00.000Z",
+                      "organisme": "Mission Local",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "JetonUsagerInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Le header 'ft-jeton-usager' est obligatoire dans ce context"
+                    }
+                  },
+                  "intensiteInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "L'intensité d'activité hebdomadaire doit être compris entre 0 et 48."
+                    }
+                  },
+                  "dateRefusInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "La date de refus doit être antérieur ou égale à la date du jour."
+                    }
+                  },
+                  "formatDateRefusInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Format de date de refus invalide, format attendu yyyy-MM-dd'T'HH:mm:ssZ."
+                    }
+                  },
+                  "actionInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "RefusException",
+                      "detail": "Un contrat d'engagement est déjà existant, impossible de créer un contrat d'engagmeent à l'état refusé."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "HabilitationException",
+                      "detail": "Vous n'êtes pas habilité à signer ce contrat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Contrat d'engagement"
+        ],
+        "summary": "Refuser un contrat d'engagement existant",
+        "description": "Refuser un contrat d'engagement existant",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "pa-nom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "Doe"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-prenom-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+            "schema": {
+              "type": "string",
+              "example": "John"
+            }
+          },
+          {
+            "in": "header",
+            "name": "pa-identifiant-agent",
+            "description": "**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+            "schema": {
+              "type": "string",
+              "example": "monidentifiant"
+            }
+          },
+          {
+            "name": "ft-jeton-usager",
+            "in": "header",
+            "description": "Ce jeton permet d'appeler une API pour accéder aux données d'un usager. Il remplace l'identifiant national (idRci). \n\n Pour obtenir un jeton, il est nécessaire d'appeler au préalable l'API Rechercher usager.\n\n Attention, ce jeton est 'volatile' et a une durée de vie limitée (actuellement à une journée).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deefde0-6170-46fb-afeb-3c26a8289b5c%23u5JTUdGYuOyUBCBE57143qqUB1mILDeU9-sl6me46d-PwRS4DcGVVjfsmaevPSln"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information de refus du contrat d'engagement",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Refus"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "dateRefus": "2024-06-12T14:18:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratEngagement"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "etat": "REFUSE",
+                      "dateRefus": "2024-06-12T14:18:00.000Z",
+                      "organisme": "France Travail",
+                      "engagements": {
+                        "engagementsUsager": [
+                          {
+                            "titre": "Je participe activement",
+                            "libelles": [
+                              "Je m'implique dans les différentes actions définies avec mon référent",
+                              "Je tiens compte des conseils et des propositions de la structure qui m’accompagne"
+                            ]
+                          }
+                        ],
+                        "engagementsConseiller": [
+                          {
+                            "titre": "J’accompagne de manière personnalisée",
+                            "libelles": [
+                              "Je tiens compte de votre parcours, de vos compétences, de vos objectifs et de vos besoins"
+                            ]
+                          }
+                        ]
+                      },
+                      "mentionsLegales": {
+                        "mentions": [
+                          {
+                            "titre": "Respect du contrat",
+                            "mention": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu.",
+                            "sanctions": [],
+                            "notes": []
+                          }
+                        ],
+                        "niveauSanction": null,
+                        "voiesRecours": {
+                          "titre": "Voies de recours",
+                          "mention": "Dans tous les cas, vous pourrez présenter vos observations avant toute décision de sanction. Vous pourrez contester la sanction auprès de l'auteur de la décision (France Travail, le Conseil départemental* ou la Mission Locale) ou auprès des juridictions compétentes. Les étapes précises à suivre en cas de contestation seront détaillées dans le courrier de notification de sanction.",
+                          "sanctions": [],
+                          "notes": [
+                            "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc.)"
+                          ]
+                        },
+                        "articles": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "JetonUsagerInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Le header 'ft-jeton-usager' est obligatoire dans ce context"
+                    }
+                  },
+                  "intensiteInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "L'intensité d'activité hebdomadaire doit être compris entre 0 et 48."
+                    }
+                  },
+                  "dateRefusInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "La date de refus doit être antérieur ou égale à la date du jour."
+                    }
+                  },
+                  "formatDateRefusInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "DonneeEnEntreeInvalideException",
+                      "detail": "Format de date de refus invalide, format attendu yyyy-MM-dd'T'HH:mm:ssZ."
+                    }
+                  },
+                  "actionInvalide": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 400,
+                      "title": "RefusException",
+                      "detail": "Impossible de refuser un contrat d'engagement déjà refusé."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "HabilitationException",
+                      "detail": "Vous n'êtes pas habilité à signer ce contrat"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Une erreur technique s'est produite"
+                    }
+                  },
+                  "contrat-suspendu": {
+                    "value": {
+                      "type": "about:blank",
+                      "status": 500,
+                      "title": "Exception",
+                      "detail": "Un contrat d'engagement existe déjà à l'état suspendu, impossible de signer le contrat."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_contrat-engagementv1",
+              "contratengagementpart",
+              "profil_accedant"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/contrat-engagement/v1"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Contrat d'engagement",
+      "description": "API destinée à la signature et à la restitution du contrat d'engagement d'un usager"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ContratEngagement": {
+        "type": "object",
+        "description": "Contient les informations du contrat d'engagement",
+        "properties": {
+          "etat": {
+            "type": "string",
+            "enum": [
+              "SIGNE",
+              "REFUSE",
+              "A_SIGNER",
+              "EN_ATTENTE_SIGNATURE",
+              "SUSPENDU"
+            ],
+            "description": "Etat du contrat d'engagement de l'usager. L'état 'SIGNE' indique que le contrat a été signé par le référent et la personne accompagnée. L'état 'REFUSE' indique que la personne accompagnée a refusé le contrat. L'état 'A_SIGNER' indique qu'une donnée essentielle du contrat a été modifiée depuis sa dernière signature et qu'il est nécessaire de signer à nouveau le contrat. L'état 'EN_ATTENTE_SIGNATURE' indique qu'une signature électronique est en cours de finalisation. L'état 'SUSPENDU' indique que le contrat d'engagement n'est plus en cours car l'usager est en cessation d'inscription."
+          },
+          "dateSignature": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date de signature du contrat d'engagement de l'usager. Non renseigné si l'état du contrat d'engagement est 'REFUSE', 'EN_ATTENTE_SIGNATURE' ou 'SUSPENDU'. Si l'état du contrat d'engagement est 'A_SIGNER' et que la date de signature est présente cela implique que le contrat d'engagement était précédemment à l'état 'SIGNE'",
+            "format": "yyyy-MM-dd'T'HH:mm:ssZ"
+          },
+          "dateRefus": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date de refus du contrat d'engagement de l'usager. Non renseigné si l'état du contrat d'engagement est 'SIGNE', 'EN_ATTENTE_SIGNATURE' ou 'SUSPENDU'. Si l'état du contrat d'engagement est 'A_SIGNER' et que la date de refus est présente cela implique que le contrat d'engagement était précédemment à l'état 'REFUSE'",
+            "format": "yyyy-MM-dd'T'HH:mm:ssZ"
+          },
+          "dateSuspension": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date de suspension du contrat d'engagement de l'usager. Non renseigné si l'état du contrat d'engagement est 'SIGNE', 'REFUSE', 'A_SIGNER' ou 'EN_ATTENTE_SIGNATURE'.",
+            "format": "yyyy-MM-dd'T'HH:mm:ssZ"
+          },
+          "organisme": {
+            "type": "string",
+            "description": "Nom de l'organisme signataire",
+            "example": "France Travail"
+          },
+          "engagements": {
+            "type": "object",
+            "description": "Collection des engagements",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Engagements"
+              }
+            ]
+          },
+          "mentionsLegales": {
+            "type": "object",
+            "description": "Mentions légales",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MentionsLegales"
+              }
+            ]
+          }
+        }
+      },
+      "Engagements": {
+        "type": "object",
+        "properties": {
+          "engagementsUsager": {
+            "type": "array",
+            "description": "Collection des engagements de l'usager",
+            "items": {
+              "$ref": "#/components/schemas/Engagement"
+            }
+          },
+          "engagementsConseiller": {
+            "type": "array",
+            "description": "Collection des engagements de l'organisme",
+            "items": {
+              "$ref": "#/components/schemas/Engagement"
+            }
+          }
+        },
+        "required": [
+          "engagementsUsager",
+          "engagementsConseiller"
+        ]
+      },
+      "Engagement": {
+        "type": "object",
+        "description": "Représentation d'un engagement",
+        "properties": {
+          "titre": {
+            "type": "string",
+            "description": "Titre de l'engagement",
+            "example": "Participer activement"
+          },
+          "libelles": {
+            "type": "array",
+            "description": "Collections des libelles de l'engagement",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Être acteur de son parcours et s’engager de manière active pour son retour à l’emploi"
+            ]
+          }
+        },
+        "required": [
+          "titre",
+          "libelle"
+        ]
+      },
+      "MentionLegale": {
+        "required": [
+          "titre",
+          "mention"
+        ],
+        "type": "object",
+        "properties": {
+          "titre": {
+            "description": "Titre de la mention légale",
+            "type": "string",
+            "example": "Respect du contrat"
+          },
+          "mention": {
+            "description": "Mention légale",
+            "type": "string",
+            "example": "Si vous ne respectez pas les obligations prévues dans votre contrat, vous risquez jusqu’à la radiation de la liste des demandeurs d’emploi et la suppression de vos allocations. Si vous percevez le RSA, toute décision de radiation de la liste des demandeurs d’emploi prise à votre encontre sera transmise au Président du Conseil départemental qui pourra décider de suspendre, en tout ou partie, le paiement de ce revenu."
+          },
+          "sanctions": {
+            "description": "Sanctions associées. Vide pour le moment.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": []
+          },
+          "notes": {
+            "description": "Notes associées.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "*L’autorité compétente pour prendre la décision peut être différente en fonction de votre territoire (Caisse d’allocation familiale, président de collectivité, etc."
+            ]
+          }
+        }
+      },
+      "MentionsLegales": {
+        "required": [
+          "mentions",
+          "voiesRecours",
+          "articles"
+        ],
+        "type": "object",
+        "properties": {
+          "mentions": {
+            "description": "Liste des mentions légales",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MentionLegale"
+            }
+          },
+          "niveauSanction": {
+            "description": "Niveau de sanction. Non renseigné pour le moment.",
+            "type": "string",
+            "example": null
+          },
+          "voiesRecours": {
+            "description": "Voies de recours",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MentionLegale"
+              }
+            ]
+          },
+          "articles": {
+            "description": "Liste des articles. Vide pour le moment.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": []
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "description": "Implementation de la norme rfc9457, https:/www.rfc-editor.org/rfc/rfc9457",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "URI qui identifie le type de problème."
+          },
+          "status": {
+            "type": "integer",
+            "description": "Code du status HTTP.",
+            "format": "int32",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "title": {
+            "type": "string",
+            "description": "Courte description du problème."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Explication lisible par l'homme de l'occurence du problème."
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true,
+            "description": "URI qui identifie l'occurence spécifique du problème."
+          }
+        }
+      },
+      "Structure": {
+        "type": "object",
+        "description": "Structure du contrat d'engagement",
+        "properties": {
+          "engagements": {
+            "type": "object",
+            "description": "Collection des engagements de l'usager",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Engagements"
+              }
+            ]
+          }
+        }
+      },
+      "Signature": {
+        "type": "object",
+        "description": "Information de signature du contrat d'engagement de l'usager",
+        "properties": {
+          "dateSignature": {
+            "type": "string",
+            "description": "Date de signature du contrat d'engagement de l'usager",
+            "format": "yyyy-MM-dd'T'HH:mm:ssZ"
+          }
+        },
+        "required": [
+          "dateSignature"
+        ]
+      },
+      "Refus": {
+        "type": "object",
+        "description": "Information sur le refus du contrat d'engagement de l'usager",
+        "properties": {
+          "dateRefus": {
+            "type": "string",
+            "description": "Date de refus du contrat d'engagement de l'usager",
+            "format": "yyyy-MM-dd'T'HH:mm:ssZ"
+          }
+        },
+        "required": [
+          "dateRefus"
+        ]
+      }
+    },
+    "securitySchemes": {
+       "authentification_agent": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token",
+            "scopes": {
+              "api_contrat-engagementv1": "Obligatoire",
+              "contratengagementpart": "Obligatoire",
+              "profil_accedant": "Obligatoire"
+            }
+          }
+        },
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail"
+      },
+       "authentification_agent-clientCredentials": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent",
+            "scopes": {
+              "api_contrat-engagementv1": "Obligatoire",
+              "contratengagementpart": "Obligatoire",
+              "profil_accedant": "Obligatoire"
+            }
+          }
+        }
+      } 
+    }
+  }
+}

@@ -1,0 +1,641 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Open Formation",
+    "description": "API permettant aux organismes de formation et financeurs de consulter les rendez-vous et plages de candidature des formations.",
+    "version": "1.0",
+    "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+      "email": "contact@francetravail.fr"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/openformation/v1"
+    }
+  ],
+  "paths": {
+    "/sessions/{numeroSession}/{numeroAction}/{numeroFormation}": {
+      "get": {
+        "summary": "Lister les dates de rendez-vous (RDV) d'une formation",
+        "description": "Ce service permet aux organismes de formation et aux financeurs de lister les dates de rendez-vous d’information (individuels ou collectifs) d'une session de formation.",
+        "parameters": [
+          {
+            "name": "numeroSession",
+            "in": "path",
+            "required": true,
+            "example": "1330305",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de la session de formation"
+          },
+          {
+            "name": "numeroAction",
+            "in": "path",
+            "required": true,
+            "example": "20_1330305",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de l'action de formation"
+          },
+          {
+            "name": "numeroFormation",
+            "in": "path",
+            "required": true,
+            "example": "20_1262663",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de la formation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RendezVous"
+                  }
+                },
+                "example": [
+                  {
+                    "idRdv": 604659,
+                    "dateDebutRdv": "2018-11-09T17:55:00+01:00",
+                    "dureeMinuteRdv": 3,
+                    "nbTotalPlace": 3,
+                    "nbPlacesDisponible": 1,
+                    "typeRdv": "ICO",
+                    "libellePieceJustificative1": "Carte d'identité",
+                    "libellePieceJustificative2": "Permis de conduire",
+                    "libellePieceJustificative3": "Diplôme du BAC",
+                    "codeOrigine": "P",
+                    "adresse": {
+                      "adresseLigne1": "Agence France Travail de Calais",
+                      "adresseLigne2": "35 rue des sapins",
+                      "adresseLigne3": "quartier de la meinau",
+                      "codePostal": "62100",
+                      "ville": "Calais"
+                    },
+                    "numeroSession": "1330305",
+                    "numeroAction": "20_1330305",
+                    "numeroFormation": "20_1262663",
+                    "placesReservees": 2,
+                    "libelleOrigine": "France Travail",
+                    "dateCreation": "2018-11-08T17:27:14+01:00",
+                    "etat": "A",
+                    "echue": true
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_openformationv1",
+              "openFormation"
+            ]
+          }
+        ]
+      }
+    },
+    "/rendez-vous/{idRdv}": {
+      "get": {
+        "summary": "Consulter le détail d'un rendez-vous (RDV)",
+        "description": "Ce service permet aux organismes de formation et aux financeurs de consulter le détail d'un rendez-vous d’information (individuel ou collectif).",
+        "parameters": [
+          {
+            "name": "idRdv",
+            "in": "path",
+            "required": true,
+            "example": "604639",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Identifiant du rendez-vous"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RendezVousDetail"
+                },
+                "example": {
+                  "idRdv": 604639,
+                  "dateDebutRdv": "2018-12-05T00:00:00+01:00",
+                  "dateFinRdv": "2018-12-05T00:01:00+01:00",
+                  "dureeMinuteRdv": 1,
+                  "nbTotalPlace": 7,
+                  "typeRdv": "ICO",
+                  "libellePieceJustificative1": "Carte d'identité",
+                  "libellePieceJustificative2": "Permis de conduire",
+                  "libellePieceJustificative3": "Diplôme du BAC",
+                  "commentaire": "Merci de vous munir d'un stylo pour les tests d'entrée. Vous serez entendu sur vos motivations et sur les arguments vous ayant amené à ce projet de formation. Présentez-vous avec un CV à jour.",
+                  "codeOrigine": "P",
+                  "adresse": {
+                    "adresseLigne1": "Agence France Travail de Calais",
+                    "adresseLigne2": "35 rue des sapins",
+                    "adresseLigne3": "quartier de la meinau",
+                    "codePostal": "62100",
+                    "ville": "Calais",
+                    "codeDepartement": "62",
+                    "codeRegion": "32",
+                    "codePays": "FR"
+                  },
+                  "placesReservees": 7,
+                  "dateCreation": "2018-11-08T17:27:14+01:00",
+                  "dateModification": "2018-11-08T17:12:12+01:00",
+                  "etat": "A",
+                  "echue": true
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_openformationv1",
+              "openFormation"
+            ]
+          }
+        ]
+      }
+    },
+    "/plage-pre-inscription/session/{numeroSession}/action/{numeroAction}/formation/{numeroFormation}": {
+      "get": {
+        "summary": "Lister les plages de candidature d'une formation",
+        "description": "Ce service permet aux organismes de formation et aux financeurs de lister les plages de candidature d'une session de formation.",
+        "parameters": [
+          {
+            "name": "numeroSession",
+            "in": "path",
+            "required": true,
+            "example": "SE_NL_00003835252",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de la session de formation"
+          },
+          {
+            "name": "numeroAction",
+            "in": "path",
+            "required": true,
+            "example": "22_SE_NL_00003835251",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de l'action de formation"
+          },
+          {
+            "name": "numeroFormation",
+            "in": "path",
+            "required": true,
+            "example": "22_AF_NL_00000827321",
+            "schema": {
+              "type": "string",
+              "maxLength": 25
+            },
+            "description": "Numéro InterCarif de la formation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlagePreInscription"
+                  }
+                },
+                "example": [
+                  {
+                    "commentaire": "test commentaire",
+                    "dateCreation": "2020-10-23T14:55:38+02:00",
+                    "dateDebut": "2019-12-12T00:00:00+01:00",
+                    "dateFin": "2021-11-26T23:59:59+01:00",
+                    "idPlagePreInscription": 1007,
+                    "idSession": 4771789,
+                    "origine": {
+                      "codeOrigine": "P",
+                      "libelleOrigine": "France Travail"
+                    },
+                    "placesDisponibles": 9997,
+                    "placesTotal": "9999"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_openformationv1",
+              "openFormation"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RendezVous": {
+        "type": "object",
+        "properties": {
+          "idRdv": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant du rendez-vous"
+          },
+          "dateDebutRdv": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de début du rendez-vous"
+          },
+          "dureeMinuteRdv": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Durée du rendez-vous en minutes"
+          },
+          "nbTotalPlaces": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places total"
+          },
+          "nbPlacesDisponible": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places disponibles au moment de l'appel à l'API"
+          },
+          "typeRdv": {
+            "type": "string",
+            "description": "Type de rendez-vous. ICO→ Information collective, ICOP→ Information collective de positionnement (marché 2019 et FOAD), RDVI→ Rendez-vous individuel, RDVIP→ Rendez-vous individuel de positionnement (marché 2019 et FOAD), RPI→ Entretien suite à une inscription sur candidature",
+            "enum": [
+              "ICO",
+              "ICOP",
+              "RDVI",
+              "RDVIP",
+              "RPI"
+            ]
+          },
+          "libellePieceJustificative1": {
+            "type": "string",
+            "description": "Libellé de la première pièce justificative"
+          },
+          "libellePieceJustificative2": {
+            "type": "string",
+            "description": "Libellé de la seconde pièce justificative"
+          },
+          "libellePieceJustificative3": {
+            "type": "string",
+            "description": "Libellé de la troisième pièce justificative"
+          },
+          "codeOrigine": {
+            "type": "string",
+            "description": "Code de l'origine du rendez-vous. Valeurs possibles : C→ Carif, O→ OFAA, P→ France Travail, R→ L'organisme de formation, I→ Internet - TMF, A→ API Formation, X→ OuiForm, M→ TMF Mobile",
+            "enum": [
+              "C",
+              "O",
+              "P",
+              "R",
+              "I",
+              "A",
+              "X",
+              "M"
+            ]
+          },
+          "libelleOrigine": {
+            "type": "string",
+            "description": "Libellé de l'origine du rendez-vous. Valeurs possibles : Carif, OFAA', France Travail, L'organisme de formation, Internet - TMF, API Formation, OuiForm, TMF Mobile"
+          },
+          "adresse": {
+            "$ref": "#/components/schemas/Adresse"
+          },
+          "numeroSession": {
+            "type": "string",
+            "description": "Numéro InterCarif de la session de formation"
+          },
+          "numeroAction": {
+            "type": "string",
+            "description": "Numéro InterCarif de l'action de formation"
+          },
+          "numeroFormation": {
+            "type": "string",
+            "description": "Numéro InterCarif de la formation"
+          },
+          "placesReservees": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places réservées"
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création"
+          },
+          "dateModification": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de modification"
+          },
+          "etat": {
+            "type": "string",
+            "description": "Etat du rendez-vous",
+            "enum": [
+              "A",
+              "H"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "Identifiant du correspondant France Travail"
+          },
+          "uidLdap": {
+            "type": "string",
+            "description": "Identifiant dans le LDAP du correspondant France Travail"
+          },
+          "echue": {
+            "type": "boolean",
+            "description": "Indique si la formation est échue"
+          }
+        }
+      },
+      "RendezVousDetail": {
+        "type": "object",
+        "properties": {
+          "idRdv": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant du rendez-vous"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant technique de la session de formation généré par France Travail"
+          },
+          "dateDebutRdv": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de début du rendez-vous"
+          },
+          "dateFinRdv": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de fin du rendez-vous"
+          },
+          "dureeMinuteRdv": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Durée du rendez-vous en minutes"
+          },
+          "nbTotalPlaces": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places total"
+          },
+          "typeRdv": {
+            "type": "string",
+            "description": "Type de rendez-vous. ICO→ Information collective, ICOP→ Information collective de positionnement (marché 2019 et FOAD), RDVI→ Rendez-vous individuel,  RDVIP→ Rendez-vous individuel de positionnement (marché 2019 et FOAD), RPI→ Entretien suite à une inscription sur candidature",
+            "enum": [
+              "ICO",
+              "ICOP",
+              "RDVI",
+              "RDVIP",
+              "RPI"
+            ]
+          },
+          "libellePieceJustificative1": {
+            "type": "string",
+            "description": "Libellé de la première pièce justificative"
+          },
+          "libellePieceJustificative2": {
+            "type": "string",
+            "description": "Libellé de la seconde pièce justificative"
+          },
+          "libellePieceJustificative3": {
+            "type": "string",
+            "description": "Libellé de la troisième pièce justificative"
+          },
+          "commentaire": {
+            "type": "string",
+            "description": "Commentaire"
+          },
+          "codeOrigine": {
+            "type": "string",
+            "description": "Code de l'origine du rendez-vous. C→ Carif, P→ France Travail, R→ L'organisme de formation, I→ Internet - TMF, A→ API Formation, X→ OuiForm, M→ TMF Mobile",
+            "enum": [
+              "C",
+              "O",
+              "P",
+              "R",
+              "I",
+              "A",
+              "X",
+              "M"
+            ]
+          },
+          "adresse": {
+            "$ref": "#/components/schemas/Adresse"
+          },
+          "placesReservees": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places réservées"
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création"
+          },
+          "dateModification": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de modification"
+          },
+          "etat": {
+            "type": "string",
+            "description": "Etat du rendez-vous. A -> Actif, H -> Historisé",
+            "enum": [
+              "A",
+              "H"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "Identifiant du correspondant France Travail"
+          },
+          "uidLdap": {
+            "type": "string",
+            "description": "Identifiant dans le LDAP du correspondant France Travail"
+          },
+          "echue": {
+            "type": "boolean",
+            "description": "Indique si la formation est échue"
+          },
+          "positionnement": {
+            "type": "boolean",
+            "description": "Indique si le rendez-vous est de type ICOP ou RDVIP (marché 2019 et FOAD)"
+          }
+        }
+      },
+      "PlagePreInscription": {
+        "type": "object",
+        "properties": {
+          "idPlagePreInscription": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant de la plage de candidature"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Identifiant technique de la session de formation généré par France Travail"
+          },
+          "dateDebut": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de début de la plage de candidature"
+          },
+          "dateFin": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de fin de la plage de candidature"
+          },
+          "placesTotal": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places total"
+          },
+          "placesDisponibles": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Nombre de places disponibles au moment de l'appel à l'API"
+          },
+          "commentaire": {
+            "type": "string",
+            "description": "Commentaire"
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date de création"
+          },
+          "origine": {
+            "$ref": "#/components/schemas/Origine"
+          }
+        }
+      },
+      "Adresse": {
+        "type": "object",
+        "properties": {
+          "adresseLigne1": {
+            "type": "string",
+            "description": "Ligne 1 de l'adresse du RDV"
+          },
+          "adresseLigne2": {
+            "type": "string",
+            "description": "Ligne 2 de l'adresse du RDV"
+          },
+          "adresseLigne3": {
+            "type": "string",
+            "description": "Ligne 3 de l'adresse du RDV"
+          },
+          "adresseLigne4": {
+            "type": "string",
+            "description": "Ligne 4 de l'adresse du RDV"
+          },
+          "codePostal": {
+            "type": "string",
+            "description": "Code postal de l'adresse du RDV"
+          },
+          "latitude": {
+            "type": "string",
+            "description": "Latitude de l'adresse du RDV"
+          },
+          "longitude": {
+            "type": "string",
+            "description": "Longitude de l'adresse du RDV"
+          },
+          "ville": {
+            "type": "string",
+            "description": "Ville de l'adresse du RDV"
+          },
+          "codeDepartement": {
+            "type": "string",
+            "description": "Département de l'adresse du RDV"
+          },
+          "codeRegion": {
+            "type": "string",
+            "description": "Région de l'adresse du RDV"
+          },
+          "codeINSEEcommune": {
+            "type": "string",
+            "description": "Code INSEE de la commune de l'adresse du RDV"
+          },
+          "codePays": {
+            "type": "string",
+            "description": "Pays de l'adresse du RDV"
+          }
+        }
+      },
+      "Origine": {
+        "type": "object",
+        "properties": {
+          "codeOrigine": {
+            "type": "string",
+            "description": "Code de l'origine de création de la plage de candidature. C→ Carif, O→ OFAA', P→ France Travail, R→ L'organisme de formation, I→ Internet - TMF, A→ API Formation, X→ OuiForm, M→ TMF Mobile",
+            "enum": [
+              "C",
+              "O",
+              "P",
+              "R",
+              "I",
+              "A",
+              "X",
+              "M"
+            ]
+          },
+          "libelleOrigine": {
+            "type": "string",
+            "description": "Libellé de l'origine de création de la plage de candidature"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "description": "Obligatoire",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "api_openformationv1": "Obligatoire",
+              "openFormation": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

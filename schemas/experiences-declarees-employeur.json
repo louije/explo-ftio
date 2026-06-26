@@ -1,0 +1,238 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Expériences  déclarées par l'employeur",
+    "description": "Cette API permet de reconstituer la carrière professionnelle d’un individu basée sur les justificatifs employeurs transmis à France Travail.",
+    "version": "1.0",
+    "contact": {
+      "url": "https://francetravail.io/contact",
+      "email": "Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-experiencesprofessionellesdeclareesparlemployeur/v1"
+    }
+  ],
+  "paths": {
+    "/contrats": {
+      "get": {
+        "summary": "Expériences professionnelles déclarées par votre employeur",
+        "description": "Cette API vous permet de reconstituer la carrière professionnelle d’un individu basée sur les justificatifs employeurs (Attestations employeurs, DSN…) transmis à France Travail : nom de l’employeur, période de travail…",
+        "parameters": [
+          {
+            "name": "dateDebutPeriode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "20170101"
+            },
+            "description": "Date de début de la période"
+          },
+          {
+            "name": "dateFinPeriode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "20180401"
+            },
+            "description": "Date de fin de la période"
+          },
+          {
+            "name": "natureContrat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "CDD"
+            },
+            "description": "Nature du contrat"
+          },
+          {
+            "name": "dureeTravailMin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Durée de travail minimum"
+          },
+          {
+            "name": "uniteDureeTravail",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unité de la durée de travail"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContratsResponse"
+                },
+                "example": {
+                  "contrats": [
+                    {
+                      "dateDebut": "20130311",
+                      "dateFin": "20130321",
+                      "intitulePoste": "Employé de commerce qualifié",
+                      "natureContrat": "CDD",
+                      "niveauQualification": "Non cadre",
+                      "dureeContrat": "11",
+                      "quantiteTravail": "56",
+                      "entreprise": {
+                        "codeApe": "5629B",
+                        "nom": "CAISSE CENTRALE ACTIVITE SOCIALE",
+                        "regime": "Régime Général",
+                        "secteur": "Privé",
+                        "siret": "77569474807916"
+                      }
+                    },
+                    {
+                      "dateDebut": "20140401",
+                      "dateFin": "20161102",
+                      "intitulePoste": "Métier indéterminé",
+                      "natureContrat": "CDD",
+                      "niveauQualification": "Non cadre",
+                      "dureeContrat": "947",
+                      "quantiteTravail": "1142",
+                      "entreprise": {
+                        "codeApe": "5610B",
+                        "nom": "JB NIMES",
+                        "regime": "Régime Général",
+                        "secteur": "Privé",
+                        "siret": "81925395600018"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-experiencesprofessionellesdeclareesparlemployeurv1",
+              "passeprofessionnel"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContratsResponse": {
+        "type": "object",
+        "properties": {
+          "contrats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contrat"
+            }
+          }
+        }
+      },
+      "Contrat": {
+        "type": "object",
+        "properties": {
+          "dateDebut": {
+            "type": "string",
+            "format": "date",
+            "description": "Date de début de l'activité",
+            "example": "20130311"
+          },
+          "dateFin": {
+            "type": "string",
+            "format": "date",
+            "description": "Date de finde l'activité",
+            "example": "20130321"
+          },
+          "intitulePoste": {
+            "type": "string",
+            "description": "Intitulé du poste",
+            "example": "Employé de commerce qualifié"
+          },
+          "natureContrat": {
+            "type": "string",
+            "description": "Nature du contrat",
+            "example": "CDD"
+          },
+          "niveauQualification": {
+            "type": "string",
+            "description": "Niveau de qualification",
+            "example": "Non cadre"
+          },
+          "dureeContrat": {
+            "type": "string",
+            "description": "Durée du contrat",
+            "example": "11"
+          },
+          "quantiteTravail": {
+            "type": "integer",
+            "description": "Quantité de travail",
+            "example": 56
+          },
+          "entreprise": {
+            "$ref": "#/components/schemas/Entreprise"
+          }
+        }
+      },
+      "Entreprise": {
+        "type": "object",
+        "properties": {
+          "codeApe": {
+            "type": "string",
+            "description": "Code APE",
+            "example": "5629B"
+          },
+          "nom": {
+            "type": "string",
+            "description": "Nom de l'entreprise",
+            "example": "CAISSE CENTRALE ACTIVITE SOCIALE"
+          },
+          "regime": {
+            "type": "string",
+            "description": "Régime de l'entreprise",
+            "example": "Régime Général"
+          },
+          "secteur": {
+            "type": "string",
+            "description": "Secteur de l'entreprise",
+            "example": "Privé"
+          },
+          "siret": {
+            "type": "string",
+            "description": "SIRET de l'entreprise",
+            "example": "77569474807916"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_peconnect-experiencesprofessionellesdeclareesparlemployeurv1": "Obligatoire",
+              "passeprofessionnel": "Obligatoire"
+            }
+          }
+        }
+      }
+    }
+  }
+}

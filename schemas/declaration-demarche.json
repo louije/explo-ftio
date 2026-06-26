@@ -1,0 +1,1142 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "v1",
+    "title": "Déclaration de démarche",
+    "description": "L'API des démarches vous permet de partager et suivre les actions réalisées par les usagers dans le cadre de leur parcours de retour à l'emploi.\r\n ## Aide à l'utilisation de l'API\r\nVeuillez vous référer au [Référentiel des démarches](https://francetravail.io/api-peio/v2/pages-document/fichier/503/referentiel-demarches.pdf) afin d'identifier les paramètres nécessaires en entrée de l'API : codePourquoi, codeQuoi, codeComment."
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/ftconnect-demarches-usager/v1"
+    }
+  ],
+  "paths": {
+    "/demarches": {
+      "get": {
+        "summary": "Lire les démarches d'un individu",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Le nombre maximum de démarches à retourner",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "example": 5
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Le nombre de démarches à ignorer avant de commencer à retourner les résultats",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Le numéro de la page à retourner",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "security": [
+          {
+            "authentification_individu": [
+              "api_ftconnect-demarches-usagerv1",
+              "demarchesPartenairesLect"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Démarches remontées avec succès",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageDemarchesPartenaireLectureDto"
+                },
+                "example": {
+                  "page": 1,
+                  "size": 2,
+                  "totalElements": 8,
+                  "hasMore": true,
+                  "demarches": [
+                    {
+                      "identifiant": "5Xodk0ca860c-aa03-41a8-840f-9c340697418fJ8Jehd#2JUJx59YlcYf_N72H61X36MxQOMiD2-Z9x23ldcj1CMd31Q",
+                      "etat": "AC",
+                      "libelle": "Réponse aux offres",
+                      "codePourquoi": "P03",
+                      "libellePourquoi": "Mes candidatures",
+                      "codeQuoi": "Q14",
+                      "libelleQuoi": "Réponse à des offres d'emploi",
+                      "dateDebut": "2020-06-12",
+                      "dateFin": "2024-06-12",
+                      "dateCreation": "2025-06-06",
+                      "typeObjetMetier": "API_PARTENAIRE",
+                      "url": "https://www.site.fr/28",
+                      "commentaire": "Mon commentaire",
+                      "_links": {
+                        "modifier": {
+                          "href": "/demarches/50ca860c-aa03-41a8-840f-9c340697418f#2JUJx59YlcYf_N72H61X36MxQOMiD2-Z9x23ldcj11Q"
+                        }
+                      }
+                    },
+                    {
+                      "identifiant": "XUh4y+/Kqqsd1x2hazDKFoeqsdxfd==",
+                      "etat": "AC",
+                      "libelle": "Réponse aux offres",
+                      "codePourquoi": "P03",
+                      "libellePourquoi": "Mes candidatures",
+                      "codeQuoi": "Q14",
+                      "libelleQuoi": "Réponse à des offres d'emploi",
+                      "dateDebut": "2020-06-12",
+                      "dateFin": "2024-06-12",
+                      "dateCreation": "2025-06-06",
+                      "typeObjetMetier": "API_PARTENAIRE",
+                      "url": "https://www.site.fr/29",
+                      "commentaire": "Un commentaire",
+                      "_links": {
+                        "modifier": {
+                          "href": "/demarches/XUh4y+/Kqqsd1x2hazeqsdxfd=="
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "next": {
+                      "href": "/demarches?page=2&limit=2"
+                    },
+                    "last": {
+                      "href": "/demarches?page=4&limit=2"
+                    },
+                    "self": {
+                      "href": "/demarches?page=1&limit=2"
+                    },
+                    "first": {
+                      "href": "/demarches?page=1&limit=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur inconnue",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERREUR_INTERNE",
+                      "status": 500,
+                      "detail": "Une erreur interne est survenue",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Créer une démarche pour un individu",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_ftconnect-demarches-usagerv1",
+              "demarchesPartenairesMaj"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "La démarche à créer",
+          "content": {
+            "application/json;charset=utf-8": {
+              "schema": {
+                "$ref": "#/components/schemas/DemarchePartenaireCreationDto"
+              },
+              "example": {
+                "etat": "RE",
+                "codePourquoi": "P03",
+                "codeQuoi": "Q14",
+                "dateCreation": "2022-06-06",
+                "dateDebut": "2023-06-12",
+                "dateFin": "2024-06-12",
+                "url": "https://localhost.fr/28",
+                "commentaire": "Ceci est un commentaire"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Démarche créée avec succès",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemarchePartenaireLectureDto"
+                },
+                "example": {
+                  "identifiant": "50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q",
+                  "etat": "AC",
+                  "libelle": "Réponse aux offres",
+                  "codePourquoi": "P03",
+                  "libellePourquoi": "Mes candidatures",
+                  "codeQuoi": "Q14",
+                  "libelleQuoi": "Réponse à des offres d'emploi",
+                  "dateDebut": "2020-06-12",
+                  "dateFin": "2024-06-12",
+                  "dateCreation": "2022-06-06",
+                  "typeObjetMetier": "API_PARTENAIRE",
+                  "url": "https://localhost.fr/28",
+                  "commentaire": "Un exemple de commentaire ",
+                  "_links": {
+                    "modifier": {
+                      "href": "/demarches/50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données en entrée invalides",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERR_DONNEE_INCORRECTE",
+                      "status": 400,
+                      "detail": "Seuls les états [AC, RE] sont acceptés",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Démarche déjà existante",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERR_DEMARCHE_EXISTANTE",
+                      "status": 409,
+                      "detail": "La démarche d'identifiant objet métier '12346' associée au partenaire 'Part' existe déjà",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur inconnue",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERREUR_INTERNE",
+                      "status": 500,
+                      "detail": "Une erreur interne est survenue",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demarches/{idDemarche}": {
+      "patch": {
+        "summary": "Modifier une démarche pour un individu",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_ftconnect-demarches-usagerv1",
+              "demarchesPartenairesMaj"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idDemarche",
+            "in": "path",
+            "description": "L'identifiant de la démarche. Cet identifiant doit être encodé afin de garantir une interprétation correcte de l’identifiant par l’API.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q"
+          }
+        ],
+        "requestBody": {
+          "description": "La démarche à modifier",
+          "content": {
+            "application/json;charset=utf-8": {
+              "schema": {
+                "$ref": "#/components/schemas/DemarchePartenaireModificationDto"
+              },
+              "example": {
+                "etat": "RE",
+                "dateDebut": "2023-06-12",
+                "dateFin": "2024-06-12",
+                "commentaire": "Un commentaire"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Démarche modifiée avec succès",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemarchePartenaireLectureDto"
+                },
+                "example": {
+                  "example": {
+                    "identifiant": "50ca860c-aa03-41a8-840f-9c340697418f#2JUJx59YlcYf_N72H61X36MxQOMiD2-Z9x23ldcj11Q",
+                    "etat": "AC",
+                    "libelle": "Réponse aux offres",
+                    "codePourquoi": "P03",
+                    "libellePourquoi": "Mes candidatures",
+                    "codeQuoi": "Q14",
+                    "libelleQuoi": "Réponse à des offres d'emploi",
+                    "dateDebut": "2020-06-12",
+                    "dateFin": "2024-06-12",
+                    "dateCreation": "2022-06-06",
+                    "dateModification": "2022-06-07",
+                    "typeObjetMetier": "API_PARTENAIRE",
+                    "url": "https://localhost.fr/28",
+                    "commentaire": "Un exemple de commentaire ",
+                    "_links": {
+                      "modifier": {
+                        "href": "/demarches/50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données en entrée invalides",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERR_DONNEE_INCORRECTE",
+                      "status": 400,
+                      "detail": "Seuls les états [AC, RE] sont acceptés",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Démarche inexistante",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERR_DEMARCHE_INEXISTANTE",
+                      "status": 404,
+                      "detail": "La démarche n'existe pas",
+                      "instance": "/demarches/{idDemarche}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur inconnue",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERREUR_INTERNE",
+                      "status": 500,
+                      "detail": "Une erreur interne est survenue",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/referentiel/demarches": {
+      "get": {
+        "summary": "Retourne le référentiel des démarches",
+        "security": [
+          {
+            "authentification_individu": [
+              "api_ftconnect-demarches-usagerv1",
+              "demarchesPartenairesLectRef"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Référentiel retourné avec succès",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "code": "P03",
+                      "libelle": "Mes candidatures",
+                      "typesDemarcheRetourEmploi": [
+                        {
+                          "type": "TypeDemarcheRetourEmploiReferentielPartenaire",
+                          "code": "Q11",
+                          "libelle": "Préparation de ses candidatures (CV, lettre de motivation, book)",
+                          "moyensRetourEmploi": [
+                            {
+                              "type": "MoyenRetourEmploiReferentielPartenaire",
+                              "code": "C11.01",
+                              "libelle": "En participant à un atelier, une prestation, une réunion d'information",
+                              "droitCreation": false
+                            },
+                            {
+                              "type": "MoyenRetourEmploiReferentielPartenaire",
+                              "code": "C11.06",
+                              "libelle": "Sur internet",
+                              "droitCreation": true
+                            },
+                            {
+                              "type": "MoyenRetourEmploiReferentielPartenaire",
+                              "code": "C11.02",
+                              "libelle": "En créant ou en mettant à jour mon CV et ou ma lettre de motivation",
+                              "droitCreation": true
+                            },
+                            {
+                              "type": "MoyenRetourEmploiReferentielPartenaire",
+                              "code": "C11.05",
+                              "libelle": "Par un autre moyen",
+                              "droitCreation": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "libelle": {
+                        "type": "string"
+                      },
+                      "typesDemarcheRetourEmploi": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TypeDemarcheRetourEmploiReferentiel"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur inconnue",
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erreur": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  },
+                  "example": {
+                    "erreur": {
+                      "type": "about:blank",
+                      "title": "ERREUR_INTERNE",
+                      "status": 500,
+                      "detail": "Une erreur interne est survenue",
+                      "instance": "/demarches"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu",
+            "scopes": {
+              "api_ftconnect-demarches-usagerv1": "Obligatoire",
+              "demarchesPartenairesLect": "Obligatoire",
+              "demarchesPartenairesLectRef": "Obligatoire",
+              "demarchesPartenairesMaj": "Obligatoire"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string"
+          }
+        }
+      },
+      "PageDemarchesPartenaireLectureDto": {
+        "type": "object",
+        "properties": {
+          "hasMore": {
+            "type": "boolean",
+            "description": "Indique s'il existe des pages suivantes",
+            "example": true
+          },
+          "page": {
+            "type": "integer",
+            "description": "Numéro de la page courante (commence à 1)",
+            "format": "int32",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Nombre de démarches dans la page",
+            "format": "int32",
+            "example": 10
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Nombre total de démarches disponibles",
+            "format": "int32",
+            "example": 30
+          },
+          "demarches": {
+            "type": "array",
+            "description": "Les démarches de la page courante",
+            "items": {
+              "$ref": "#/components/schemas/DemarchePartenaireLectureDto"
+            }
+          },
+          "_links": {
+            "type": "object",
+            "description": "Les liens vers la première page, la dernière page, la page suivante et la page précédente",
+            "properties": {
+              "next": {
+                "$ref": "#/components/schemas/HalLink"
+              },
+              "last": {
+                "$ref": "#/components/schemas/HalLink"
+              },
+              "self": {
+                "$ref": "#/components/schemas/HalLink"
+              },
+              "first": {
+                "$ref": "#/components/schemas/HalLink"
+              }
+            }
+          }
+        },
+        "description": "Contient les informations les démarches demandées avec les informations et le liens de pagination",
+        "example": {
+          "page": 1,
+          "size": 2,
+          "totalElements": 8,
+          "hasMore": true,
+          "demarches": [
+            {
+              "identifiant": "50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q",
+              "etat": "AC",
+              "libelle": "Réponse aux offres",
+              "codePourquoi": "P03",
+              "libellePourquoi": "Mes candidatures",
+              "codeQuoi": "Q14",
+              "libelleQuoi": "Réponse à des offres d'emploi",
+              "dateDebut": "2020-06-12",
+              "dateFin": "2024-06-12",
+              "dateCreation": "2025-06-06",
+              "typeObjetMetier": "API_PARTENAIRE",
+              "url": "https://www.site.fr/28",
+              "commentaire": "Mon commentaire",
+              "_links": {
+                "modifier": {
+                  "href": "/demarches/50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q"
+                }
+              }
+            },
+            {
+              "identifiant": "XUh4y+/Kqqsd1x2hazeqsdxfd==",
+              "etat": "AC",
+              "libelle": "Réponse aux offres",
+              "codePourquoi": "P03",
+              "libellePourquoi": "Mes candidatures",
+              "codeQuoi": "Q14",
+              "libelleQuoi": "Réponse à des offres d'emploi",
+              "dateDebut": "2020-06-12",
+              "dateFin": "2024-06-12",
+              "dateCreation": "2025-06-06",
+              "typeObjetMetier": "API_PARTENAIRE",
+              "url": "https://www.site.fr/29",
+              "commentaire": "Un commentaire",
+              "_links": {
+                "modifier": {
+                  "href": "/demarches/XUh4y+/Kqqsd1x2hazeqsdxfd=="
+                }
+              }
+            }
+          ],
+          "_links": {
+            "next": {
+              "href": "/demarches?page=2&limit=2"
+            },
+            "last": {
+              "href": "/demarches?page=4&limit=2"
+            },
+            "self": {
+              "href": "/demarches?page=1&limit=2"
+            },
+            "first": {
+              "href": "/demarches?page=1&limit=2"
+            }
+          }
+        }
+      },
+      "DemarchePartenaireLectureDto": {
+        "type": "object",
+        "properties": {
+          "codeComment": {
+            "type": "string",
+            "description": "Le code comment associé à la démarche",
+            "example": "C01.02"
+          },
+          "codePourquoi": {
+            "type": "string",
+            "description": "Le code pourquoi associé à la démarche",
+            "example": "P03"
+          },
+          "codeQuoi": {
+            "type": "string",
+            "description": "Le code quoi associé à la démarche",
+            "example": "Q01"
+          },
+          "commentaire": {
+            "type": "string",
+            "description": "Le commentaire associé à la démarche",
+            "example": "Je commente ma démarche"
+          },
+          "dateAbandon": {
+            "type": "string",
+            "description": "La date d'abandon de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-05-15"
+          },
+          "dateAnnulation": {
+            "type": "string",
+            "description": "La date d'annulation de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-04-01"
+          },
+          "dateCreation": {
+            "type": "string",
+            "description": "La date de création de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-01-01"
+          },
+          "dateDebut": {
+            "type": "string",
+            "description": "La date de début de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-01-15"
+          },
+          "dateFin": {
+            "type": "string",
+            "description": "La date de fin de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-06-15"
+          },
+          "dateModification": {
+            "type": "string",
+            "description": "La date de modification de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2023-01-02"
+          },
+          "etat": {
+            "type": "string",
+            "description": "L'état de la démarche, valeurs possibles : [RE, AC, AN]",
+            "example": "AC"
+          },
+          "identifiant": {
+            "type": "string",
+            "description": "L'identifiant de la démarche",
+            "example": "50ca860c-aa03-41a8-840f-9c3406Fke97418f#2JUJx59YlcYf_N72H61X36MxQ3DfOMiD2-Z9x23ldc5RRj11Q"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de la démarche",
+            "example": "Préparation CV ou lettre de motivation : CV de coiffeur/boucher"
+          },
+          "libelleComment": {
+            "type": "string",
+            "description": "Libellé du comment associé à la démarche",
+            "example": "Avec l'aide d'une personne ou d'une structure"
+          },
+          "libellePourquoi": {
+            "type": "string",
+            "description": "Libellé du pourquoi associé à la démarche",
+            "example": "Préparation CV"
+          },
+          "libelleQuoi": {
+            "type": "string",
+            "description": "Libellé du quoi associé à la démarche",
+            "example": "Identification de ses points forts et de ses compétences"
+          },
+          "typeObjetMetier": {
+            "type": "string",
+            "description": "Type d'objet métier associé à la démarche",
+            "example": "JRE_DE"
+          },
+          "url": {
+            "type": "string",
+            "description": "L'url vers l'objet métier à l'origine de la création de la démarche. Doit être en https",
+            "example": "https://www.localhost.fr/124567890"
+          },
+          "_links": {
+            "type": "object",
+            "description": "Les liens vers les actions possibles autour de la démarche en fonction des droits",
+            "properties": {
+              "modifier": {
+                "$ref": "#/components/schemas/HalLink"
+              }
+            },
+            "example": {
+              "_links": {
+                "modifier": {
+                  "href": "/demarches/50ca860c-aa03-41a8-840f-9c340697418f#2JUJx59YlcYf_N72H61X36MxQOMiD2-Z9x23ldcj11Q"
+                }
+              }
+            }
+          }
+        },
+        "description": "Contient les informations de la démarche"
+      },
+      "DemarchePartenaireCreationDto": {
+        "required": [
+          "codePourquoi",
+          "codeQuoi",
+          "dateCreation",
+          "dateDebut",
+          "dateFin",
+          "etat"
+        ],
+        "type": "object",
+        "properties": {
+          "codeComment": {
+            "type": "string",
+            "description": "Le code comment associé à la démarche",
+            "example": "C14.01"
+          },
+          "codePourquoi": {
+            "type": "string",
+            "description": "Le code pourquoi associé à la démarche",
+            "example": "P03"
+          },
+          "codeQuoi": {
+            "type": "string",
+            "description": "Le code quoi associé à la démarche",
+            "example": "Q14"
+          },
+          "commentaire": {
+            "type": "string",
+            "description": "Le commentaire associé à la démarche",
+            "example": "Je commente ma démarche"
+          },
+          "dateCreation": {
+            "type": "string",
+            "description": "La date de création de la démarche",
+            "format": "yyyy-MM-dd",
+            "example": "2024-12-17"
+          },
+          "dateDebut": {
+            "type": "string",
+            "description": "La date de début de la démarche. Doit être inférieure ou égale à la date de fin",
+            "format": "yyyy-MM-dd",
+            "example": "2024-12-22"
+          },
+          "dateFin": {
+            "type": "string",
+            "description": "La date de fin de la démarche. Doit être supérieure ou égale à la date de début",
+            "format": "yyyy-MM-dd",
+            "example": "2025-09-28"
+          },
+          "etat": {
+            "type": "string",
+            "description": "L'état de la démarche, valeurs acceptées: [RE, AC]",
+            "example": "RE"
+          },
+          "url": {
+            "type": "string",
+            "description": "L'url vers l'objet métier à l'origine de la création la démarche. Doit être en https",
+            "example": "https://www.localhost.fr/124567890"
+          }
+        },
+        "description": "Contient les informations de la démarche à créer",
+        "example": {
+          "etat": "RE",
+          "codePourquoi": "P03",
+          "codeQuoi": "Q14",
+          "dateCreation": "2022-06-06",
+          "dateDebut": "2023-06-12",
+          "dateFin": "2024-06-12",
+          "url": "https://localhost.fr/28",
+          "commentaire": "Ceci est un commentaire"
+        }
+      },
+      "DemarchePartenaireModificationDto": {
+        "required": [
+          "dateDebut",
+          "dateFin",
+          "etat"
+        ],
+        "type": "object",
+        "properties": {
+          "commentaire": {
+            "type": "string",
+            "description": "Le commentaire associé à la démarche",
+            "example": "Je commente ma démarche"
+          },
+          "dateDebut": {
+            "type": "string",
+            "description": "La date de début de la démarche. Doit être inférieure ou égale à la date de fin",
+            "format": "yyyy-MM-dd",
+            "example": "2024-12-22"
+          },
+          "dateFin": {
+            "type": "string",
+            "description": "La date de fin de la démarche. Doit être supérieure ou égale à la date de début",
+            "format": "yyyy-MM-dd",
+            "example": "2025-09-28"
+          },
+          "etat": {
+            "type": "string",
+            "description": "L'état de la démarche, valeurs acceptées: [AC, RE, AN]",
+            "example": "AC"
+          }
+        },
+        "description": "Contient les informations de la démarche à modifier",
+        "example": {
+          "etat": "RE",
+          "dateDebut": "2023-06-12",
+          "dateFin": "2024-06-12",
+          "commentaire": "Ceci est un commentaire"
+        }
+      },
+      "ElementListeDeChoixAttribut": {
+        "type": "object",
+        "description": "Contient les éléments de choix pour un attribut donné.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code de l'élément.",
+            "example": "C01"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'élément.",
+            "example": "Sur Internet"
+          }
+        }
+      },
+      "StructureAttribut": {
+        "type": "object",
+        "description": "Contient les informations sur les attributs d'un formulaire.",
+        "properties": {
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'attribut.",
+            "example": "Nom du site ou applicatif"
+          },
+          "libelleSiValeurNulle": {
+            "type": "string",
+            "description": "Libellé si la valeur est nulle.",
+            "example": "Non renseigné"
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "Placeholder de l'attribut.",
+            "example": "Ex : Pôle-emploi.fr, Emploi Store"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type de l'attribut.",
+            "enum": [
+              "LISTE",
+              "TEXTE",
+              "NOMBRE"
+            ]
+          },
+          "choixListe": {
+            "type": "array",
+            "description": "Liste des choix pour un attribut de type liste.",
+            "items": {
+              "$ref": "#/components/schemas/ElementListeDeChoixAttribut"
+            },
+            "example": [
+              {
+                "code": "L01",
+                "libelle": "Avec un conseiller"
+              }
+            ]
+          }
+        }
+      },
+      "StructureFormulaireOut": {
+        "type": "object",
+        "description": "Contient les informations sur la structure du formulaire.",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description du formulaire.",
+            "example": "Rédiger un CV pour décrire son parcours professionnel."
+          },
+          "libelleLong": {
+            "type": "string",
+            "description": "Libellé long de l'attribut.",
+            "example": "Préparation de ses candidatures (CV, lettre de motivation)"
+          },
+          "attributs": {
+            "type": "array",
+            "description": "Liste des attributs du formulaire.",
+            "items": {
+              "$ref": "#/components/schemas/StructureAttribut"
+            }
+          }
+        }
+      },
+      "MoyenRetourEmploiReferentiel": {
+        "type": "object",
+        "description": "Contient les informations sur les moyens de retour à l'emploi.",
+        "properties": {
+          "structureFormulaire": {
+            "description": "Structure du formulaire associé.",
+            "$ref": "#/components/schemas/StructureFormulaireOut"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code du moyen de retour à l'emploi.",
+            "example": "C11.06"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du moyen de retour à l'emploi.",
+            "example": "Sur internet"
+          }
+        }
+      },
+      "TypeDemarcheRetourEmploiReferentiel": {
+        "type": "object",
+        "description": "Contient les types de démarches de retour à l'emploi.",
+        "properties": {
+          "moyensRetourEmploi": {
+            "type": "array",
+            "description": "Liste des moyens de retour à l'emploi.",
+            "items": {
+              "$ref": "#/components/schemas/MoyenRetourEmploiReferentiel"
+            }
+          },
+          "structureFormulaire": {
+            "description": "Structure du formulaire associé.",
+            "$ref": "#/components/schemas/StructureFormulaireOut"
+          },
+          "code": {
+            "type": "string",
+            "description": "Code du type de démarche.",
+            "example": "Q11"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé du type de démarche.",
+            "example": "Préparation de ses candidatures (CV, lettre de motivation)"
+          }
+        }
+      },
+      "ObjectifRetourEmploiReferentiel": {
+        "type": "object",
+        "description": "Contient les objectifs de retour à l'emploi.",
+        "properties": {
+          "typesDemarcheRetourEmploi": {
+            "type": "array",
+            "description": "Liste des types de démarches de retour à l'emploi.",
+            "items": {
+              "$ref": "#/components/schemas/TypeDemarcheRetourEmploiReferentiel"
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "Code de l'objectif de retour à l'emploi.",
+            "example": "P03"
+          },
+          "libelle": {
+            "type": "string",
+            "description": "Libellé de l'objectif de retour à l'emploi.",
+            "example": "Mes candidatures"
+          }
+        }
+      },
+      "HalLink": {
+        "type": "object",
+        "description": "Lien hateoas.",
+        "properties": {
+          "href": {
+            "description": "La valeur du lien hateoas.",
+            "type": "string"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "description": "Représentation d'une erreur au format Problem Details (RFC 9457).",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "description": "URI identifiant le type d’erreur.",
+            "example": "about:blank"
+          },
+          "title": {
+            "$ref": "#/components/schemas/CodesErreur"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Code HTTP associé à l’erreur.",
+            "example": 500
+          },
+          "detail": {
+            "type": "string",
+            "description": "Description détaillée de l’erreur.",
+            "example": "Une erreur interne est survenue"
+          },
+          "instance": {
+            "type": "string",
+            "description": "URI de la requête ayant provoqué l’erreur.",
+            "example": "/demarches"
+          }
+        },
+        "example": {
+          "type": "about:blank",
+          "title": "ERREUR_INTERNE",
+          "status": 500,
+          "detail": "Une erreur interne est survenue",
+          "instance": "/demarches"
+        }
+      },
+      "CodesErreur": {
+        "description": "Les codes d'erreur.",
+        "type": "string",
+        "example": "ERR_DEMARCHE_EXISTANTE",
+        "enum": [
+          "ERR_DEMARCHE_EXISTANTE",
+          "ERR_DEMARCHE_INEXISTANTE",
+          "ERR_MODIFICATION_INTERDITE",
+          "ERR_DATES_INCOHERENTES",
+          "ERR_MODIFICATION_ETAT_INTERDITE",
+          "ERR_DONNEE_INCORRECTE",
+          "ERREUR_INTERNE"
+        ]
+      }
+    }
+  }
+}

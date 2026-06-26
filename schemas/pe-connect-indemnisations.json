@@ -1,0 +1,99 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API PE Connect - Indemnisations",
+    "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA).\n\nA titre d’exemple, cela peut permettre à un individu de bénéficier d’aides liées à son type de ressource(s) ou d’allocation.\n\nCette API fait partie de l’ensemble des API mises à disposition dans le cadre de l’utilisation du dispositif de portabilité de France Travail des données personnelles d'un individu.\n\nPour pouvoir l'exploiter, l'utilisateur doit au préalable s'être identifié sur l’application ou le site web avec son compte France Travail grâce au bouton « Se connecter avec France Travail » (API France Travail Connect)."
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/peconnect-indemnisations/v1"
+    }
+  ],
+  "paths": {
+    "/indemnisation": {
+      "get": {
+        "tags": [
+          "Indemnisations"
+        ],
+        "summary": "Récupère les informations d'indemnisation d'un individu",
+        "description": "Retourne si l'individu est bénéficiaire d'une prestation d'assurance chômage ou de minima sociaux.",
+        "responses": {
+          "200": {
+            "description": "Informations d'indemnisation de l'individu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Indemnisation"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "beneficiairePrestationSolidarite": false,
+                      "beneficiaireAssuranceChomage": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          },
+          "403": {
+            "description": "L'accès à cette ressource n'est pas autorisé"
+          }
+        },
+        "security": [
+          {
+            "authentification_individu": [
+              "api_peconnect-indemnisationsv1",
+              "indemnisation"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/peconnect-indemnisations/v1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "authentification_individu": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/authorize?realm=/individu",
+            "scopes": {
+              "api_peconnect-indemnisationsv1": "Obligatoire",
+              "indemnisation": "Obligatoire"
+            },
+            "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Indemnisation": {
+        "type": "object",
+        "properties": {
+          "beneficiairePrestationSolidarite": {
+            "type": "boolean",
+            "description": "Indique si l'utilisateur connecté est bénéficiaire d’un ou de minima sociaux (ASS, AAH, RSA, AER)"
+          },
+          "beneficiaireAssuranceChomage": {
+            "type": "boolean",
+            "description": "Indique si l'utilisateur connecté est bénéficiaire de l’assurance chômage (ARE ou ASP)"
+          }
+        },
+        "required": [
+          "beneficiairePrestationSolidarite",
+          "beneficiaireAssuranceChomage"
+        ]
+      }
+    }
+  }
+}
