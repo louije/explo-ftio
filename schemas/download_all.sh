@@ -44,6 +44,8 @@ apis[360]="la-bonne-boite"
 apis[431]="contrat-engagement"
 apis[455]="declaration-demarche"
 apis[617]="gestion-activites-operationnelles"
+apis[602]="rome-4-0-substitutions"
+apis[645]="je-recrute-avec-ftpro"
 # APIs without swagger metadata but still worth trying
 apis[560]="emploi-store"
 apis[564]="evenements-emploi-espace-conseiller"

@@ -2,7 +2,7 @@
 
 Schema download pattern: `https://francetravail.io/api-peio/v2/api/{pageId}/openapi`
 
-## APIs with downloadable OpenAPI schemas (42)
+## APIs with downloadable OpenAPI schemas (44)
 
 | # | Page ID | API Name | Version | Schema URL | Local File |
 |---|---------|----------|---------|-----------|------------|
@@ -48,6 +48,8 @@ Schema download pattern: `https://francetravail.io/api-peio/v2/api/{pageId}/open
 | 40 | 431 | Contrat d'engagement | 1 | [openapi](https://francetravail.io/api-peio/v2/api/431/openapi) | contrat-engagement.json |
 | 41 | 455 | Declaration de demarche | 1 | [openapi](https://francetravail.io/api-peio/v2/api/455/openapi) | declaration-demarche.json |
 | 42 | 617 | Gestion activites operationnelles | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/617/openapi) | gestion-activites-operationnelles.json |
+| 43 | 602 | ROME 4.0 - Substitutions d'entites | 1 | [openapi](https://francetravail.io/api-peio/v2/api/602/openapi) | rome-4-0-substitutions.json |
+| 44 | 645 | Je recrute avec FT pro | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/645/openapi) | je-recrute-avec-ftpro.json |
 
 ## APIs without downloadable OpenAPI schemas (16)
 

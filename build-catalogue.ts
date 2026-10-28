@@ -55,6 +55,8 @@ const PAGE_IDS: Record<string, number> = {
   "contrat-engagement": 431,
   "declaration-demarche": 455,
   "gestion-activites-operationnelles": 617,
+  "rome-4-0-substitutions": 602,
+  "je-recrute-avec-ftpro": 645,
 };
 
 const GROUPS: Record<string, [string, string]> = {
@@ -90,11 +92,13 @@ const GROUPS: Record<string, [string, string]> = {
   "la-bonne-boite":                      ["offres", "Offres & recrutement"],
   "jcmo-controle-offre":                 ["offres", "Offres & recrutement"],
   "synthese-pages-employeurs":           ["offres", "Offres & recrutement"],
+  "je-recrute-avec-ftpro":               ["offres", "Offres & recrutement"],
   // ROME 4.0
   "rome-4-0-fiches-metiers":             ["rome", "ROME 4.0"],
   "rome-4-0-competences":                ["rome", "ROME 4.0"],
   "rome-4-0-contextes-travail":          ["rome", "ROME 4.0"],
   "rome-4-0-metiers":                    ["rome", "ROME 4.0"],
+  "rome-4-0-substitutions":              ["rome", "ROME 4.0"],
   "romeo":                               ["rome", "ROME 4.0"],
   // Statistiques
   "marche-travail":                      ["stats", "Statistiques"],
@@ -371,6 +375,8 @@ const NEW: string[] = [
   "contrat-engagement",
   "declaration-demarche",
   "gestion-activites-operationnelles",
+  "rome-4-0-substitutions",
+  "je-recrute-avec-ftpro",
 ];
 
 // Starred APIs — appear first on the catalogue when no filter is active

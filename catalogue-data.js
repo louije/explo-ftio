@@ -1132,6 +1132,38 @@ const CATALOGUE = {
       "isNew": false
     },
     {
+      "slug": "je-recrute-avec-ftpro",
+      "title": "Je recrute avec FT pro",
+      "version": "1.0",
+      "description": "Cette API permet de créer des opportunités de recrutement via le widget je-recrute-avec-ft-pro pour les partenaires de France Travail.",
+      "baseUrl": "api.francetravail.io/partenaire/je-recrute-avec-ftpro/v1",
+      "auth": "public",
+      "endpointCount": 1,
+      "schemaCount": 6,
+      "group": "offres",
+      "groupLabel": "Offres & recrutement",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/opportunites",
+          "summary": "Enregistrer une opportunité partenaire"
+        }
+      ],
+      "schemas": [
+        "EntrepriseES",
+        "LocalDate",
+        "OpportuniteES",
+        "PosteES",
+        "RapporteurES",
+        "ResponsableRecrutementES"
+      ],
+      "pageId": 645,
+      "hasDocPage": false,
+      "concepts": [],
+      "starred": false,
+      "isNew": true
+    },
+    {
       "slug": "la-bonne-boite",
       "title": "La Bonne Boite",
       "version": "2.27.3",
@@ -1668,6 +1700,38 @@ const CATALOGUE = {
         "Profil RIASEC",
         "Famille ROME 4.0"
       ],
+      "starred": false,
+      "isNew": true
+    },
+    {
+      "slug": "rome-4-0-substitutions",
+      "title": "ROME 4.0 - Substitutions d'entités",
+      "version": "1",
+      "description": "Référentiel des substitutions d'entités permettant de gérer les remplacements de codes pour les appellations, compétences, contextes de travail et métiers. <br/> Une substitution désigne le remplacement d'un code d'origine par un code de substitution pour une entité donnée, permettant de : <br/>…",
+      "baseUrl": "api.francetravail.io/partenaire/rome-substitutions/v1",
+      "auth": "public",
+      "endpointCount": 2,
+      "schemaCount": 1,
+      "group": "rome",
+      "groupLabel": "ROME 4.0",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/substitution/{typeEntite}/{code}",
+          "summary": "Récupérer une substitution par code et type d'entité"
+        },
+        {
+          "method": "GET",
+          "path": "/substitution/{typeEntite}",
+          "summary": "Lister les substitutions par type d'entité"
+        }
+      ],
+      "schemas": [
+        "Substitution"
+      ],
+      "pageId": 602,
+      "hasDocPage": false,
+      "concepts": [],
       "starred": false,
       "isNew": true
     },

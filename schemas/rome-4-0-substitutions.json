@@ -1,0 +1,308 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "ROME 4.0 - Substitutions d'entités",
+      "description": "Référentiel des substitutions d'entités permettant de gérer les remplacements de codes pour les appellations, compétences, contextes de travail et métiers. <br/> Une substitution désigne le remplacement d'un code d'origine par un code de substitution pour une entité donnée, permettant de : <br/> <ul> <li>Gérer l'évolution des nomenclatures (remplacement de codes obsolètes par de nouveaux codes) ;</li> <li>Maintenir la cohérence des référentiels (harmonisation des codes entre différents systèmes) ;</li> <li>Tracer l'historique des modifications (suivi des changements et versions des entités).</li> </ul> <br/> Le système de substitution supporte les types d'entités suivants : <br/> <ul> <li>APPELLATION : codes des appellations professionnelles</li> <li>COMPETENCE : codes des compétences et savoir-faire</li> <li>CONTEXTE-TRAVAIL : codes des contextes et environnements de travail</li> <li>METIER : codes des métiers et professions</li> </ul>",
+      "version": "1"
+    },
+    "servers": [
+      {
+        "url": "https://api.francetravail.io/partenaire/rome-substitutions/v1"
+      }
+    ],
+    "paths": {
+      "/substitution/{typeEntite}/{code}": {
+        "get": {
+          "tags": [
+            "Substitution"
+          ],
+          "summary": "Récupérer une substitution par code et type d'entité",
+          "description": "Cet endpoint permet de récupérer les informations de substitution pour un code spécifique d'une entité donnée. <br/><br/> **Cas d'usage :** <br/> - Vérifier si un code d'appellation, compétence, contexte de travail ou métier a été remplacé par un nouveau code <br/> - Obtenir le code de substitution à utiliser pour remplacer un code obsolète <br/> - Consulter l'historique des modifications d'un code particulier <br/><br/> **Fonctionnement :** <br/> L'API recherche dans le référentiel des substitutions si le code fourni correspond à un code d'origine ayant fait l'objet d'une substitution. Si une substitution existe, elle retourne les informations associées (code de substitution, dates de validité). <br/><br/> **Filtrage temporel :** <br/> Le paramètre `date` permet de consulter l'état des substitutions à une date donnée, utile pour reconstituer l'historique des changements.",
+          "operationId": "getSubstitutionByCodeAndType",
+          "parameters": [
+            {
+              "name": "typeEntite",
+              "in": "path",
+              "description": "Type d'entité",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "APPELLATION",
+                  "COMPETENCE",
+                  "CONTEXTE-TRAVAIL",
+                  "METIER"
+                ]
+              }
+            },
+            {
+              "name": "code",
+              "in": "path",
+              "description": "Code d'origine de l'entité",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "champs",
+              "in": "query",
+              "description": "Sélecteur de champs : il est possible de paramétrer le retour de la requête en définissant les champs souhaités (liste exhaustive des champs possibles : `Allowed values`). <br/> Vous pouvez vous aider des exemples de réponse pour identifier les champs que vous voulez récupérer.",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "example": "libelle,code",
+                "enum": [
+                  "code",
+                  "codeSubstitution",
+                  "typeEntite",
+                  "code,codeSubstitution,typeEntite",
+                  "code,typeEntite",
+                  "code,codeSubstitution"
+                ]
+              }
+            },
+            {
+              "name": "date",
+              "in": "query",
+              "description": "Date de la recherche au format yyyy-MM-dd ou yyyyMMdd.",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Substitution"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request : peut-être causé par un sélecteur de champs incorrect",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "invalidEntityType": {
+                      "summary": "Type d'entité invalide",
+                      "value": {
+                        "service": "/v1/substitutions-rome/substitution/APPELLATIO",
+                        "message": "La valeur fournie pour le type d'entité est invalide : %sAPPELLATIO",
+                        "code": 400,
+                        "codeMetier": "VALIDATION_ERROR"
+                      }
+                    },
+                    "codeInexistant": {
+                      "summary": "Code inexistant",
+                      "value": {
+                        "service": "/v1/mon_uri",
+                        "message": "Code inexistant: Aucune substitution trouvée pour le code 'monCode' et le type APPELLATION, (entite: Substitution)",
+                        "code": 400,
+                        "codeMetier": "SELECTOR"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Code inexistant: Aucune substitution trouvée pour le code 'monCode' et le type APPELLATION, (entite: Substitution)",
+                    "codeMetier": "SELECTOR",
+                    "service": "/v1/mon_uri",
+                    "code": 400
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "timestamp": "2025-09-08T19:08:42.123+00:00",
+                    "status": 500,
+                    "error": "Internal Server Error",
+                    "path": "/v1/mon_uri"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "authentification_partenaire": ["nomenclatureRomeSubstitutions", "api_rome-substitutionsv1"]
+            }
+          ]
+        }
+      },
+      "/substitution/{typeEntite}": {
+        "get": {
+          "tags": [
+            "Substitution"
+          ],
+          "summary": "Lister les substitutions par type d'entité",
+          "description": "Cet endpoint permet de récupérer la liste complète de toutes les substitutions disponibles pour un type d'entité donné. <br/><br/> **Cas d'usage :** <br/> - Obtenir un aperçu global de tous les codes ayant fait l'objet de substitutions pour un type d'entité <br/> **Fonctionnement :** <br/> L'API retourne l'ensemble des enregistrements de substitution pour le type d'entité spécifié, incluant les codes d'origine, les codes de substitution et les informations de validité. <br/><br/> **Performance :** <br/> Cet endpoint peut retourner un volume important de données selon le type d'entité. Il est recommandé d'utiliser le paramètre `champs` pour limiter les données retournées aux champs strictement nécessaires.",
+          "operationId": "getSubstitutionsByType",
+          "parameters": [
+            {
+              "name": "typeEntite",
+              "in": "path",
+              "description": "Type d'entité",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "APPELLATION",
+                  "COMPETENCE",
+                  "CONTEXTE-TRAVAIL",
+                  "METIER"
+                ]
+              }
+            },
+            {
+              "name": "champs",
+              "in": "query",
+              "description": "Sélecteur de champs : il est possible de paramétrer le retour de la requête en définissant les champs souhaités (liste exhaustive des champs possibles : `Allowed values`). <br/> Vous pouvez vous aider des exemples de réponse pour identifier les champs que vous voulez récupérer.",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "example": "libelle,code",
+                "enum": [
+                  "code",
+                  "codeSubstitution",
+                  "typeEntite",
+                  "code,codeSubstitution,typeEntite",
+                  "code,typeEntite",
+                  "code,codeSubstitution"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Substitution"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request : peut-être causé par un sélecteur de champs incorrect",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "invalidEntityType": {
+                      "summary": "Type d'entité invalide",
+                      "value": {
+                        "service": "/v1/substitutions-rome/substitution/APPELLATIO",
+                        "message": "La valeur fournie pour le type d'entité est invalide : %sAPPELLATIO",
+                        "code": 400,
+                        "codeMetier": "VALIDATION_ERROR"
+                      }
+                    },
+                    "invalidFieldSelector": {
+                      "summary": "Sélecteur de champs invalide",
+                      "value": {
+                        "service": "/v1/substitutions-rome/substitution/APPELLATION",
+                        "message": "Le sélecteur de champs contient des valeurs non autorisées",
+                        "code": 400,
+                        "codeMetier": "VALIDATION_ERROR"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "timestamp": "2025-09-08T19:08:42.123+00:00",
+                    "status": 500,
+                    "error": "Internal Server Error",
+                    "path": "/v1/mon_uri"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "authentification_partenaire": ["nomenclatureRomeSubstitutions", "api_rome-substitutionsv1"]
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Substitution": {
+          "type": "object",
+          "properties": {
+            "obsolete": {
+              "type": "boolean",
+              "description": "boolean définissant si l'entité est obsolete"
+            },
+            "dateFin": {
+              "type": "string",
+              "description": "date de fin de validité (renseignée si l'entité est obsolete)",
+              "format": "date-time"
+            },
+            "code": {
+              "type": "string",
+              "description": "Code d'origine de l'entité",
+              "example": "500725"
+            },
+            "codeSubstitution": {
+              "type": "string",
+              "description": "Code de substitution de l'entité",
+              "example": "504295"
+            },
+            "typeEntite": {
+              "type": "string",
+              "description": "Type d'entité concernée",
+              "example": "APPELLATION,COMPETENCE,CONTEXTE-TRAVAIL,METIER",
+              "enum": [
+                "APPELLATION",
+                "COMPETENCE",
+                "CONTEXTE-TRAVAIL",
+                "METIER"
+              ]
+            }
+          },
+          "description": "Substitution d'une entité"
+        }
+      },
+      "securitySchemes": {
+        "authentification_partenaire": {
+          "type": "oauth2",
+          "flows": {
+            "clientCredentials": {
+              "tokenUrl": "https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=/partenaire",
+              "scopes": {
+                "nomenclatureRomeSubstitutions": "Obligatoire",
+                "api_rome-substitutionsv1": "Obligatoire"
+              }
+            }
+          }
+        }
+      }
+    }
+  }

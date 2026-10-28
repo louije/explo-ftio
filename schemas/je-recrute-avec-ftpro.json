@@ -1,0 +1,248 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "contact": {
+      "email": "contact@francetravail.fr",
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact"
+    },
+    "description": "Cette API permet de créer des opportunités de recrutement via le widget je-recrute-avec-ft-pro pour les partenaires de France Travail.",
+    "title": "Je recrute avec FT pro",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.francetravail.io/partenaire/je-recrute-avec-ftpro/v1",
+      "description": "Production"
+    },
+    {
+      "url": "https://api.francetravail.io/partenaire/testje-recrute-avec-ftpro/v1",
+      "description": "Bac à sable"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "authentification_partenaire": {
+        "type": "oauth2",
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire",
+            "scopes": {
+              "api_je-recrute-avec-ftprov1": "Obligatoire pour le mode production",
+              "jerecrute_opportunites_creer": "Obligatoire pour le mode production",
+              "api_testje-recrute-avec-ftprov1": "Obligatoire pour le mode bac à sable",
+              "testjerecrute_opportunites_creer": "Obligatoire pour le mode bac à sable"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "EntrepriseES": {
+        "type": "object",
+        "required": [
+          "siret"
+        ],
+        "properties": {
+          "siret": {
+            "type": "string",
+            "minLength": 14,
+            "examples": [
+              "12345678901234"
+            ],
+            "maxLength": 14,
+            "description": "SIRET de l'entreprise"
+          }
+        }
+      },
+      "LocalDate": {
+        "type": "string",
+        "format": "date",
+        "examples": [
+          "2022-03-10"
+        ]
+      },
+      "OpportuniteES": {
+        "type": "object",
+        "required": [
+          "poste",
+          "entreprise",
+          "responsableRecrutement",
+          "dateContactSouhaitee"
+        ],
+        "properties": {
+          "poste": {
+            "$ref": "#/components/schemas/PosteES",
+            "type": "object",
+            "description": "Description du poste"
+          },
+          "entreprise": {
+            "$ref": "#/components/schemas/EntrepriseES",
+            "type": "object",
+            "description": "Identification de l’entreprise"
+          },
+          "responsableRecrutement": {
+            "$ref": "#/components/schemas/ResponsableRecrutementES",
+            "type": "object",
+            "description": "Responsable de recrutement"
+          },
+          "dateContactSouhaitee": {
+            "$ref": "#/components/schemas/LocalDate",
+            "type": "string",
+            "examples": [
+              "2026-09-04"
+            ],
+            "description": "Date de contact souhaitée, au format yyyy-MM-dd"
+          },
+          "rapporteur": {
+            "$ref": "#/components/schemas/RapporteurES",
+            "type": "object",
+            "description": "Rapporteur du besoin"
+          }
+        }
+      },
+      "PosteES": {
+        "type": "object",
+        "required": [
+          "intitule"
+        ],
+        "properties": {
+          "intitule": {
+            "type": "string",
+            "examples": [
+              "Comptable"
+            ],
+            "description": "Intitulé du poste"
+          },
+          "nombrePostes": {
+            "type": "integer",
+            "format": "int32",
+            "examples": [
+              2
+            ],
+            "description": "Nombre de postes à pourvoir"
+          },
+          "informations": {
+            "type": "string",
+            "examples": [
+              "Comptable connaissant SAP"
+            ],
+            "description": "Informations sur le poste (Missions, type de contrat, horaires etc...)"
+          }
+        }
+      },
+      "RapporteurES": {
+        "type": "object",
+        "required": [
+          "nom",
+          "prenom",
+          "telephone"
+        ],
+        "properties": {
+          "nom": {
+            "type": "string",
+            "examples": [
+              "Dupont"
+            ],
+            "description": "Nom du rapporteur"
+          },
+          "prenom": {
+            "type": "string",
+            "examples": [
+              "Jean"
+            ],
+            "description": "Prénom du rapporteur"
+          },
+          "telephone": {
+            "type": "string",
+            "minLength": 10,
+            "examples": [
+              "0102030405"
+            ],
+            "maxLength": 10,
+            "description": "Téléphone du rapporteur"
+          }
+        }
+      },
+      "ResponsableRecrutementES": {
+        "type": "object",
+        "required": [
+          "nom",
+          "prenom",
+          "telephone"
+        ],
+        "properties": {
+          "nom": {
+            "type": "string",
+            "examples": [
+              "Dupond"
+            ],
+            "description": "Nom du responsable du recrutement"
+          },
+          "prenom": {
+            "type": "string",
+            "examples": [
+              "Pierre"
+            ],
+            "description": "Prénom du responsable du recrutement"
+          },
+          "telephone": {
+            "type": "string",
+            "minLength": 10,
+            "examples": [
+              "0102030405"
+            ],
+            "maxLength": 10,
+            "description": "Téléphone du responsable du recrutement"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/opportunites": {
+      "post": {
+        "summary": "Enregistrer une opportunité partenaire",
+        "description": "Permet la création d'une opportunité d'un partenaire décrivant un besoin de recrutement et des éléments permettant d'identifier la personne à contacter.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpportuniteES"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Une opportunité partenaire a été enregistrée"
+          },
+          "400": {
+            "description": "Erreur de syntaxe/contenu de la requête"
+          },
+          "500": {
+            "description": "Erreur interne au serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_je-recrute-avec-ftprov1",
+              "jerecrute_opportunites_creer",
+              "api_testje-recrute-avec-ftprov1",
+              "testjerecrute_opportunites_creer"
+            ]
+          }
+        ],
+        "tags": [
+          "Opportunites Api"
+        ],
+        "x-stoplight": {
+          "id": "ak115kgqf2y5w"
+        }
+      }
+    }
+  }
+}
