@@ -3,7 +3,7 @@
   "info": {
     "title": "API Mes évènements emplois",
     "description": "Cette API permet de rechercher et récupérer des informations sur les événements emploi, salons en ligne et ateliers organisés par France Travail et ses partenaires.",
-    "version": "1.0.0",
+    "version": "1.1",
     "contact": {
       "name": "Support francetravail.io",
       "url": "https://francetravail.io/contact",
@@ -16,132 +16,6 @@
     }
   ],
   "paths": {
-    "/salonsenligne": {
-      "get": {
-        "summary": "Rechercher les salons en ligne en cours et à venir",
-        "description": "Cette ressource permet de rechercher l'ensemble des salons en ligne France Travail en cours et à venir.",
-        "security": [
-          {
-            "authentification_partenaire": [
-              "api_evenementsv1",
-              "evenements"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SalonEnLigne"
-                  }
-                },
-                "examples": {
-                  "example-1": {
-                    "value": [
-                      {
-                        "dateDebut": "23/01/2018",
-                        "dateDebutCandidature": "23/01/2018",
-                        "dateFin": "13/02/2018",
-                        "dateFinCandidature": "09/02/2018",
-                        "description": "\n\nl'ADMR recrute dans l'Aube !\n\n\nDes postes a pourvoir à Troyes, Romilly, Bar-sur-Aube et l'ensemble du département de l'Aube\n\n",
-                        "localisation": "AUBE",
-                        "nombreOffres": 4,
-                        "salonEnCours": true,
-                        "titre": "Recrutement ADMR ",
-                        "urlSalonEnLigne": "https://salonenligne.pole-emploi.fr/candidat/?salonId=601"
-                      },
-                      {
-                        "dateDebut": "05/02/2018",
-                        "dateDebutCandidature": "05/02/2018",
-                        "dateFin": "19/02/2018",
-                        "dateFinCandidature": "15/02/2018",
-                        "description": "\n\nMANAGER DE FORCE DE VENTE AUX PARTICULIERS, H/F\n\n\nTECHNICO COMMERCIAL H/F DANS L'AUTOCONSOMMATION\n\n",
-                        "localisation": "30 postes - Agence de Paris Laumière - Ile de France",
-                        "nombreOffres": 2,
-                        "salonEnCours": false,
-                        "titre": "la transition écologique: rejoignez HITECH !",
-                        "urlSalonEnLigne": "https://salonenligne.pole-emploi.fr/candidat/?salonId=614"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/salonsenligne/jeunes": {
-      "get": {
-        "summary": "Rechercher les salons ciblés 'Jeunes' en cours et à venir",
-        "description": "Cette ressource permet de rechercher l'ensemble des salons en ligne France Travail ciblé 'jeunes' en cours et à venir.",
-        "security": [
-          {
-            "authentification_partenaire": [
-              "api_evenementsv1",
-              "evenements"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SalonEnLigne"
-                  }
-                },
-                "examples": {
-                  "example-1": {
-                    "value": [
-                      {
-                        "dateDebut": "14/12/2020",
-                        "dateDebutCandidature": "15/12/2020",
-                        "dateFin": "31/07/2021",
-                        "dateFinCandidature": "27/07/2021",
-                        "description": "En économie, un service est une prestation qui consiste en « la mise à disposition d'une capacité technique ou intellectuelle » ou en « la fourniture d'un travail directement utile pour l'usager, sans transformation de matière ». Les services correspondent au secteur tertiaire",
-                        "id": 356,
-                        "localisation": "Paris",
-                        "nombreOffres": 2,
-                        "online": true,
-                        "organismeOrganisateur": "France Travail",
-                        "salonEnCours": true,
-                        "titre": "SALON Services",
-                        "typeEvenement": "salon",
-                        "urlSalonEnLigne": "https://salonenligne-t.pe-qvr.fr/candidat/?salonId=356"
-                      },
-                      {
-                        "dateDebut": "04/01/2021",
-                        "dateDebutCandidature": "04/01/2021",
-                        "dateFin": "05/03/2021",
-                        "dateFinCandidature": "01/03/2021",
-                        "description": "\n\n42 postes de Conseiller commercial en alternance à pourvoir sur le territoire national.\n\nFree poursuit le déploiement dans de nombreuses villes de ses points de vente et de relation abonnés. Les Free Centers sont le lieu incontournable pour découvrir l’incroyable richesse des services Free. Une soixantaine de Free Centers sont déjà ouverts et de nouvelles ouvertures sont prévues dans les prochains mois. Rejoignez-nous et faites partie d'une équipe dynamique et motivée au service des Free Centers !\n\nFREE DISTRIBUTION, acteur incontournable du réseau des boutiques de Free, en partenariat avec STUDI leader français de l’enseignement en ligne, recrute des conseillers de vente (H/F) en alternance, avec la possibilité d'un CDI, pour préparer le Titre de vendeur conseil en magasin.\n\nTu souhaites te former dans le domaine des télécommunications, tu es fasciné par la téléphonie, le multimédia…\n\nD’un naturel dynamique et rigoureux, tu as le sens de la communication et le goût du challenge.  Ce poste est fait pour toi !\n\nIntégré(e) à l'équipe du Free Center de … ,  tes missions seront les suivantes :\n\n\n\n\tOffrir à nos visiteurs un accueil professionnel et de grande qualité,\n\tÊtre à l'écoute des visiteurs afin de comprendre leur demande,\n\tSavoir qualifier la demande ou le besoin des abonnés et prospects pour les orienter,\n\tProposer une solution adaptée,\n\tAssister et conseiller les abonnés mobile et/ou box et les prospects sur les actes rapides aux bornes (souscription, changement carte sim, paiement de factures…),\n\tS’inscrire dans une démarche de satisfaction des abonnés quel que soit leur motif de visite.\n\tParticiper aux actions de marketing.\n\tParticiper à la vie du FREE Center et notamment à la bonne tenue du magasin et des locaux.\n\n\n",
-                        "id": 303,
-                        "localisation": "Paris",
-                        "nombreOffres": 0,
-                        "online": true,
-                        "organismeOrganisateur": "France Travail",
-                        "salonEnCours": false,
-                        "titre": "Salon test SEL2",
-                        "typeEvenement": "salon",
-                        "urlSalonEnLigne": "https://salonenligne-t.pe-qvr.fr/candidat/?salonId=303"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/mee/evenements": {
       "post": {
         "summary": "Rechercher les événements \"Mes événements emploi\"",
@@ -442,10 +316,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Operation"
-                  }
+                  "$ref": "#/components/schemas/Operation"
                 },
                 "examples": {
                   "example-1": {
@@ -490,85 +361,6 @@
   },
   "components": {
     "schemas": {
-      "SalonEnLigne": {
-        "type": "object",
-        "properties": {
-          "titre": {
-            "type": "string",
-            "description": "Titre de l’évènement",
-            "example": "Recrutement ADMR"
-          },
-          "dateDebut": {
-            "type": "string",
-            "format": "date",
-            "description": "Date de début de l’évènement",
-            "example": "23/01/2018"
-          },
-          "dateFin": {
-            "type": "string",
-            "format": "date",
-            "description": "Date de fin de l’évènement",
-            "example": "13/02/2018"
-          },
-          "dateDebutCandidature": {
-            "type": "string",
-            "format": "date",
-            "description": "Date de début de candidature de l’évènement",
-            "example": "23/01/2018"
-          },
-          "dateFinCandidature": {
-            "type": "string",
-            "format": "date",
-            "description": "Date de fin de candidature de l’évènement",
-            "example": "09/02/2018"
-          },
-          "description": {
-            "type": "string",
-            "description": "Description de l’évènement. Le contenu de ce champ est au format HTML et peut contenir des éléments de type images ou liens.",
-            "example": "\n\nl'ADMR recrute dans l'Aube !\n\n\nDes postes a pourvoir à Troyes, Romilly, Bar-sur-Aube et l'ensemble du département de l'Aube\n\n"
-          },
-          "localisation": {
-            "type": "string",
-            "description": "Information concernant le bassin d'emploi ciblé par le salon (une ville, un département, une agence France Travail, etc.). Cette information est saisie par l'organisateur du salon.",
-            "example": "AUBE"
-          },
-          "typeEvenement": {
-            "type": "string",
-            "description": "Type de l’évènement",
-            "example": "salon"
-          },
-          "organismeOrganisateur": {
-            "type": "string",
-            "description": "Organisme organisateur de l’évènement",
-            "example": "France Travail"
-          },
-          "nombreOffres": {
-            "type": "integer",
-            "description": "Nombre d’offres proposées sur le salon",
-            "example": 4
-          },
-          "urlSalonEnLigne": {
-            "type": "string",
-            "description": "URL vers la page de détail du salon en ligne",
-            "example": "https://salonenligne.pole-emploi.fr/candidat/?salonId=601"
-          },
-          "salonEnCours": {
-            "type": "boolean",
-            "description": "Indique si le salon est en cours ou à venir",
-            "example": true
-          },
-          "online": {
-            "type": "boolean",
-            "description": "Indique si le salon est en ligne",
-            "example": true
-          },
-          "id": {
-            "type": "integer",
-            "description": "Identifiant du salon",
-            "example": 356
-          }
-        }
-      },
       "EvenementRequest": {
         "type": "object",
         "properties": {
@@ -614,14 +406,14 @@
             "items": {
               "type": "integer"
             },
-            "description": "Ce champ doit contenir le(s) code(s) opération recherché(s). Par exemple : \"66\". Référentiel: 22 - 1 jeune 1 solution, 23 - La semaine du maritime et du fluvial, 24 - La semaine du numérique, 25 - La semaine de l'emploi, 26 - #TousMobilisés, 42 - Jeux Olympiques Paris 2024, 43 - La semaine de l'agriculture, 44 - Le semaine de la création et reprise d'entreprise, 45 - La semaine du handicap, 46 - La place de l'emploi et de la formation, 47 - Travail  avenir formation, 49 - La semaine de l'alternance, 50 - La semaine du BTP, 51  - Détection de potentiel, 52 - La semaine de l'industrie agroalimentaire, 53 - La semaine de l'emploi intérimaire, 54 - La  semaine de l'emploi TF1, 55 - La semaine de l'industrie, 56 - La semaine de l'industrie pharmaceutique, 57 - La semaine du nucléaire, 58 - La semaine du soin et de l'accompagnement, 59 - La semaine de la propreté, 60 - La semaine du transport/logistique, 61 - 1 jour 1 formation, 62 - Décroche un job d'été, 63 - Décroche une job d'hiver, 64 - Du Stade vers l'Emploi, 65 - La route de votre avenir, 66 - Le mois de la formation, 67 - Rentrée des métiers, 68 - Semine du commerce, 102 - La semaine de l'intégration, 104 - La semaine des métiers de la Défense et de la Sécurité, 105 - Réussir sans attendre, 106 - ReStart, 107 - La semaine des métiers et de la défence, 108 - La semaine du Tourisme",
+            "description": "Ce champ doit contenir le(s) code(s) opération recherché(s). Se référer au service référentiel Opérations pour récupérer la liste exhaustives des codes opérations",
             "example": [
               30
             ]
           },
           "typeEvenement": {
             "type": "integer",
-            "description": "Ce champ doit contenir le code type recherché. Par exemple : \"16\". Référentiel: 13 - Réunion d'information, 14 - Forum, 15 - Conférence, 16 - Atelier, 17 - Salon en ligne, 18 - Job Dating, 31 - Visites d'entreprise, 32 - Portes ouvertes ",
+            "description": "Ce champ doit contenir le code type recherché. Par exemple: \\16\\. Référentiel: 13 - Réunion d'information, 14 - Forum, 15 - Conférence, 16 - Atelier, 17 - Salon en ligne, 18 - Job Dating, 31 - Visites d'entreprise, 32 - Portes ouvertes",
             "example": 16
           },
           "beneficeParticipations": {
@@ -675,6 +467,19 @@
             "type": "integer",
             "description": "Ce champ contient le rayon de recherche autour du point géographique désigné par les coordonnées renseignées. Exemple : \"10\" ou \"25\" ... Ce rayon est exprimé en kilomètre et est un entier. Pré-requis : Les champs longitude et latidude sont renseignés. Si la valeur renseignée est 0, alors le rayon par défaut de 10km s'applique. Si la valeur n'est pas renseignée, alors le rayon par défaut de 10km s'applique",
             "example": 10
+          },
+          "safir": {
+            "type": "string",
+            "description": "Ce champ contient le code SAFIR (sur 5 positions numériques uniquement) de l'établissement/l'agence en charge des événements recherchés",
+            "example": "31011"
+          },
+          "sirets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Ce champ contient une liste de SIREN (9 chiffres) et/ou SIRET (14 chiffres) des intervenants recherchés sur les événements",
+              "example": "['812925071','81292507100035']"
+            }
           }
         }
       },
@@ -814,6 +619,29 @@
             "example": [
               "en physique"
             ]
+          },
+          "intervenants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "raisonSociale": {
+                  "description": "Raison sociale de l'intervenant",
+                  "type": "string",
+                  "example": "Wifirst"
+                },
+                "siret": {
+                  "description": "SIRET de l'intervenant",
+                  "type": "string",
+                  "example": "44175761400058"
+                },
+                "urlEntreprise": {
+                  "description": "URL de l'entreprise",
+                  "type": "string",
+                  "example": "https://www.wifirst.com/fr/"
+                }
+              }
+            }
           },
           "deroulement": {
             "type": "string",
@@ -1014,81 +842,134 @@
               "en physique"
             ]
           },
-          "deroulement": {
-            "type": "string",
-            "description": "Ce champ contient les détails et étapes relatifs à l'organisation de l'événement",
-            "example": "Ouverture du forum et réception des candidats à partir de 9h00 - Ramenez vos CV afin de  promouvoir votre profil auprès des organismes présents."
-          },
-          "nombrePlaceTotalDistance": {
-            "type": "integer",
-            "description": "Nombre total de places en distanciel",
-            "example": 0
-          },
-          "nombrePlaceTotalPresentiel": {
-            "type": "integer",
-            "description": "Nombre total de places en présentiel",
-            "example": 300
-          },
-          "nombreInscritDistance": {
-            "type": "integer",
-            "description": "Nombre d'inscrits en distanciel",
-            "example": 0
-          },
-          "nombreInscritPresentiel": {
-            "type": "integer",
-            "description": "Nombre d'inscrits en présentiel",
-            "example": 0
-          },
-          "dateEvenement": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Date de réalisation de l'événement",
-            "example": "2023-05-22T05:00:00.000+00:00"
-          },
-          "titre": {
-            "type": "string",
-            "description": "Ce champ contient le nom de l'événement concerné.",
-            "example": "FORUM DE L'ALTERNANCE"
-          },
-          "codesRome": {
+          "intervenants": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "raisonSociale": {
+                  "description": "Raison sociale de l'intervenant",
+                  "type": "string",
+                  "example": "Wifirst"
+                },
+                "siret": {
+                  "description": "SIRET de l'intervenant",
+                  "type": "string",
+                  "example": "44175761400058"
+                },
+                "urlEntreprise": {
+                  "description": "URL de l'entreprise",
+                  "type": "string",
+                  "example": "https://www.wifirst.com/fr/"
+                },
+                "deroulement": {
+                  "type": "string",
+                  "description": "Ce champ contient les détails et étapes relatifs à l'organisation de l'événement",
+                  "example": "Ouverture du forum et réception des candidats à partir de 9h00 - Ramenez vos CV afin de  promouvoir votre profil auprès des organismes présents."
+                },
+                "nombrePlaceTotalDistance": {
+                  "type": "integer",
+                  "description": "Nombre total de places en distanciel",
+                  "example": 0
+                },
+                "nombrePlaceTotalPresentiel": {
+                  "type": "integer",
+                  "description": "Nombre total de places en présentiel",
+                  "example": 300
+                },
+                "nombreInscritDistance": {
+                  "type": "integer",
+                  "description": "Nombre d'inscrits en distanciel",
+                  "example": 0
+                },
+                "nombreInscritPresentiel": {
+                  "type": "integer",
+                  "description": "Nombre d'inscrits en présentiel",
+                  "example": 0
+                },
+                "dateEvenement": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Date de réalisation de l'événement",
+                  "example": "2023-05-22T05:00:00.000+00:00"
+                },
+                "titre": {
+                  "type": "string",
+                  "description": "Ce champ contient le nom de l'événement concerné.",
+                  "example": "FORUM DE L'ALTERNANCE"
+                },
+                "codesRome": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Ce champ indique le(s) code(s) ROME associé(s) à l'événement",
+                  "example": [
+                    "M16",
+                    "D15",
+                    "F17"
+                  ]
+                },
+                "multisectoriel": {
+                  "type": "boolean",
+                  "description": "Indique si l'événement concerne plusieurs secteurs d'activités",
+                  "example": false
+                },
+                "offresId": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Identifiant(s) de ou des offre(s) d'emploi associée(s) à l'événement",
+                  "example": "206LMVK"
+                },
+                "urlDetailEvenement": {
+                  "type": "string",
+                  "description": "Url du détail de l'événement sur le site candidat",
+                  "example": "https://mesevenementsemploi.pole-emploi.fr/mes-evenements-emploi/mes-evenements-emploi/evenement/110105"
+                },
+                "libelleEtablissement": {
+                  "type": "string",
+                  "description": "Ce champ contient le libellé de l'agence associée à l'événement",
+                  "example": "Agence VIENNE"
+                },
+                "libelleOrganisateurPrincipal": {
+                  "type": "string",
+                  "description": "Ce champ contient le libellé de l'organisateur principal de l'événement",
+                  "example": "Pole emploi"
+                }
+              }
             },
-            "description": "Ce champ indique le(s) code(s) ROME associé(s) à l'événement",
-            "example": [
-              "M16",
-              "D15",
-              "F17"
-            ]
-          },
-          "multisectoriel": {
-            "type": "boolean",
-            "description": "Indique si l'événement concerne plusieurs secteurs d'activités",
-            "example": false
-          },
-          "offresId": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Identifiant(s) de ou des offre(s) d'emploi associée(s) à l'événement",
-            "example": null
-          },
-          "urlDetailEvenement": {
-            "type": "string",
-            "description": "Url du détail de l'événement sur le site candidat",
-            "example": "https://mesevenementsemploi.pole-emploi.fr/mes-evenements-emploi/mes-evenements-emploi/evenement/110105"
-          },
-          "libelleEtablissement": {
-            "type": "string",
-            "description": "Ce champ contient le libellé de l'agence associée à l'événement",
-            "example": "Agence VIENNE"
-          },
-          "libelleOrganisateurPrincipal": {
-            "type": "string",
-            "description": "Ce champ contient le libellé de l'organisateur principal de l'événement",
-            "example": "Pole emploi"
+            "Operation": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Identifiant de l'opération",
+                  "example": 22
+                },
+                "code": {
+                  "type": "string",
+                  "description": "Code de l'opération",
+                  "example": "1J1SO"
+                },
+                "libelle": {
+                  "type": "string",
+                  "description": "Libellé de l'opération",
+                  "example": "1 jeune 1 solution"
+                },
+                "typeTagId": {
+                  "type": "integer",
+                  "description": "Identifiant du type de tag. Valeur fixe pour les opérations : (\"4\")",
+                  "example": 4
+                },
+                "typeTagCode": {
+                  "type": "string",
+                  "description": "Code du type de tag. Valeur fixe pour les opérations : (\"OPERA\")",
+                  "example": "OPERA"
+                }
+              }
+            }
           }
         }
       },

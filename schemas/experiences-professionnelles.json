@@ -15,7 +15,7 @@
     }
   ],
   "paths": {
-    "/experiencesindividu": {
+    "/experiences": {
       "get": {
         "summary": "Récupérer la liste des expériences professionnelles",
         "description": "Cette API vous permet d’accéder aux expériences saisies par un individu dans son profil de compétences sur francetravail.fr : fonction, nom de l’entreprise, périodes de travail etc. Ces données sont également utilisées pour le système de rapprochement entre les CV et les offres sur francetravail.fr. Cette ressource permet de récupérer la liste des expériences saisies dans son profil de compétences par un individu.",

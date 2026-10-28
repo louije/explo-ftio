@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
-    "title": "API PE Connect - Indemnisations",
+    "title": "API Indemnisations",
     "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA).\n\nA titre d’exemple, cela peut permettre à un individu de bénéficier d’aides liées à son type de ressource(s) ou d’allocation.\n\nCette API fait partie de l’ensemble des API mises à disposition dans le cadre de l’utilisation du dispositif de portabilité de France Travail des données personnelles d'un individu.\n\nPour pouvoir l'exploiter, l'utilisateur doit au préalable s'être identifié sur l’application ou le site web avec son compte France Travail grâce au bouton « Se connecter avec France Travail » (API France Travail Connect)."
   },
   "servers": [

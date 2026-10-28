@@ -5,7 +5,7 @@ const CATALOGUE = {
       "slug": "conclusions-entretiens",
       "title": "Conclusions Entretiens",
       "version": "1.0.0",
-      "description": "Ce service permet de récupérer les données concernant les entretiens réalisés par un usager. Scope : api_conclusions-entretiensv1, conclusionsentretienagent Royaume : /agent",
+      "description": "Ce service permet de récupérer les données concernant les entretiens réalisés par un usager.",
       "baseUrl": "api.francetravail.io/partenaire/conclusions-entretiens/v1",
       "auth": "agent",
       "endpointCount": 1,
@@ -107,7 +107,7 @@ const CATALOGUE = {
         {
           "method": "POST",
           "path": "/diagnostics/{idDiagnostic}/supprime",
-          "summary": "Supprime le diagnostic de l'usager"
+          "summary": "Supprime le diagnostic sur un projet rattaché et les besoins associés de l'usager"
         },
         {
           "method": "GET",
@@ -236,7 +236,7 @@ const CATALOGUE = {
       "slug": "informations-administratives-usager",
       "title": "Informations administratives usager",
       "version": "1.2.0",
-      "description": "Cette API permet de récupérer les données d'un usager (état civil, adresses, email, téléphones et numéro France Travail)  Scopes : api_informations-administrativesv1, informationsadministrativesusager, profil_accedant   Royaume : /agent",
+      "description": "Cette API permet de récupérer les données d'un usager (état civil, adresses, email, téléphones et numéro France Travail)",
       "baseUrl": "api.francetravail.io/partenaire/informations-administratives/v1",
       "auth": "agent",
       "endpointCount": 1,
@@ -324,12 +324,12 @@ const CATALOGUE = {
     {
       "slug": "rechercher-usager",
       "title": "Rechercher usager",
-      "version": "2.0",
-      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager ainsi que le numéro France Travail permettant d'accéder à d'autres API Scope : api_rechercher-usagerv2, rechercheusager, profil_accedant…",
+      "version": "2.1",
+      "description": "Ce service permet de rechercher un usager connu du réseau pour l'emploi en fonction de critères discriminants et le cas échéant de récupérer un jeton usager permettant d'accéder à d'autres API",
       "baseUrl": "api.francetravail.io/partenaire/rechercher-usager/v2",
       "auth": "agent",
-      "endpointCount": 2,
-      "schemaCount": 7,
+      "endpointCount": 3,
+      "schemaCount": 8,
       "group": "dossier",
       "groupLabel": "Dossier usager",
       "endpoints": [
@@ -342,6 +342,11 @@ const CATALOGUE = {
           "method": "POST",
           "path": "/usagers/par-numero-francetravail",
           "summary": "Rechercher un usager par numéro France Travail"
+        },
+        {
+          "method": "POST",
+          "path": "/usagers/par-identite-pivot",
+          "summary": "Rechercher un usager par identité pivot"
         }
       ],
       "schemas": [
@@ -351,7 +356,8 @@ const CATALOGUE = {
         "Resultat403DTO",
         "Resultat500DTO",
         "Resultat503DTO",
-        "ParNumeroFTDTO"
+        "ParNumeroFTDTO",
+        "ParIdentitePivotDTO"
       ],
       "pageId": 465,
       "hasDocPage": true,
@@ -522,7 +528,7 @@ const CATALOGUE = {
     {
       "slug": "gestion-sanctions-rsa",
       "title": "Gestion des sanctions RSA",
-      "version": "1.1",
+      "version": "1.4",
       "description": "Cette API met à disposition les propositions sur les sanctions des bénéficiaires du RSA accompagnés par France Travail, afin de statuer sur ces dernières propositions. <br>Elle permet également de transmettre des décisions de sanctions RSA pour un bénéficiaire RSA non accompagné par France Travail…",
       "baseUrl": "api.francetravail.io/partenaire/gestion-sanctions-rsa/v1",
       "auth": "agent",
@@ -584,12 +590,12 @@ const CATALOGUE = {
     {
       "slug": "orientation-usager",
       "title": "Orientation Usager",
-      "version": "2.0",
+      "version": "2.1",
       "description": "Cette API permet : - de récupérer une proposition de résultat d'orientation d'un usager.  - de récupérer une décision d'orientation d'un usager. - de prendre une décision afin de l'orienter vers un organisme et dans un des trois parcours : Social, Socio-Professionnel, Professionnel. - d'orienter un…",
       "baseUrl": "api.francetravail.io/partenaire/orientationusager/v2",
       "auth": "agent",
-      "endpointCount": 5,
-      "schemaCount": 15,
+      "endpointCount": 6,
+      "schemaCount": 16,
       "group": "parcours",
       "groupLabel": "Parcours d'accompagnement",
       "endpoints": [
@@ -617,6 +623,11 @@ const CATALOGUE = {
           "method": "POST",
           "path": "/decisionOrientation",
           "summary": "Décider une orientation"
+        },
+        {
+          "method": "GET",
+          "path": "/nomenclature/motifs-reorientation",
+          "summary": "Lister les motifs de reorientation"
         }
       ],
       "schemas": [
@@ -634,7 +645,8 @@ const CATALOGUE = {
         "DecisionCA",
         "OrganismeDto",
         "OrganismeLightDto",
-        "DonneesModifieesDto"
+        "DonneesModifieesDto",
+        "MotifReorientationDto"
       ],
       "pageId": 635,
       "hasDocPage": true,
@@ -648,7 +660,7 @@ const CATALOGUE = {
       "isNew": true,
       "versions": [
         {
-          "label": "2.0",
+          "label": "2.1",
           "pageId": 635,
           "slug": "orientation-usager-v2"
         },
@@ -775,7 +787,7 @@ const CATALOGUE = {
     },
     {
       "slug": "pe-connect-indemnisations",
-      "title": "API PE Connect - Indemnisations",
+      "title": "API Indemnisations",
       "version": "1.0.0",
       "description": "L’API « Indemnisations » vous permet de savoir si un individu perçoit une prestation de l’assurance chômage (allocation d’aide au retour à l’emploi (ARE), allocation de sécurisation professionnelle (ASP)) de France Travail ou s’il bénéficie des minima sociaux (AAH, AER, ASS, RSA). A titre…",
       "baseUrl": "api.francetravail.io/partenaire/peconnect-indemnisations/v1",
@@ -878,7 +890,7 @@ const CATALOGUE = {
       "endpoints": [
         {
           "method": "POST",
-          "path": "/competences/enregistrer",
+          "path": "/competences",
           "summary": "Enregistrer des compétences"
         }
       ],
@@ -939,7 +951,7 @@ const CATALOGUE = {
       "endpoints": [
         {
           "method": "GET",
-          "path": "/experiencesindividu",
+          "path": "/experiences",
           "summary": "Récupérer la liste des expériences professionnelles"
         }
       ],
@@ -995,7 +1007,7 @@ const CATALOGUE = {
     },
     {
       "slug": "metiers-recherches",
-      "title": "API PE Connect - Métiers Recherchés",
+      "title": "API Métiers Recherchés",
       "version": "1.0.0",
       "description": "Cette ressource fait remonter les activités professionnelles recherchées (salariées ou non-salariées) par un individu et renseignées au sein du profil de compétences de son espace personnel sur pole-emploi.fr. Deux métiers recherchés du profil au maximum seront remontés par cette API. Le métier…",
       "baseUrl": "api.francetravail.io/partenaire/peconnect-metiersrecherches/v1",
@@ -1321,7 +1333,7 @@ const CATALOGUE = {
       "title": "Synthèse des pages employeur",
       "version": "1.0.0",
       "description": "La synthèse pages employeurs restitue des informations synthétiques d'employeurs ayant une page sur France Travail. Grâce à l'API, vous avez la possibilité de filtrer les entreprises que vous souhaitez mettre en avant, selon leurs secteurs d'activité, leurs localisations, date de création, nombre…",
-      "baseUrl": "http://api.francetravail.io/partenaire/synthese-pages-employeurs/v1",
+      "baseUrl": "api.francetravail.io/partenaire/synthese-pages-employeurs/v1",
       "auth": "public",
       "endpointCount": 4,
       "schemaCount": 25,
@@ -1817,11 +1829,11 @@ const CATALOGUE = {
     {
       "slug": "acces-emploi-demandeurs-emploi",
       "title": "Accès à l'emploi des demandeurs d'emploi",
-      "version": "1",
-      "description": "Accédez aux statistiques de France Travail - Accès à l'emploi des demandeurs d'emploi.   Cette API présente les taux d'accès à l'emploi à 6 mois des demandeurs d'emploi selon le métier recherché.",
+      "version": "1.1",
+      "description": "Accédez aux statistiques de France Travail - Accès à l'emploi des demandeurs d'emploi. Cette API présente les taux d'accès à l'emploi à 6 mois des demandeurs d'emploi selon le métier recherché.",
       "baseUrl": "api.francetravail.io/partenaire/stats-perspectives-retour-emploi",
       "auth": "public",
-      "endpointCount": 27,
+      "endpointCount": 28,
       "schemaCount": 32,
       "group": "stats",
       "groupLabel": "Statistiques",
@@ -1830,6 +1842,11 @@ const CATALOGUE = {
           "method": "POST",
           "path": "/v1/indicateur/stat-acces-emploi",
           "summary": "Stats d'accès à l'emploi des demandeurs d'emploi catégories A et B (ACC_1)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-acces-emploi-profil",
+          "summary": "Stats d'accès à l'emploi des demandeurs d'emploi par profil (ACC_8)"
         },
         {
           "method": "GET",
@@ -1963,11 +1980,11 @@ const CATALOGUE = {
         }
       ],
       "schemas": [
-        "CritereIndicateurAvecNomenclature",
-        "Caracteristique",
         "IndicateurRetour",
-        "ValeursParPeriode",
         "ValeursParCaracteristique",
+        "ValeursParPeriode",
+        "Caracteristique",
+        "CritereIndicateurAvecNomenclature",
         "Activite",
         "ListeActivite",
         "ListeTypeActivite",
@@ -1975,15 +1992,15 @@ const CATALOGUE = {
         "ListeCaracteristique",
         "ListeTypeCaracteristique",
         "TypeCaracteristique",
-        "ListeDetailIndicateur",
-        "DetailIndicateur",
-        "TypeValeur",
-        "TypeTerritoire",
-        "TypePeriodeIndicateur",
-        "TypeNomenclatureIndicateur",
-        "ValeurNomenclatureIndicateur",
-        "CroisementIndicateur",
         "CaracteristiqueIndicateur",
+        "CroisementIndicateur",
+        "DetailIndicateur",
+        "ListeDetailIndicateur",
+        "TypeNomenclatureIndicateur",
+        "TypePeriodeIndicateur",
+        "TypeTerritoire",
+        "TypeValeur",
+        "ValeurNomenclatureIndicateur",
         "ListeNomenclature",
         "Nomenclature",
         "ListeTypeNomenclature",
@@ -2009,7 +2026,7 @@ const CATALOGUE = {
     {
       "slug": "informations-territoire",
       "title": "Informations sur un territoire",
-      "version": "1",
+      "version": "1.1",
       "description": "Accédez aux statistiques de France Travail - Informations sur un territoire.   Cette API vous permet d'accéder à toutes les données clés pour comprendre un territoire : population, établissements, salariés.  Elle vous fournit également un indicateur prospectif de dynamisme du territoire développé…",
       "baseUrl": "api.francetravail.io/partenaire/stats-informations-territoire",
       "auth": "public",
@@ -2222,12 +2239,12 @@ const CATALOGUE = {
     {
       "slug": "marche-travail",
       "title": "Marché du travail",
-      "version": "1",
+      "version": "1.1",
       "description": "Accédez aux statistiques de France Travail - Marché du travail.  Cette API vous fournit toutes les données statistiques essentielles de France Travail pour bien évaluer la situation de l'emploi sur un territoire: chiffres des demandeurs d'emploi, offres, embauches.  Elle intègre des indicateurs…",
       "baseUrl": "api.francetravail.io/partenaire/stats-offres-demandes-emploi",
       "auth": "public",
-      "endpointCount": 38,
-      "schemaCount": 37,
+      "endpointCount": 35,
+      "schemaCount": 35,
       "group": "stats",
       "groupLabel": "Statistiques",
       "endpoints": [
@@ -2243,13 +2260,18 @@ const CATALOGUE = {
         },
         {
           "method": "POST",
-          "path": "/v1/indicateur/stat-dynamique-emploi",
-          "summary": "Stats sur l'Indicateur global de dynamique de l’emploi sur le territoire sélectionné (DYN_1)"
+          "path": "/v1/indicateur/stat-demandeurs-profil",
+          "summary": "Stats des demandeurs d'emploi par profil (DE_8)"
         },
         {
           "method": "POST",
           "path": "/v1/indicateur/stat-embauches",
           "summary": "Stats sur les embauches (EMB_1)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/indicateur/stat-embauches-profil",
+          "summary": "Stats sur les embauches par profil (EMB_8)"
         },
         {
           "method": "POST",
@@ -2320,21 +2342,6 @@ const CATALOGUE = {
           "method": "GET",
           "path": "/v1/referentiel/details-indicateurs",
           "summary": "Consulter le détail d'un indicateur."
-        },
-        {
-          "method": "GET",
-          "path": "/v1/referentiel/famille-indicateur/{codeFamilleIndicateur}",
-          "summary": "Consulter une famille d'indicateur"
-        },
-        {
-          "method": "GET",
-          "path": "/v1/referentiel/familles-indicateurs",
-          "summary": "Lister les familles d'indicateur"
-        },
-        {
-          "method": "GET",
-          "path": "/v1/referentiel/indicateurs",
-          "summary": "Lister les indicateurs"
         },
         {
           "method": "GET",
@@ -2413,21 +2420,16 @@ const CATALOGUE = {
         },
         {
           "method": "GET",
-          "path": "/v1/referentiel/territoires-communes/{codeTypeTerritoire}",
-          "summary": "Lister les communes avec Bassin et EPCI"
-        },
-        {
-          "method": "GET",
           "path": "/v1/referentiel/type-territoire/{codeTypeTerritoire}",
           "summary": "Consulter un type de territoire"
         }
       ],
       "schemas": [
-        "CritereIndicateurAvecNomenclature",
-        "Caracteristique",
         "IndicateurRetour",
-        "ValeursParPeriode",
         "ValeursParCaracteristique",
+        "ValeursParPeriode",
+        "Caracteristique",
+        "CritereIndicateurAvecNomenclature",
         "CritereIndicateurSansNomenclature",
         "Activite",
         "ListeActivite",
@@ -2436,15 +2438,15 @@ const CATALOGUE = {
         "ListeCaracteristique",
         "ListeTypeCaracteristique",
         "TypeCaracteristique",
-        "ListeDetailIndicateur",
-        "DetailIndicateur",
-        "TypeValeur",
-        "TypeTerritoire",
-        "TypePeriodeIndicateur",
-        "TypeNomenclatureIndicateur",
-        "ValeurNomenclatureIndicateur",
-        "CroisementIndicateur",
         "CaracteristiqueIndicateur",
+        "CroisementIndicateur",
+        "DetailIndicateur",
+        "ListeDetailIndicateur",
+        "TypeNomenclatureIndicateur",
+        "TypePeriodeIndicateur",
+        "TypeTerritoire",
+        "TypeValeur",
+        "ValeurNomenclatureIndicateur",
         "ListeNomenclature",
         "Nomenclature",
         "ListeTypeNomenclature",
@@ -2457,9 +2459,7 @@ const CATALOGUE = {
         "RomeFap",
         "ListeTerritoire",
         "Territoire",
-        "ListeTypeTerritoire",
-        "ListeTerritoireCommune",
-        "TerritoireCommune"
+        "ListeTypeTerritoire"
       ],
       "pageId": 233,
       "hasDocPage": true,
@@ -2474,8 +2474,8 @@ const CATALOGUE = {
     {
       "slug": "sortants-formation-acces-emploi",
       "title": "Sortants de formation et accès à l'emploi",
-      "version": "1",
-      "description": "Accédez aux statistiques de France Travail - Sortants de formation et accès à l'emploi.  Cette API vous met à disposition des chiffres exacts sur les sorties de formation et l'accès à l'emploi des demandeurs d'emploi en catégories A et B",
+      "version": "1.1",
+      "description": "Accédez aux statistiques de France Travail - Sortants de formation et accès à l'emploi. Cette API vous met à disposition des chiffres exacts sur les sorties de formation et l'accès à l'emploi des demandeurs d'emploi en catégories A et B.",
       "baseUrl": "api.francetravail.io/partenaire/stats-entrees-sorties-formations",
       "auth": "public",
       "endpointCount": 28,
@@ -2625,11 +2625,11 @@ const CATALOGUE = {
         }
       ],
       "schemas": [
-        "CritereIndicateurAvecNomenclature",
-        "Caracteristique",
         "IndicateurRetour",
-        "ValeursParPeriode",
         "ValeursParCaracteristique",
+        "ValeursParPeriode",
+        "Caracteristique",
+        "CritereIndicateurAvecNomenclature",
         "CritereIndicateurSansNomenclature",
         "Activite",
         "ListeActivite",
@@ -2638,15 +2638,15 @@ const CATALOGUE = {
         "ListeCaracteristique",
         "ListeTypeCaracteristique",
         "TypeCaracteristique",
-        "ListeDetailIndicateur",
-        "DetailIndicateur",
-        "TypeValeur",
-        "TypeTerritoire",
-        "TypePeriodeIndicateur",
-        "TypeNomenclatureIndicateur",
-        "ValeurNomenclatureIndicateur",
-        "CroisementIndicateur",
         "CaracteristiqueIndicateur",
+        "CroisementIndicateur",
+        "DetailIndicateur",
+        "ListeDetailIndicateur",
+        "TypeNomenclatureIndicateur",
+        "TypePeriodeIndicateur",
+        "TypeTerritoire",
+        "TypeValeur",
+        "ValeurNomenclatureIndicateur",
         "ListeNomenclature",
         "Nomenclature",
         "ListeTypeNomenclature",
@@ -2971,25 +2971,15 @@ const CATALOGUE = {
     {
       "slug": "evenements-france-travail",
       "title": "API Mes évènements emplois",
-      "version": "1.0.0",
+      "version": "1.1",
       "description": "Cette API permet de rechercher et récupérer des informations sur les événements emploi, salons en ligne et ateliers organisés par France Travail et ses partenaires.",
       "baseUrl": "api.francetravail.io/partenaire/evenements/v1",
       "auth": "public",
-      "endpointCount": 5,
-      "schemaCount": 6,
+      "endpointCount": 3,
+      "schemaCount": 5,
       "group": "services",
       "groupLabel": "Référentiels & services",
       "endpoints": [
-        {
-          "method": "GET",
-          "path": "/salonsenligne",
-          "summary": "Rechercher les salons en ligne en cours et à venir"
-        },
-        {
-          "method": "GET",
-          "path": "/salonsenligne/jeunes",
-          "summary": "Rechercher les salons ciblés 'Jeunes' en cours et à venir"
-        },
         {
           "method": "POST",
           "path": "/mee/evenements",
@@ -3007,7 +2997,6 @@ const CATALOGUE = {
         }
       ],
       "schemas": [
-        "SalonEnLigne",
         "EvenementRequest",
         "EvenementResponse",
         "Evenement",

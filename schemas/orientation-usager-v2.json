@@ -8,7 +8,7 @@
          "url":"https://francetravail.io/contact",
          "email":"contact@francetravail.fr"
       },
-      "version":"2.0"
+      "version":"2.1"
    },
    "servers":[
       {
@@ -559,6 +559,88 @@
                      "decisionorientationusager",
                      "api_testorientationusagerv2",
                      "testdecisionorientationusager"
+                  ]
+               }
+            ]
+         }
+      },
+      "/nomenclature/motifs-reorientation":{
+         "get":{
+            "tags":[
+               "Nomenclature Orientation"
+            ],
+            "summary":"Lister les motifs de reorientation",
+            "description":"Permet de récupérer la liste des motifs pour une réorientation.",
+            "operationId":"listeMotifReorientation",
+            "parameters":[
+               {
+                  "in":"header",
+                  "name":"pa-nom-agent",
+                  "description":"**Attribut obligatoire en mode Client Credentials**.<br>\nNom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+                  "schema":{
+                     "type":"string",
+                     "example":"Doe"
+                  }
+               },
+               {
+                  "in":"header",
+                  "name":"pa-prenom-agent",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**<br>\nPrénom de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner un nom logique de batch.\n",
+                  "schema":{
+                     "type":"string",
+                     "example":"John"
+                  }
+               },
+               {
+                  "in":"header",
+                  "name":"pa-identifiant-agent",
+                  "description":"**Attribut obligatoire en mode Client Credentials.**<br>\nIdentifiant de l'agent partenaire à l'origine de l'appel. Le caractère spécial pipe/barre verticale ' | ' est interdit.<br>\nDans le cadre d'un appel depuis un traitement de type batch, renseigner \"BATCH\"\n",
+                  "schema":{
+                     "type":"string",
+                     "example":"monidentifiant"
+                  }
+               },
+               {
+                  "name":"actif",
+                  "in":"query",
+                  "required":false,
+                  "description":"**Filtre sur les motifs actifs**<br>\nPour une lecture de l'orientation rechercher tous les motifs actifs et inactifs (actif = false).<br>\nEn entrée d'une décision d'orientation sont attendus uniquement des motifs actifs (actif = true).\n",
+                  "schema":{
+                     "type":"boolean",
+                     "default": false
+                  }
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Motifs récupérés",
+                  "content":{
+                     "application/json":{
+                    "schema": {
+                       "type": "array",
+                       "items": {
+                         "$ref": "#/components/schemas/MotifReorientationDto"
+                        }
+                       }
+                     }
+                  }
+               }
+            },
+            "security":[
+               {
+                  "authentification_agent-clientCredentials":[
+                     "api_orientationusagerv2",
+                     "lireorientationusager",
+                     "api_testorientationusagerv2",
+                     "testlireorientationusager"
+                  ]
+               },
+               {
+                  "authentification_agent":[
+                     "api_orientationusagerv2",
+                     "lireorientationusager",
+                     "api_testorientationusagerv2",
+                     "testlireorientationusager"
                   ]
                }
             ]
@@ -1231,6 +1313,11 @@
                   "description":"Le motif de sortie en parcours de l'orientation de l'usager",
                   "example":"Exemple de motif"
                },
+               "motif_reorientation":{
+                  "type":"string",
+                  "description":"Le motif de réorientation s'il existe",
+                  "example":"FIN_ACCOMPAGNEMENT"
+               },
                "date_creation":{
                   "type":"string",
                   "format":"date-time",
@@ -1556,6 +1643,11 @@
                      "PSO"
                   ]
                },
+              "motif_reorientation":{
+                  "type":"string",
+                  "example":"FIN_ACCOMPAGNEMENT",
+                  "description":"Le motif de reorientation est obligatoire si la fonctionnalité de réorientation des bRSA est activée. Seul un motif actif peut être envoyé pour une décision d'orientation."
+               },
                "date_entree_parcours":{
                   "type":"string",
                   "format":"date",
@@ -1588,6 +1680,11 @@
                   "type":"string",
                   "format":"date",
                   "description":"La date de la décision"
+               },
+              "motif_reorientation":{
+                  "type":"string",
+                  "example":"FIN_ACCOMPAGNEMENT",
+                  "description":"Le motif de reorientation est obligatoire si la fonctionnalité de réorientation des bRSA est activée. Seul un motif actif peut être envoyé pour une décision d'orientation."
                },
                "agent_decision":{
                   "type":"string",
@@ -1690,6 +1787,25 @@
                   "type":"string",
                   "format":"date",
                   "description":"La date d'entrée dans le nouveau parcours, elle ne doit pas être antérieure à la date de sortie de parcours de l'orientation précédente"
+               }
+            }
+         },
+         "MotifReorientationDto":{
+            "type":"object",
+            "properties":{
+               "cle":{
+                  "type":"string",
+                  "description":"Le code du motif de réorientation",
+                  "example": "PROJET_EMPLOI"
+               },
+               "libelle":{
+                  "type":"string",
+                  "description":"Le libellé du motif de réorientation",
+                  "example": "Volonté d'aller vers l'emploi"
+               },
+               "actif":{
+                  "type":"boolean",
+                  "example":true
                }
             }
          }

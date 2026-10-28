@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.1",
+    "version": "1.4",
     "title": "Gestion des sanctions RSA",
     "description": "Cette API met à disposition les propositions sur les sanctions des bénéficiaires du RSA accompagnés par France Travail, afin de statuer sur ces dernières propositions. <br>Elle permet également de transmettre des décisions de sanctions RSA pour un bénéficiaire RSA non accompagné par France Travail (dans un 1er temps uniquement les décisions portant sur des natures de manquements communes au code du travail et code de l'action sociale et des familles) et de demander la radiation de la liste des demandeurs d'emploi quand une sanction RSA l'implique. <br>Elle dispose de quatre ressources : \r\n\r\n1) Une ressource permettant de récupérer le détail d’un manquement et conséquence de sanction associés, pour un bRSA accompagné par France Travail\r\n\r\n2) Une ressource permettant d’agir sur la conséquence de sanction concernée en fonction de l’action à réaliser (selon le code activité sanction) :<br><ul><li>Choisir d’instruire une proposition de suspension du RSA (accepter ou refuser) - Code activité ACT366</li><li>Décider de la suite à donner à une proposition de suspension du RSA (accepter, refuser ou mettre à jour la proposition) - Code activité ACT367</li><li> Décider de la suite à donner à une proposition de levée de suspension du RSA (accepter ou refuser la proposition) - Code activité ACT369</li><li>Décider de la suite à donner à une proposition de suppression du RSA (accepter, refuser ou mettre à jour la proposition) - Code activité ACT370</li><li> Décider d'annuler une décision de sanction RSA (non lié à une activité)</li></ul></br>\r\n\r\n3) Une ressource permettant de transmettre une décision de sanction RSA pour un bRSA non accompagné par France Travail\r\n\r\n4) Une ressource permettant de demander la radiation de la liste des DE suite à une décision de sanction RSA\r\n\r\n",
     
@@ -375,6 +375,12 @@
                       "codeErreur": "R011",
                       "message": "Identifiant Consequence Sanction invalide"
                     }
+                  },
+                  "Erreur R014 - Identifiant de sanction n’est pas rattaché à l’usager": {
+                    "value": {
+                      "codeErreur": "R014",
+                      "message": "Identifiant de sanction n’est pas rattaché à l’usager"
+                    }
                   }
                 }
               }
@@ -416,7 +422,7 @@
           "Publication d'un événement sur une conséquence de sanction RSA"
         ],
         "summary": "Transmettre un événement sur une conséquence de sanction RSA",
-        "description": "Cette ressource permet d’agir sur une conséquence de sanction RSA (via la publication d'un événement approprié) en fonction de l’action à réaliser :<br><ul><li>ACT366: Choisir d’instruire une proposition de suspension du RSA (accepter ou refuser) <br><b>Important : Sauf nouvelle consigne, nous vous invitons à ne pas refuser d'instruire une proposition de suspension RSA (i.e. ne pas transmettre l'événement REFUS_SAISIE_SANCTION), car cela valide automatiquement la proposition au titre d'une reprise de compétences France Travail</b></li></bR><li>ACT367: Décider de la suite à donner à une proposition de suspension du RSA (accepter, refuser ou mettre à jour la proposition)</li><li>ACT369: Décider de la suite à donner à une proposition de levée de suspension du RSA (accepter ou refuser la proposition)</li><li>ACT370: Décider de la suite à donner à une proposition de suppression du RSA (accepter, refuser ou mettre à jour la proposition)</li><li> Décider d'annuler une décision de sanction RSA (non lié à une activité)",
+        "description": "Cette ressource permet d’agir sur une conséquence de sanction RSA (via la publication d'un événement approprié) en fonction de l’action à réaliser :<br><ul><li>ACT366: Choisir d’instruire une proposition de suspension du RSA (accepter ou refuser) <br><b>Important : Sauf nouvelle consigne, nous vous invitons à ne pas refuser d'instruire une proposition de suspension RSA (i.e. ne pas transmettre l'événement REFUS_SAISIE_SANCTION), car cela valide automatiquement la proposition au titre d'une reprise de compétences France Travail. <br>Le cas échéant, l’API retournera le code erreur R021 'Type evenement invalide, non présent au référentiel ou non transmissible'. </b></li></bR><li>ACT367: Décider de la suite à donner à une proposition de suspension du RSA (accepter, refuser ou mettre à jour la proposition)</li><li>ACT369: Décider de la suite à donner à une proposition de levée de suspension du RSA (accepter ou refuser la proposition)</li><li>ACT370: Décider de la suite à donner à une proposition de suppression du RSA (accepter, refuser ou mettre à jour la proposition)</li><li> Décider d'annuler une décision de sanction RSA (non lié à une activité)",
         "operationId": "traiterSanctionRsa",
         "parameters": [
           {
@@ -582,7 +588,7 @@
         },
         "responses": {
           "200": {
-            "description": "Demande traitée. Si codeSortie=C001, publication de l'événement effectuée. Si codeSortie=C999, l'événement n'a pas été pris en compte car incompatible avec le dernier événement connu pour la conséquence de sanction concernée ",
+            "description": "Demande traitée. <br>\nSi codeSortie=C001, publication de l'événement effectuée. <br>\nSi codeSortie=C999, l'événement n'a pas été pris en compte car incompatible avec le dernier événement connu pour la conséquence de sanction concernée",
             "content": {
               "application/json": {
                 "schema": {
@@ -624,6 +630,12 @@
                     "value": {
                       "codeErreur": "R011",
                       "message": "Identifiant Consequence Sanction invalide, format donnée non respecté"
+                    }
+                  },
+                   "Erreur R014 - Identifiant de sanction n’est pas rattaché à l’usager": {
+                    "value": {
+                      "codeErreur": "R014",
+                      "message": "Identifiant de sanction n’est pas rattaché à l’usager"
                     }
                   },
                   "Erreur R020 - Type événement obligatoire": {
@@ -857,7 +869,7 @@
         },
         "responses": {
           "200": {
-            "description": "Demande traitée. Si codeSortie=C001, enregistrement de la décision",
+            "description": "Demande traitée. <br>\nSi codeSortie=C001, enregistrement de la décision",
             "content": {
               "application/json": {
                 "schema": {
@@ -1090,39 +1102,39 @@
         },
         "responses": {
           "200": {
-            "description": "Demande traitée. Si codeSortie=C000, la demande de radiation a bien été créée. Si codeSortie=C001/C002/C003/C004, pas de demande de radiation créée",
+            "description": "Demande traitée. <br>\nSi codeSortie=C000, la demande de radiation a bien été créée. <br>\nSi codeSortie=C001/C002/C003/C004, pas de demande de radiation créée",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RetourDemandeRadiation"
                 },
                 "examples": {
-                  "Demande de radiation créée": {
+                  "Demande de radiation créée (C000)": {
                     "value": {
                       "codeSortie": "C000",
                       "idConsequenceSanctionCree": "5070",
                       "message": "Demande de radiation créée"
                     }
                   },
-                  "Demande de radiation non créée car le demandeur d'emploi est déjà radié pour sanction": {
+                  "Demande de radiation non créée car le demandeur d'emploi est déjà radié pour sanction (C0001)": {
                     "value": {
                       "codeSortie": "C001",
                       "message": "Demande de radiation non créée car le DE est déjà en statut radié suite à sanction"
                     }
                   },
-                  "Demande de radiation non créée car non conforme aux cas d'usages réglementaires": {
+                  "Demande de radiation non créée car non conforme aux cas d'usages réglementaires (C002)": {
                     "value": {
                       "codeSortie": "C002",
                       "message": "Demande de radiation non créée car non conforme aux cas d'usages"
                     }
                   },
-                  "Demande de radiation non créée car l'identifiantConsequenceSanction n'est pas rattaché au demandeur d'emploi": {
+                  "Demande de radiation non créée car l'identifiantConsequenceSanction n'est pas rattaché au demandeur d'emploi (C003)": {
                     "value": {
                       "codeSortie": "C003",
                       "message": "Demande de radiation non créée car l’identifiantConsequenceSanction n’est pas rattaché au demandeur d’emploi"
                     }
                   },
-                  "Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction RSA": {
+                  "Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction RSA (C004)": {
                     "value": {
                       "codeSortie": "C004",
                       "message": "Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction financière"
@@ -1303,7 +1315,14 @@
         "properties": {
           "natureDefaut": {
             "type": "string",
-            "description": "La nature du défaut constaté",
+            "enum": [
+              "N23",
+              "N24",
+              "N25",
+              "N30",
+              "N31"
+            ],
+            "description": "La nature du défaut constaté. Parmi les valeurs possibles: N23-Absence à rendez-vous, N24-Non présentation à une action de formation, N25-Abandon d'une action de formation, N30-Refus de suivre une action d'aide à la recherche d'activité, N31-Non présentation à une action d'aide à recherche d'activité",
             "example": "N23"
           },
           "dateConstatDefaut": {
@@ -1343,7 +1362,7 @@
         "properties": {
           "idConsequenceSanction": {
             "type": "string",
-            "description": "Identifiant de la conséquence de sanction",
+            "description": "Identifiant unique de la conséquence de sanction",
             "example": "680"
           },
           "typeConsequenceSanction": {
@@ -1460,7 +1479,7 @@
           },
           "typeEvenement": {
             "type": "string",
-            "description": "Type de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nANNULATION_SANCTION\t|Annulation d’une sanction (suite recours / erreur saisie…)\r\nPROP_SANCTION\t|Proposition de sanction / initialisation de la sanction\r\nACCORD_FT_SANCTION\t|Accord sanction par le manager France Travail\r\nVALID_SANCTION\t|Décision de sanction\r\nREFUS_SANCTION\t|Sanction refusée\r\nSAISIE_SANCTION\t|Choix d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement) \r\nREFUS_SAISIE_SANCTION\t|Refus d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement)\r\nPROP_LEVEE_SUSP\t|Proposition de levée de suspension\r\nACCORD_FT_LEVEE_SUSP\t|Accord levée de suspension par le manager France Travail\r\nVALID_LEVEE_SUSP\t|Décision de levée de suspension v=\r\nREFUS_LEVEE_SUSP\t|Refus de levée de suspension\r\n",
+            "description": "Type de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nANNULATION_SANCTION\t|Annulation d’une sanction (suite recours / erreur saisie…)\r\nPROP_SANCTION\t|Proposition de sanction / initialisation de la sanction\r\nACCORD_FT_SANCTION\t|Accord sanction par le manager France Travail\r\nVALID_SANCTION\t|Décision de sanction\r\nREFUS_SANCTION\t|Sanction refusée\r\nSAISIE_SANCTION\t|Choix d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement) \r\nREFUS_SAISIE_SANCTION\t|Refus d'instruire la proposition de sanction par le CD (cas suspension RSA uniquement)\r\nPROP_LEVEE_SUSP\t|Proposition de levée de suspension\r\nACCORD_FT_LEVEE_SUSP\t|Accord levée de suspension par le manager France Travail\r\nVALID_LEVEE_SUSP\t|Décision de levée de suspension v=\r\nREFUS_LEVEE_SUSP\t|Refus de levée de suspension\r\nINIT_DEMANDE_REMOB\t|Initialisation d'une demande de remobilisation par un conseiller en amont du retour partenaire sur une proposition de suspension\r\nACCORD_FT_DEMANDE_REMOB\t|Avis remobilisation par le manager France Travail en amont du retour partenaire sur une proposition de suspension\r\nREVUE_DATE_REMOB\t|Date de remobilisation mise à jour post levée de suspension\r\nFIN_APPLICATION_SANCTION\t|Date de fin d'application de la sanction atteinte",
             "example": "VALID_SANCTION"
           },
           "dateEvenement": {
@@ -1471,7 +1490,7 @@
           },
           "motif": {
             "type": "string",
-            "description": "Motif de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nAUTRE\t|Autre motif (sanction prononcée CD ou CAF)\r\nRECOURS\t|Annulation suite à recours (sanction prononcée CD ou CAF)\r\nDROIT_ERREUR\t|Droit à l'erreur (sanction prononcée CD ou CAF)\r\nDELEGATION_FT\t|Validation au titre de la délégation FT\r\nDELAI_SAISIE_DEPASSE\t|Délai d'instruction CD dépassé\r\nREFUS_SAISIE\t|Refus d'instruction par le CD\r\nVALIDATION_CD\t|Décision de sanction par le CD\r\nREFUS_CD\t|Proposition de sanction refusée par le CD\r\nREFUS_ELD\t|Proposition de sanction refusée par le manager France Travail\r\nRECENTRALISATION_RSA_OUTREMER\t|Proposition de sanction à traiter CAF Outremer recentralisation du RSA\r\nVALIDATION_CAF\t| Décision de sanction par la CAF\r\nREFUS_CAF\t| Proposition de sanction refusée par la CAF\r\nABANDON_RECOURS_FT\t|Annulation de la décision de sanction suite à réclamation FT (sanction prononcée FT)\r\nMEDIATEUR\t|Annulation de la décision suite préconisation médiateur (sanction prononcée FT)\r\nTRIBUNAL_ADM\t|Annulation suite décision tribunal administratif (sanction prononcée FT)\r\nANNU_SANCTION\t|Annulation suite erreur décision sanction (sanction prononcée FT)\r\nANNU_RECOURS\t|Annulation suite erreur décision recours (sanction prononcée FT)",
+            "description": "Motif de l'évènement portant sur la conséquence de sanction\r\n\r\nCode | Valeur\r\n---------|----------\r\nAUTRE\t|Autre motif (sanction prononcée CD ou CAF)\r\nRECOURS\t|Annulation suite à recours (sanction prononcée CD ou CAF)\r\nDROIT_ERREUR\t|Droit à l'erreur (sanction prononcée CD ou CAF)\r\nDELEGATION_FT\t|Validation au titre de la délégation FT\r\nDELAI_SAISIE_DEPASSE\t|Délai d'instruction CD dépassé\r\nREFUS_SAISIE\t|Refus d'instruction par le CD\r\nVALIDATION_CD\t|Décision de sanction par le CD\r\nREFUS_CD\t|Proposition de sanction refusée par le CD\r\nREFUS_ELD\t|Proposition de sanction refusée par le manager France Travail\r\nRECENTRALISATION_RSA_OUTREMER\t|Proposition de sanction à traiter CAF Outremer recentralisation du RSA\r\nVALIDATION_CAF\t| Décision de sanction par la CAF\r\nREFUS_CAF\t| Proposition de sanction refusée par la CAF\r\nABANDON_RECOURS_FT\t|Annulation de la décision de sanction suite à réclamation FT (sanction prononcée FT)\r\nMEDIATEUR\t|Annulation de la décision suite préconisation médiateur (sanction prononcée FT)\r\nTRIBUNAL_ADM\t|Annulation suite décision tribunal administratif (sanction prononcée FT)\r\nANNU_SANCTION\t|Annulation suite erreur décision sanction (sanction prononcée FT)\r\nANNU_RECOURS\t|Annulation suite erreur décision recours (sanction prononcée FT)\r\nFAVORABLE\t|Avis favorable FT suite à la demande de remobilisation\r\nDEFAVORABLE\t|Avis défavorable FT suite à la demande de remobilisation\r\nDEMANDE_PARTENAIRE\t|Motif applicable aux radiations de la liste des DE demandées par un partenaire",
             "example": "REFUS_SAISIE"
           },
           "commentaireEvenement": {
@@ -1488,9 +1507,10 @@
             "type": "string",
             "enum": [
               "R010",
-              "R011"
+              "R011",
+              "R014"
             ],
-            "description": "Code Erreur suite à la demande de récupération du détail d'un manquement parmi: R010 (Identifiant Consequence Sanction obligatoire), R011 (Identifiant conséquence de sanction invalide)",
+            "description": "Code Erreur suite à la demande de récupération du détail d'un manquement parmi: R010 (Identifiant conséquence de sanction obligatoire), R011 (Identifiant conséquence de sanction invalide), R014 (Identifiant de sanction n’est pas rattaché à l’usager)",
             "example": "R010"
           },
           "message": {
@@ -1531,7 +1551,7 @@
           },
           "montantValide": {
             "type": "integer",
-            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION, précision sur le montant/taux de sanction validée. Pour un taux, doit être compris entre 30 et 100",
+            "description": "Obligatoire dans le cas d'un événement VALID_SANCTION, précision sur le montant/taux de sanction validée. Pour un taux, la valeur doit être comprise entre 30 et 100",
             "example": 50
           },
           "dureeValidee": {
@@ -1623,6 +1643,7 @@
             "enum": [
               "R010",
               "R011",
+              "R014",
               "R020",
               "R021",
               "R030",
@@ -1638,7 +1659,7 @@
               "R070",
               "R071"
             ],
-            "description": "Code Erreur suite à la demande de mise à jour de la conséquence de sanction RSA parmi: R010 (Identifiant Consequence Sanction obligatoire), R011 (Identifiant conséquence de sanction invalide), R020 (type événement obligatoire), R021 (type événement invalide), R030 (date événement obligatoire), R031 (date événement erronée), R040 (commentaire evénement invalide, RO50 (type de conséquence de sanction obligatoire pour le type d'événement transmis), R051 (type de conséquence de sanction invalide), R060 (montant obligatoire pour le type d'événement transmis), R061 (montant invalide), R062 (modalité validée incorrecte), R063 (modalité validée obligatoire pour le type d'événement transmis), R064 (montant invalide pour le type d'événement transmis), R070 (durée obligatoire pour le type d'événement transmis), R071 (durée validée invalide)",
+            "description": "Code Erreur suite à la demande de mise à jour de la conséquence de sanction RSA parmi: R010 (Identifiant conséquence de sanction obligatoire), R011 (Identifiant conséquence de sanction invalide), R014 (Identifiant de sanction n’est pas rattaché à l’usager), R020 (Type événement obligatoire), R021 (Type événement invalide), R030 (Date événement obligatoire), R031 (Date événement erronée), R040 (Commentaire evénement invalide, RO50 (Type de conséquence de sanction obligatoire pour le type d'événement transmis), R051 (Type de conséquence de sanction invalide), R060 (Montant obligatoire pour le type d'événement transmis), R061 (Montant invalide), R062 (Modalité validée incorrecte), R063 (Modalité validée obligatoire pour le type d'événement transmis), R064 (Montant invalide pour le type d'événement transmis), R070 (Durée obligatoire pour le type d'événement transmis), R071 (Durée validée invalide)",
             "example": "R010"
           }
         }
@@ -1659,7 +1680,7 @@
               "N64",
               "N65"
             ],
-            "description": "Obligatoire, permet de connaître la nature du manquement à l'origine de la décision N61 pour un manquements aux obligations du contrat d'engagement, N63 pour un manquement refus d'élaborer le contrat d'engagement, N64 pour un manquement refus d'actualiser le contrat d'engagement, N65 pour un manquements aux obligations du contrat d'engagement dans le contexte d'un refus de deux offres raisonnables d'emploi",
+            "description": "Obligatoire, permet de connaître la nature du manquement à l'origine de la décision. Choix parmi: N61 pour un manquements aux obligations du contrat d'engagement, N63 pour un manquement refus d'élaborer le contrat d'engagement, N64 pour un manquement refus d'actualiser le contrat d'engagement, N65 pour un manquements aux obligations du contrat d'engagement dans le contexte d'un refus de deux offres raisonnables d'emploi",
             "example": "N61"
           },
           "rangManquement": {
@@ -1668,7 +1689,7 @@
               "R1",
               "R2"
             ],
-            "description": "Rang/itération du manquement R1 pour un 1er manquement sanctionné, R2 pour un second ou plus",
+            "description": "Rang/itération du manquement: R1 pour un 1er manquement sanctionné, R2 pour un second ou plus",
             "example": "R2"
           },
            "dateManquement": {
@@ -1696,7 +1717,7 @@
           },
           "montantValide": {
             "type": "integer",
-            "description": "Obligatoire, précision sur le montant/taux de sanction. Pour un taux, doit être compris entre 30 et 100.",
+            "description": "Obligatoire, précision sur le montant/taux de sanction. Pour un taux, la valeur doit être comprise entre 30 et 100",
             "example": 50
           },
           "dureeValidee": {
@@ -1707,7 +1728,7 @@
               3,
               4
             ],
-            "description": "Obligatoire, précision sur la durée de sanction en mois, doit être comprise entre 1 et 4.",
+            "description": "Obligatoire, précision sur la durée de sanction en mois, doit être comprise entre 1 et 4",
             "example": 2
         },
          "justificationDecisionSanction": {
@@ -1734,7 +1755,7 @@
             "enum": [
               "C001"
             ],
-            "description": "Code retour suite à la demande d'enregistrement d'une sanction partenaire : C001-Sanction partenaire créée ,",
+            "description": "Code retour suite à la demande d'enregistrement d'une sanction partenaire : C001-Sanction partenaire créée",
             "example": "C001"
           },
           "identifiantConsequenceSanction": {
@@ -1778,7 +1799,7 @@
               "R090",
               "R091"
             ],
-            "description": "Code Erreur suite à la transmission d'une décision de sanction RSA parmi: R032 (dateNotificationDecisionSanction obligatoire), R033 (dateNotificationDecisionSanction invalide), R041 (Commentaire invalide), RO52 (type de conséquence de sanction obligatoire pour le type d'événement transmis), R053 (type de conséquence de sanction invalide), R060 (montant obligatoire pour le type d'événement transmis), R061 (montant invalide), R062 (modalité validée incorrecte), R063 (modalité validée obligatoire pour le type d'événement transmis), R064 (montant invalide pour le type d'événement transmis), R070 (durée obligatoire pour le type d'événement transmis), R071 (durée validée invalide), R080 (nature manquement obligatoire), R081 (nature manquement invalide), R082 (rang manquement invalide), R090 (date manquement obligatoire), R091 (date manquement invalide)",
+            "description": "Code Erreur suite à la transmission d'une décision de sanction RSA parmi: R032 (dateNotificationDecisionSanction obligatoire), R033 (dateNotificationDecisionSanction invalide), R041 (Commentaire invalide), R052 (type de conséquence de sanction obligatoire pour le type d'événement transmis), R053 (type de conséquence de sanction invalide), R060 (montant obligatoire pour le type d'événement transmis), R061 (montant invalide), R062 (modalité validée incorrecte), R063 (modalité validée obligatoire pour le type d'événement transmis), R064 (montant invalide pour le type d'événement transmis), R070 (durée obligatoire pour le type d'événement transmis), R071 (durée validée invalide), R080 (nature manquement obligatoire), R081 (nature manquement invalide), R082 (rang manquement invalide), R090 (date manquement obligatoire), R091 (date manquement invalide)",
             "example": "R071"
           }
         }
@@ -1813,7 +1834,7 @@
               "C003",
               "C004"
             ],
-            "description": "Code retour suite à la demande de radiation de la liste des demandeurs d'emploi",
+            "description": "Code retour suite à la demande de radiation de la liste des demandeurs d'emploi parmi : C000 (Demande de radiation créée), C001 (Demande de radiation non créée car le demandeur d'emploi est déjà radié pour sanction), C002 (Demande de radiation non créée car non conforme aux cas d'usages réglementaires), C003 (Demande de radiation non créée car l’identifiantConsequenceSanction n’est pas rattaché au demandeur d’emploi), C004 (Demande de radiation non créée car une radiation a déjà été appliquée pour cette même sanction RSA)",
             "example": "C000"
           },
           "idConsequenceSanctionCree": {

@@ -15,7 +15,7 @@
     }
   ],
   "paths": {
-    "/competences/enregistrer": {
+    "/competences": {
       "post": {
         "summary": "Enregistrer des compétences",
         "description": "Enregistre des compétences dans le portefeuille de compétences.",

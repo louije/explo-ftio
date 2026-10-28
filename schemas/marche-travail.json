@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1",
     "title": "Marché du travail",
-    "description": "Accédez aux statistiques de France Travail - Marché du travail. \r\n\r\nCette API vous fournit toutes les données statistiques essentielles de France Travail pour bien évaluer la situation de l'emploi sur un territoire: chiffres des demandeurs d'emploi, offres, embauches.  Elle intègre des indicateurs clés développés par France Travail vous permettant de comprendre les tensions sur les métiers, ainsi que la dynamique globale d'un territoire."
+    "description": "Accédez aux statistiques de France Travail - Marché du travail.  Cette API vous fournit toutes les données statistiques essentielles de France Travail pour bien évaluer la situation de l'emploi sur un territoire: chiffres des demandeurs d'emploi, offres, embauches.  Elle intègre des indicateurs clés développés par France Travail vous permettant de comprendre les tensions sur les métiers, ainsi que la dynamique globale d'un territoire.\n",
+    "version": "1.1"
   },
   "servers": [
     {
@@ -25,17 +25,13 @@
               "schema": {
                 "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
-                    "codeTypePeriode": "TRIMESTRE",
-                    "codeTypeNomenclature": "CATCAND"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "CATCAND"
               }
             }
           }
@@ -64,10 +60,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -89,17 +88,13 @@
               "schema": {
                 "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
-                    "codeTypePeriode": "TRIMESTRE",
-                    "codeTypeNomenclature": "CATCAND"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "CATCAND"
               }
             }
           }
@@ -128,10 +123,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -139,37 +137,35 @@
         ]
       }
     },
-    "/v1/indicateur/stat-dynamique-emploi": {
+    "/v1/indicateur/stat-demandeurs-profil": {
       "post": {
         "tags": [
-          "Dynamique Emploi"
+          "Demandeurs"
         ],
-        "summary": "Stats sur l'Indicateur global de dynamique de l’emploi sur le territoire sélectionné (DYN_1)",
-        "description": "Permet de rechercher les données statistiques sur l'Indicateur global de dynamique de l’emploi sur le territoire sélectionné (DYN_1), selon des critères obligatoires (territoire, activité) et facultatifs (périodes). Particularités de cet indicateur : pas de caractéristique.",
-        "operationId": "rechercherStatDynamiqueEmploi",
+        "summary": "Stats des demandeurs d'emploi par profil (DE_8)",
+        "description": "Permet de rechercher les données statistiques sur le Nombre de demandeurs d'emploi inscrits en fin de trimestre par métier et par compétence (DE_8), selon des critères obligatoires (territoire, activité) et facultatifs (catégories de candidats, périodes, caractéristiques).",
+        "operationId": "rechercherStatDemandeursParProfil",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CritereIndicateurSansNomenclature"
+                "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "MOYENNE",
-                    "codeActivite": "MOYENNE",
-                    "codeTypePeriode": "TRIMESTRE"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "PROF_SPECxCATCAND",
+                "profilDemandeur": "JEUNES"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Statistiques dynamisme de l'emploi trouvées",
+            "description": "Statistiques demandeurs d'emploi trouvées",
             "content": {
               "application/xml": {
                 "schema": {
@@ -191,10 +187,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -216,17 +215,13 @@
               "schema": {
                 "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
-                    "codeTypePeriode": "TRIMESTRE",
-                    "codeTypeNomenclature": "CATCANDxDUREEEMP"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "CATCANDxDUREEEMP"
               }
             }
           }
@@ -255,10 +250,77 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
+          }
+        ]
+      }
+    },
+    "/v1/indicateur/stat-embauches-profil": {
+      "post": {
+        "tags": [
+          "Embauches"
+        ],
+        "summary": "Stats sur les embauches par profil (EMB_8)",
+        "description": "Permet de rechercher les données statistiques sur les Embauches par profil et métier recherché pour les demandeurs d'emploi et par secteur (EMB_8) selon des critères obligatoires (territoire, activité) et facultatifs (Catégories de candidat, durée d’emploi, périodes, caractéristiques).",
+        "operationId": "rechercherStatEmbauchesParProfil",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
+              },
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "PROF_SPECxCATCAND",
+                "profilDemandeur": "JEUNES"
+              }
             }
-          ],
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Statistiques sur les embauches trouvées",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndicateurRetour"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndicateurRetour"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
+          "500": {
+            "description": "Erreur interne au serveur"
+          }
+        },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -280,17 +342,13 @@
               "schema": {
                 "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
-                    "codeTypePeriode": "TRIMESTRE",
-                    "codeTypeNomenclature": "ORIGINEOFF"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "TRIMESTRE",
+                "codeTypeNomenclature": "ORIGINEOFF"
               }
             }
           }
@@ -319,10 +377,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -344,17 +405,13 @@
               "schema": {
                 "$ref": "#/components/schemas/CritereIndicateurAvecNomenclature"
               },
-              "examples": {
-                "default": {
-                  "value": {
-                    "codeTypeTerritoire": "REG",
-                    "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
-                    "codeTypePeriode": "ANNEE",
-                    "codeTypeNomenclature": "TYPE_TENSION"
-                  }
-                }
+              "example": {
+                "codeTypeTerritoire": "REG",
+                "codeTerritoire": "75",
+                "codeTypeActivite": "ROME",
+                "codeActivite": "A1203",
+                "codeTypePeriode": "ANNEE",
+                "codeTypeNomenclature": "TYPE_TENSION"
               }
             }
           }
@@ -383,10 +440,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -404,48 +464,40 @@
         "operationId": "rechercherStatSalairesParMetier",
         "parameters": [
           {
-            "name": "codeRome",
-            "in": "query",
-            "description": "Code ROME",
-            "schema": {
-              "type": "string",
-              "example": "A1101"
-            },
-            "examples": {
-              "default": {
-                "value": "A1101"
-              }
-            }
-          },
-          {
             "name": "codeTypeTerritoire",
             "in": "path",
             "description": "Code du type de territoire",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "NAT"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "NAT"
-              }
-            }
+            "example": "NAT"
           },
           {
             "name": "codeTerritoire",
             "in": "path",
             "description": "Code du territoire",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "FR"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "FR"
-              }
-            }
+            "example": "FR"
+          },
+          {
+            "name": "codeRome",
+            "in": "query",
+            "description": "Code ROME",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "A1101"
           }
         ],
         "responses": {
@@ -472,10 +524,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -497,30 +552,24 @@
             "in": "query",
             "description": "codeActivite",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "A1203"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "A1203"
-              }
-            }
+            "example": "A1203"
           },
           {
             "name": "codeTypeActivite",
             "in": "query",
             "description": "codeTypeActivite",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "ROME"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "ROME"
-              }
-            }
+            "example": "ROME"
           }
         ],
         "responses": {
@@ -544,10 +593,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -584,10 +636,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -605,33 +660,28 @@
         "operationId": "recupererListeActiviteParCodeTypeActivite",
         "parameters": [
           {
-            "name": "filtreActivite",
-            "in": "query",
-            "description": "filtreActivite",
-            "schema": {
-              "type": "string",
-              "example": "A12"
-            },
-            "examples": {
-              "default": {
-                "value": "A12"
-              }
-            }
-          },
-          {
             "name": "codeTypeActivite",
             "in": "path",
             "description": "codeTypeActivite",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "ROME"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "ROME"
-              }
-            }
+            "example": "ROME"
+          },
+          {
+            "name": "filtreActivite",
+            "in": "query",
+            "description": "filtreActivite",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "A12"
           }
         ],
         "responses": {
@@ -655,10 +705,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -695,10 +748,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -720,15 +776,12 @@
             "in": "path",
             "description": "codeTypeActivite",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "ROME"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "ROME"
-              }
-            }
+            "example": "ROME"
           }
         ],
         "responses": {
@@ -752,10 +805,13 @@
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -777,30 +833,24 @@
             "in": "query",
             "description": "codeCaracteristique",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "H"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "H"
-              }
-            }
+            "example": "H"
           },
           {
             "name": "codeTypeCaracteristique",
             "in": "query",
             "description": "codeTypeCaracteristique",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "GENRE"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "GENRE"
-              }
-            }
+            "example": "GENRE"
           }
         ],
         "responses": {
@@ -819,15 +869,21 @@
               }
             }
           },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
           "500": {
             "description": "Erreur interne au serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -859,15 +915,21 @@
               }
             }
           },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
           "500": {
             "description": "Erreur interne au serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -889,15 +951,12 @@
             "in": "path",
             "description": "codeTypeCaracteristique",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "GENRE"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "GENRE"
-              }
-            }
+            "example": "GENRE"
           }
         ],
         "responses": {
@@ -916,15 +975,21 @@
               }
             }
           },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
           "500": {
             "description": "Erreur interne au serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -956,15 +1021,21 @@
               }
             }
           },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
           "500": {
             "description": "Erreur interne au serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -986,15 +1057,12 @@
             "in": "path",
             "description": "codeTypeCaracteristique",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "GENRE"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "GENRE"
-              }
-            }
+            "example": "GENRE"
           }
         ],
         "responses": {
@@ -1013,15 +1081,21 @@
               }
             }
           },
+          "400": {
+            "description": "Les paramètres en entrée ne sont pas valides"
+          },
           "500": {
             "description": "Erreur interne au serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1042,29 +1116,25 @@
             "name": "codeFamille",
             "in": "query",
             "description": "codeFamille",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "DEMANDEURS"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "DEMANDEURS"
-              }
-            }
+            "example": "DEMANDEURS"
           },
           {
             "name": "codeIndicateur",
             "in": "query",
             "description": "codeIndicateur",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "DE_1"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "DE_1"
-              }
-            }
+            "example": "DE_1"
           }
         ],
         "responses": {
@@ -1084,131 +1154,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
-          }
-        },
-        "servers": [
-          {
-            "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
-          }
-        ]
-      }
-    },
-    "/v1/referentiel/famille-indicateur/{codeFamilleIndicateur}": {
-      "get": {
-        "tags": [
-          "Catalogue Indicateur"
-        ],
-        "summary": "Consulter une famille d'indicateur",
-        "description": "Permet de lister toutes les valeurs possibles des critères d’entrée (Types de territoire, Types d'activité, Type de période, Nomenclatures, Croisements disponibles, Caractéristiques), et des Types de valeur obtenus, pour une famille d'indicateur donné. Un croisement disponible correspond à une combinaison [Type de territoire, Type d'activité, Type de période et Nomenclature] .",
-        "operationId": "recupererFamilleIndicateurParCodeFamilleIndicateur",
-        "parameters": [
-          {
-            "name": "codeFamilleIndicateur",
-            "in": "path",
-            "description": "codeFamilleIndicateur",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "DEMANDEURS"
-            },
-            "examples": {
-              "default": {
-                "value": "DEMANDEURS"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Détail d'une famille d'indicateur",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              }
-            }
-          },
-          "500": {
             "description": "Erreur interne du serveur"
           }
         },
-        "servers": [
+        "security": [
           {
-            "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
           }
-        ]
-      }
-    },
-    "/v1/referentiel/familles-indicateurs": {
-      "get": {
-        "tags": [
-          "Catalogue Indicateur"
         ],
-        "summary": "Lister les familles d'indicateur",
-        "description": "Permet de lister toutes les familles des indicateurs ",
-        "operationId": "recupererListeFamilleIndicateur",
-        "responses": {
-          "200": {
-            "description": "Retourne la liste des familles d'indicateur",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur interne du serveur"
-          }
-        },
-        "servers": [
-          {
-            "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
-          }
-        ]
-      }
-    },
-    "/v1/referentiel/indicateurs": {
-      "get": {
-        "tags": [
-          "Catalogue Indicateur"
-        ],
-        "summary": "Lister les indicateurs",
-        "description": "Permet de lister tous les indicateurs",
-        "operationId": "recupererListeIndicateur",
-        "responses": {
-          "200": {
-            "description": "Retourne la liste des indicateurs",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeDetailIndicateur"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur interne du serveur"
-          }
-        },
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1241,14 +1197,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1270,15 +1229,12 @@
             "in": "path",
             "description": "codeTypeNomenclature",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "CATCAND"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "CATCAND"
-              }
-            }
+            "example": "CATCAND"
           }
         ],
         "responses": {
@@ -1298,14 +1254,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1338,14 +1297,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1367,30 +1329,24 @@
             "in": "query",
             "description": "codeNomenclature",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "A"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "A"
-              }
-            }
+            "example": "A"
           },
           {
             "name": "codeTypeNomenclature",
             "in": "query",
             "description": "codeTypeNomenclature",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "CATCAND"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "CATCAND"
-              }
-            }
+            "example": "CATCAND"
           }
         ],
         "responses": {
@@ -1410,9 +1366,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
+        "security": [
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1434,15 +1398,12 @@
             "in": "path",
             "description": "codeTypeNomenclature",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "CATCAND"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "CATCAND"
-              }
-            }
+            "example": "CATCAND"
           }
         ],
         "responses": {
@@ -1462,14 +1423,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1502,14 +1466,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1527,62 +1494,53 @@
         "operationId": "recupererListePeriodeParCodeTypePeriode",
         "parameters": [
           {
+            "name": "codeTypePeriode",
+            "in": "path",
+            "description": "codeTypePeriode",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "ANNEE"
+          },
+          {
             "name": "codePeriode",
             "in": "query",
             "description": "codePeriode",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": 2019
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": 2019
-              }
-            }
+            "example": 2019
           },
           {
             "name": "nbPeriode",
             "in": "query",
             "description": "nbPeriode",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "example": 5
+              "format": "int32"
             },
-            "examples": {
-              "default": {
-                "value": 5
-              }
-            }
+            "example": 5
           },
           {
             "name": "critereTemporel",
             "in": "query",
             "description": "critereTemporel",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "A"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "A"
-              }
-            }
-          },
-          {
-            "name": "codeTypePeriode",
-            "in": "path",
-            "description": "codeTypePeriode",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "ANNEE"
-            },
-            "examples": {
-              "default": {
-                "value": "ANNEE"
-              }
-            }
+            "example": "A"
           }
         ],
         "responses": {
@@ -1602,14 +1560,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1642,14 +1603,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1671,30 +1635,24 @@
             "in": "query",
             "description": "codePeriode",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": 2019
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": 2019
-              }
-            }
+            "example": 2019
           },
           {
             "name": "codeTypePeriode",
             "in": "query",
             "description": "codeTypePeriode",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "ANNEE"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "ANNEE"
-              }
-            }
+            "example": "ANNEE"
           }
         ],
         "responses": {
@@ -1714,14 +1672,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1743,15 +1704,12 @@
             "in": "path",
             "description": "codeTypePeriode",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "ANNEE"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "ANNEE"
-              }
-            }
+            "example": "ANNEE"
           }
         ],
         "responses": {
@@ -1771,14 +1729,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1793,11 +1754,14 @@
         ],
         "summary": "Référentiel des correspondances ROME/FAP",
         "description": "Permet de rechercher les FAP associées à un code ROME.",
-        "operationId": "recupererListeTypeTerritoire_1",
+        "operationId": "recupererListeTypeTerritoire",
         "parameters": [
           {
             "name": "codeRome",
             "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
             "schema": {
               "type": "string"
             }
@@ -1820,14 +1784,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1860,14 +1827,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1885,33 +1855,28 @@
         "operationId": "recupererListeTerritoireParCodeTypeTerritoire",
         "parameters": [
           {
-            "name": "filtreTerritoire",
-            "in": "query",
-            "description": "filtreTerritoire",
-            "schema": {
-              "type": "string",
-              "example": "G"
-            },
-            "examples": {
-              "default": {
-                "value": "G"
-              }
-            }
-          },
-          {
             "name": "codeTypeTerritoire",
             "in": "path",
             "description": "codeTypeTerritoire",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "DEP"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "DEP"
-              }
-            }
+            "example": "DEP"
+          },
+          {
+            "name": "filtreTerritoire",
+            "in": "query",
+            "description": "filtreTerritoire",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "G"
           }
         ],
         "responses": {
@@ -1931,14 +1896,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -1953,7 +1921,7 @@
         ],
         "summary": "Lister les types de territoire",
         "description": "Permet de lister les types de territoire du Référentiel Smart Emploi.",
-        "operationId": "recupererListeTypeTerritoire_2",
+        "operationId": "recupererListeTypeTerritoire_1",
         "responses": {
           "200": {
             "description": "Retourne la liste des types de territoire",
@@ -1971,14 +1939,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -2000,30 +1971,24 @@
             "in": "query",
             "description": "codeTerritoire",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": 33
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": 33
-              }
-            }
+            "example": 33
           },
           {
             "name": "codeTypeTerritoire",
             "in": "query",
             "description": "codeTypeTerritoire",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "example": "DEP"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "DEP"
-              }
-            }
+            "example": "DEP"
           }
         ],
         "responses": {
@@ -2043,71 +2008,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
-          }
-        },
-        "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
-        "servers": [
-          {
-            "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
-          }
-        ]
-      }
-    },
-    "/v1/referentiel/territoires-communes/{codeTypeTerritoire}": {
-      "get": {
-        "tags": [
-          "Territoire"
-        ],
-        "summary": "Lister les communes avec Bassin et EPCI",
-        "description": "Permet de lister les territoires communes",
-        "operationId": "recupererTerritoireParCodeTypeAvecCommuneBassinEtEPCI",
-        "parameters": [
-          {
-            "name": "filtreTerritoire",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "codeTypeTerritoire",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Retourne la liste des territoires Communes",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeTerritoireCommune"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListeTerritoireCommune"
-                }
-              }
-            }
-          },
-          "500": {
             "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -2129,15 +2040,12 @@
             "in": "path",
             "description": "codeTypeTerritoire",
             "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
-              "type": "string",
-              "example": "DEP"
+              "type": "string"
             },
-            "examples": {
-              "default": {
-                "value": "DEP"
-              }
-            }
+            "example": "DEP"
           }
         ],
         "responses": {
@@ -2157,14 +2065,17 @@
             }
           },
           "500": {
-            "description": "Erreur interne au serveur"
+            "description": "Erreur interne du serveur"
           }
         },
         "security": [
-            {
-              "authentification_partenaire": ["offresetdemandesemploi", "api_stats-offres-demandes-emploiv1"]
-            }
-          ],
+          {
+            "authentification_partenaire": [
+              "api_stats-offres-demandes-emploiv1",
+              "offresetdemandesemploi"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/stats-offres-demandes-emploi"
@@ -2175,130 +2086,6 @@
   },
   "components": {
     "schemas": {
-      "CritereIndicateurAvecNomenclature": {
-        "type": "object",
-        "properties": {
-          "codeTypeTerritoire": {
-            "type": "string",
-            "description": "Le type de territoire (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "DEP"
-          },
-          "codeTerritoire": {
-            "type": "string",
-            "description": "Le code du territoire (voir le référentiel Territoire pour les codes disponibles)",
-            "example": "33"
-          },
-          "codeTypeActivite": {
-            "type": "string",
-            "description": "Le type d'activité (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "ROME"
-          },
-          "codeActivite": {
-            "type": "string",
-            "description": "Le code d'activité (voir le référentiel Activite pour les codes disponibles)",
-            "example": "K1303"
-          },
-          "codeTypePeriode": {
-            "type": "string",
-            "description": "Le type de période (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "TRIMESTRE"
-          },
-          "codeTypeNomenclature": {
-            "type": "string",
-            "description": "Le type de nomenclature (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "CATCAND"
-          },
-          "dernierePeriode": {
-            "type": "boolean",
-            "description": "Optionnel: A renseigner à true pour que la recherche se limite à la période la plus récente sur cet indicateur, sinon la recherche se limite à la liste de périodes fournie en entrée"
-          },
-          "listeCodePeriode": {
-            "type": "array",
-            "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
-            "items": {
-              "type": "string",
-              "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
-              "example": "[\"2020T2\",\"2020T3\"]"
-            },
-            "example": [
-              "2020T2",
-              "2020T3"
-            ]
-          },
-          "listeCodeNomenclature": {
-            "type": "array",
-            "description": "Optionnel: A renseigner avec les nomenclatures souhaitées, sinon la recherche est réalisée sur toutes les nomenclatures disponibles sur cet indicateur",
-            "items": {
-              "type": "string",
-              "description": "Optionnel: A renseigner avec les nomenclatures souhaitées, sinon la recherche est réalisée sur toutes les nomenclatures disponibles sur cet indicateur",
-              "example": "[\"A\",\"B\",\"C\"]"
-            },
-            "example": [
-              "A",
-              "B",
-              "C"
-            ]
-          },
-          "sansCaracteristiques": {
-            "type": "boolean",
-            "description": "Optionnel: A renseigner à true pour que la recherche se limite aux valeurs hors caractéristiques sur cet indicateur, sinon la recherche se limite aux valeurs de la liste de caractéristiques fournie en entrée"
-          },
-          "listeCaracteristiques": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Caracteristique"
-            }
-          }
-        },
-        "required": [
-          "codeTypeTerritoire",
-          "codeTerritoire",
-          "codeTypeActivite",
-          "codeActivite",
-          "codeTypePeriode",
-          "codeTypeNomenclature"
-        ]
-      },
-      "Caracteristique": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour de la caractéristique",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeCaracteristique": {
-            "type": "string",
-            "description": "Le code du type de la caractéristique",
-            "example": "AGC_RAT"
-          },
-          "codeCaracteristique": {
-            "type": "string",
-            "description": "Le code de la caractéristique",
-            "example": "AGC_BASS"
-          },
-          "libelleCaracteristique": {
-            "type": "string",
-            "description": "Le libellé de la caractéristique",
-            "example": "rattachement agence bassin"
-          },
-          "masque": {
-            "type": "boolean",
-            "description": "La caractéristique est masqué par l'administrateur",
-            "example": true
-          }
-        },
-        "required": [
-          "codeTypeCaracteristique",
-          "codeCaracteristique",
-          "libelleCaracteristique"
-        ],
-        "xml": {
-          "name": "CaracteristiqueReferentiel",
-          "namespace": "http://fr.pe.auto.service.da084.services.rest.model.referentiel"
-        }
-      },
       "IndicateurRetour": {
         "type": "object",
         "properties": {
@@ -2334,6 +2121,54 @@
               "$ref": "#/components/schemas/ValeursParPeriode"
             }
           }
+        }
+      },
+      "ValeursParCaracteristique": {
+        "type": "object",
+        "properties": {
+          "codeTypeCaract": {
+            "type": "string",
+            "description": "La code du type de la caractéristique",
+            "example": "GENRE"
+          },
+          "codeCaract": {
+            "type": "string",
+            "description": "La code de la caractéristique",
+            "example": "H"
+          },
+          "libCaract": {
+            "type": "string",
+            "description": "Le libellé de la caractéristique",
+            "example": "Homme"
+          },
+          "nombre": {
+            "type": "integer",
+            "description": "La valeur de la caractéristique",
+            "format": "int32",
+            "example": 4470
+          },
+          "pourcentage": {
+            "type": "number",
+            "description": "Le pourcentage de la caractéristique",
+            "format": "double",
+            "example": 94
+          },
+          "montant": {
+            "type": "number",
+            "description": "Le montant (s'il existe) de la caractéristique",
+            "format": "double",
+            "example": 10
+          },
+          "taux": {
+            "type": "number",
+            "description": "Le taux (s'il existe) de la caractéristique",
+            "format": "double",
+            "example": 10
+          }
+        },
+        "xml": {
+          "name": "ValeursParCaracteristique",
+          "namespace": "fr.pe.auto.service.da084.services.rest.model.salairevaleurmontant"
         }
       },
       "ValeursParPeriode": {
@@ -2402,54 +2237,60 @@
           },
           "valeurPrincipaleNom": {
             "type": "string",
-            "description": "Le nom de la valeur principale",
+            "description": "Le nom de la valeur principale (cette valeur n'est pas disponible pour tous les indicateurs)",
             "example": "Nombre de demandeurs d'emploi"
+          },
+          "valeurPrincipaleDecimale": {
+            "type": "number",
+            "description": "La valeur principale avec decimales (cette valeur n'est pas disponible pour tous les indicateurs)",
+            "format": "double",
+            "example": 49.3
           },
           "valeurPrincipaleNombre": {
             "type": "integer",
-            "description": "La valeur principale",
+            "description": "La valeur principale entiere (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "int32",
             "example": 4750
           },
           "valeurPrincipaleRang": {
             "type": "integer",
-            "description": "La valeur principale si l'indicateur représente un rang",
+            "description": "La valeur principale si l'indicateur représente un rang (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "int32",
             "example": 4
           },
           "valeurPrincipaleMontant": {
             "type": "number",
-            "description": "La valeur principale si l'indicateur représente un montant",
+            "description": "La valeur principale si l'indicateur représente un montant (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "double",
             "example": 55.5
           },
           "valeurPrincipaleTaux": {
             "type": "number",
-            "description": "La valeur principale si l'indicateur représente un taux",
+            "description": "La valeur principale si l'indicateur représente un taux (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "double",
             "example": 10
           },
           "valeurSecondaireNombre": {
             "type": "integer",
-            "description": "La valeur secondaire",
+            "description": "La valeur secondaire (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "int32",
             "example": 4750
           },
           "valeurSecondairePourcentage": {
             "type": "number",
-            "description": "La valeur secondaire en pourcentage",
+            "description": "La valeur secondaire en pourcentage (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "double",
             "example": 54
           },
           "valeurSecondairePourcentage2": {
             "type": "number",
-            "description": "La valeur secondaire en pourcentage",
+            "description": "La valeur secondaire en pourcentage (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "double",
             "example": 54
           },
           "valeurSecondaireTaux": {
             "type": "number",
-            "description": "La valeur secondaire si l'indicateur représente un taux",
+            "description": "La valeur secondaire si l'indicateur représente un taux (cette valeur n'est pas disponible pour tous les indicateurs)",
             "format": "double",
             "example": 10
           },
@@ -2464,53 +2305,149 @@
               "$ref": "#/components/schemas/ValeursParCaracteristique"
             }
           }
+        },
+        "xml": {
+          "name": "ValeursParPeriode",
+          "namespace": "fr.pe.auto.service.da084.services.rest.model.valeursparperiode"
         }
       },
-      "ValeursParCaracteristique": {
+      "Caracteristique": {
+        "required": [
+          "codeCaracteristique",
+          "codeTypeCaracteristique",
+          "libelleCaracteristique"
+        ],
         "type": "object",
         "properties": {
-          "codeTypeCaract": {
+          "datMaj": {
             "type": "string",
-            "description": "La code du type de la caractéristique",
-            "example": "GENRE"
+            "description": "Date de mise à jour de la caractéristique",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
           },
-          "codeCaract": {
+          "codeTypeCaracteristique": {
             "type": "string",
-            "description": "La code de la caractéristique",
-            "example": "H"
+            "description": "Le code du type de la caractéristique",
+            "example": "AGC_RAT"
           },
-          "libCaract": {
+          "codeCaracteristique": {
+            "type": "string",
+            "description": "Le code de la caractéristique",
+            "example": "AGC_BASS"
+          },
+          "libelleCaracteristique": {
             "type": "string",
             "description": "Le libellé de la caractéristique",
-            "example": "Homme"
+            "example": "rattachement agence bassin"
           },
-          "nombre": {
-            "type": "integer",
-            "description": "La valeur de la caractéristique",
-            "format": "int32",
-            "example": 4470
+          "masque": {
+            "type": "boolean",
+            "description": "La caractéristique est masqué par l'administrateur",
+            "example": true
+          }
+        },
+        "xml": {
+          "name": "CaracteristiqueReferentiel",
+          "namespace": "http://fr.pe.auto.service.da084.services.rest.model.referentiel"
+        }
+      },
+      "CritereIndicateurAvecNomenclature": {
+        "required": [
+          "codeActivite",
+          "codeTerritoire",
+          "codeTypeActivite",
+          "codeTypeNomenclature",
+          "codeTypePeriode",
+          "codeTypeTerritoire"
+        ],
+        "type": "object",
+        "properties": {
+          "codeTypeTerritoire": {
+            "type": "string",
+            "description": "Le type de territoire (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "DEP"
           },
-          "pourcentage": {
-            "type": "number",
-            "description": "Le pourcentage de la caractéristique",
-            "format": "double",
-            "example": 94
+          "codeTerritoire": {
+            "type": "string",
+            "description": "Le code du territoire (voir le référentiel Territoire pour les codes disponibles)",
+            "example": "33"
           },
-          "montant": {
-            "type": "number",
-            "description": "Le montant (s'il existe) de la caractéristique",
-            "format": "double",
-            "example": 10
+          "codeTypeActivite": {
+            "type": "string",
+            "description": "Le type d'activité (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "ROME"
           },
-          "taux": {
-            "type": "number",
-            "description": "Le taux (s'il existe) de la caractéristique",
-            "format": "double",
-            "example": 10
+          "codeActivite": {
+            "type": "string",
+            "description": "Le code d'activité (voir le référentiel Activite pour les codes disponibles)",
+            "example": "K1303"
+          },
+          "codeTypePeriode": {
+            "type": "string",
+            "description": "Le type de période (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "TRIMESTRE"
+          },
+          "codeTypeNomenclature": {
+            "type": "string",
+            "description": "Le type de nomenclature (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "CATCAND"
+          },
+          "profilDemandeur": {
+            "type": "string",
+            "description": "Permet de spécifier un profil de demandeur. Champ conditionnel : requis selon la ressource (indicateur). Si cette ressource est nécessaire mais non indiquée lors de l'appel, une erreur 400 sera retournée.",
+            "example": "JEUNES"
+          },
+          "dernierePeriode": {
+            "type": "boolean",
+            "description": "Optionnel: A renseigner à true pour que la recherche se limite à la période la plus récente sur cet indicateur, sinon la recherche se limite à la liste de périodes fournie en entrée"
+          },
+          "listeCodePeriode": {
+            "type": "array",
+            "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
+            "example": [
+              "2020T2",
+              "2020T3"
+            ],
+            "items": {
+              "type": "string",
+              "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
+              "example": "[\"2020T2\",\"2020T3\"]"
+            }
+          },
+          "listeCodeNomenclature": {
+            "type": "array",
+            "description": "Optionnel: A renseigner avec les nomenclatures souhaitées, sinon la recherche est réalisée sur toutes les nomenclatures disponibles sur cet indicateur",
+            "example": [
+              "A",
+              "B",
+              "C"
+            ],
+            "items": {
+              "type": "string",
+              "description": "Optionnel: A renseigner avec les nomenclatures souhaitées, sinon la recherche est réalisée sur toutes les nomenclatures disponibles sur cet indicateur",
+              "example": "[\"A\",\"B\",\"C\"]"
+            }
+          },
+          "sansCaracteristiques": {
+            "type": "boolean",
+            "description": "Optionnel: A renseigner à true pour que la recherche se limite aux valeurs hors caractéristiques sur cet indicateur, sinon la recherche se limite aux valeurs de la liste de caractéristiques fournie en entrée"
+          },
+          "listeCaracteristiques": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Caracteristique"
+            }
           }
         }
       },
       "CritereIndicateurSansNomenclature": {
+        "required": [
+          "codeActivite",
+          "codeTerritoire",
+          "codeTypeActivite",
+          "codeTypePeriode",
+          "codeTypeTerritoire"
+        ],
         "type": "object",
         "properties": {
           "codeTypeTerritoire": {
@@ -2545,15 +2482,15 @@
           "listeCodePeriode": {
             "type": "array",
             "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
+            "example": [
+              "2020T2",
+              "2020T3"
+            ],
             "items": {
               "type": "string",
               "description": "Optionnel: A renseigner avec les périodes souhaitées, sinon la recherche est réalisée sur toutes les périodes disponibles sur cet indicateur",
               "example": "[\"2020T2\",\"2020T3\"]"
-            },
-            "example": [
-              "2020T2",
-              "2020T3"
-            ]
+            }
           },
           "sansCaracteristiques": {
             "type": "boolean",
@@ -2565,16 +2502,14 @@
               "$ref": "#/components/schemas/Caracteristique"
             }
           }
-        },
-        "required": [
-          "codeTypeTerritoire",
-          "codeTerritoire",
-          "codeTypeActivite",
-          "codeActivite",
-          "codeTypePeriode"
-        ]
+        }
       },
       "Activite": {
+        "required": [
+          "codeActivite",
+          "codeTypeActivite",
+          "libelleActivite"
+        ],
         "type": "object",
         "properties": {
           "datMaj": {
@@ -2603,12 +2538,7 @@
             "description": "Optionnel: le code NSF de l'activité",
             "example": "114"
           }
-        },
-        "required": [
-          "codeTypeActivite",
-          "codeActivite",
-          "libelleActivite"
-        ]
+        }
       },
       "ListeActivite": {
         "type": "object",
@@ -2696,14 +2626,70 @@
           }
         }
       },
-      "ListeDetailIndicateur": {
+      "CaracteristiqueIndicateur": {
+        "required": [
+          "codeCaracteristique",
+          "codeTypeCaracteristique",
+          "libelleCaracteristique"
+        ],
         "type": "object",
         "properties": {
-          "listeIndicateurs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DetailIndicateur"
-            }
+          "datMaj": {
+            "type": "string",
+            "description": "Date de mise à jour de la caractéristique de l'indicateur",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
+          },
+          "codeTypeCaracteristique": {
+            "type": "string",
+            "description": "Le code du type de la caractéristique",
+            "example": "GENRE"
+          },
+          "codeCaracteristique": {
+            "type": "string",
+            "description": "Le code de la caractéristique",
+            "example": "H"
+          },
+          "libelleCaracteristique": {
+            "type": "string",
+            "description": "Le libellé de la caractéristique",
+            "example": "Homme"
+          }
+        }
+      },
+      "CroisementIndicateur": {
+        "type": "object",
+        "properties": {
+          "datMaj": {
+            "type": "string",
+            "description": "Date de mise à jour du croisement de l'indicateur",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
+          },
+          "codeTypeTerritoire": {
+            "type": "string",
+            "description": "Le type de territoire (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "DEP"
+          },
+          "codeTypeActivite": {
+            "type": "string",
+            "description": "Le type d'activité (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "ROME"
+          },
+          "codeTypePeriode": {
+            "type": "string",
+            "description": "Le type de période (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "TRIMESTRE"
+          },
+          "codeTypeNomenclature": {
+            "type": "string",
+            "description": "Le type de nomenclature (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
+            "example": "CATCAND"
+          },
+          "codeNomenclature": {
+            "type": "string",
+            "description": "Le code de nomenclature",
+            "example": "A"
           }
         }
       },
@@ -2792,6 +2778,91 @@
           }
         }
       },
+      "ListeDetailIndicateur": {
+        "type": "object",
+        "properties": {
+          "listeIndicateurs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetailIndicateur"
+            }
+          }
+        }
+      },
+      "TypeNomenclatureIndicateur": {
+        "type": "object",
+        "properties": {
+          "datMaj": {
+            "type": "string",
+            "description": "Date de mise à jour du type de nomenclature de l'indicateur",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
+          },
+          "codeTypeNomenclature": {
+            "type": "string",
+            "description": "Le code du type de nomenclature de l'indicateur",
+            "example": "DUREEEMP"
+          },
+          "libelleTypeNomenclature": {
+            "type": "string",
+            "description": "Le libellé du type de nomenclature de l'indicateur",
+            "example": "Durée d'emploi > 1  mois, emploi durable (> 6 mois), Toutes durées)"
+          },
+          "listeValeursNomenclaturesIndicateur": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValeurNomenclatureIndicateur"
+            }
+          }
+        }
+      },
+      "TypePeriodeIndicateur": {
+        "type": "object",
+        "properties": {
+          "datMaj": {
+            "type": "string",
+            "description": "Date de mise à jour du type de période de l'indicateur",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
+          },
+          "codeTypePeriode": {
+            "type": "string",
+            "description": "Le code du type de période",
+            "example": "TRIMESTRE"
+          },
+          "libelleTypePeriode": {
+            "type": "string",
+            "description": "Le libellé du type de période",
+            "example": "Trimestre"
+          },
+          "profondeurMax": {
+            "type": "string",
+            "description": "Nombre maximum de période interrogeable pour ce type",
+            "example": "12"
+          }
+        }
+      },
+      "TypeTerritoire": {
+        "type": "object",
+        "properties": {
+          "datMaj": {
+            "type": "string",
+            "description": "Date de mise à jour du type de territoire",
+            "format": "date-time",
+            "example": "2024-04-21T17:13:44+02:00"
+          },
+          "codeTypeTerritoire": {
+            "type": "string",
+            "description": "Le code du type de territoire",
+            "example": "DEP"
+          },
+          "libelleTypeTerritoire": {
+            "type": "string",
+            "description": "Le libellé du type de territoire",
+            "example": "Département"
+          }
+        }
+      },
       "TypeValeur": {
         "type": "object",
         "properties": {
@@ -2829,80 +2900,6 @@
           }
         }
       },
-      "TypeTerritoire": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour du type de territoire",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeTerritoire": {
-            "type": "string",
-            "description": "Le code du type de territoire",
-            "example": "DEP"
-          },
-          "libelleTypeTerritoire": {
-            "type": "string",
-            "description": "Le libellé du type de territoire",
-            "example": "Département"
-          }
-        }
-      },
-      "TypePeriodeIndicateur": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour du type de période de l'indicateur",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypePeriode": {
-            "type": "string",
-            "description": "Le code du type de période",
-            "example": "TRIMESTRE"
-          },
-          "libelleTypePeriode": {
-            "type": "string",
-            "description": "Le libellé du type de période",
-            "example": "Trimestre"
-          },
-          "profondeurMax": {
-            "type": "string",
-            "description": "Nombre maximum de période interrogeable pour ce type",
-            "example": "12"
-          }
-        }
-      },
-      "TypeNomenclatureIndicateur": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour du type de nomenclature de l'indicateur",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeNomenclature": {
-            "type": "string",
-            "description": "Le code du type de nomenclature de l'indicateur",
-            "example": "DUREEEMP"
-          },
-          "libelleTypeNomenclature": {
-            "type": "string",
-            "description": "Le libellé du type de nomenclature de l'indicateur",
-            "example": "Durée d'emploi > 1  mois, emploi durable (> 6 mois), Toutes durées)"
-          },
-          "listeValeursNomenclaturesIndicateur": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ValeurNomenclatureIndicateur"
-            }
-          }
-        }
-      },
       "ValeurNomenclatureIndicateur": {
         "type": "object",
         "properties": {
@@ -2923,73 +2920,6 @@
             "example": "Emploi > 1 mois"
           }
         }
-      },
-      "CroisementIndicateur": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour du croisement de l'indicateur",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeTerritoire": {
-            "type": "string",
-            "description": "Le type de territoire (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "DEP"
-          },
-          "codeTypeActivite": {
-            "type": "string",
-            "description": "Le type d'activité (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "ROME"
-          },
-          "codeTypePeriode": {
-            "type": "string",
-            "description": "Le type de période (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "TRIMESTRE"
-          },
-          "codeTypeNomenclature": {
-            "type": "string",
-            "description": "Le type de nomenclature (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "CATCAND"
-          },
-          "codeNomenclature": {
-            "type": "string",
-            "description": "Le code de nomenclature",
-            "example": "A"
-          }
-        }
-      },
-      "CaracteristiqueIndicateur": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour de la caractéristique de l'indicateur",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeCaracteristique": {
-            "type": "string",
-            "description": "Le code du type de la caractéristique",
-            "example": "GENRE"
-          },
-          "codeCaracteristique": {
-            "type": "string",
-            "description": "Le code de la caractéristique",
-            "example": "H"
-          },
-          "libelleCaracteristique": {
-            "type": "string",
-            "description": "Le libellé de la caractéristique",
-            "example": "Homme"
-          }
-        },
-        "required": [
-          "codeTypeCaracteristique",
-          "codeCaracteristique",
-          "libelleCaracteristique"
-        ]
       },
       "ListeNomenclature": {
         "type": "object",
@@ -3072,6 +3002,12 @@
         }
       },
       "Periode": {
+        "required": [
+          "codePeriode",
+          "codeTypePeriode",
+          "libellePeriode",
+          "ordrePeriode"
+        ],
         "type": "object",
         "properties": {
           "datMaj": {
@@ -3101,13 +3037,7 @@
             "description": "Libellé de la période",
             "example": "1er trimestre 2023"
           }
-        },
-        "required": [
-          "codeTypePeriode",
-          "codePeriode",
-          "ordrePeriode",
-          "libellePeriode"
-        ]
+        }
       },
       "ListeTypePeriode": {
         "type": "object",
@@ -3121,6 +3051,10 @@
         }
       },
       "TypePeriode": {
+        "required": [
+          "codeTypePeriode",
+          "libelleTypePeriode"
+        ],
         "type": "object",
         "properties": {
           "datMaj": {
@@ -3139,11 +3073,7 @@
             "description": "Le libellé du type de période",
             "example": "Trimestre"
           }
-        },
-        "required": [
-          "codeTypePeriode",
-          "libelleTypePeriode"
-        ]
+        }
       },
       "ListeRomeFap": {
         "type": "object",
@@ -3232,61 +3162,6 @@
             "items": {
               "$ref": "#/components/schemas/TypeTerritoire"
             }
-          }
-        }
-      },
-      "ListeTerritoireCommune": {
-        "type": "object",
-        "properties": {
-          "territoiresCommunes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TerritoireCommune"
-            }
-          }
-        }
-      },
-      "TerritoireCommune": {
-        "type": "object",
-        "properties": {
-          "datMaj": {
-            "type": "string",
-            "description": "Date de mise à jour du territoire",
-            "format": "date-time",
-            "example": "2024-04-21T17:13:44+02:00"
-          },
-          "codeTypeTerritoire": {
-            "type": "string",
-            "description": "Le type de territoire (voir le référentiel du Catalogue des Indicateurs pour les types disponibles)",
-            "example": "DEP"
-          },
-          "codeTerritoire": {
-            "type": "string",
-            "description": "Le code du territoire (voir le référentiel Territoire pour les codes disponibles)",
-            "example": "33"
-          },
-          "libelleTerritoire": {
-            "type": "string",
-            "description": "Le libellé du territoire",
-            "example": "GIRONDE"
-          },
-          "codeTypeTerritoireParent": {
-            "type": "string",
-            "description": "Le code type du territoire parent",
-            "example": "REG"
-          },
-          "codeTerritoireParent": {
-            "type": "string",
-            "description": "Le code du territoire parent",
-            "example": "75"
-          },
-          "codeTerritoireParentEPCI": {
-            "type": "string",
-            "description": "Le code du territoire parent EPCI"
-          },
-          "codeTerritoireParentBassin": {
-            "type": "string",
-            "description": "Le code du territoire parent Bassin"
           }
         }
       }

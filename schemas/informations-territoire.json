@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1",
+    "version": "1.1",
     "title": "Informations sur un territoire",
     "description": "Accédez aux statistiques de France Travail - Informations sur un territoire.  \n\nCette API vous permet d'accéder à toutes les données clés pour comprendre un territoire : population, établissements, salariés.  Elle vous fournit également un indicateur prospectif de dynamisme du territoire développé par France Travail."
   },
@@ -282,8 +282,8 @@
                   "value": {
                     "codeTypeTerritoire": "REG",
                     "codeTerritoire": "75",
-                    "codeTypeActivite": "ROME",
-                    "codeActivite": "A1203",
+                    "codeTypeActivite": "CUMUL",
+                    "codeActivite": "CUMUL",
                     "codeTypePeriode": "ANNEE"
                   }
                 }

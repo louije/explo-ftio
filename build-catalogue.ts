@@ -401,7 +401,7 @@ const VERSION_GROUPS: Record<string, { primary: string; versions: { label: strin
   "orientation-usager": {
     primary: "orientation-usager-v2",
     versions: [
-      { label: "2.0", pageId: 635, slug: "orientation-usager-v2" },
+      { label: "2.1", pageId: 635, slug: "orientation-usager-v2" },
       { label: "1.0", pageId: 433, slug: "orientation-usager" },
     ],
   },

@@ -3,7 +3,12 @@
   "info": {
     "version": "1.0.0",
     "title": "Conclusions Entretiens",
-    "description": "Ce service permet de récupérer les données concernant les entretiens réalisés par un usager.\n\n\n**Scope** : `api_conclusions-entretiensv1`, `conclusionsentretienagent`\n\n**Royaume** : `/agent`"
+    "description": "Ce service permet de récupérer les données concernant les entretiens réalisés par un usager.",
+   "contact": {
+      "name": "Support francetravail.io",
+      "url": "https://francetravail.io/contact",
+    	"email": "contact@francetravail.fr"
+				}
   },
   "servers": [
     {
@@ -85,6 +90,20 @@
             "description": "Erreur technique"
           }
         },
+        "security": [
+          {
+            "authentification_agent": [
+              "api_conclusions-entretiensv1",
+              "conclusionsentretienagent"
+            ]
+          },
+          {
+            "authentification_agent-clientCredentials": [
+              "api_conclusions-entretiensv1",
+              "conclusionsentretienagent"
+            ]
+          }
+        ],
         "servers": [
           {
             "url": "https://api.francetravail.io/partenaire/conclusions-entretiens/v1"
@@ -183,6 +202,34 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+       "authentification_agent": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/authorize",
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/agent/access_token",
+            "scopes": {
+              "api_conclusions-entretiensv1": "Obligatoire",
+              "conclusionsentretienagent": "Obligatoire"
+            }
+          }
+        },
+        "description": "Comprendre l'authentification francetravail.io : https://francetravail.io/produits-partages/documentation/utilisation-api-france-travail"
+      },
+       "authentification_agent-clientCredentials": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://proxyproconnect.francetravail.net/connexion/oauth2/access_token?realm=/agent",
+            "scopes": {
+              "api_conclusions-entretiensv1": "Obligatoire",
+              "conclusionsentretienagent": "Obligatoire"
+            }
+          }
+        }
+      } 
     }
   }
 }

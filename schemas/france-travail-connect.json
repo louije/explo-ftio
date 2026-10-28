@@ -41,7 +41,8 @@
                       "email": "nom-prenom@mail.com",
                       "idIdentiteExterne": "749dd14f-c82a-48b1-b1bb-fffc5467e4d4",
                       "subname": null,
-                      "updated_at": 1732610213
+                      "updated_at": 1732610213,
+                      "referenceExterne": 15236578956
                     }
                   }
                 }
@@ -86,7 +87,7 @@
             "scopes": {
               "api_peconnect-individuv1": "Obligatoire",
               "openid": "Obligatoire",
-              "profile": "Facultatif (Permet de récupérer le prénom, le nom, le genre et l'Id France Travail du Demandeur d'emploi)",
+              "profile": "Facultatif (Permet de récupérer le prénom, le nom, le genre et l'Id France Travail du Demandeur d'emploi ainsi que son Numéro France Travail)",
               "email": "Facultatif (Permet de récupérer le mail du Demandeur d'emploi)"
             },
             "tokenUrl": "https://authentification-candidat.francetravail.fr/connexion/oauth2/access_token?realm=/individu"
@@ -145,7 +146,12 @@
             "type": "integer",
             "description": "Timestamp Unix de la dernière mise à jour",
             "example": 1732610213
-          }
+          },
+          "referenceExterne": {
+            "type": "string",
+            "description": "Numéro France Travail",
+            "example": 15236578956
+          }          
         },
         "required": [
           "sub",

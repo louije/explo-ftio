@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://api.francetravail.io/partenaire/synthese-pages-employeurs/v1"
+      "url": "https://api.francetravail.io/partenaire/synthese-pages-employeurs/v1"
     }
   ],
   "paths": {
