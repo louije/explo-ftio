@@ -2,54 +2,59 @@
 
 Schema download pattern: `https://francetravail.io/api-peio/v2/api/{pageId}/openapi`
 
-## APIs with downloadable OpenAPI schemas (44)
+## APIs with downloadable OpenAPI schemas (43)
 
 | # | Page ID | API Name | Version | Schema URL | Local File |
 |---|---------|----------|---------|-----------|------------|
-| 1 | 84 | Offres d'emploi | 2 | [openapi](https://francetravail.io/api-peio/v2/api/84/openapi) | offres-emploi.json |
-| 2 | 231 | Sortants de formation et acces a l'emploi | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/231/openapi) | sortants-formation-acces-emploi.json |
-| 3 | 465 | Rechercher usager | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/465/openapi) | rechercher-usager.json |
-| 4 | 515 | Conclusions Entretiens | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/515/openapi) | conclusions-entretiens.json |
-| 5 | 116 | API Experiences Professionnelles | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/116/openapi) | experiences-professionnelles.json |
-| 6 | 452 | Metiers recherches, projets d'evolution et projets de creation | 1.0.40 | [openapi](https://francetravail.io/api-peio/v2/api/452/openapi) | metiers-recherches-projets-evolution.json |
-| 7 | 107 | API Referentiel des Agences | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/107/openapi) | referentiel-agences.json |
-| 8 | 272 | ROME V4.0 - Fiches ROME | 1 | [openapi](https://francetravail.io/api-peio/v2/api/272/openapi) | rome-4-0-fiches-metiers.json |
-| 9 | 366 | Romeo | 2.0 | [openapi](https://francetravail.io/api-peio/v2/api/366/openapi) | romeo.json |
-| 10 | 233 | Marche du travail | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/233/openapi) | marche-travail.json |
-| 11 | 234 | Acces a l'emploi des demandeurs d'emploi | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/234/openapi) | acces-emploi-demandeurs-emploi.json |
-| 12 | 51 | France Travail Connect | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/51/openapi) | france-travail-connect.json |
-| 13 | 92 | API Coordonnees | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/92/openapi) | coordonnees.json |
-| 14 | 93 | API Formations Professionnelles | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/93/openapi) | formations-professionnelles.json |
-| 15 | 115 | API Metiers Recherches | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/115/openapi) | metiers-recherches.json |
-| 16 | 103 | API Mes evenements emplois | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/103/openapi) | evenements-france-travail.json |
-| 17 | 270 | ROME 4.0 - Competences | 1 | [openapi](https://francetravail.io/api-peio/v2/api/270/openapi) | rome-4-0-competences.json |
-| 18 | 271 | ROME V4.0 - Situations de travail | 1 | [openapi](https://francetravail.io/api-peio/v2/api/271/openapi) | rome-4-0-contextes-travail.json |
-| 19 | 279 | Je Controle Mon Offre - JCMO | 1 | [openapi](https://francetravail.io/api-peio/v2/api/279/openapi) | jcmo-controle-offre.json |
-| 20 | 135 | API Statut | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/135/openapi) | statut.json |
-| 21 | 99 | API Date de Naissance | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/99/openapi) | date-naissance.json |
-| 22 | 320 | API Ajout de Competence | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/320/openapi) | ajout-competence.json |
-| 23 | 449 | Informations administratives usager | 1.2.0 | [openapi](https://francetravail.io/api-peio/v2/api/449/openapi) | informations-administratives-usager.json |
-| 24 | 466 | Statut Usager | 2.0 | [openapi](https://francetravail.io/api-peio/v2/api/466/openapi) | statut-usager.json |
-| 25 | 477 | Diagnostic Usager | 4.0 | [openapi](https://francetravail.io/api-peio/v2/api/477/openapi) | diagnostic-usager.json |
-| 26 | 497 | Gestion des sanctions RSA | 1.4 | [openapi](https://francetravail.io/api-peio/v2/api/497/openapi) | gestion-sanctions-rsa.json |
-| 27 | 416 | Rendez-vous partenaire | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/416/openapi) | rendez-vous-partenaires.json |
-| 28 | 561 | Synthese des pages employeur | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/561/openapi) | synthese-pages-employeurs.json |
-| 29 | 260 | Gestion des prestations sous-traitees | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/260/openapi) | prestation-partenaire.json |
-| 30 | 433 | Orientation Usager | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/433/openapi) | orientation-usager.json |
-| 31 | 635 | Orientation Usager | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/635/openapi) | orientation-usager-v2.json |
-| 32 | 85 | API Experiences declarees par l'employeur | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/85/openapi) | experiences-declarees-employeur.json |
-| 33 | 91 | API Cadre de vie des communes | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/91/openapi) | cadre-vie-communes.json |
-| 34 | 98 | Competences professionnelles | 2.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/98/openapi) | competences-professionnelles.json |
-| 35 | 106 | API Open Formation | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/106/openapi) | open-formation.json |
-| 36 | 117 | API Indemnisations | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/117/openapi) | pe-connect-indemnisations.json |
-| 37 | 232 | Informations sur un territoire | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/232/openapi) | informations-territoire.json |
-| 38 | 273 | ROME 4.0 - Metiers | 1 | [openapi](https://francetravail.io/api-peio/v2/api/273/openapi) | rome-4-0-metiers.json |
-| 39 | 360 | La Bonne Boite | 2.27.3 | [openapi](https://francetravail.io/api-peio/v2/api/360/openapi) | la-bonne-boite.json |
-| 40 | 431 | Contrat d'engagement | 1 | [openapi](https://francetravail.io/api-peio/v2/api/431/openapi) | contrat-engagement.json |
-| 41 | 455 | Declaration de demarche | 1 | [openapi](https://francetravail.io/api-peio/v2/api/455/openapi) | declaration-demarche.json |
-| 42 | 617 | Gestion activites operationnelles | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/617/openapi) | gestion-activites-operationnelles.json |
-| 43 | 602 | ROME 4.0 - Substitutions d'entites | 1 | [openapi](https://francetravail.io/api-peio/v2/api/602/openapi) | rome-4-0-substitutions.json |
-| 44 | 645 | Je recrute avec FT pro | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/645/openapi) | je-recrute-avec-ftpro.json |
+| 1 | 231 | Sortants de formation et acces a l'emploi | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/231/openapi) | sortants-formation-acces-emploi.json |
+| 2 | 465 | Rechercher usager | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/465/openapi) | rechercher-usager.json |
+| 3 | 515 | Conclusions Entretiens | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/515/openapi) | conclusions-entretiens.json |
+| 4 | 116 | API Experiences Professionnelles | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/116/openapi) | experiences-professionnelles.json |
+| 5 | 452 | Metiers recherches, projets d'evolution et projets de creation | 1.0.40 | [openapi](https://francetravail.io/api-peio/v2/api/452/openapi) | metiers-recherches-projets-evolution.json |
+| 6 | 107 | API Referentiel des Agences | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/107/openapi) | referentiel-agences.json |
+| 7 | 272 | ROME V4.0 - Fiches ROME | 1 | [openapi](https://francetravail.io/api-peio/v2/api/272/openapi) | rome-4-0-fiches-metiers.json |
+| 8 | 366 | Romeo | 2.0 | [openapi](https://francetravail.io/api-peio/v2/api/366/openapi) | romeo.json |
+| 9 | 233 | Marche du travail | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/233/openapi) | marche-travail.json |
+| 10 | 234 | Acces a l'emploi des demandeurs d'emploi | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/234/openapi) | acces-emploi-demandeurs-emploi.json |
+| 11 | 51 | France Travail Connect | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/51/openapi) | france-travail-connect.json |
+| 12 | 92 | API Coordonnees | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/92/openapi) | coordonnees.json |
+| 13 | 93 | API Formations Professionnelles | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/93/openapi) | formations-professionnelles.json |
+| 14 | 115 | API Metiers Recherches | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/115/openapi) | metiers-recherches.json |
+| 15 | 103 | API Mes evenements emplois | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/103/openapi) | evenements-france-travail.json |
+| 16 | 270 | ROME 4.0 - Competences | 1 | [openapi](https://francetravail.io/api-peio/v2/api/270/openapi) | rome-4-0-competences.json |
+| 17 | 271 | ROME V4.0 - Situations de travail | 1 | [openapi](https://francetravail.io/api-peio/v2/api/271/openapi) | rome-4-0-contextes-travail.json |
+| 18 | 279 | Je Controle Mon Offre - JCMO | 1 | [openapi](https://francetravail.io/api-peio/v2/api/279/openapi) | jcmo-controle-offre.json |
+| 19 | 135 | API Statut | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/135/openapi) | statut.json |
+| 20 | 99 | API Date de Naissance | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/99/openapi) | date-naissance.json |
+| 21 | 320 | API Ajout de Competence | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/320/openapi) | ajout-competence.json |
+| 22 | 449 | Informations administratives usager | 1.2.0 | [openapi](https://francetravail.io/api-peio/v2/api/449/openapi) | informations-administratives-usager.json |
+| 23 | 466 | Statut Usager | 2.0 | [openapi](https://francetravail.io/api-peio/v2/api/466/openapi) | statut-usager.json |
+| 24 | 477 | Diagnostic Usager | 4.0 | [openapi](https://francetravail.io/api-peio/v2/api/477/openapi) | diagnostic-usager.json |
+| 25 | 497 | Gestion des sanctions RSA | 1.4 | [openapi](https://francetravail.io/api-peio/v2/api/497/openapi) | gestion-sanctions-rsa.json |
+| 26 | 416 | Rendez-vous partenaire | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/416/openapi) | rendez-vous-partenaires.json |
+| 27 | 561 | Synthese des pages employeur | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/561/openapi) | synthese-pages-employeurs.json |
+| 28 | 260 | Gestion des prestations sous-traitees | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/260/openapi) | prestation-partenaire.json |
+| 29 | 433 | Orientation Usager | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/433/openapi) | orientation-usager.json |
+| 30 | 635 | Orientation Usager | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/635/openapi) | orientation-usager-v2.json |
+| 31 | 85 | API Experiences declarees par l'employeur | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/85/openapi) | experiences-declarees-employeur.json |
+| 32 | 91 | API Cadre de vie des communes | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/91/openapi) | cadre-vie-communes.json |
+| 33 | 98 | Competences professionnelles | 2.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/98/openapi) | competences-professionnelles.json |
+| 34 | 106 | API Open Formation | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/106/openapi) | open-formation.json |
+| 35 | 117 | API Indemnisations | 1.0.0 | [openapi](https://francetravail.io/api-peio/v2/api/117/openapi) | pe-connect-indemnisations.json |
+| 36 | 232 | Informations sur un territoire | 1.1 | [openapi](https://francetravail.io/api-peio/v2/api/232/openapi) | informations-territoire.json |
+| 37 | 273 | ROME 4.0 - Metiers | 1 | [openapi](https://francetravail.io/api-peio/v2/api/273/openapi) | rome-4-0-metiers.json |
+| 38 | 360 | La Bonne Boite | 2.27.3 | [openapi](https://francetravail.io/api-peio/v2/api/360/openapi) | la-bonne-boite.json |
+| 39 | 431 | Contrat d'engagement | 1 | [openapi](https://francetravail.io/api-peio/v2/api/431/openapi) | contrat-engagement.json |
+| 40 | 455 | Declaration de demarche | 1 | [openapi](https://francetravail.io/api-peio/v2/api/455/openapi) | declaration-demarche.json |
+| 41 | 617 | Gestion activites operationnelles | 2.1 | [openapi](https://francetravail.io/api-peio/v2/api/617/openapi) | gestion-activites-operationnelles.json |
+| 42 | 602 | ROME 4.0 - Substitutions d'entites | 1 | [openapi](https://francetravail.io/api-peio/v2/api/602/openapi) | rome-4-0-substitutions.json |
+| 43 | 645 | Je recrute avec FT pro | 1.0 | [openapi](https://francetravail.io/api-peio/v2/api/645/openapi) | je-recrute-avec-ftpro.json |
+
+## APIs whose schema is no longer public (1)
+
+| # | Page ID | API Name | Last known version | Local File | Note |
+|---|---------|----------|--------------------|------------|------|
+| 1 | 84 | Offres d'emploi | 2 | offres-emploi.json | `403` since the 2026-10-28 sweep. The local file is the last public copy (2026-03-15) and is kept as is. |
 
 ## APIs without downloadable OpenAPI schemas (16)
 

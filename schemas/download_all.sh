@@ -1,7 +1,7 @@
 #!/bin/bash
 # APIs with known page IDs from the catalogue
 declare -A apis
-apis[84]="offres-emploi"
+# apis[84]="offres-emploi"  # 403 since 2026-10-28: keep the last public copy (a failed fetch deletes the file)
 apis[231]="sortants-formation-acces-emploi"
 apis[465]="rechercher-usager"
 apis[515]="conclusions-entretiens"
