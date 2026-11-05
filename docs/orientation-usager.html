@@ -16,7 +16,7 @@
   <h1>Orientation Usager</h1>
   <div class="ver-toggle" role="group" aria-label="Version de l'API">
     <button class="vb" onclick="setVersion('v1')">v1.0</button>
-    <button class="vb active" onclick="setVersion('v2')">v2.0</button>
+    <button class="vb active" onclick="setVersion('v2')">v2.1</button>
   </div>
   <div class="sub">Calcul, enregistrement et d&#xe9;cision d'orientation d'un usager vers un parcours (Social, Socio-Professionnel, Professionnel) et un organisme d'accompagnement</div>
   <div class="verblock ver-v1">
@@ -24,7 +24,7 @@
     <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/orientationusager/v1</div>
   </div>
   <div class="verblock ver-v2">
-    <div class="sub-tech">Orientation Usager v2.0 &#x2014; 5 endpoints &#xb7; 15 schemas</div>
+    <div class="sub-tech">Orientation Usager v2.1 &#x2014; 6 endpoints &#xb7; 16 schemas</div>
     <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/orientationusager/v2</div>
   </div>
 </header>
@@ -248,7 +248,7 @@
       </div>
       <div class="nb">
         <div class="fi">Acceptation ou refus de la proposition d'orientation. En cas de refus, un motif et un parcours alternatif peuvent &#xea;tre propos&#xe9;s.
-          <div class="fi-tech"><code>etat_decision</code> &#xb7; <code>date_decision</code> &#xb7; <code>referent_parcours</code> &#xb7; <code>agent_decision</code> &#xb7; <code>motif_refus</code> &#xb7; <code>commentaire_refus</code>
+          <div class="fi-tech"><code>etat_decision</code> &#xb7; <code>date_decision</code> &#xb7; <code>referent_parcours</code> &#xb7; <code>agent_decision</code> &#xb7; <code>motif_refus</code> &#xb7; <code>commentaire_refus</code> &#xb7; <code>motif_reorientation</code> (v2.1, obligatoire si la r&#xe9;orientation des bRSA est activ&#xe9;e)
             <br><span class="ev">ACCEPTEE</span> &#xb7; <span class="ev">REFUSEE</span>
             <br>Motifs : <span class="ev">DECLARATION_INEXACTE</span> &#xb7; <span class="ev">SITUATION_NON_COUVERTE</span> &#xb7; <span class="ev">APPRECIATION_DIFFERENTE</span> &#xb7; <span class="ev">MANQUE_CAPACITE_ACCUEIL</span> &#xb7; <span class="ev">ENTRETIEN_ORIENTATION</span> &#xb7; <span class="ev">AUTRE</span></div>
         </div>
@@ -276,18 +276,18 @@
 <!-- TAB: v1 → v2 (version-agnostique) -->
 <div class="view" id="v-versions">
 <div class="note" style="margin-bottom:20px;">
-  <strong>Deux versions en parallèle</strong> — Les v1.0 (page 433, base <code>/orientationusager/v1</code>) et v2.0 (page 635, base <code>/orientationusager/v2</code>) sont publiées simultanément sur francetravail.io. Même royaume <code>/agent</code>, mêmes critères d'entrée, même vocabulaire métier (parcours, freins, motifs de refus). Ce qui change tient au <strong>modèle d'acteurs</strong> et à quelques ajouts. Basculez sur <strong>v1.0</strong> dans l'en-tête pour revoir l'ancienne version.
+  <strong>Deux versions en parallèle</strong> — Les v1.0 (page 433, base <code>/orientationusager/v1</code>) et v2.1 (page 635, base <code>/orientationusager/v2</code>) sont publiées simultanément sur francetravail.io. Même royaume <code>/agent</code>, mêmes critères d'entrée, même vocabulaire métier (parcours, freins, motifs de refus). Ce qui change tient au <strong>modèle d'acteurs</strong> et à quelques ajouts. Basculez sur <strong>v1.0</strong> dans l'en-tête pour revoir l'ancienne version.
 </div>
 
 <div class="ref-section">
   <h2 class="ref-section-title">
     <span class="rs-dot" style="background:#047857;"></span>
     Ce qui change de la v1 à la v2
-    <span class="rs-count">7 différences</span>
+    <span class="rs-count">8 différences</span>
     <span class="rs-tech">OpenAPI 3.0.1 → 3.1.0</span>
   </h2>
   <div class="ref-section-intro">
-    Les deux versions couvrent le même périmètre — cinq endpoints, les mêmes critères d'entrée, le même vocabulaire métier. Presque toutes les évolutions suivent un seul fil conducteur : <strong>la façon dont l'API nomme les acteurs</strong> (qui suit l'usager, qui décide, dans quelle structure). Le reste tient à quelques ajouts et simplifications, détaillés ci-dessous.
+    Les deux versions couvrent le même périmètre — cinq endpoints communs, les mêmes critères d'entrée, le même vocabulaire métier. Presque toutes les évolutions suivent un seul fil conducteur : <strong>la façon dont l'API nomme les acteurs</strong> (qui suit l'usager, qui décide, dans quelle structure). Le reste tient à quelques ajouts et simplifications, détaillés ci-dessous.
   </div>
   <div class="ref-families">
   <div class="ref-card" style="grid-column:1/-1;">
@@ -299,7 +299,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>organisme</code> (code) + <code>structure</code> (objet), <br>doublés en <code>organisme_decision</code> + <code>structure_decision</code>.</div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>responsable_usager</code> · <code>competent_decision</code> · <code>prise_decision</code> · <code>referent_parcours</code>, <br>chacun une <code>EntiteGeographiqueDto</code> (organisme + structure).</div>
       </div>
     </div>
@@ -313,7 +313,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>structure.code_aurore</code> · <code>structure.code_safir</code> · <code>structure.libelle_structure</code></div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>structure.code</code> · <code>structure.libelle</code></div>
       </div>
     </div>
@@ -327,7 +327,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>POST /calculOrientation</code></div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>POST /calculerOrientation</code></div>
       </div>
     </div>
@@ -341,7 +341,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>DecisionCA</code> portait <code>organisme</code>, <code>structure</code>, <code>structure_decision</code>.</div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>DecisionCA</code> porte un seul <code>referent_parcours</code> (<code>OrganismeLightDto</code>) ; le bloc <code>decision</code> est aussi renvoyé dans le résultat du calcul.</div>
       </div>
     </div>
@@ -355,7 +355,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;">—</div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>msa_calculee</code> · <code>msa_calculee_libelle</code></div>
       </div>
     </div>
@@ -369,7 +369,7 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>date_sortie_parcours</code> / <code>motif_sortie_parcours</code> uniquement en lecture.</div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;">Ces deux champs figurent aussi sur le résultat de <code>calculerOrientation</code>.</div>
       </div>
     </div>
@@ -383,8 +383,22 @@
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>origine</code> + <code>parcours</code> + <code>organisme</code> + <code>structure</code> + <code>structure_decision</code></div>
       </div>
       <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
-        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.0</div>
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
         <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>origine</code> + <code>parcours</code> + <code>date_entree_parcours</code> + <code>referent_parcours</code></div>
+      </div>
+    </div>
+  </div>
+  <div class="ref-card" style="grid-column:1/-1;">
+    <div class="ref-head"><span class="ref-title">Motif de réorientation</span><span class="ref-count">nouveau en v2.1</span></div>
+    <div class="expl">Ajouté entre juin et octobre 2026. Quand la réorientation des bénéficiaires du RSA est activée, une décision d'orientation doit porter un motif de réorientation, choisi parmi les motifs <em>actifs</em> que liste un nouvel endpoint.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+      <div style="border:1px solid #e5e1d8;border-radius:8px;padding:10px 12px;background:#faf9f6;">
+        <div style="font-size:.66rem;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v1.0</div>
+        <div class="voc-tech" style="margin:0;padding:0;border:none;">Pas de motif de réorientation.</div>
+      </div>
+      <div style="border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;background:#f0fdf4;">
+        <div style="font-size:.66rem;font-weight:700;color:#047857;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;">v2.1</div>
+        <div class="voc-tech" style="margin:0;padding:0;border:none;"><code>motif_reorientation</code> (ex. <span class="ev">FIN_ACCOMPAGNEMENT</span>) dans <code>DecisionCA</code>, <code>OrientationCA_Lecture</code> et <code>OrientationCreationCA_Commun</code> ; liste via <code>GET /nomenclature/motifs-reorientation</code> (<code>cle</code> · <code>libelle</code> · <code>actif</code>).</div>
       </div>
     </div>
   </div>
@@ -392,7 +406,7 @@
 </div>
 
 <div class="note">
-  <strong>Inchangé</strong> — Les cinq endpoints (un seul renommé), les critères d'entrée du calcul (<code>CriteresOrientationCA_CalculerEntree</code>, enums identiques), les huit dimensions de freins, les statuts/états, les motifs de refus et les codes organisme (FT/CD/ML/CAF/CE/IND). Si vous consommez déjà la v1, l'essentiel de votre mapping de critères reste valable.
+  <strong>Inchangé</strong> — Les cinq endpoints communs (un seul renommé ; la v2.1 en ajoute un sixième, la liste des motifs de réorientation), les critères d'entrée du calcul (<code>CriteresOrientationCA_CalculerEntree</code>, enums identiques), les huit dimensions de freins, les statuts/états, les motifs de refus et les codes organisme (FT/CD/ML/CAF/CE/IND). Si vous consommez déjà la v1, l'essentiel de votre mapping de critères reste valable.
 </div>
 </div>
 
@@ -1190,9 +1204,16 @@
   </div>
 </div>
 
+<div class="domain">
+  <div class="domain-title">Nomenclature <span class="dt-human">&#x2014; Motifs de r&#xe9;orientation</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les motifs de r&#xe9;orientation</span><div class="ep-human">Les motifs utilisables pour une r&#xe9;orientation (seuls les motifs actifs sont accept&#xe9;s) &#x2014; ajout&#xe9; en v2.1</div><span class="ep-path">/nomenclature/motifs-reorientation</span></div></div>
+  </div>
+</div>
+
 <!-- Schemas -->
 <div style="margin-top:24px;">
-  <div class="domain-title">15 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="domain-title">16 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
   <div class="sc-legend">
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Enregistrement</span>
@@ -1208,6 +1229,7 @@
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">CriteresOrientationCA_CalculerEntree</span> <span class="sc-desc">&#x2014; Crit&#xe8;res en entr&#xe9;e du calcul</span></div>
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">OrientationCreationCA_Commun</span> <span class="sc-desc">&#x2014; Orientation directe (referent_parcours seul)</span></div>
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">DecisionCA</span> <span class="sc-desc">&#x2014; D&#xe9;cision &#xe0; enregistrer</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">MotifReorientationDto</span> <span class="sc-desc">&#x2014; <span class="at">v2.1</span> motif de r&#xe9;orientation (cl&#xe9;, libell&#xe9;, actif)</span></div>
     <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">EntiteGeographiqueDto</span> <span class="sc-desc">&#x2014; <span class="at">Nouveau</span> organisme + structure, par r&#xf4;le</span></div>
     <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">OrganismeDto</span> <span class="sc-desc">&#x2014; <span class="at">Nouveau</span> code organisme (FT/CD/ML/CAF/CE/IND)</span></div>
     <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">OrganismeLightDto</span> <span class="sc-desc">&#x2014; <span class="at">Nouveau</span> organisme seul (d&#xe9;cision, orientation directe)</span></div>
@@ -1659,7 +1681,7 @@
 
 <footer>
   <span class="verblock ver-v1">OpenAPI 3.0.1 &#x2014; Orientation Usager v1.0 &#xb7; api.francetravail.io &#xb7; 5 endpoints &#xb7; 14 schemas</span>
-  <span class="verblock ver-v2">OpenAPI 3.1.0 &#x2014; Orientation Usager v2.0 &#xb7; api.francetravail.io &#xb7; 5 endpoints &#xb7; 15 schemas</span>
+  <span class="verblock ver-v2">OpenAPI 3.1.0 &#x2014; Orientation Usager v2.1 &#xb7; api.francetravail.io &#xb7; 6 endpoints &#xb7; 16 schemas</span>
 </footer>
 
 </div>
