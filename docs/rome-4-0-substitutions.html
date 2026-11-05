@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROME 4.0 — Substitutions d'entités — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>ROME 4.0 — Substitutions d'entités</h1>
+  <div class="sub">Savoir par quel nouveau code remplacer un code ROME devenu obsolète (appellation, compétence, contexte de travail ou métier), pour garder à jour les codes que vous avez enregistrés.</div>
+  <div class="sub-tech">ROME 4.0 - Substitutions d'entités v1 — 2 endpoints · 1 schéma</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rome-substitutions/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('ref')">Référentiels</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+    <button class="tb" onclick="setTab('famille')">Famille</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Qu'est-ce qu'une substitution ?</strong> Le ROME évolue : d'une version à l'autre, certains codes sont retirés et remplacés par de nouveaux. Une <strong>substitution</strong> est le lien officiel « ancien code → nouveau code » pour une même famille d'entités — par exemple l'appellation <code>500725</code> remplacée par <code>504295</code> (codes tirés de l'exemple du schéma).
+  <br><br>
+  <strong>Pourquoi s'en servir ?</strong> Si votre application enregistre des codes ROME — dans des offres, des profils de candidats, des alertes, des statistiques — ces codes vieillissent avec le référentiel. Cette API permet de les remettre à niveau : pour un code d'origine, elle indique le code de substitution à utiliser désormais.
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Substitution <span class="dto">Substitution</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1 — tableau 0:N sur la liste</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une ligne de la table de correspondance : un code d'origine, la famille du ROME à laquelle il appartient, et le code qui le remplace. La même structure sert aux deux endpoints : un objet seul quand on interroge un code, un tableau d'objets quand on liste tout un type.
+      <div class="fi-tech"><code>code</code> · <code>codeSubstitution</code> · <code>typeEntite</code> · <code>obsolete</code> · <code>dateFin</code>
+        <br>Aucun champ déclaré obligatoire (pas de <code>required</code>) : tous peuvent manquer, en particulier quand la réponse est restreinte par <code>champs</code>.</div>
+    </div>
+
+    <div class="n l1-c" id="m-code">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Code d'origine — l'ancien code <span class="dto">code</span></div>
+        <div class="card">Facultatif <span class="card-tech">string · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Le code tel qu'il existait avant le changement — celui que vous avez sans doute déjà en base. C'est aussi la clé de recherche : on interroge l'API avec ce code, dans le chemin de la requête.
+          <div class="fi-tech"><code>code</code> — « Code d'origine de l'entité » · <span class="eg">ex. 500725</span>
+            <br>Paramètre de chemin <code>{code}</code> sur <code>/substitution/{typeEntite}/{code}</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n" id="m-code-substitution">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Code de substitution — le code à utiliser désormais <span class="dto">codeSubstitution</span></div>
+        <div class="card">Facultatif <span class="card-tech">string · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Le code qui remplace l'ancien dans le ROME : c'est la valeur à reporter dans vos données. Le schéma ne prévoit qu'un seul type d'entité par ligne, donc l'ancien et le nouveau code appartiennent à la même famille (une appellation remplace une appellation, un métier remplace un métier). La réponse ne donne que le code, pas son libellé.
+          <div class="fi-tech"><code>codeSubstitution</code> — « Code de substitution de l'entité » · <span class="eg">ex. 504295</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-b" id="m-type">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Type d'entité — de quelle famille du ROME il s'agit <span class="dto">typeEntite</span></div>
+        <div class="card">Facultatif <span class="card-tech">string · enum · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Les substitutions sont rangées par famille : chaque ligne dit si le code est une appellation, une compétence, un contexte de travail ou un métier. Le type est obligatoire dans l'URL de la requête et répété dans la réponse. Le détail des quatre valeurs est dans l'onglet Référentiels.
+          <div class="fi-tech"><code>typeEntite</code> — <span class="ev">APPELLATION</span> · <span class="ev">COMPETENCE</span> · <span class="ev">CONTEXTE-TRAVAIL</span> · <span class="ev">METIER</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3o" id="m-validite">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Validité — l'entité est-elle encore en vigueur ? <span class="dto">obsolete · dateFin</span></div>
+        <div class="card">Facultatif <span class="card-tech">boolean · date-time · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Indique si l'entité est devenue obsolète et, dans ce cas, jusqu'à quelle date elle était valable. Le schéma parle de « l'entité » sans préciser laquelle : on comprend qu'il s'agit du code d'origine, mais ce n'est pas écrit.
+          <div class="fi-tech"><code>obsolete</code> — booléen, « définissant si l'entité est obsolete »
+            <br><code>dateFin</code> — <code>date-time</code>, « date de fin de validité (renseignée si l'entité est obsolete) »
+            <br>Pas de date de début : la description de l'endpoint évoque des « dates de validité », mais seule <code>dateFin</code> existe.
+            <br>Aucune valeur autorisée de <code>champs</code> ne contient <code>obsolete</code> ni <code>dateFin</code> : dès qu'on restreint les champs, ces deux informations disparaissent.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Des codes, pas de libellés</strong> — Pour savoir ce que recouvre un code (son intitulé, sa définition), il faut l'API qui le décrit : <a href="rome-4-0-metiers.html">ROME 4.0 — Métiers</a> pour les appellations et les métiers, <a href="rome-4-0-competences.html">ROME 4.0 — Compétences</a> pour les compétences, <a href="rome-4-0-contextes-travail.html">Situations de travail</a> pour les contextes de travail. Les API Métiers et Compétences portent elles aussi <code>obsolete</code> / <code>dateFin</code> sur leurs entités : elles disent <em>qu'</em>un code est obsolète ; celle-ci dit <em>par quoi</em> le remplacer.
+</div>
+
+<div class="note">
+  <strong>Ce que le schéma ne dit pas</strong> — <strong>Remplacements en chaîne :</strong> si le nouveau code est lui-même remplacé plus tard, rien n'indique si l'API renvoie directement le dernier code ou seulement l'étape suivante ; par prudence, réinterrogez l'API avec <code>codeSubstitution</code> jusqu'à obtenir « aucune substitution ».
+  <br><strong>Un code remplacé par plusieurs :</strong> la réponse pour un code est un objet unique, avec un seul <code>codeSubstitution</code> ; ce cas n'est pas prévu.
+  <br><strong>Historique :</strong> la description promet de « tracer l'historique des modifications », mais la réponse ne décrit qu'un état ; seul le paramètre <code>date</code> permet de remonter dans le temps, et uniquement sur l'endpoint qui interroge un code.
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> — API du royaume <code>/partenaire</code> (client credentials). Scopes requis : <code>nomenclatureRomeSubstitutions</code> + <code>api_rome-substitutionsv1</code>. Attention, le scope de nomenclature diffère de celui des autres API ROME 4.0 (<code>nomenclatureRome</code>). Aucun jeton usager : on n'accède à aucune donnée personnelle, et tous les endpoints sont en lecture (<code>GET</code>).
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: RÉFÉRENTIELS                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-ref">
+
+<div class="note" style="margin-bottom:20px;">
+  Cette API manipule les codes des autres référentiels ROME sans les décrire. Les seuls vocabulaires qu'elle définit elle-même sont la liste des types d'entité, les combinaisons autorisées du sélecteur de champs, le format de date et les codes d'erreur.
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#d97706;"></span>
+    Types d'entité
+    <span class="rs-count">4 valeurs</span>
+    <span class="rs-tech">chemin <code>{typeEntite}</code> · <code>Substitution.typeEntite</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    Les quatre familles du ROME pour lesquelles des substitutions sont publiées. La valeur s'écrit telle quelle dans l'URL — avec un tiret pour <span class="ev">CONTEXTE-TRAVAIL</span> ; une valeur hors liste renvoie une erreur 400 <span class="ev">VALIDATION_ERROR</span>. Le même <code>enum</code> sert pour le paramètre de chemin et pour le champ de la réponse.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Appellation</span><span class="ref-count">1 / 4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">APPELLATION</span> <span>L'intitulé concret d'un poste (<span class="eg">ex. « Développeur / Développeuse web »</span>) ; un métier en regroupe plusieurs.</span></li>
+      </ul>
+      <div class="voc-tech">Schéma : « codes des appellations professionnelles ». Décrites par <a href="rome-4-0-metiers.html">ROME 4.0 — Métiers</a> (<code>/v1/metiers/appellation/{code}</code>).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Compétence</span><span class="ref-count">2 / 4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">COMPETENCE</span> <span>Ce que la personne sait faire dans l'exercice d'un métier.</span></li>
+      </ul>
+      <div class="voc-tech">Schéma : « codes des compétences et savoir-faire ». Décrites par <a href="rome-4-0-competences.html">ROME 4.0 — Compétences</a> (<code>/v1/competences/competence/{code}</code>).</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Contexte de travail</span><span class="ref-count">3 / 4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">CONTEXTE-TRAVAIL</span> <span>Les conditions dans lesquelles le métier s'exerce (horaires, environnement, déplacements…).</span></li>
+      </ul>
+      <div class="voc-tech">Schéma : « codes des contextes et environnements de travail ». Décrits par <a href="rome-4-0-contextes-travail.html">ROME V4.0 — Situations de travail</a>.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Métier</span><span class="ref-count">4 / 4</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">METIER</span> <span>La fiche métier ROME elle-même (<span class="eg">ex. M1805 — Études et développement informatique</span>).</span></li>
+      </ul>
+      <div class="voc-tech">Schéma : « codes des métiers et professions ». Décrits par <a href="rome-4-0-metiers.html">ROME 4.0 — Métiers</a> (<code>/v1/metiers/metier/{code}</code>).</div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <strong>Périmètre</strong> — Le schéma ne dit pas si <span class="ev">COMPETENCE</span> couvre aussi les savoirs et les savoir-être, que l'API Compétences range parmi les compétences ; il ne cite que « compétences et savoir-faire ». Les autres entités du ROME (grands domaines, domaines professionnels, secteurs, centres d'intérêt, thèmes, catégories de savoirs…) n'ont pas de type de substitution, bien que les API Métiers et Compétences leur donnent aussi un drapeau <code>obsolete</code>. Enfin, l'exemple fourni pour le champ <code>typeEntite</code> (<code>APPELLATION,COMPETENCE,CONTEXTE-TRAVAIL,METIER</code>) n'est pas une valeur valide : le champ contient une seule valeur.
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    Paramètres de requête
+    <span class="rs-count">2 paramètres facultatifs</span>
+    <span class="rs-tech"><code>champs</code> · <code>date</code></span>
+  </h2>
+  <div class="ref-section-intro">
+    En plus du type et du code, deux paramètres facultatifs : l'un réduit la réponse aux seuls champs utiles, l'autre interroge le référentiel tel qu'il était à une date donnée.
+  </div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Paramètres de requête</span><span class="ref-count">facultatifs</span></div>
+      <div class="ref-cols">
+        <div>
+          <div class="ref-subtitle">Sélecteur de champs <span class="ref-count">champs · 6 valeurs</span></div>
+          <ul class="ref-list voc-list">
+            <li><span class="voc-code">code</span> <span>Le code d'origine seul</span></li>
+            <li><span class="voc-code">codeSubstitution</span> <span>Le code de substitution seul</span></li>
+            <li><span class="voc-code">typeEntite</span> <span>Le type seul</span></li>
+            <li><span class="voc-code">code,codeSubstitution</span> <span>La table « ancien → nouveau »</span></li>
+            <li><span class="voc-code">code,typeEntite</span> <span>Les codes d'origine et leur type</span></li>
+            <li><span class="voc-code">code,codeSubstitution,typeEntite</span> <span>Les trois codes</span></li>
+          </ul>
+          <div class="voc-tech"><code>champs</code> — sur les deux endpoints. Liste fermée (<code>enum</code>) : <code>obsolete</code> et <code>dateFin</code> n'y figurent pas. L'exemple du schéma (<code>libelle,code</code>) n'est pas une valeur autorisée, et <code>libelle</code> n'existe pas dans <code>Substitution</code>. Une valeur hors liste renvoie 400 <span class="ev">VALIDATION_ERROR</span>.</div>
+        </div>
+        <div>
+          <div class="ref-subtitle">Date de consultation <span class="ref-count">date · 2 formats</span></div>
+          <ul class="ref-list voc-list">
+            <li><span class="voc-code">yyyy-MM-dd</span> <span class="eg">ex. 2025-09-08</span></li>
+            <li><span class="voc-code">yyyyMMdd</span> <span class="eg">ex. 20250908</span></li>
+          </ul>
+          <div class="voc-tech"><code>date</code> — uniquement sur <code>/substitution/{typeEntite}/{code}</code> : « consulter l'état des substitutions à une date donnée ». Le schéma ne précise ni la valeur par défaut, ni la façon dont cette date se compare à <code>dateFin</code>.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#dc2626;"></span>
+    Réponses d'erreur
+    <span class="rs-count">2 codes métier</span>
+    <span class="rs-tech"><code>codeMetier</code> · exemples de réponses</span>
+  </h2>
+  <div class="ref-section-intro">
+    <strong>« Aucune substitution » n'est pas un incident :</strong> c'est la réponse normale pour un code qui n'a pas été remplacé. Mais l'API ne distingue pas un code jamais remplacé d'un code qui n'a jamais existé — pour vérifier qu'un code est valide, il faut passer par l'API qui le décrit. Le <code>codeMetier</code> n'est pas déclaré en <code>enum</code> : les valeurs ci-dessous viennent des exemples de réponses du schéma.
+  </div>
+  <div class="ref-families">
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Code métier d'erreur</span><span class="ref-count">2 valeurs</span></div>
+
+      <div class="ref-subtitle">Requête mal formée <span class="ref-count">HTTP 400</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">VALIDATION_ERROR</span> <span>Type d'entité inconnu (faute de frappe, <span class="eg">ex. APPELLATIO</span>) ou sélecteur de champs non autorisé</span></li>
+      </ul>
+
+      <div class="ref-subtitle" style="margin-top:14px;">Aucune substitution trouvée <span class="ref-count">HTTP 404 — ou 400</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">SELECTOR</span> <span>« Code inexistant: Aucune substitution trouvée pour le code '…' et le type … » — le code demandé n'a pas de substitution pour ce type</span></li>
+      </ul>
+
+      <div class="voc-tech">Le même message <span class="ev">SELECTOR</span> est documenté à la fois en 400 et en 404 sur <code>/substitution/{typeEntite}/{code}</code>, et le corps de l'exemple 404 indique <code>"code": 400</code> : mieux vaut tester <code>codeMetier</code> que le seul statut HTTP. Corps d'erreur : <code>service</code> · <code>message</code> · <code>code</code> · <code>codeMetier</code>. Le message <span class="ev">VALIDATION_ERROR</span> d'exemple contient un <code>%s</code> non remplacé. Les erreurs 500 suivent un autre format : <code>timestamp</code> · <code>status</code> · <code>error</code> · <code>path</code>.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Substitutions <span class="dt-human">— retrouver le code qui remplace un code ROME obsolète</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les substitutions par type d'entité</span><div class="ep-human">Toute la table « ancien code → nouveau code » d'une famille (par exemple toutes les appellations remplacées), pour remettre à niveau une base entière en une fois</div><span class="ep-path">/substitution/{typeEntite}</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupérer une substitution par code et type d'entité</span><div class="ep-human">Ce code a-t-il été remplacé, et par quoi ? Éventuellement à une date donnée</div><span class="ep-path">/substitution/{typeEntite}/{code}</span></div></div>
+  </div>
+</div>
+
+<div class="note"><strong>Paramètres — liste par type</strong>
+  <div class="chips"><code>typeEntite</code><code>champs</code></div></div>
+
+<div class="note"><strong>Paramètres — substitution d'un code</strong>
+  <div class="chips"><code>typeEntite</code><code>code</code><code>champs</code><code>date</code></div></div>
+
+<div class="note">
+  <strong>Volume</strong> — Selon le type, la liste peut être longue ; le schéma recommande de la restreindre avec <code>champs</code> (par exemple <code>code,codeSubstitution</code>). Aucune pagination n'est décrite, et le paramètre <code>date</code> n'existe pas sur cet endpoint : la liste donne l'état courant.
+</div>
+
+<div class="note">
+  <strong>Chemins</strong> — Contrairement aux autres API ROME 4.0 (serveur sans version, chemins en <code>/v1/metiers/…</code>), la version est ici dans l'URL du serveur et les chemins commencent à <code>/substitution</code>. Les exemples d'erreur citent pourtant un service <code>/v1/substitutions-rome/…</code>, mots inversés par rapport au serveur <code>/partenaire/rome-substitutions/v1</code> ; le schéma n'explique pas cet écart, l'URL à appeler est celle du serveur. Pas d'endpoint <code>/version</code> non plus, à la différence des API sœurs.
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">1 Schéma <span class="dt-human">— type de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel / Nomenclature</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-ref"></span><span class="sc-name">Substitution</span> <span class="sc-desc">— ancien code → nouveau code, pour un type d'entité</span></div>
+  </div>
+  <div class="note">Les corps d'erreur ne sont décrits que par des exemples, sans schéma nommé.</div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Remettre à jour des codes d'appellation après une évolution du ROME</strong> — Une plateforme d'offres d'emploi a enregistré des codes d'appellation ROME dans ses offres et dans les alertes de ses candidats. Après une mise à jour du référentiel, un traitement de nuit récupère la table des substitutions, puis vérifie des codes au cas par cas. Les codes <strong>500725 → 504295</strong> sont ceux de l'exemple du schéma, qui ne dit pas à quel type d'entité ils appartiennent : on les traite ici comme des appellations. La date de fin, le code 12374 et le détail de la réponse « aucune substitution » sont adaptés des exemples du schéma, à titre d'illustration.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-liste"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// 1) Récupérer la table d'un type</span>
+<span class="jc">// GET /substitution/APPELLATION</span>
+<span class="jc">//      ?champs=code,codeSubstitution</span>
+<span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// ─ Réponse 200 (tableau) ──────────────</span>
+[
+  { <span class="jk">"code"</span>: <span class="js">"500725"</span>, <span class="jk">"codeSubstitution"</span>: <span class="js">"504295"</span> },
+  <span class="jc">// … une entrée par appellation remplacée</span>
+]</div>
+<div data-section="s-detail"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// 2) Vérifier un code précis</span>
+<span class="jc">// GET /substitution/APPELLATION/500725</span>
+<span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// ─ Réponse 200 ────────────────────────</span>
+{
+  <span class="jk">"code"</span>: <span class="js">"500725"</span>,
+  <span class="jk">"codeSubstitution"</span>: <span class="js">"504295"</span>,
+  <span class="jk">"typeEntite"</span>: <span class="js">"APPELLATION"</span>,
+  <span class="jk">"obsolete"</span>: <span class="jb">true</span>,
+  <span class="jk">"dateFin"</span>: <span class="js">"2026-01-01T00:00:00.000+00:00"</span>
+}</div>
+<div data-section="s-absent"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// 3) Un code sans substitution</span>
+<span class="jc">// GET /substitution/APPELLATION/12374</span>
+<span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// ─ Réponse 404 (le schéma documente aussi 400)</span>
+{
+  <span class="jk">"service"</span>: <span class="js">"/v1/substitutions-rome/substitution/APPELLATION/12374"</span>,
+  <span class="jk">"message"</span>: <span class="js">"Code inexistant: Aucune substitution trouvée pour le code '12374' et le type APPELLATION, (entite: Substitution)"</span>,
+  <span class="jk">"code"</span>: <span class="jn">400</span>,
+  <span class="jk">"codeMetier"</span>: <span class="js">"SELECTOR"</span>
+}</div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-liste">
+  <div class="ex-title"><span class="ex-ico">🗂️</span> 1 — La table de correspondance</div>
+  <div class="ex-card">
+    <h4>Toutes les appellations remplacées, en un appel</h4>
+    <p>Pour le type demandé, l'API renvoie la liste des couples « ancien code → nouveau code ». Le sélecteur <code>champs</code> réduit chaque ligne aux deux codes utiles : le schéma le recommande, la liste pouvant être longue.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>500725</strong> → remplacé par <strong>504295</strong></div>
+      <div class="ex-item"><strong>…</strong> → une ligne par appellation remplacée</div>
+    </div>
+    <div class="ex-agent">Usage : remettre à niveau toute une base en une seule passe.</div>
+  </div>
+</div>
+
+<div data-section="s-detail">
+  <div class="ex-title"><span class="ex-ico">🔁</span> 2 — Un code précis</div>
+  <div class="ex-card">
+    <h4>500725 → 504295</h4>
+    <p>L'appellation 500725 n'est plus en vigueur : dans les offres et les alertes, on la remplace par <strong>504295</strong>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Type</strong> → <span class="ev">APPELLATION</span></div>
+      <div class="ex-item"><strong>Obsolète</strong> → <span class="ex-tag tag-actif">oui</span></div>
+      <div class="ex-item"><strong>Fin de validité</strong> → 1er janvier 2026 (date illustrative)</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;">La réponse ne donne aucun libellé : pour afficher le nouvel intitulé, on enchaîne sur l'API <a href="rome-4-0-metiers.html">ROME 4.0 — Métiers</a> (<code>GET /v1/metiers/appellation/504295</code>). Avant d'enregistrer 504295, on peut aussi le soumettre à son tour à cette API : le schéma ne dit pas si un code de substitution peut lui-même être remplacé.</p>
+    <div class="ex-agent">Le paramètre <code>date</code> permet de poser la même question pour une date passée.</div>
+  </div>
+</div>
+
+<div data-section="s-absent">
+  <div class="ex-title"><span class="ex-ico">➖</span> 3 — Aucune substitution</div>
+  <div class="ex-card">
+    <h4>12374 : rien à remplacer</h4>
+    <p>Pour un code qui n'a pas été remplacé, l'API ne renvoie pas un objet vide mais une erreur <span class="ev">SELECTOR</span> « Code inexistant ». Pour le traitement, c'est la réponse attendue : on garde le code tel quel.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Substitution</strong> → <span class="ex-tag tag-inactif">aucune</span></div>
+      <div class="ex-item"><strong>Statut HTTP</strong> → 404 ici ; le schéma documente le même message en 400, et le corps indique <code>"code": 400</code> — on se fie donc à <code>codeMetier</code>.</div>
+    </div>
+    <p style="margin-top:10px;font-size:.86rem;color:var(--text-light);">Cette réponse ne prouve pas que le code existe : un code mal saisi donnerait la même erreur. Pour le vérifier, on interroge l'API <a href="rome-4-0-metiers.html">Métiers</a>.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<!-- FAMILLE (généré par gen-famille.py) -->
+<div class="view" id="v-famille">
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    La famille ROME 4.0
+    <span class="rs-count">6 API</span>
+    <span class="rs-tech">navigation</span>
+  </h2>
+  <div class="ref-section-intro">Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction. Toutes décrivent le référentiel ROME 4.0 sous un angle différent ; chaque carte précise ce qui la distingue. <a href="../index.html">Voir toutes les familles</a> dans le catalogue.</div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-competences.html">ROME 4.0 - Compétences</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">Le référentiel des compétences : chaque compétence avec son type, sa correspondance ESCO, ses macro-compétences et savoirs.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-metiers.html">ROME 4.0 - Métiers</a></span><span class="ref-count">v1  <span class="at">nouveau</span></span></div>
+      <div class="expl">Le référentiel navigable : parcourir l'arbre des métiers, rechercher, filtrer par RIASEC / NAF / compétence, et lire les métadonnées d'un métier (ISCO/ESCO, transitions, mobilité).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">ROME 4.0 - Substitutions d'entités</span><span class="ref-count">cette page</span></div>
+      <div class="expl">Référentiel des substitutions d'entités permettant de gérer les remplacements de codes pour les appellations, compétences, contextes de travail et…</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-fiches-metiers.html">ROME V4.0 - Fiches ROME</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">La fiche métier assemblée : pour un code ROME, les compétences groupées par enjeu et les savoirs groupés par catégorie.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="rome-4-0-contextes-travail.html">ROME V4.0 - Situations de travail</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">Le référentiel des situations de travail : contextes et conditions d'exercice (horaires, environnement, statuts).</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="romeo.html">Romeo</a></span><span class="ref-count">v2.0</span></div>
+      <div class="expl">Le moteur de prédiction : à partir d'un texte libre, prédit le code métier ou compétence ROME le plus probable.</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.0.1 — ROME 4.0 - Substitutions d'entités v1 · api.francetravail.io · 2 endpoints · 1 schéma
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
