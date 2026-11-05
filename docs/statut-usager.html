@@ -197,6 +197,7 @@
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Récupère les données du contrat d'un usager</span><div class="ep-human">Lire le statut, la durée et la catégorie d'inscription d'un demandeur</div><span class="ep-path">/contrat</span></div></div>
   </div>
+  <div class="note"><strong>Réponses possibles</strong> — <code>200</code> données du contrat · <code>204</code> aucune donnée trouvée · <code>409</code> type de population non géré par l'API · <code>500</code> erreur technique. Jusqu'en juin 2026, le cas « type de population non géré » n'était décrit que dans le texte de la réponse 200 ; il a désormais sa propre réponse <code>409</code>.</div>
 </div>
 
 <div style="margin-top:24px;">
