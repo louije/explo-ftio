@@ -33,6 +33,7 @@ ROLES = {
     "rome-4-0-competences": "Le référentiel des compétences : chaque compétence avec son type, sa correspondance ESCO, ses macro-compétences et savoirs.",
     "rome-4-0-contextes-travail": "Le référentiel des situations de travail : contextes et conditions d'exercice (horaires, environnement, statuts).",
     "romeo": "Le moteur de prédiction : à partir d'un texte libre, prédit le code métier ou compétence ROME le plus probable.",
+    "rome-4-0-substitutions": "La table des remplacements : pour un code ROME devenu obsolète (appellation, compétence, contexte de travail, métier), le code à utiliser désormais.",
     # Statistiques
     "informations-territoire": "Comprendre un territoire : population, population active, établissements, salariés et dynamisme de l'emploi. L'angle « contexte socio-économique ».",
     "marche-travail": "Demandeurs, offres, embauches, tensions de recrutement et salaires, par métier et territoire. L'angle « marché de l'emploi ».",
@@ -118,7 +119,7 @@ def card(gid, current, slug):
         if a.get("hasDocPage"):  # no link to a page that doesn't exist yet
             name = '<a href="%s.html">%s</a>' % (slug, name)
         title = name + star
-        count = "v" + esc(a["version"]) + ('  <span class="at">nouveau</span>' if a.get("isNew") else "")
+        count = "v" + esc(a["version"].lstrip("vV")) + ('  <span class="at">nouveau</span>' if a.get("isNew") else "")
     body = role_for(slug)
     if not is_cur and gid in BOUNDARY:
         b = BOUNDARY[gid].get(frozenset({current, slug}))

@@ -3193,12 +3193,12 @@ const CATALOGUE = {
     {
       "id": "offres",
       "label": "Offres & recrutement",
-      "description": "Offres d'emploi, entreprises à fort potentiel d'embauche, contrôle des offres et pages employeur."
+      "description": "Offres d'emploi, entreprises à fort potentiel d'embauche, contrôle des offres, pages employeur et signalement de besoins de recrutement."
     },
     {
       "id": "rome",
       "label": "ROME 4.0",
-      "description": "Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction."
+      "description": "Le référentiel des métiers et compétences : fiches, métiers, compétences, situations de travail, prédiction, substitutions de codes."
     },
     {
       "id": "stats",
