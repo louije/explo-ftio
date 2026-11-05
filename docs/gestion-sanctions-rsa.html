@@ -255,7 +255,7 @@
   <h2 class="ref-section-title">
     <span class="rs-dot" style="background:#7c3aed;"></span>
     Cycle de vie de la sanction
-    <span class="rs-count">11 types d'événement · 2 vocabulaires de motif</span>
+    <span class="rs-count">15 types d'événement · 2 vocabulaires de motif</span>
     <span class="rs-tech">schémas <code>Evenement</code> · <code>DetailEvenementSanction</code></span>
   </h2>
   <div class="ref-section-intro">
@@ -263,11 +263,11 @@
   </div>
 
   <div class="ref-card voc-card" style="--lc:#7c3aed;--lbg:#faf5ff;grid-column:1/-1;">
-    <div class="ref-head"><span class="ref-title">Type d'événement</span><span class="ref-count">11</span></div>
+    <div class="ref-head"><span class="ref-title">Type d'événement</span><span class="ref-count">15</span></div>
     <ul class="ref-list voc-list">
       <li><span class="voc-code">PROP_SANCTION</span> Proposition / initialisation de la sanction</li>
       <li><span class="voc-code">SAISIE_SANCTION</span> Choix d'instruire la proposition par le CD (suspension RSA uniquement)</li>
-      <li><span class="voc-code">REFUS_SAISIE_SANCTION</span> Refus d'instruire par le CD (suspension RSA uniquement)</li>
+      <li><span class="voc-code">REFUS_SAISIE_SANCTION</span> Refus d'instruire par le CD (suspension RSA uniquement) — <strong>à ne plus transmettre</strong> depuis la v1.4 : il valide automatiquement la proposition au titre d'une reprise de compétences France Travail, et l'API répond par l'erreur <code>R021</code></li>
       <li><span class="voc-code">ACCORD_FT_SANCTION</span> Accord du manager France Travail</li>
       <li><span class="voc-code">VALID_SANCTION</span> Décision de sanction</li>
       <li><span class="voc-code">REFUS_SANCTION</span> Sanction refusée</li>
@@ -276,6 +276,10 @@
       <li><span class="voc-code">ACCORD_FT_LEVEE_SUSP</span> Accord levée de suspension par le manager FT</li>
       <li><span class="voc-code">VALID_LEVEE_SUSP</span> Décision de levée de suspension</li>
       <li><span class="voc-code">REFUS_LEVEE_SUSP</span> Refus de levée de suspension</li>
+      <li><span class="voc-code">INIT_DEMANDE_REMOB</span> Demande de remobilisation initiée par un conseiller, avant le retour du partenaire sur une proposition de suspension (v1.4)</li>
+      <li><span class="voc-code">ACCORD_FT_DEMANDE_REMOB</span> Avis du manager France Travail sur la demande de remobilisation (v1.4)</li>
+      <li><span class="voc-code">REVUE_DATE_REMOB</span> Date de remobilisation mise à jour après une levée de suspension (v1.4)</li>
+      <li><span class="voc-code">FIN_APPLICATION_SANCTION</span> Date de fin d'application de la sanction atteinte (v1.4)</li>
     </ul>
     <div class="voc-tech"><code>typeEvenement</code> — séquence type : PROP_SANCTION → [SAISIE_SANCTION | REFUS_SAISIE_SANCTION] → ACCORD_FT_SANCTION → [VALID_SANCTION | REFUS_SANCTION] → (éventuellement ANNULATION_SANCTION ou cycle levée suspension).</div>
   </div>
@@ -293,7 +297,7 @@
     </div>
 
     <div class="ref-card voc-card">
-      <div class="ref-head"><span class="ref-title">Motif — version détaillée</span><span class="ref-count">17</span></div>
+      <div class="ref-head"><span class="ref-title">Motif — version détaillée</span><span class="ref-count">20</span></div>
       <ul class="ref-list voc-list">
         <li><span class="voc-code">DROIT_ERREUR</span> Droit à l'erreur (sanction prononcée CD ou CAF)</li>
         <li><span class="voc-code">RECOURS</span> Annulation suite à recours (sanction prononcée CD ou CAF)</li>
@@ -304,7 +308,7 @@
         <li><span class="voc-code">VALIDATION_CD</span> Décision de sanction par le CD</li>
         <li><span class="voc-code">REFUS_CD</span> Proposition refusée par le CD</li>
         <li><span class="voc-code">REFUS_ELD</span> Proposition refusée par le manager France Travail</li>
-        <li><span class="voc-code">RECENTALISATION_RSA_OUTREMER</span> Proposition à traiter CAF Outremer (recentralisation RSA)</li>
+        <li><span class="voc-code">RECENTRALISATION_RSA_OUTREMER</span> Proposition à traiter CAF Outremer (recentralisation RSA)</li>
         <li><span class="voc-code">VALIDATION_CAF</span> Décision de sanction par la CAF</li>
         <li><span class="voc-code">REFUS_CAF</span> Proposition refusée par la CAF</li>
         <li><span class="voc-code">ABANDON_RECOURS_FT</span> Annulation suite réclamation FT (sanction prononcée FT)</li>
@@ -312,8 +316,11 @@
         <li><span class="voc-code">TRIBUNAL_ADM</span> Annulation suite décision tribunal administratif</li>
         <li><span class="voc-code">ANNU_SANCTION</span> Annulation suite erreur décision sanction (sanction prononcée FT)</li>
         <li><span class="voc-code">ANNU_RECOURS</span> Annulation suite erreur décision recours (sanction prononcée FT)</li>
+        <li><span class="voc-code">FAVORABLE</span> Avis favorable de France Travail sur une demande de remobilisation (v1.4)</li>
+        <li><span class="voc-code">DEFAVORABLE</span> Avis défavorable de France Travail sur une demande de remobilisation (v1.4)</li>
+        <li><span class="voc-code">DEMANDE_PARTENAIRE</span> Radiation de la liste des demandeurs d'emploi demandée par un partenaire (v1.4)</li>
       </ul>
-      <div class="voc-tech"><code>motif</code> (dans le schéma <code>DetailEvenementSanction</code>) — vocabulaire riche qui porte à la fois <em>quoi</em> et <em>qui</em> (FT, CD, CAF, manager, médiateur, tribunal). Note orthographique : <code>RECENTALISATION</code> est l'orthographe du schéma (typo probable de « recentralisation »).</div>
+      <div class="voc-tech"><code>motif</code> (dans le schéma <code>DetailEvenementSanction</code>) — vocabulaire riche qui porte à la fois <em>quoi</em> et <em>qui</em> (FT, CD, CAF, manager, médiateur, tribunal).</div>
     </div>
 
   </div>
