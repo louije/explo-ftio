@@ -157,12 +157,12 @@
 </div>
 
 <div class="note" style="margin-bottom:20px;">
-  <strong>Deux petits vocabulaires, mais critiques</strong> — Pas d'endpoint <code>/referentiel</code> ici, seulement deux champs dont les valeurs conditionnent l'usage côté consommateur. Le <code>codeRetour</code> en particulier n'est <strong>pas déclaré en enum</strong> dans l'OpenAPI — ses valeurs sont documentées uniquement à travers les exemples de réponses, et la logique d'intégration dépend directement de cette liste.
+  <strong>Trois petits vocabulaires, mais critiques</strong> — Pas d'endpoint <code>/referentiel</code> ici, seulement trois champs dont les valeurs conditionnent l'usage côté consommateur. Le <code>codeRetour</code> en particulier n'est <strong>pas déclaré en enum</strong> dans l'OpenAPI — ses valeurs sont documentées uniquement à travers les exemples de réponses, et la logique d'intégration dépend directement de cette liste.
 </div>
 
 <div class="ref-section">
   <h2 class="ref-section-title rs-soft">
-    Vocabulaires des réponses
+    Vocabulaires des requêtes et des réponses
     <span class="rs-count">2 enums · 1 pseudo-enum (exemples)</span>
     <span class="rs-tech">schémas <code>ResultatDTO</code> · <code>Resultat{400,403,500,503}DTO</code> · <code>ParIdentitePivotDTO</code></span>
   </h2>
@@ -293,7 +293,7 @@
 <span class="jc">// ── Corps de requête ──</span>
 {
   <span class="jk">"dateNaissance"</span>: <span class="js">"1989-04-15"</span>,
-  <span class="jk">"nir"</span>: <span class="js">"2890475012045"</span>
+  <span class="jk">"nir"</span>: <span class="js">"2890475112045"</span>
 }</div>
 <div data-section="s-reponse-nir"><span class="jc">// Réponse 200 — Usager trouvé</span>
 {
@@ -347,7 +347,7 @@
   <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche par NIR</div>
   <div class="ex-card">
     <h4>Identification par sécurité sociale</h4>
-    <p>Henri recherche Sophie Moreau à partir de son NIR (2890475012045) et de sa date de naissance (15 avril 1989). Ces deux informations figurent sur la carte Vitale de l'usager.</p>
+    <p>Henri recherche Sophie Moreau à partir de son NIR (2890475112045) et de sa date de naissance (15 avril 1989). Ces deux informations figurent sur la carte Vitale de l'usager.</p>
     <p>Les trois headers obligatoires identifient le conseiller qui consulte le dossier : son nom, son prénom et son identifiant interne chez le partenaire (<code>ML-AMI-0042</code>). France Travail enregistre ces informations pour la traçabilité des accès aux données personnelles.</p>
   </div>
 </div>
@@ -382,7 +382,7 @@
   <div class="ex-card">
     <h4>Même usager, même jeton</h4>
     <p><span class="ex-tag tag-ok">S001 — Usager trouvé</span></p>
-    <p>Les deux méthodes produisent le même jeton pour le même usager. Le jeton peut ensuite être transmis en header <code>ft-jeton-usager</code> à toute API du réseau.</p>
+    <p>Quelle que soit la méthode, le même usager obtient le même jeton. Le jeton peut ensuite être transmis en header <code>ft-jeton-usager</code> à toute API du réseau.</p>
     <p style="margin-top:10px;padding:8px 12px;background:#fffbeb;border-radius:6px;color:#92400e;font-size:0.84rem;">
       <strong>Cycle de vie du jeton :</strong> le jeton est volatile, valide environ une journée. Au-delà, il faut relancer une recherche pour en obtenir un nouveau. Le jeton ne contient aucune donnée personnelle en clair — c'est un identifiant crypté opaque.
     </p>
