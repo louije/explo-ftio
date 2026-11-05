@@ -91,7 +91,7 @@
       </div>
       <div class="nb">
         <div class="fi">État du rendez-vous et traçabilité
-          <div class="fi-tech"><code>statut</code> <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ANNULE</span> · <code>estEnConflit</code> · <code>initiateur</code> <span class="ev">USAGER|CONSEILLER</span> · <code>dateAnnulation</code> · <code>motifAnnulation</code> · <code>idOrigine</code></div>
+          <div class="fi-tech"><code>statut</code> <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ABSENT_EXC|ANNULE</span> · <code>estEnConflit</code> · <code>initiateur</code> <span class="ev">USAGER|CONSEILLER</span> · <code>dateAnnulation</code> · <code>motifAnnulation</code> · <code>idOrigine</code></div>
         </div>
       </div>
     </div>
@@ -141,7 +141,7 @@
       </div>
       <div class="nb">
         <div class="fi">Date, durée, thème, motif, modalité et type de réception du rendez-vous. Les champs obligatoires sont marqués ci-dessous.
-          <div class="fi-tech"><code>date</code>* · <code>duree</code> · <code>theme</code> · <code>description</code> · <code>modaliteContact</code>* <span class="ev">VISIO|TELEPHONE|PHYSIQUE</span> · <code>motif</code>* <span class="ev">AUT|ACC|ORI</span> · <code>statut</code>* <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ANNULE</span> · <code>typeReception</code>* <span class="ev">IND|COL</span> · <code>initiateur</code> <span class="ev">USAGER|PARTENAIRE</span>
+          <div class="fi-tech"><code>date</code>* · <code>duree</code> · <code>theme</code> · <code>description</code> · <code>modaliteContact</code>* <span class="ev">VISIO|TELEPHONE|PHYSIQUE</span> · <code>motif</code>* <span class="ev">AUT|ACC|ORI</span> · <code>statut</code>* <span class="ev">PRIS|EFFECTUE|MODIFIE|ABSENT|ABSENT_EXC|ANNULE</span> · <code>typeReception</code>* <span class="ev">IND|COL</span> · <code>initiateur</code> <span class="ev">USAGER|PARTENAIRE</span>
             <br><span style="font-size:.58rem;color:var(--text-light);">* champs obligatoires — AUT=Autre · ACC=Accompagnement · ORI=Orientation</span></div>
         </div>
       </div>
@@ -329,15 +329,16 @@
   <div class="ref-families">
 
     <div class="ref-card voc-card">
-      <div class="ref-head"><span class="ref-title">Statut du rendez-vous</span><span class="ref-count">5</span></div>
+      <div class="ref-head"><span class="ref-title">Statut du rendez-vous</span><span class="ref-count">6</span></div>
       <ul class="ref-list voc-list">
         <li><span class="voc-code">PRIS</span> Planifié, à venir</li>
         <li><span class="voc-code">MODIFIE</span> Déplacé / replanifié</li>
         <li><span class="voc-code">EFFECTUE</span> Tenu — l'usager était présent</li>
         <li><span class="voc-code">ABSENT</span> Non tenu — absence de l'usager</li>
+        <li><span class="voc-code">ABSENT_EXC</span> Non tenu — absence de l'usager, a priori excusée (ajouté entre juin et octobre 2026, sans description dans le schéma)</li>
         <li><span class="voc-code">ANNULE</span> Annulé</li>
       </ul>
-      <div class="voc-tech"><code>statut</code></div>
+      <div class="voc-tech"><code>statut</code> — même liste dans <code>RendezVousPartenaire</code> et <code>RendezVousUsager</code>.</div>
     </div>
 
     <div class="ref-card voc-card">
