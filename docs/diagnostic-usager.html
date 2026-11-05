@@ -124,7 +124,7 @@
             <div class="n l3o stack" id="m-objectifs">
               <div class="nh"><div class="dot"></div><div class="name">Objectifs pour lever le frein <span class="dto">objectifs[] · ObjectifDto</span></div><div class="card">1 ou plusieurs <span class="card-tech">array · 1:N</span></div></div>
               <div class="nb"><div class="fi">Actions concrètes : « Obtenir le permis », « Trouver une garde »… <span class="ev">Pas abordé</span> <span class="ev">En cours</span> <span class="ev">Réalisé</span> <span class="ev">Abandonné</span> <span class="at">Conseiller tracé</span>
-                <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">NON_ABORDE|EN_COURS|REALISE|ABANDONNE</span> · <span class="at">@ AgentDto</span></div>
+                <div class="fi-tech"><code>code</code> · <code>libelle</code> · <code>valeur</code> <span class="ev">NON_ABORDE|A_FAIRE|EN_COURS|REALISE|ABANDONNE</span> · <span class="at">@ AgentDto</span></div>
               </div></div>
             </div>
           </div>
@@ -285,7 +285,7 @@
     <span class="rs-tech">domaine <code>contrainte</code> · sous-domaines <code>situation</code> · <code>objectif</code></span>
   </h2>
   <div class="ref-section-intro">
-    Chaque frein se décline en <strong>situations constatées</strong> (ce que le conseiller voit — <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">NON</span>) et en <strong>objectifs</strong> (ce qu'on vise — <span class="ev">NON_ABORDE</span> <span class="ev">EN_COURS</span> <span class="ev">REALISE</span> <span class="ev">ABANDONNE</span>). Le frein lui-même est <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">CLOTUREE</span> <span class="ev">SUPPRIMEE</span>.
+    Chaque frein se décline en <strong>situations constatées</strong> (ce que le conseiller voit — <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">NON</span>) et en <strong>objectifs</strong> (ce qu'on vise — <span class="ev">NON_ABORDE</span> <span class="ev">A_FAIRE</span> <span class="ev">EN_COURS</span> <span class="ev">REALISE</span> <span class="ev">ABANDONNE</span>). Le frein lui-même est <span class="ev">NON_ABORDEE</span> <span class="ev">OUI</span> <span class="ev">CLOTUREE</span> <span class="ev">SUPPRIMEE</span>.
     Les codes de situations et d'objectifs ne sont <strong>pas uniques au niveau global</strong> — ils ne le sont qu'à l'intérieur d'un même frein (ex. objectif « 6 » existe à la fois sous mobilité et sous numérique).
   </div>
 
@@ -721,7 +721,7 @@
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Crée un diagnostic</span><div class="ep-human">Ajouter un nouveau projet professionnel</div><span class="ep-path">/diagnostics</span></div></div>
     <div class="ep-row"><span class="ep-method m-put">PUT</span><div><span class="ep-desc">Modifie un diagnostic</span><div class="ep-human">Modifier un projet existant</div><span class="ep-path">/diagnostics/{idDiagnostic}</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Priorise un diagnostic</span><div class="ep-human">Marquer un projet comme prioritaire</div><span class="ep-path">/diagnostics/{idDiagnostic}/priorise</span></div></div>
-    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Supprime un diagnostic</span><div class="ep-human">Supprimer un projet professionnel</div><span class="ep-path">/diagnostics/{idDiagnostic}/supprime</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Supprime un diagnostic</span><div class="ep-human">Supprimer le diagnostic d'un projet et ses besoins ; les éléments transverses (pouvoir d'agir, contraintes, autonomie numérique) sont conservés, et un diagnostic « projet à définir » est recréé</div><span class="ep-path">/diagnostics/{idDiagnostic}/supprime</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Historisation des diagnostics</span><div class="ep-human">Historique des projets</div><span class="ep-path">/historisation/diagnostics</span></div></div>
   </div>
 </div>
