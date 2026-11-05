@@ -160,6 +160,7 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Identification de l'agent",
     "Recherche par NIR + date de naissance",
     "Recherche par numéro France Travail",
+    "Recherche par identité pivot",
   ],
   "conclusions-entretiens": [
     "Entretien — type et date",

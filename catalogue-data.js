@@ -364,7 +364,8 @@ const CATALOGUE = {
       "concepts": [
         "Identification de l'agent",
         "Recherche par NIR + date de naissance",
-        "Recherche par numéro France Travail"
+        "Recherche par numéro France Travail",
+        "Recherche par identité pivot"
       ],
       "starred": false,
       "isNew": false

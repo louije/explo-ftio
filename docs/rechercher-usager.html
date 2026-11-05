@@ -15,7 +15,7 @@
 <header>
   <h1>Rechercher usager</h1>
   <div class="sub">Point d'entrée du réseau : identifie un demandeur d'emploi et produit le jeton d'accès à son dossier</div>
-  <div class="sub-tech">Rechercher usager v2.0 — 2 endpoints · 7 schemas</div>
+  <div class="sub-tech">Rechercher usager v2.1 — 3 endpoints · 8 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/rechercher-usager/v2</div>
 </header>
 
@@ -41,7 +41,7 @@
 <div class="n l0" id="m-requete">
   <div class="nh"><div class="dot"></div>
     <div class="name">Recherche usager <span class="dto">Requête POST</span></div>
-    <div class="card">2 méthodes de recherche</div>
+    <div class="card">3 méthodes de recherche</div>
   </div>
   <div class="nb">
 
@@ -79,6 +79,21 @@
       <div class="nb"><div class="fi">
         Recherche directe par le numéro France Travail de l'usager (anciennement identifiant Pôle emploi).
         <div class="fi-tech"><code>numeroFranceTravail</code> string (11 chiffres)</div>
+      </div></div>
+    </div>
+
+    <div class="n l1-b" id="m-par-pivot">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Par identité pivot <span class="dto">ParIdentitePivotDTO</span></div>
+        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Recherche par l'état civil de naissance, sans NIR ni numéro France Travail : nom de naissance, prénoms, sexe, date et lieu de naissance. Utile quand on ne connaît que l'identité de la personne. Si plusieurs usagers partagent la même identité, l'adresse e-mail permet de les départager ; sinon la réponse est <span class="ev">S003</span> (plusieurs usagers). Ajouté en v2.1.
+        <div class="fi-tech">
+          <code>nomFamilleNaissance</code>* string · <code>prenoms</code>* string (séparés par un espace) · <code>sexe</code>* (<span class="ev">M|F</span>) · <code>dateNaissance</code>* string (AAAA-MM-JJ)<br>
+          <code>codeInseePaysNaissance</code>* string (ex. <span class="ev">99100</span> France) · <code>codeInseeLieuNaissance</code> string — obligatoire si né en France<br>
+          <code>adresseMail</code> string — facultatif, pour départager des homonymes
+        </div>
       </div></div>
     </div>
 
@@ -148,8 +163,8 @@
 <div class="ref-section">
   <h2 class="ref-section-title rs-soft">
     Vocabulaires des réponses
-    <span class="rs-count">1 enum · 1 pseudo-enum (exemples)</span>
-    <span class="rs-tech">schémas <code>ResultatDTO</code> · <code>Resultat{400,403,500,503}DTO</code></span>
+    <span class="rs-count">2 enums · 1 pseudo-enum (exemples)</span>
+    <span class="rs-tech">schémas <code>ResultatDTO</code> · <code>Resultat{400,403,500,503}DTO</code> · <code>ParIdentitePivotDTO</code></span>
   </h2>
 
   <div class="ref-vocs">
@@ -164,7 +179,7 @@
       <ul class="ref-list voc-list">
         <li><span class="voc-code">S001</span> Usager trouvé — un <code>jetonUsager</code> est produit (<code>topIdentiteCertifiee</code> = O ou N)</li>
         <li><span class="voc-code">S002</span> Aucun usager trouvé — pas de jeton (<code>topIdentiteCertifiee</code> = null)</li>
-        <li><span class="voc-code">S003</span> Plusieurs usagers trouvés — pas de jeton, résultat ambigu à lever en amont</li>
+        <li><span class="voc-code">S003</span> Plusieurs usagers trouvés — pas de jeton, résultat ambigu à lever en amont (par identité pivot : ajouter <code>adresseMail</code>)</li>
       </ul>
 
       <div class="ref-subtitle" style="margin-top:14px;">Erreurs <span class="ref-count">HTTP 4xx / 5xx</span></div>
@@ -193,6 +208,17 @@
       </div>
     </div>
 
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Sexe de naissance</span><span class="ref-count">2</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">M</span> Masculin</li>
+        <li><span class="voc-code">F</span> Féminin</li>
+      </ul>
+      <div class="voc-tech">
+        <code>ParIdentitePivotDTO.sexe</code> — déclaré en <code>enum</code>, obligatoire pour la recherche par identité pivot. Les lieux et pays de naissance sont des codes INSEE (pays : <code>99100</code> = France).
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -212,12 +238,13 @@
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher un usager par date de naissance et NIR</span><div class="ep-human">Identifier un demandeur par son numéro de sécurité sociale et sa date de naissance</div><span class="ep-path">/usagers/par-datenaissance-et-nir</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher un usager par numéro France Travail</span><div class="ep-human">Identifier un demandeur par son numéro France Travail</div><span class="ep-path">/usagers/par-numero-francetravail</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher un usager par identité pivot</span><div class="ep-human">Identifier un demandeur par son état civil de naissance (nom, prénoms, sexe, date et lieu de naissance)</div><span class="ep-path">/usagers/par-identite-pivot</span></div></div>
   </div>
 </div>
 
 <!-- Schemas -->
 <div style="margin-top:24px;">
-  <div class="domain-title">7 Schémas <span class="dt-human">— Types de données</span></div>
+  <div class="domain-title">8 Schémas <span class="dt-human">— Types de données</span></div>
   <div class="sc-legend">
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / Consultation</span>
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Requête</span>
@@ -226,6 +253,7 @@
   <div class="schema-grid">
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ParDateNaissanceEtNirDTO</span> <span class="sc-desc">— Recherche par NIR</span></div>
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ParNumeroFTDTO</span> <span class="sc-desc">— Recherche par n° FT</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ParIdentitePivotDTO</span> <span class="sc-desc">— Recherche par identité pivot</span></div>
     <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">ResultatDTO</span> <span class="sc-desc">— Réponse succès</span></div>
     <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat400DTO</span> <span class="sc-desc">— Erreur validation</span></div>
     <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">Resultat403DTO</span> <span class="sc-desc">— Accès non autorisé</span></div>
@@ -235,7 +263,11 @@
 </div>
 
 <div class="note" style="margin-top:16px;">
-  <strong>2 endpoints</strong> · <strong>7 schémas</strong> — 2 en écriture (corps de requête), 1 en lecture (réponse succès), 4 en erreur (400, 403, 500, 503). Les deux endpoints partagent le même schéma de réponse <code>ResultatDTO</code> et les mêmes headers obligatoires : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+  <strong>3 endpoints</strong> · <strong>8 schémas</strong> — 3 en écriture (corps de requête), 1 en lecture (réponse succès), 4 en erreur (400, 403, 500, 503). Les trois endpoints partagent le même schéma de réponse <code>ResultatDTO</code> et les mêmes headers obligatoires : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+</div>
+
+<div class="note">
+  <strong>Nouveau en v2.1</strong> — Entre juin et octobre 2026, la recherche par identité pivot (<code>POST /usagers/par-identite-pivot</code>) a été ajoutée. La réponse 403 (<code>Resultat403DTO</code>) contient aussi désormais <code>numeroFranceTravail</code>, qui y vaut toujours <code>null</code>.
 </div>
 
 </div>
@@ -246,7 +278,7 @@
 <div class="view" id="v-example">
 
 <div class="story">
-  <strong>Henri Martin, conseiller à la Mission Locale d'Amiens</strong> — Henri Martin, conseiller à la Mission Locale d'Amiens, doit consulter le dossier de Sophie Moreau. Il commence par rechercher l'usager pour obtenir un jeton d'accès. Il effectue deux recherches : d'abord par NIR et date de naissance, puis par numéro France Travail.
+  <strong>Henri Martin, conseiller à la Mission Locale d'Amiens</strong> — Henri Martin, conseiller à la Mission Locale d'Amiens, doit consulter le dossier de Sophie Moreau. Il commence par rechercher l'usager pour obtenir un jeton d'accès. Il effectue trois recherches : d'abord par NIR et date de naissance, puis par numéro France Travail, enfin par identité pivot. Les données de l'exemple sont fictives.
 </div>
 
 <div class="example-split">
@@ -280,6 +312,24 @@
   <span class="jk">"numeroFranceTravail"</span>: <span class="js">"10107641246"</span>
 }</div>
 <div data-section="s-reponse-ft"><span class="jc">// Réponse 200 — Usager trouvé</span>
+{
+  <span class="jk">"codeRetour"</span>: <span class="js">"S001"</span>,
+  <span class="jk">"message"</span>: <span class="js">"Usager trouvé"</span>,
+  <span class="jk">"topIdentiteCertifiee"</span>: <span class="js">"O"</span>,
+  <span class="jk">"jetonUsager"</span>: <span class="js">"ewogICJ2ZXJzIiA6ICIwLjEiLAogICJ1dWlkIiA6ICJjOTE5YmY4Yy0yY2E5LTQ3MjYtYWEwMy1jNGE1ZTEyODI4ZDUiLAogICJleHBpcmUiIDogMTcyNjU4NjEyNjY0NywKICAidHlwZSIgOiAiL3BhcnRlbmFpcmUiLAogICJkYXRhIiA6ICI1MmEwOGU4YS1jMmFhLTRlODQtYTQ2NS1lMTIwZWU2YzQxM2UjQWtFRjZtSnRtRm9HOWlXS3pCbTdITmNKeVpVM2ZNc1dURHBhSktibUNSWkM3WWd5YVFWSzhwWkJCMWQ3aTc0dzhOamRja01URkFZR0xXWklEd3JYRVhDaE5XOUhIVU9fcDByTV9kajFKbFozdElBQURMUURTX2ZsUlBWMW1BdmtPbTl4WEFSQWoxQWFlQkJCdW9hQjhCNWJJVU8xTWhBMHE0Q3drMGhQS2ZrIgp9"</span>,
+  <span class="jk">"numeroFranceTravail"</span>: <span class="js">"10107641246"</span>
+}</div>
+<div data-section="s-requete-pivot"><span class="jc">// POST /usagers/par-identite-pivot</span>
+<span class="jc">// ── Mêmes headers obligatoires ──</span>
+{
+  <span class="jk">"nomFamilleNaissance"</span>: <span class="js">"MOREAU"</span>,
+  <span class="jk">"prenoms"</span>: <span class="js">"SOPHIE CLAIRE"</span>,
+  <span class="jk">"sexe"</span>: <span class="js">"F"</span>,
+  <span class="jk">"dateNaissance"</span>: <span class="js">"1989-04-15"</span>,
+  <span class="jk">"codeInseeLieuNaissance"</span>: <span class="js">"75112"</span>,
+  <span class="jk">"codeInseePaysNaissance"</span>: <span class="js">"99100"</span>
+}</div>
+<div data-section="s-reponse-pivot"><span class="jc">// Réponse 200 — Usager trouvé</span>
 {
   <span class="jk">"codeRetour"</span>: <span class="js">"S001"</span>,
   <span class="jk">"message"</span>: <span class="js">"Usager trouvé"</span>,
@@ -336,6 +386,30 @@
     <p style="margin-top:10px;padding:8px 12px;background:#fffbeb;border-radius:6px;color:#92400e;font-size:0.84rem;">
       <strong>Cycle de vie du jeton :</strong> le jeton est volatile, valide environ une journée. Au-delà, il faut relancer une recherche pour en obtenir un nouveau. Le jeton ne contient aucune donnée personnelle en clair — c'est un identifiant crypté opaque.
     </p>
+  </div>
+</div>
+
+<div data-section="s-requete-pivot">
+  <div class="ex-title"><span class="ex-ico">&#x1F50D;</span> Recherche par identité pivot</div>
+  <div class="ex-card">
+    <h4>Identification par l'état civil</h4>
+    <p>Troisième méthode, quand on n'a ni la carte Vitale ni le numéro France Travail : Henri saisit l'identité de naissance de Sophie, telle qu'elle figure sur sa pièce d'identité.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Nom de naissance</strong> → MOREAU</div>
+      <div class="ex-item"><strong>Prénoms</strong> → SOPHIE CLAIRE (séparés par un espace)</div>
+      <div class="ex-item"><strong>Sexe</strong> → F</div>
+      <div class="ex-item"><strong>Naissance</strong> → 15 avril 1989, Paris 12e (INSEE 75112), France (99100)</div>
+    </div>
+    <p>Née en France, Sophie doit avoir sa commune de naissance renseignée. Si deux personnes avaient exactement la même identité, l'API répondrait <span class="ev">S003</span> ; Henri pourrait alors ajouter l'adresse e-mail de Sophie pour les départager.</p>
+  </div>
+</div>
+
+<div data-section="s-reponse-pivot">
+  <div class="ex-title"><span class="ex-ico">&#x2705;</span> Résultat — Toujours le même usager</div>
+  <div class="ex-card">
+    <h4>Sophie Moreau identifiée sans identifiant</h4>
+    <p><span class="ex-tag tag-ok">S001 — Usager trouvé</span></p>
+    <p>La réponse a la même forme que pour les deux autres méthodes : le jeton usager et le numéro France Travail de Sophie, que Henri pourra réutiliser ensuite.</p>
     <div class="ex-agent">Recherche effectuée par Henri Martin — Mission Locale d'Amiens</div>
   </div>
 </div>
@@ -394,7 +468,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.3 — Rechercher usager v2.0 · api.francetravail.io · 2 endpoints · 7 schemas
+  OpenAPI 3.0.3 — Rechercher usager v2.1 · api.francetravail.io · 3 endpoints · 8 schemas
 </footer>
 
 </div>
