@@ -15,7 +15,7 @@
 <header>
   <h1>Acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi</h1>
   <div class="sub">Taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois des demandeurs d'emploi en cat&#xe9;gories A et B, par m&#xe9;tier recherch&#xe9;</div>
-  <div class="sub-tech">Acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi v1 &#x2014; 22 endpoints &#xb7; 26 schemas</div>
+  <div class="sub-tech">Acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi v1.1 &#x2014; 28 endpoints &#xb7; 32 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-perspectives-retour-emploi</div>
 </header>
 
@@ -40,8 +40,8 @@
     <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
   </div>
   <div class="nb">
-    <div class="fi">Enveloppe de r&#xe9;ponse de l'indicateur ACC_1 (acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois). Identifie l'indicateur, le territoire et contient les valeurs ventil&#xe9;es par p&#xe9;riode.
-      <div class="fi-tech"><code>codeIndicateur</code> (<span class="ev">ACC_1</span>) &#xb7; <code>codeFamille</code> &#xb7; <code>libIndicateur</code> &#xb7; <code>libTerritoire</code> &#xb7; <code>datMaj</code></div>
+    <div class="fi">Enveloppe de r&#xe9;ponse des indicateurs ACC_1 (acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois) et ACC_8 (la m&#xea;me mesure, par profil de demandeur). Identifie l'indicateur, le territoire et contient les valeurs ventil&#xe9;es par p&#xe9;riode.
+      <div class="fi-tech"><code>codeIndicateur</code> (<span class="ev">ACC_1|ACC_8</span>) &#xb7; <code>codeFamille</code> &#xb7; <code>libIndicateur</code> &#xb7; <code>libTerritoire</code> &#xb7; <code>datMaj</code></div>
     </div>
 
     <div class="n l1-p stack" id="m-valeurs-periode">
@@ -55,7 +55,7 @@
             <br><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libActivite</code>
             <br><code>codeNomenclature</code> &#xb7; <code>libNomenclature</code>
             <br><code>codeTypePeriode</code> &#xb7; <code>codePeriode</code> &#xb7; <code>libPeriode</code>
-            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleTaux</code>
+            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleTaux</code> &#xb7; <code>valeurPrincipaleDecimale</code>
             <br><code>valeurSecondaireNombre</code> &#xb7; <code>valeurSecondairePourcentage</code></div>
         </div>
 
@@ -84,11 +84,12 @@
     <div class="card">Unique <span class="card-tech">object &#xb7; 1:1</span></div>
   </div>
   <div class="nb">
-    <div class="fi">Corps de la requ&#xea;te POST pour l'indicateur ACC_1. Crit&#xe8;res obligatoires : territoire, m&#xe9;tier ROME, p&#xe9;riode et nomenclature (d&#xe9;lai d'acc&#xe8;s ou dur&#xe9;e d'emploi). Crit&#xe8;res facultatifs : p&#xe9;riodes sp&#xe9;cifiques, caract&#xe9;ristiques de filtrage.
+    <div class="fi">Corps de la requ&#xea;te POST pour les indicateurs ACC_1 et ACC_8. Crit&#xe8;res obligatoires : territoire, m&#xe9;tier ROME, p&#xe9;riode et nomenclature (d&#xe9;lai d'acc&#xe8;s ou dur&#xe9;e d'emploi). Crit&#xe8;res facultatifs : p&#xe9;riodes sp&#xe9;cifiques, caract&#xe9;ristiques de filtrage.
       <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code>
         <br><code>codeTypeActivite</code> (<span class="ev">ROME</span>) &#xb7; <code>codeActivite</code>
         <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">ACCESEMP|DUREEEMP</span>)
-        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code></div>
+        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code>
+        <br><code>profilDemandeur</code> (<span class="ev">JEUNES</span>&#x2026;) &#x2014; requis selon l'indicateur (ACC_8), sinon erreur 400</div>
     </div>
   </div>
 </div>
@@ -124,7 +125,7 @@
 </div>
 
 <div class="note">
-  <strong>Structure partag&#xe9;e</strong> &#x2014; Cette API partage le m&#xea;me cadre de r&#xe9;ponse (<code>IndicateurRetour</code> &#x2192; <code>ValeursParPeriode</code> &#x2192; <code>ValeursParCaracteristique</code>) que les API <a href="marche-travail.html">March&#xe9; du travail</a> et <a href="sortants-formation-acces-emploi.html">Sortants de formation</a>. Seul l'indicateur diff&#xe8;re : ACC_1 mesure le taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois des demandeurs inscrits en cat&#xe9;gories A et B, ind&#xe9;pendamment de toute formation.
+  <strong>Structure partag&#xe9;e</strong> &#x2014; Cette API partage le m&#xea;me cadre de r&#xe9;ponse (<code>IndicateurRetour</code> &#x2192; <code>ValeursParPeriode</code> &#x2192; <code>ValeursParCaracteristique</code>) que les API <a href="marche-travail.html">March&#xe9; du travail</a> et <a href="sortants-formation-acces-emploi.html">Sortants de formation</a>. Seul l'indicateur diff&#xe8;re : ACC_1 mesure le taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois des demandeurs inscrits en cat&#xe9;gories A et B, ind&#xe9;pendamment de toute formation. ACC_8, ajout&#xe9; en v1.1, donne la m&#xea;me mesure par profil de demandeur.
 </div>
 
 </div>
@@ -201,7 +202,7 @@
   <h2 class="ref-section-title">
     <span class="rs-dot" style="background:#7c3aed;"></span>
     Indicateurs &amp; requêtes possibles
-    <span class="rs-count">1</span>
+    <span class="rs-count">2</span>
     <span class="rs-tech">un appel par indicateur</span>
   </h2>
   <div class="ref-section-intro">
@@ -212,6 +213,11 @@
     <div class="ref-card voc-card" style="grid-column:1/-1;">
       <div class="ref-head"><span class="ref-title">Accès à l'emploi à 6 mois</span><span class="ref-count"><span class="ev">ACC_1</span></span></div>
       <div class="expl"><code>stat-acces-emploi</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> délai d'accès, périodes, caractéristiques. <em>Demandeurs catégories A et B, par métier recherché.</em></div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Accès à l'emploi à 6 mois par profil</span><span class="ref-count"><span class="ev">ACC_8</span></span></div>
+      <div class="expl"><code>stat-acces-emploi-profil</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> délai d'accès, durée d'emploi, périodes, caractéristiques. <em>Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) et métier recherché : profil requis selon l'indicateur, sinon erreur 400.</em></div>
     </div>
 
   </div>
@@ -225,9 +231,10 @@
 <div class="view" id="v-coverage">
 
 <div class="domain">
-  <div class="domain-title">Indicateur statistique <span class="dt-human">&#x2014; Acc&#xe8;s &#xe0; l'emploi</span></div>
+  <div class="domain-title">Indicateurs statistiques <span class="dt-human">&#x2014; Acc&#xe8;s &#xe0; l'emploi</span></div>
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Acc&#xe8;s &#xe0; l'emploi cat&#xe9;gories A et B (ACC_1)</span><div class="ep-human">Taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois par m&#xe9;tier recherch&#xe9;</div><span class="ep-path">/v1/indicateur/stat-acces-emploi</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Acc&#xe8;s &#xe0; l'emploi par profil (ACC_8)</span><div class="ep-human">Taux d'acc&#xe8;s &#xe0; l'emploi &#xe0; 6 mois par profil de demandeur et m&#xe9;tier recherch&#xe9; &#x2014; ajout&#xe9; en v1.1</div><span class="ep-path">/v1/indicateur/stat-acces-emploi-profil</span></div></div>
   </div>
 </div>
 
@@ -239,13 +246,13 @@
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">P&#xe9;riodes</span><div class="ep-human">Consulter et lister les p&#xe9;riodes</div><span class="ep-path">/v1/referentiel/periode(s)</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Nomenclatures</span><div class="ep-human">Consulter et lister les nomenclatures (acc&#xe8;s emploi, dur&#xe9;e)</div><span class="ep-path">/v1/referentiel/nomenclature(s)</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Caract&#xe9;ristiques</span><div class="ep-human">Consulter et lister les caract&#xe9;ristiques (genre, &#xe2;ge&#x2026;)</div><span class="ep-path">/v1/referentiel/caracteristique(s)</span></div></div>
-    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Catalogue indicateurs</span><div class="ep-human">D&#xe9;tails de l'indicateur ACC_1 et croisements disponibles</div><span class="ep-path">/v1/referentiel/details-indicateurs</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Catalogue indicateurs</span><div class="ep-human">D&#xe9;tails des indicateurs ACC_1 et ACC_8 et croisements disponibles</div><span class="ep-path">/v1/referentiel/details-indicateurs</span></div></div>
   </div>
 </div>
 
 <!-- Schemas -->
 <div style="margin-top:24px;">
-  <div class="domain-title">26 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="domain-title">32 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
   <div class="sc-legend">
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
@@ -446,7 +453,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.1 &#x2014; Acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi v1 &#xb7; api.francetravail.io &#xb7; 22 endpoints &#xb7; 26 schemas
+  OpenAPI 3.0.1 &#x2014; Acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi v1.1 &#xb7; api.francetravail.io &#xb7; 28 endpoints &#xb7; 32 schemas
 </footer>
 
 </div>

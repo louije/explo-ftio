@@ -64,6 +64,7 @@ PER_API = {
         "nomenclatures": [("DUREEEMP", "Durée d'emploi / délai d'accès")],
         "indicators": [
             ("ACC_1", "Accès à l'emploi à 6 mois", "stat-acces-emploi", "territoire, activité", "délai d'accès, périodes, caractéristiques", "Demandeurs catégories A et B, par métier recherché."),
+            ("ACC_8", "Accès à l'emploi à 6 mois par profil", "stat-acces-emploi-profil", "territoire, activité", "délai d'accès, durée d'emploi, périodes, caractéristiques", "Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) et métier recherché : profil requis selon l'indicateur, sinon erreur 400."),
         ],
     },
     "sortants-formation-acces-emploi": {

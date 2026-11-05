@@ -15,7 +15,7 @@
 <header>
   <h1>Sortants de formation et acc&#xe8;s &#xe0; l'emploi</h1>
   <div class="sub">Statistiques sur les sorties de formation et l'acc&#xe8;s &#xe0; l'emploi des demandeurs d'emploi en cat&#xe9;gories A et B</div>
-  <div class="sub-tech">Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1 &#x2014; 22 endpoints &#xb7; 26 schemas</div>
+  <div class="sub-tech">Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1.1 &#x2014; 28 endpoints &#xb7; 33 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-entrees-sorties-formations</div>
 </header>
 
@@ -56,7 +56,7 @@
             <br><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libActivite</code>
             <br><code>codeNomenclature</code> &#xb7; <code>libNomenclature</code>
             <br><code>codeTypePeriode</code> &#xb7; <code>codePeriode</code> &#xb7; <code>libPeriode</code>
-            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleTaux</code>
+            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleDecimale</code> &#xb7; <code>valeurPrincipaleTaux</code>
             <br><code>valeurSecondaireNombre</code> &#xb7; <code>valeurSecondairePourcentage</code></div>
         </div>
 
@@ -88,7 +88,8 @@
       <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code>
         <br><code>codeTypeActivite</code> (<span class="ev">ROME|FORM14|FORM40</span>) &#xb7; <code>codeActivite</code>
         <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">ACCESEMP|DUREEEMP</span>)
-        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>listeCaracteristiques[]</code></div>
+        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>listeCaracteristiques[]</code>
+        <br><code>profilDemandeur</code> &#x2014; ajout&#xe9; en v1.1 au sch&#xe9;ma partag&#xe9; ; aucun indicateur de cette API ne l'utilise (voir les indicateurs par profil de <a href="marche-travail.html">March&#xe9; du travail</a> et d'<a href="acces-emploi-demandeurs-emploi.html">Acc&#xe8;s &#xe0; l'emploi</a>)</div>
     </div>
   </div>
 </div>
@@ -252,7 +253,7 @@
 
 <!-- Schemas -->
 <div style="margin-top:24px;">
-  <div class="domain-title">26 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="domain-title">33 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
   <div class="sc-legend">
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
@@ -428,7 +429,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.1 &#x2014; Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1 &#xb7; api.francetravail.io &#xb7; 22 endpoints &#xb7; 26 schemas
+  OpenAPI 3.0.1 &#x2014; Sortants de formation et acc&#xe8;s &#xe0; l'emploi v1.1 &#xb7; api.francetravail.io &#xb7; 28 endpoints &#xb7; 33 schemas
 </footer>
 
 </div>
