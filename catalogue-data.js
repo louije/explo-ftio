@@ -3070,9 +3070,9 @@ const CATALOGUE = {
       "pageId": 103,
       "hasDocPage": true,
       "concepts": [
-        "Salons en ligne",
         "Événements emploi",
-        "Publics et objectifs"
+        "Publics et objectifs",
+        "Entreprises intervenantes"
       ],
       "starred": false,
       "isNew": false

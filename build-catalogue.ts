@@ -211,9 +211,9 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Horaires d'ouverture",
   ],
   "evenements-france-travail": [
-    "Salons en ligne",
     "Événements emploi",
     "Publics et objectifs",
+    "Entreprises intervenantes",
   ],
   "coordonnees": [
     "Identité",

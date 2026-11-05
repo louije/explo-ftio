@@ -14,8 +14,8 @@
 
 <header>
   <h1>Événements emploi</h1>
-  <div class="sub">Salons en ligne, forums, job datings et ateliers organisés par France Travail et ses partenaires</div>
-  <div class="sub-tech">Mes évènements emplois v1.0.0 — 5 endpoints · 5 schemas</div>
+  <div class="sub">Forums, job datings, ateliers et salons en ligne organisés par France Travail et ses partenaires</div>
+  <div class="sub-tech">Mes évènements emplois v1.1 — 3 endpoints · 5 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/evenements/v1</div>
 </header>
 
@@ -34,53 +34,7 @@
 <!-- ═══════════════════════════════════════════════════ -->
 <div class="view active" id="v-nested">
 
-<div class="grid-2">
-
-<!-- LEFT: Salons en ligne -->
-<div class="n l0 stack" id="m-salons">
-  <div class="nh"><div class="dot"></div>
-    <div class="name">Salons en ligne <span class="dto">SalonEnLigne[]</span></div>
-    <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
-  </div>
-  <div class="nb">
-
-    <div class="n l1-b" id="m-salon-desc">
-      <div class="nh"><div class="dot"></div>
-        <div class="name">Description <span class="dto">titre · description · typeEvenement</span></div>
-        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
-      </div>
-      <div class="nb"><div class="fi">
-        Titre, description HTML, type d'événement, organisateur
-        <div class="fi-tech"><code>titre</code> · <code>description</code> · <code>typeEvenement</code> · <code>organismeOrganisateur</code></div>
-      </div></div>
-    </div>
-
-    <div class="n l1-n" id="m-salon-dates">
-      <div class="nh"><div class="dot"></div>
-        <div class="name">Dates et état <span class="dto">dateDebut · dateFin</span></div>
-        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
-      </div>
-      <div class="nb"><div class="fi">
-        Dates de l'événement et de la période de candidature. Indique si le salon est en cours.
-        <div class="fi-tech"><code>dateDebut</code> · <code>dateFin</code> · <code>dateDebutCandidature</code> · <code>dateFinCandidature</code> · <code>salonEnCours</code> · <code>online</code></div>
-      </div></div>
-    </div>
-
-    <div class="n l1-p" id="m-salon-offres">
-      <div class="nh"><div class="dot"></div>
-        <div class="name">Offres <span class="dto">nombreOffres · urlSalonEnLigne</span></div>
-        <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
-      </div>
-      <div class="nb"><div class="fi">
-        Nombre d'offres proposées et lien vers le salon
-        <div class="fi-tech"><code>nombreOffres</code> · <code>urlSalonEnLigne</code> · <code>localisation</code></div>
-      </div></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- RIGHT: Événement emploi -->
+<!-- Événement emploi -->
 <div class="n l0" id="m-evenement">
   <div class="nh"><div class="dot"></div>
     <div class="name">Événement emploi <span class="dto">Evenement</span></div>
@@ -144,13 +98,22 @@
       </div></div>
     </div>
 
+    <div class="n l2t" id="m-evt-intervenants">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Entreprises intervenantes <span class="dto">intervenants[]</span></div>
+        <div class="card">0 ou plusieurs <span class="card-tech">array · 0:N</span></div>
+      </div>
+      <div class="nb"><div class="fi">
+        Les entreprises qui interviennent à l'événement, avec leur raison sociale, leur SIRET et leur site web. Ajouté en v1.1.
+        <div class="fi-tech"><code>raisonSociale</code> · <code>siret</code> · <code>urlEntreprise</code></div>
+      </div></div>
+    </div>
+
   </div>
 </div>
 
-</div><!-- .grid-2 -->
-
 <div class="note">
-  <strong>Authentification partenaire</strong> — Cette API est dans le royaume <code>/partenaire</code> (client credentials). Aucun jeton usager n'est nécessaire. Les salons en ligne sont retournés sans filtre. Les événements emploi acceptent un POST avec critères de recherche (date, lieu, type, objectifs, publics).
+  <strong>Authentification partenaire</strong> — Cette API est dans le royaume <code>/partenaire</code> (client credentials). Aucun jeton usager n'est nécessaire. La recherche se fait par un POST avec des critères (date, lieu, type, objectifs, publics). Depuis la v1.1, on peut aussi filtrer par agence organisatrice (<code>safir</code>, code SAFIR sur 5 chiffres) ou par liste de SIRET (<code>sirets</code>, sans description dans le schéma).
 </div>
 
 </div>
@@ -366,20 +329,13 @@
 <div class="view" id="v-coverage">
 
 <div class="domain">
-  <div class="domain-title">Salons en ligne <span class="dt-human">— Événements virtuels</span></div>
-  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les salons en ligne</span><div class="ep-human">Salons en cours et à venir</div><span class="ep-path">/salonsenligne</span></div></div>
-    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les salons jeunes</span><div class="ep-human">Salons ciblant les jeunes</div><span class="ep-path">/salonsenligne/jeunes</span></div></div>
-  </div>
-</div>
-
-<div class="domain">
   <div class="domain-title">Événements emploi <span class="dt-human">— Recherche locale</span></div>
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Rechercher des événements</span><div class="ep-human">Recherche multicritère (lieu, date, type, public)</div><span class="ep-path">/mee/evenements</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Détail d'un événement</span><div class="ep-human">Fiche complète d'un événement</div><span class="ep-path">/mee/evenement/{evenement_id}</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Référentiel des opérations</span><div class="ep-human">Liste des opérations marketing (1 jeune 1 solution…)</div><span class="ep-path">/mee/tags/opera/lister</span></div></div>
   </div>
+  <div class="note"><strong>Salons en ligne retirés.</strong> Entre juin et octobre 2026 (v1.0.0 → v1.1), les endpoints <code>GET /salonsenligne</code> et <code>GET /salonsenligne/jeunes</code> ont disparu, avec le schéma <code>SalonEnLigne</code>. Le type d'événement 17 « Salon en ligne » reste un critère de <code>POST /mee/evenements</code>.</div>
 </div>
 
 <!-- Schemas -->
@@ -391,7 +347,6 @@
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#f59e0b;"></span> Référentiel</span>
   </div>
   <div class="schema-grid">
-    <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">SalonEnLigne</span> <span class="sc-desc">— Salon en ligne</span></div>
     <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EvenementRequest</span> <span class="sc-desc">— Critères de recherche</span></div>
     <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">EvenementResponse</span> <span class="sc-desc">— Réponse paginée</span></div>
     <div class="schema-chip"><span class="sc-dot sc-read"></span><span class="sc-name">Evenement / EvenementDetail</span> <span class="sc-desc">— Événement emploi</span></div>
@@ -400,7 +355,12 @@
 </div>
 
 <div class="note" style="margin-top:16px;">
-  <strong>5 endpoints</strong> · <strong>5 schémas</strong> — 3 en lecture, 1 en écriture (recherche POST), 1 référentiel.
+  <strong>3 endpoints</strong> · <strong>5 schémas</strong> — 1 recherche (POST), 1 lecture de détail, 1 référentiel.
+</div>
+
+<div class="note">
+  <strong>Erreur dans le schéma v1.1</strong> — Dans <code>EvenementDetail</code>, treize champs de l'événement sont déclarés par erreur à l'intérieur des éléments de <code>intervenants[]</code>. L'exemple de réponse fourni par France Travail les place bien au premier niveau, comme le schéma <code>Evenement</code> de la recherche. Un client généré à partir du schéma est à corriger à la main.
+  <div class="chips"><code>titre</code> <code>dateEvenement</code> <code>codesRome</code> <code>deroulement</code> <code>multisectoriel</code> <code>libelleOrganisateurPrincipal</code> <code>libelleEtablissement</code> <code>offresId</code> <code>urlDetailEvenement</code> <code>nombrePlaceTotalPresentiel</code> <code>nombrePlaceTotalDistance</code> <code>nombreInscritPresentiel</code> <code>nombreInscritDistance</code></div>
 </div>
 
 </div>
@@ -460,7 +420,14 @@
       <span class="jk">"nombreInscritPresentiel"</span>: <span class="jn">47</span>,
       <span class="jk">"libelleOrganisateurPrincipal"</span>: <span class="js">"France Travail"</span>,
       <span class="jk">"libelleEtablissement"</span>: <span class="js">"Agence SAINT-PIERRE"</span>,
-      <span class="jk">"urlDetailEvenement"</span>: <span class="js">"https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenement/103783"</span>
+      <span class="jk">"urlDetailEvenement"</span>: <span class="js">"https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenement/103783"</span>,
+      <span class="jk">"intervenants"</span>: [
+        {
+          <span class="jk">"raisonSociale"</span>: <span class="js">"Wifirst"</span>,
+          <span class="jk">"siret"</span>: <span class="js">"44175761400058"</span>,
+          <span class="jk">"urlEntreprise"</span>: <span class="js">"https://www.wifirst.com/fr/"</span>
+        }
+      ]
     }
   ]
 }</div>
@@ -498,6 +465,7 @@
       <div class="ex-item"><strong>&#x1F3AF; Objectifs</strong> &#x2192; Recrutement</div>
       <div class="ex-item"><strong>Public</strong> &#x2192; Ouvert aux jeunes</div>
       <div class="ex-item"><strong>Bénéfice</strong> &#x2192; Contrat en alternance</div>
+      <div class="ex-item"><strong>&#x1F3E2; Entreprise présente</strong> &#x2192; Wifirst (SIRET 441 757 614 00058)</div>
     </div>
 
     <div style="margin-top:10px;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Déroulement</div>
@@ -551,7 +519,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.1 — Mes évènements emplois v1.0.0 · api.francetravail.io · 5 endpoints · 5 schemas
+  OpenAPI 3.0.1 — Mes évènements emplois v1.1 · api.francetravail.io · 3 endpoints · 5 schemas
 </footer>
 
 </div>
