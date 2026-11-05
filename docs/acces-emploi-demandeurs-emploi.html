@@ -87,7 +87,7 @@
     <div class="fi">Corps de la requ&#xea;te POST pour les indicateurs ACC_1 et ACC_8. Crit&#xe8;res obligatoires : territoire, m&#xe9;tier ROME, p&#xe9;riode et nomenclature (d&#xe9;lai d'acc&#xe8;s ou dur&#xe9;e d'emploi). Crit&#xe8;res facultatifs : p&#xe9;riodes sp&#xe9;cifiques, caract&#xe9;ristiques de filtrage.
       <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code>
         <br><code>codeTypeActivite</code> (<span class="ev">ROME</span>) &#xb7; <code>codeActivite</code>
-        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">ACCESEMP|DUREEEMP</span>)
+        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">ACCESEMP|DUREEEMP|PROF_SPECxCATCAND</span>)
         <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code>
         <br><code>profilDemandeur</code> (<span class="ev">JEUNES</span>&#x2026;) &#x2014; requis selon l'indicateur (ACC_8), sinon erreur 400</div>
     </div>
@@ -189,9 +189,10 @@
       <div class="voc-tech"><code>codeTypePeriode</code> — <code>dernierePeriode=true</code> pour la plus récente, sinon <code>listeCodePeriode</code>.</div>
     </div>
     <div class="ref-card voc-card">
-      <div class="ref-head"><span class="ref-title">Nomenclatures</span><span class="ref-count">1</span></div>
+      <div class="ref-head"><span class="ref-title">Nomenclatures</span><span class="ref-count">2</span></div>
       <ul class="ref-list voc-list">
         <li><span class="voc-code">DUREEEMP</span> Durée d'emploi / délai d'accès</li>
+        <li><span class="voc-code">PROF_SPECxCATCAND</span> Profil spécifique × catégorie de candidat (ACC_8)</li>
       </ul>
       <div class="voc-tech"><code>codeTypeNomenclature</code> — axes de découpage propres à certains indicateurs.</div>
     </div>

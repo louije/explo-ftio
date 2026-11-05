@@ -52,7 +52,7 @@ PER_API = {
             ("DE_8", "Demandeurs par profil", "stat-demandeurs-profil", "territoire, activité", "catégorie de candidat, périodes, caractéristiques", "Ajouté en v1.1. Par métier et compétence, pour un profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) : requis selon l'indicateur, sinon erreur 400."),
             ("OFF_1", "Offres enregistrées", "stat-offres", "territoire, activité", "origine de l'offre, périodes", ""),
             ("EMB_1", "Embauches", "stat-embauches", "territoire, activité", "catégorie de candidat, périodes", ""),
-            ("EMB_8", "Embauches par profil", "stat-embauches-profil", "territoire, activité", "catégorie de candidat, durée d'emploi, périodes, caractéristiques", "Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>) et métier recherché."),
+            ("EMB_8", "Embauches par profil", "stat-embauches-profil", "territoire, activité", "catégorie de candidat, durée d'emploi, périodes, caractéristiques", "Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) et métier recherché : profil requis selon l'indicateur, sinon erreur 400."),
             ("PERSP_2", "Tensions de recrutement", "stat-perspective-employeur", "territoire, activité", "périodes", "Difficultés de recrutement par métier."),
             ("SAL_3", "Salaires en poste", "salaire-rome-fap (GET)", "territoire, ROME", "—", "Endpoint GET par chemin, pas un POST de critères."),
         ],
@@ -61,7 +61,7 @@ PER_API = {
         "page": "acces-emploi-demandeurs-emploi.html",
         "activites": [("ROME", "Métier recherché (code ROME)")],
         "periodes": [("TRIMESTRE", "Donnée trimestrielle")],
-        "nomenclatures": [("DUREEEMP", "Durée d'emploi / délai d'accès")],
+        "nomenclatures": [("DUREEEMP", "Durée d'emploi / délai d'accès"), ("PROF_SPECxCATCAND", "Profil spécifique × catégorie de candidat (ACC_8)")],
         "indicators": [
             ("ACC_1", "Accès à l'emploi à 6 mois", "stat-acces-emploi", "territoire, activité", "délai d'accès, périodes, caractéristiques", "Demandeurs catégories A et B, par métier recherché."),
             ("ACC_8", "Accès à l'emploi à 6 mois par profil", "stat-acces-emploi-profil", "territoire, activité", "délai d'accès, durée d'emploi, périodes, caractéristiques", "Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) et métier recherché : profil requis selon l'indicateur, sinon erreur 400."),
