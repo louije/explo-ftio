@@ -361,6 +361,17 @@ const DOC_CONCEPTS: Record<string, string[]> = {
     "Entête et identification",
     "Établissements",
   ],
+  "rome-4-0-substitutions": [
+    "Substitution de code",
+    "Code obsolète → nouveau code",
+    "Types d'entité ROME",
+    "Mise à jour des nomenclatures",
+  ],
+  "je-recrute-avec-ftpro": [
+    "Signaler un besoin de recrutement",
+    "Entreprise identifiée par SIRET",
+    "Contact du recruteur + date de rappel",
+  ],
 };
 
 // Newly published APIs — flagged with a "new" badge in the UI

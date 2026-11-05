@@ -1159,8 +1159,12 @@ const CATALOGUE = {
         "ResponsableRecrutementES"
       ],
       "pageId": 645,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Signaler un besoin de recrutement",
+        "Entreprise identifiée par SIRET",
+        "Contact du recruteur + date de rappel"
+      ],
       "starred": false,
       "isNew": true
     },
@@ -1731,8 +1735,13 @@ const CATALOGUE = {
         "Substitution"
       ],
       "pageId": 602,
-      "hasDocPage": false,
-      "concepts": [],
+      "hasDocPage": true,
+      "concepts": [
+        "Substitution de code",
+        "Code obsolète → nouveau code",
+        "Types d'entité ROME",
+        "Mise à jour des nomenclatures"
+      ],
       "starred": false,
       "isNew": true
     },
