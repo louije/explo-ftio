@@ -465,7 +465,7 @@ const CATALOGUE = {
         "État et mentions légales"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "declaration-demarche",
@@ -524,7 +524,7 @@ const CATALOGUE = {
         "Référentiel des démarches"
       ],
       "starred": true,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "gestion-sanctions-rsa",
@@ -658,7 +658,7 @@ const CATALOGUE = {
         "Comparatif v1 → v2"
       ],
       "starred": true,
-      "isNew": true,
+      "isNew": false,
       "versions": [
         {
           "label": "2.1",
@@ -814,7 +814,7 @@ const CATALOGUE = {
         "Minima sociaux (AAH/ASS/RSA/AER)"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "statut",
@@ -936,7 +936,7 @@ const CATALOGUE = {
         "Profil vs employeur"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "experiences-professionnelles",
@@ -1097,7 +1097,7 @@ const CATALOGUE = {
         "Profil de compétences"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "jcmo-controle-offre",
@@ -1225,7 +1225,7 @@ const CATALOGUE = {
         "Offres vs entreprises"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "offres-emploi",
@@ -1706,7 +1706,7 @@ const CATALOGUE = {
         "Famille ROME 4.0"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "rome-4-0-substitutions",
@@ -2308,7 +2308,7 @@ const CATALOGUE = {
         "Famille Statistiques"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "marche-travail",
@@ -2809,7 +2809,7 @@ const CATALOGUE = {
         "Attributs de contexte"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "prestation-partenaire",
@@ -3040,7 +3040,7 @@ const CATALOGUE = {
         "Communes à proximité"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "evenements-france-travail",
@@ -3130,7 +3130,7 @@ const CATALOGUE = {
         "Formation par triplet InterCarif"
       ],
       "starred": false,
-      "isNew": true
+      "isNew": false
     },
     {
       "slug": "referentiel-agences",

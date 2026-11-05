@@ -374,19 +374,8 @@ const DOC_CONCEPTS: Record<string, string[]> = {
   ],
 };
 
-// Newly published APIs — flagged with a "new" badge in the UI
+// Newly published APIs — flagged with a "new" badge in the UI (latest sweep only)
 const NEW: string[] = [
-  "experiences-declarees-employeur",
-  "cadre-vie-communes",
-  "competences-professionnelles",
-  "open-formation",
-  "pe-connect-indemnisations",
-  "informations-territoire",
-  "rome-4-0-metiers",
-  "la-bonne-boite",
-  "contrat-engagement",
-  "declaration-demarche",
-  "gestion-activites-operationnelles",
   "rome-4-0-substitutions",
   "je-recrute-avec-ftpro",
 ];
@@ -517,7 +506,7 @@ async function main() {
       hasDocPage,
       concepts: DOC_CONCEPTS[slug] || [],
       starred: STARRED.includes(slug),
-      isNew: grp ? true : NEW.includes(slug),
+      isNew: NEW.includes(grp ? grp.primary : slug),
       versions: grp ? grp.versions : undefined,
       jsonSlug: grp ? grp.primary : undefined,
     });
