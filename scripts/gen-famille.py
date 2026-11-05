@@ -114,7 +114,10 @@ def card(gid, current, slug):
         title = esc(a["title"]) + star
         count = "cette page"
     else:
-        title = '<a href="%s.html">%s</a>%s' % (slug, esc(a["title"]), star)
+        name = esc(a["title"])
+        if a.get("hasDocPage"):  # no link to a page that doesn't exist yet
+            name = '<a href="%s.html">%s</a>' % (slug, name)
+        title = name + star
         count = "v" + esc(a["version"]) + ('  <span class="at">nouveau</span>' if a.get("isNew") else "")
     body = role_for(slug)
     if not is_cur and gid in BOUNDARY:
@@ -204,6 +207,7 @@ def inject(current):
     return path
 
 if __name__ == "__main__":
-    for slug in APIS:
+    pages = [slug for slug in APIS if APIS[slug].get("hasDocPage")]
+    for slug in pages:
         inject(slug)
-    print("Famille tab injected into %d pages" % len(APIS))
+    print("Famille tab injected into %d pages" % len(pages))
