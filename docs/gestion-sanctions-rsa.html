@@ -15,7 +15,7 @@
 <header>
   <h1>Sanctions RSA</h1>
   <div class="sub">Gestion des manquements, propositions de sanction et d&#xe9;cisions pour les allocataires du RSA</div>
-  <div class="sub-tech">Gestion des sanctions RSA v1.1 &#x2014; 4 endpoints &#xb7; 12 schemas</div>
+  <div class="sub-tech">Gestion des sanctions RSA v1.4 &#x2014; 4 endpoints &#xb7; 17 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/gestion-sanctions-rsa/v1</div>
 </header>
 
@@ -60,7 +60,7 @@
       </div>
       <div class="nb">
         <div class="fi">Preuves justifiant le manquement : nature du d&#xe9;faut, date de constat et attributs d&#xe9;taill&#xe9;s (identifiant RDV, date convocation, type prestation&#x2026;)
-          <div class="fi-tech"><code>natureDefaut</code> &#xb7; <code>dateConstatDefaut</code> &#xb7; <code>attributs[]</code> &#x2014; <code>codeAttribut</code> &#xb7; <code>valeurAttribut</code></div>
+          <div class="fi-tech"><code>natureDefaut</code> (<span class="ev">N23|N24|N25|N30|N31</span>) &#xb7; <code>dateConstatDefaut</code> &#xb7; <code>attributs[]</code> &#x2014; <code>codeAttribut</code> &#xb7; <code>valeurAttribut</code></div>
         </div>
       </div>
     </div>
@@ -146,7 +146,7 @@
   <h2 class="ref-section-title">
     <span class="rs-dot" style="background:#dc2626;"></span>
     Manquement — l'origine
-    <span class="rs-count">4 natures · 2 rangs</span>
+    <span class="rs-count">4 natures · 2 rangs · 5 défauts constatés</span>
     <span class="rs-tech">schéma <code>DecisionSanctionRsa</code></span>
   </h2>
   <div class="ref-section-intro">
@@ -173,6 +173,18 @@
         <li><span class="voc-code">R2</span> Second manquement ou plus</li>
       </ul>
       <div class="voc-tech"><code>rangManquement</code> — détermine la sévérité de la sanction applicable.</div>
+    </div>
+
+    <div class="ref-card voc-card">
+      <div class="ref-head"><span class="ref-title">Nature du défaut constaté</span><span class="ref-count">5</span></div>
+      <ul class="ref-list voc-list">
+        <li><span class="voc-code">N23</span> Absence à un rendez-vous</li>
+        <li><span class="voc-code">N24</span> Non-présentation à une action de formation</li>
+        <li><span class="voc-code">N25</span> Abandon d'une action de formation</li>
+        <li><span class="voc-code">N30</span> Refus de suivre une action d'aide à la recherche d'activité</li>
+        <li><span class="voc-code">N31</span> Non-présentation à une action d'aide à la recherche d'activité</li>
+      </ul>
+      <div class="voc-tech"><code>faisceauIndices[].natureDefaut</code> — la preuve qui étaye le manquement. Texte libre jusqu'en v1.1, liste fermée (<code>enum</code>) depuis la v1.4.</div>
     </div>
 
   </div>
@@ -334,7 +346,7 @@
     </div>
 
     <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title">Codes d'erreur de validation</span><span class="ref-count">28</span></div>
+      <div class="ref-head"><span class="ref-title">Codes d'erreur de validation</span><span class="ref-count">29</span></div>
       <p style="font-size:0.82rem;color:var(--text-dim);line-height:1.55;margin:2px 0 8px;">
         Série <code>R0xx</code> groupée par champ concerné. Pattern : numéro pair = « obligatoire », numéro impair = « invalide ».
       </p>
@@ -342,6 +354,7 @@
       <ul class="ref-list voc-list">
         <li><span class="voc-code">R010</span> / <span class="voc-code">R011</span> Obligatoire / invalide</li>
         <li><span class="voc-code">R012</span> / <span class="voc-code">R013</span> Obligatoire / invalide (avec accents)</li>
+        <li><span class="voc-code">R014</span> L'identifiant de sanction n'est pas rattaché à l'usager (ajouté en v1.4)</li>
       </ul>
       <div class="ref-subtitle" style="margin-top:8px;">Événement</div>
       <ul class="ref-list voc-list">
@@ -448,7 +461,7 @@
   <span class="jk">"dateAvertissement"</span>: <span class="js">"2026-01-20T00:00:00"</span>,
   <span class="jk">"faisceauIndices"</span>: [
     {
-      <span class="jk">"natureDefaut"</span>: <span class="js">"Absence non justifi&#xe9;e"</span>,
+      <span class="jk">"natureDefaut"</span>: <span class="js">"N23"</span>,
       <span class="jk">"dateConstatDefaut"</span>: <span class="js">"2026-01-15T10:30:00"</span>,
       <span class="jk">"attributs"</span>: [
         { <span class="jk">"codeAttribut"</span>: <span class="js">"ARDV_DATE_RDV"</span>, <span class="jk">"valeurAttribut"</span>: <span class="js">"2026-01-15"</span> },
@@ -502,7 +515,7 @@
 <div data-section="s-manquement">
   <div class="ex-title"><span class="ex-ico">&#x26A0;</span> Manquement</div>
   <div class="ex-card">
-    <h4>Absence non justifi&#xe9;e &#x2014; 15 janvier 2026</h4>
+    <h4>Absence &#xe0; un rendez-vous (N23) &#x2014; 15 janvier 2026</h4>
     <p><span class="ex-tag tag-encours">F01 &#x2014; Absence RDV</span> L'allocataire a manqu&#xe9; un entretien de suivi le 15 janvier 2026. Un avertissement a &#xe9;t&#xe9; &#xe9;mis le 20 janvier.</p>
     <div class="ex-sub">
       <div class="ex-item"><strong>&#x2696; Sanction propos&#xe9;e</strong> &#x2192; Suspension RSA 50% pendant 1 mois (propos&#xe9;e par FT)</div>
@@ -575,7 +588,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.1 &#x2014; Gestion des sanctions RSA v1.1 &#xb7; api.francetravail.io &#xb7; 4 endpoints &#xb7; 12 schemas
+  OpenAPI 3.0.1 &#x2014; Gestion des sanctions RSA v1.4 &#xb7; api.francetravail.io &#xb7; 4 endpoints &#xb7; 17 schemas
 </footer>
 
 </div>
