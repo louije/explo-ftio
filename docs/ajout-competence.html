@@ -104,8 +104,9 @@
 <div class="domain">
   <div class="domain-title">Gestion du portefeuille de comp&#xe9;tences <span class="dt-human">&#x2014; Enregistrement de comp&#xe9;tences ROME</span></div>
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistrer des comp&#xe9;tences</span><div class="ep-human">Ajouter un lot de comp&#xe9;tences ROME au portefeuille de l'usager connect&#xe9;</div><span class="ep-path">/competences/enregistrer</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistrer des comp&#xe9;tences</span><div class="ep-human">Ajouter un lot de comp&#xe9;tences ROME au portefeuille de l'usager connect&#xe9;</div><span class="ep-path">/competences</span></div></div>
   </div>
+  <div class="note"><strong>Chemin renomm&#xe9;.</strong> Entre juin et octobre 2026, <code>/competences/enregistrer</code> est devenu <code>/competences</code>, sans changement de num&#xe9;ro de version (v1.0.0).</div>
 </div>
 
 <div style="margin-top:24px;">
@@ -135,7 +136,7 @@
 
 <!-- LEFT: JSON -->
 <div class="panel panel-json" id="panel-json">
-<div class="json-tree"><div data-section="s-requete"><span class="jc">// POST /competences/enregistrer</span>
+<div class="json-tree"><div data-section="s-requete"><span class="jc">// POST /competences</span>
 <span class="jc">// Authorization: Bearer &lt;token PE Connect&gt;</span>
 <span class="jc">// Content-Type: application/json</span>
 {
