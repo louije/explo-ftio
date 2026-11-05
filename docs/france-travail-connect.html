@@ -64,12 +64,13 @@
 
     <div class="n l1-b" id="m-identifiants">
       <div class="nh"><div class="dot"></div>
-        <div class="name">Identifiants techniques</div>
-        <div class="card">2 champs</div>
+        <div class="name">Identifiants</div>
+        <div class="card">3 champs</div>
       </div>
       <div class="nb"><div class="fi">
-        Identifiant unique stable (UUID) de l'utilisateur dans le syst&#xe8;me France Travail &#x2014; <code>sub</code> et <code>idIdentiteExterne</code> contiennent la m&#xea;me valeur
-        <div class="fi-tech"><code>sub</code> &#xb7; <code>idIdentiteExterne</code> &#xb7; format <code>uuid</code></div>
+        Identifiant unique stable (UUID) de l'utilisateur dans le syst&#xe8;me France Travail &#x2014; <code>sub</code> et <code>idIdentiteExterne</code> contiennent la m&#xea;me valeur. Avec le scope <code>profile</code>, <code>referenceExterne</code> donne aussi le num&#xe9;ro France Travail de l'usager (ajout&#xe9; entre juin et octobre 2026, sans changement de version).
+        <div class="fi-tech"><code>sub</code> &#xb7; <code>idIdentiteExterne</code> &#xb7; format <code>uuid</code>
+          <br><code>referenceExterne</code> string &#x2014; num&#xe9;ro France Travail (ex. <span class="eg">15236578956</span>)</div>
       </div></div>
     </div>
 
@@ -164,6 +165,7 @@
   <span class="jk">"given_name"</span>: <span class="js">"Am&#xe9;lie"</span>,
   <span class="jk">"email"</span>: <span class="js">"amelie.durand@mail.fr"</span>,
   <span class="jk">"idIdentiteExterne"</span>: <span class="js">"a3b8c1d4-e5f6-7890-abcd-ef1234567890"</span>,
+  <span class="jk">"referenceExterne"</span>: <span class="js">"15236578956"</span>,
   <span class="jk">"subname"</span>: <span class="jnull">null</span>,
   <span class="jk">"updated_at"</span>: <span class="jn">1709827200</span>
 }</div>
@@ -174,6 +176,7 @@
   <span class="jk">"family_name"</span>: <span class="js">"Martin"</span>,
   <span class="jk">"given_name"</span>: <span class="js">"Lucas"</span>,
   <span class="jk">"idIdentiteExterne"</span>: <span class="js">"f7e6d5c4-b3a2-1098-7654-321fedcba098"</span>,
+  <span class="jk">"referenceExterne"</span>: <span class="js">"10456789012"</span>,
   <span class="jk">"subname"</span>: <span class="jnull">null</span>,
   <span class="jk">"updated_at"</span>: <span class="jn">1715270400</span>
 }</div>
@@ -192,6 +195,7 @@
       <div class="ex-item"><strong>Identit&#xe9;</strong> &#x2192; Am&#xe9;lie Durand (genre : female)</div>
       <div class="ex-item"><strong>Email</strong> &#x2192; amelie.durand@mail.fr</div>
       <div class="ex-item"><strong>Identifiant</strong> &#x2192; a3b8c1d4-e5f6-7890-abcd-ef1234567890</div>
+      <div class="ex-item"><strong>Num&#xe9;ro France Travail</strong> &#x2192; 15236578956</div>
       <div class="ex-item"><strong>Derni&#xe8;re MAJ</strong> &#x2192; 7 mars 2024 (timestamp 1709827200)</div>
     </div>
     <div class="ex-agent">L'email est pr&#xe9;sent car le scope <code>email</code> a &#xe9;t&#xe9; autoris&#xe9; et l'adresse est confirm&#xe9;e</div>
@@ -207,6 +211,7 @@
       <div class="ex-item"><strong>Identit&#xe9;</strong> &#x2192; Lucas Martin (genre : male)</div>
       <div class="ex-item"><strong>Email</strong> &#x2192; <span class="ex-tag tag-nonex">Absent</span> (scope non demand&#xe9;)</div>
       <div class="ex-item"><strong>Identifiant</strong> &#x2192; f7e6d5c4-b3a2-1098-7654-321fedcba098</div>
+      <div class="ex-item"><strong>Num&#xe9;ro France Travail</strong> &#x2192; 10456789012</div>
       <div class="ex-item"><strong>Derni&#xe8;re MAJ</strong> &#x2192; 9 mai 2024 (timestamp 1715270400)</div>
     </div>
     <div class="ex-agent">Sans le scope <code>email</code>, le champ est simplement absent de la r&#xe9;ponse</div>
