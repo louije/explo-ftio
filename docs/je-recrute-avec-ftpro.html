@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Je recrute avec FT pro — Schéma complet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container" id="doc">
+
+<a href="../index.html" class="back-link">← Catalogue</a>
+
+<header>
+  <h1>Je recrute avec FT pro</h1>
+  <div class="sub">Signaler à France Travail qu'une entreprise cherche à recruter : un partenaire transmet le poste, l'entreprise et la personne à rappeler, avec la date à laquelle la joindre.</div>
+  <div class="sub-tech">Je recrute avec FT pro v1.0 — 1 endpoint · 6 schemas</div>
+  <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/je-recrute-avec-ftpro/v1</div>
+</header>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tb active" onclick="setTab('nested')">Modèle</button>
+    <button class="tb" onclick="setTab('coverage')">Couverture API</button>
+    <button class="tb" onclick="setTab('example')">Exemple</button>
+    <button class="tb" onclick="setTab('famille')">Famille</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: MODÈLE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view active" id="v-nested">
+
+<div class="note" style="margin-bottom:18px;">
+  <strong>Un signalement, pas une offre d'emploi.</strong> Un partenaire de France Travail apprend qu'une entreprise a un besoin de recrutement. Par le widget « je-recrute-avec-ft-pro », il transmet à France Travail une <em>opportunité</em> : le poste recherché, l'entreprise (par son SIRET), la personne qui recrute et la date à laquelle elle souhaite être contactée. Rien n'est publié et rien n'est renvoyé : France Travail enregistre l'opportunité, la réponse est vide (<code>204</code>).
+</div>
+
+<div class="n l0" id="m-root">
+  <div class="nh"><div class="dot"></div>
+    <div class="name">Opportunité de recrutement <span class="dto">OpportuniteES · corps de POST /opportunites</span></div>
+    <div class="card">Unique <span class="card-tech">object · 1:1</span></div>
+  </div>
+  <div class="nb">
+    <div class="fi">Une opportunité tient en cinq blocs : <strong>quoi</strong> (le poste), <strong>chez qui</strong> (l'entreprise), <strong>qui appeler</strong> (le responsable du recrutement), <strong>quand</strong> (la date de contact souhaitée) et, si on le souhaite, <strong>qui signale</strong> (le rapporteur). Les quatre premiers sont obligatoires.
+      <div class="fi-tech"><code>poste</code>* <span class="at">@ PosteES</span> · <code>entreprise</code>* <span class="at">@ EntrepriseES</span> · <code>responsableRecrutement</code>* <span class="at">@ ResponsableRecrutementES</span> · <code>dateContactSouhaitee</code>* <span class="at">@ LocalDate</span> · <code>rapporteur</code> <span class="at">@ RapporteurES</span>
+        <br><span style="font-size:.58rem;color:var(--text-light);">* champs obligatoires</span></div>
+    </div>
+
+    <div class="n l1-b" id="m-poste">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Le poste à pourvoir <span class="dto">poste · PosteES</span></div>
+        <div class="card">Obligatoire <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Ce que l'entreprise cherche. Seul l'intitulé est exigé ; on peut préciser combien de personnes recruter et ajouter un texte libre (missions, type de contrat, horaires…). Il n'existe aucun champ dédié au contrat, au lieu de travail, au salaire ou au code métier ROME : tout ce qui dépasse l'intitulé passe par ce texte libre.
+          <div class="fi-tech"><code>intitule</code>* — string · <span class="eg">ex. Comptable</span>
+            <br><code>nombrePostes</code> — entier (int32), ni minimum ni maximum déclarés · <span class="eg">ex. 2</span>
+            <br><code>informations</code> — string libre, sans longueur maximale · <span class="eg">ex. Comptable connaissant SAP</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-n" id="m-entreprise">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">L'entreprise qui recrute <span class="dto">entreprise · EntrepriseES</span></div>
+        <div class="card">Obligatoire <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">L'entreprise n'est désignée que par son SIRET, le numéro à 14 chiffres qui identifie un <em>établissement</em> (un site précis, pas l'entreprise dans son ensemble). Ni nom, ni adresse, ni secteur d'activité ne sont transmis.
+          <div class="fi-tech"><code>siret</code>* — string, exactement 14 caractères (longueur min. = max. = 14, aucun motif imposé) · <span class="eg">ex. 12345678901234</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l1-p" id="m-responsable">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">La personne qui recrute <span class="dto">responsableRecrutement · ResponsableRecrutementES</span></div>
+        <div class="card">Obligatoire <span class="card-tech">object · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Celle ou celui qui porte le recrutement dans l'entreprise — gérant, responsable RH, chef d'équipe… C'est, selon toute vraisemblance, « la personne à contacter » dont parle la description de l'endpoint (voir la note en bas de page). Seul un numéro de téléphone est prévu : ni e-mail, ni fonction.
+          <div class="fi-tech"><code>nom</code>* · <code>prenom</code>* — string, sans contrainte de longueur · <code>telephone</code>* — string, exactement 10 caractères · <span class="eg">ex. Pierre Dupond, 0102030405</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l2d" id="m-date">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Quand la contacter <span class="dto">dateContactSouhaitee · LocalDate</span></div>
+        <div class="card">Obligatoire <span class="card-tech">string (date) · 1:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">Le jour où l'entreprise souhaite être contactée au sujet de ce recrutement. Le schéma ne dit pas s'il s'agit d'un jour précis ou d'une date « à partir de laquelle », ni si une date passée est refusée.
+          <div class="fi-tech"><code>dateContactSouhaitee</code>* — string au format date, yyyy-MM-dd <span class="at">@ LocalDate</span> · <span class="eg">ex. 2026-09-04</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n l3" id="m-rapporteur">
+      <div class="nh"><div class="dot"></div>
+        <div class="name">Qui signale le besoin <span class="dto">rapporteur · RapporteurES</span></div>
+        <div class="card">Facultatif <span class="card-tech">object · 0:1</span></div>
+      </div>
+      <div class="nb">
+        <div class="fi">La personne qui fait remonter le besoin — celle qui a repéré le recrutement et le transmet. Le bloc est facultatif ; mais dès qu'il est fourni, nom, prénom et téléphone sont tous trois obligatoires. Le schéma ne dit pas à quelle structure appartient le rapporteur.
+          <div class="fi-tech"><code>nom</code>* · <code>prenom</code>* · <code>telephone</code>* — mêmes contraintes que pour le responsable (téléphone de 10 caractères) · <span class="eg">ex. Jean Dupont, 0102030405</span>
+            <br><span style="font-size:.58rem;color:var(--text-light);">* obligatoires dès que le bloc <code>rapporteur</code> est présent</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Authentification</strong> — royaume <code>/partenaire</code>, en <code>client_credentials</code>. Production : scopes <code>api_je-recrute-avec-ftprov1</code> et <code>jerecrute_opportunites_creer</code>. Bac à sable : <code>api_testje-recrute-avec-ftprov1</code> et <code>testjerecrute_opportunites_creer</code>. Aucun jeton usager : l'opportunité concerne une entreprise, pas un demandeur d'emploi.
+</div>
+
+<div class="note">
+  <strong>Codes HTTP</strong> — <span class="ev">204</span> : opportunité enregistrée, réponse vide. <span class="ev">400</span> : erreur de syntaxe ou de contenu de la requête. <span class="ev">500</span> : erreur interne au serveur. Aucun identifiant d'opportunité n'est renvoyé et aucun endpoint ne permet de la relire : via l'API, le partenaire ne peut pas suivre ce qu'elle devient. Les cas 401/403 (jeton absent ou scopes manquants) ne sont pas documentés.
+</div>
+
+<div class="note">
+  <strong>Ce que le schéma ne précise pas.</strong>
+  <br>• <strong>Qui est rappelé, et par qui.</strong> La description parle de « la personne à contacter » sans la nommer, alors que deux personnes ont un téléphone : le responsable du recrutement (obligatoire) et le rapporteur (facultatif). Le responsable est le candidat naturel, mais ce n'est pas écrit. Rien n'indique non plus quel service de France Travail prend contact, ni ce qui se passe ensuite.
+  <br>• <strong>Le partenaire n'apparaît pas dans le corps.</strong> Il est vraisemblablement identifié par ses identifiants OAuth (<code>client_credentials</code>), mais aucun champ ne le dit.
+  <br>• <strong>Le widget n'est pas décrit.</strong> On ne sait pas si le partenaire intègre le widget « je-recrute-avec-ft-pro » tel quel (le widget appelant alors l'API), ou s'il appelle l'API directement depuis ses propres outils.
+  <br>• <strong>Format des téléphones.</strong> Exactement 10 caractères, sans motif : un numéro français écrit sans espaces ni points (<code>0102030405</code>) passe, un format international (<code>+33…</code>) non. Rien n'interdit en revanche des lettres.
+  <br>• <strong>Consentement.</strong> Aucun champ ne trace l'accord des personnes dont on transmet le nom et le téléphone.
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: COUVERTURE API                                 -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-coverage">
+
+<div class="domain">
+  <div class="domain-title">Opportunités de recrutement <span class="dt-human">— signaler le besoin d'une entreprise à France Travail</span></div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Enregistrer une opportunité partenaire</span><div class="ep-human">Transmettre un besoin de recrutement (poste, SIRET, personne à contacter, date souhaitée) — réponse 204 sans contenu</div><span class="ep-path">/opportunites</span></div></div>
+  </div>
+  <div class="note"><strong>Écriture seule.</strong> L'API ne sait faire qu'une chose : déposer une opportunité. Pas de lecture, de modification ni de suppression ; une fois envoyée, l'opportunité ne se consulte plus par l'API.</div>
+</div>
+
+<div class="note">
+  <strong>Deux environnements</strong>
+  <br>Production : <code>api.francetravail.io/partenaire/je-recrute-avec-ftpro/v1</code> — scopes <code>api_je-recrute-avec-ftprov1</code> + <code>jerecrute_opportunites_creer</code>.
+  <br>Bac à sable (test) : <code>api.francetravail.io/partenaire/testje-recrute-avec-ftpro/v1</code> — le préfixe <code>test</code> est collé au nom de l'API — scopes <code>api_testje-recrute-avec-ftprov1</code> + <code>testjerecrute_opportunites_creer</code>.
+  <br>Jeton : <code>authentification-partenaire.francetravail.io/connexion/oauth2/access_token?realm=/partenaire</code>, flux <code>client_credentials</code>.
+</div>
+
+<div class="note">
+  <strong>Scopes listés ensemble.</strong> Le bloc <code>security</code> de l'endpoint énumère les quatre scopes dans une même exigence, alors que leurs descriptions les répartissent : « Obligatoire pour le mode production » pour les deux premiers, « Obligatoire pour le mode bac à sable » pour les deux autres. C'est la paire de l'environnement visé qu'il faut demander.
+</div>
+
+<div style="margin-top:24px;">
+  <div class="domain-title">6 Schémas <span class="dt-human">— types de données</span></div>
+  <div class="sc-legend">
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> Écriture / Entrée</span>
+    <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8;"></span> Utilitaire</span>
+  </div>
+  <div class="schema-grid">
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">OpportuniteES</span> <span class="sc-desc">— l'opportunité (corps de la requête)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">PosteES</span> <span class="sc-desc">— le poste à pourvoir</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">EntrepriseES</span> <span class="sc-desc">— l'entreprise, par son SIRET</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">ResponsableRecrutementES</span> <span class="sc-desc">— la personne qui recrute</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-write"></span><span class="sc-name">RapporteurES</span> <span class="sc-desc">— la personne qui signale (facultatif)</span></div>
+    <div class="schema-chip"><span class="sc-dot sc-misc"></span><span class="sc-name">LocalDate</span> <span class="sc-desc">— date au format yyyy-MM-dd</span></div>
+  </div>
+  <div class="note"><strong>Aucun schéma de réponse.</strong> Le succès est un <code>204</code> vide, et les erreurs <code>400</code> / <code>500</code> n'ont pas de corps décrit. Le suffixe <code>ES</code> des noms de schémas n'est pas expliqué dans la spécification.</div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TAB: EXEMPLE                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="view" id="v-example">
+
+<div class="story">
+  <strong>Données fictives</strong> — Bastien Orlac est chargé de relations entreprises dans une structure partenaire de France Travail. En visite à l'Atelier Bois &amp; Lumière, une petite menuiserie, il apprend que la gérante, Nadège Fontclair, cherche deux menuisiers poseurs et n'a encore publié aucune offre. Avec son accord, il saisit le besoin dans le widget « je-recrute-avec-ft-pro » ; elle souhaite être appelée le lundi 16 novembre 2026. Personnes, entreprise, SIRET et numéros de téléphone sont inventés.
+</div>
+
+<div class="example-split">
+
+<!-- LEFT: JSON -->
+<div class="panel panel-json" id="panel-json">
+<div class="json-tree"><div data-section="s-poste"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// POST /opportunites</span>
+<span class="jc">// Authorization: Bearer &lt;jeton partenaire&gt;</span>
+<span class="jc">// Content-Type: application/json</span>
+<span class="jc">// ──────────────────────────────────────</span>
+{
+  <span class="jk">"poste"</span>: {
+    <span class="jk">"intitule"</span>: <span class="js">"Menuisier poseur / Menuisière poseuse"</span>,
+    <span class="jk">"nombrePostes"</span>: <span class="jn">2</span>,
+    <span class="jk">"informations"</span>: <span class="js">"CDI 35 h, pose chez des particuliers, permis B"</span>
+  },</div>
+<div data-section="s-entreprise">  <span class="jk">"entreprise"</span>: {
+    <span class="jk">"siret"</span>: <span class="js">"12345678900017"</span>
+  },</div>
+<div data-section="s-responsable">  <span class="jk">"responsableRecrutement"</span>: {
+    <span class="jk">"nom"</span>: <span class="js">"Fontclair"</span>,
+    <span class="jk">"prenom"</span>: <span class="js">"Nadège"</span>,
+    <span class="jk">"telephone"</span>: <span class="js">"0199001234"</span>
+  },</div>
+<div data-section="s-date">  <span class="jk">"dateContactSouhaitee"</span>: <span class="js">"2026-11-16"</span>,</div>
+<div data-section="s-rapporteur">  <span class="jk">"rapporteur"</span>: {
+    <span class="jk">"nom"</span>: <span class="js">"Orlac"</span>,
+    <span class="jk">"prenom"</span>: <span class="js">"Bastien"</span>,
+    <span class="jk">"telephone"</span>: <span class="js">"0199005678"</span>
+  }
+}</div>
+<div data-section="s-reponse"><span class="jc">// ──────────────────────────────────────</span>
+<span class="jc">// RÉPONSE — HTTP 204 No Content</span>
+<span class="jc">// (pas de corps de réponse)</span></div>
+</div>
+</div>
+
+<!-- RIGHT: Human narrative -->
+<div class="panel panel-human" id="panel-human">
+
+<div data-section="s-poste">
+  <div class="ex-title"><span class="ex-ico">🪚</span> Le poste</div>
+  <div class="ex-card">
+    <h4>2 menuisiers poseurs</h4>
+    <p>L'intitulé est le seul champ exigé. Le nombre de postes et le texte libre précisent le besoin : le CDI, les horaires et le permis n'ont pas de champ dédié, ils sont simplement écrits dans <code>informations</code>.</p>
+    <div class="ex-sub">
+      <div class="ex-item"><strong>Intitulé</strong> → Menuisier poseur / Menuisière poseuse <span class="ex-tag tag-actif">obligatoire</span></div>
+      <div class="ex-item"><strong>Nombre de postes</strong> → 2 <span class="ex-tag tag-inactif">facultatif</span></div>
+      <div class="ex-item"><strong>Informations</strong> → contrat, horaires, missions, permis <span class="ex-tag tag-inactif">facultatif</span></div>
+    </div>
+  </div>
+</div>
+
+<div data-section="s-entreprise">
+  <div class="ex-title"><span class="ex-ico">🏭</span> L'entreprise</div>
+  <div class="ex-card">
+    <h4>Atelier Bois &amp; Lumière</h4>
+    <p>Seul le SIRET de l'atelier part dans la requête : son nom n'apparaît nulle part dans le JSON. Le SIRET doit faire exactement 14 caractères.</p>
+    <div class="ex-agent">SIRET inventé.</div>
+  </div>
+</div>
+
+<div data-section="s-responsable">
+  <div class="ex-title"><span class="ex-ico">📞</span> La personne qui recrute</div>
+  <div class="ex-card">
+    <h4>Nadège Fontclair, gérante</h4>
+    <p>Nom, prénom et téléphone sont tous trois obligatoires. Sa fonction de gérante n'a pas de champ : elle reste dans le récit, pas dans le JSON. Le téléphone s'écrit sur 10 caractères, sans espaces.</p>
+    <div class="ex-agent">Nom et numéro inventés.</div>
+  </div>
+</div>
+
+<div data-section="s-date">
+  <div class="ex-title"><span class="ex-ico">📅</span> Quand l'appeler</div>
+  <div class="ex-card">
+    <h4>Lundi 16 novembre 2026</h4>
+    <p>Une date au format <code>yyyy-MM-dd</code>. Le schéma ne dit pas si c'est un jour précis ou une date à partir de laquelle appeler.</p>
+  </div>
+</div>
+
+<div data-section="s-rapporteur">
+  <div class="ex-title"><span class="ex-ico">🙋</span> Qui signale</div>
+  <div class="ex-card">
+    <h4>Bastien Orlac, côté partenaire <span class="ex-tag tag-inactif">facultatif</span></h4>
+    <p>Sans ce bloc, l'opportunité resterait valable. Mais puisqu'il est présent, ses trois champs — nom, prénom, téléphone — deviennent obligatoires.</p>
+    <div class="ex-agent">Nom et numéro inventés.</div>
+  </div>
+</div>
+
+<div data-section="s-reponse">
+  <div class="ex-title"><span class="ex-ico">✅</span> Opportunité enregistrée</div>
+  <div class="ex-card">
+    <h4>Réponse <span class="ex-tag tag-ok">204 No Content</span></h4>
+    <p>Pas de corps de réponse, pas d'identifiant : l'envoi est confirmé, mais l'API ne permet ni au partenaire ni à l'entreprise de suivre l'opportunité ensuite.</p>
+    <p style="margin-top:10px;font-size:.82rem;color:var(--text-light);">Un SIRET de 13 caractères, un téléphone écrit <code>01 99 00 12 34</code> (avec espaces, donc 14 caractères) ou un bloc <code>entreprise</code> absent ne respecteraient pas le schéma : c'est le cas que couvre la réponse <code>400</code>.</p>
+  </div>
+</div>
+
+</div>
+
+</div><!-- .example-split -->
+</div>
+
+<!-- FAMILLE (généré par gen-famille.py) -->
+<div class="view" id="v-famille">
+
+<div class="ref-section">
+  <h2 class="ref-section-title">
+    <span class="rs-dot" style="background:#0d9488;"></span>
+    La famille Offres &amp; recrutement
+    <span class="rs-count">5 API</span>
+    <span class="rs-tech">navigation</span>
+  </h2>
+  <div class="ref-section-intro">Offres d'emploi, entreprises à fort potentiel d'embauche, contrôle des offres et pages employeur. <a href="../index.html">Voir toutes les familles</a> dans le catalogue.</div>
+  <div class="ref-families">
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="jcmo-controle-offre.html">Je Contrôle Mon Offre - JCMO</a></span><span class="ref-count">v1</span></div>
+      <div class="expl">Récupération d'une liste d'appellations métier à partir d'un intitulé et d'un contexte.   Scopes : api_jecontrolemonoffrev1, legaliteoffreemploi  …</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;border-color:#a7f3d0;background:#f0fdf4;">
+      <div class="ref-head"><span class="ref-title">Je recrute avec FT pro</span><span class="ref-count">cette page</span></div>
+      <div class="expl">Cette API permet de créer des opportunités de recrutement via le widget je-recrute-avec-ft-pro pour les partenaires de France Travail.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="la-bonne-boite.html">La Bonne Boite</a></span><span class="ref-count">v2.27.3  <span class="at">nouveau</span></span></div>
+      <div class="expl">La Bonne Boîte cible les entreprises ayant des perspectives d'embauche élevées et permet d'être plus efficace dans l'envoi de candidatures…</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="offres-emploi.html">Offres d'emploi</a></span><span class="ref-count">v2</span></div>
+      <div class="expl">Accédez aux offres d'emploi disponibles sur francetravail.fr Consultez les référentiels pour renseigner les critères de recherche d'offres.</div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title"><a href="synthese-pages-employeurs.html">Synthèse des pages employeur</a></span><span class="ref-count">v1.0.0</span></div>
+      <div class="expl">La synthèse pages employeurs restitue des informations synthétiques d'employeurs ayant une page sur France Travail. Grâce à l'API, vous avez la…</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<footer>
+  OpenAPI 3.1.0 — Je recrute avec FT pro v1.0 · api.francetravail.io · 1 endpoint · 6 schemas
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
