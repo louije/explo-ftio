@@ -119,7 +119,7 @@ function renderCards() {
       '<div class="cat-card-head">' +
         titleHtml +
         newHtml +
-        '<div class="cat-card-version">' + (api.versions ? api.versions.map(function(x){return 'v'+escapeHtml(x.label);}).join(' \u00b7 ') : 'v'+escapeHtml(api.version)) + '</div>' +
+        '<div class="cat-card-version">' + (api.versions ? api.versions.map(function(x){return 'v'+escapeHtml(x.label);}).join(' \u00b7 ') : 'v'+escapeHtml(api.version.replace(/^v/i, ''))) + '</div>' +
       '</div>' +
       '<div class="cat-card-desc">' + escapeHtml(api.description) + '</div>' +
       '<div class="cat-card-stats">' +
@@ -374,12 +374,13 @@ function renderFamilles() {
     apis.sort(function(a, b) { if (a.starred !== b.starred) return a.starred ? -1 : 1; return a.title.localeCompare(b.title, "fr"); });
     var links = "";
     apis.forEach(function(a) {
-      links += '<a class="fam-api" href="docs/' + a.slug + '.html" data-slug="' + a.slug + '">' +
+      var tag = a.hasDocPage ? 'a' : 'span';
+      links += '<' + tag + ' class="fam-api"' + (a.hasDocPage ? ' href="docs/' + a.slug + '.html"' : '') + ' data-slug="' + a.slug + '">' +
         (a.starred ? '<span class="fam-star">\u2605</span> ' : "") +
         '<span class="fam-api-name">' + escapeHtml(a.title) + '</span>' +
-        ' <span class="fam-ver">v' + escapeHtml(a.version) + '</span>' +
+        ' <span class="fam-ver">v' + escapeHtml(a.version.replace(/^v/i, '')) + '</span>' +
         (a.isNew ? ' <span class="fam-new">new</span>' : "") +
-      '</a>';
+      '</' + tag + '>';
     });
     html += '<div class="fam-card"><div class="fam-card-body">' +
       '<div class="fam-left"><div class="fam-title">' + escapeHtml(g.label) + '<span class="fam-count">' + apis.length + '</span></div>' +
