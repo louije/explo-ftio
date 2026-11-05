@@ -1,7 +1,7 @@
 #!/bin/bash
 # APIs with known page IDs from the catalogue
 declare -A apis
-# apis[84]="offres-emploi"  # 403 since 2026-10-28: keep the last public copy (a failed fetch deletes the file)
+apis[84]="offres-emploi"  # 403 since 2026-10-28: the last public copy is kept
 apis[231]="sortants-formation-acces-emploi"
 apis[465]="rechercher-usager"
 apis[515]="conclusions-entretiens"
@@ -63,20 +63,23 @@ apis[502]="tableau-bord-reseau-emploi"
 apis[562]="service-geocodage"
 apis[462]="semafor"
 
+# Download to a temp file and replace the local schema only on a valid 200:
+# a 403/5xx/HTML answer must never destroy the last good copy.
 for id in "${!apis[@]}"; do
   name="${apis[$id]}"
-  code=$(curl -s -o "${name}.json" -w "%{http_code}" "https://francetravail.io/api-peio/v2/api/${id}/openapi")
+  tmp=$(mktemp)
+  code=$(curl -s -o "$tmp" -w "%{http_code}" "https://francetravail.io/api-peio/v2/api/${id}/openapi")
   if [ "$code" = "200" ]; then
     # Check if it's valid JSON
-    if python3 -c "import json; json.load(open('${name}.json'))" 2>/dev/null; then
+    if python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$tmp" 2>/dev/null; then
+      mv "$tmp" "${name}.json"
       size=$(wc -c < "${name}.json" | tr -d ' ')
       echo "OK  ${id}  ${name}  ${size}b"
     else
       echo "BADJSON  ${id}  ${name}"
-      rm -f "${name}.json"
     fi
   else
     echo "FAIL(${code})  ${id}  ${name}"
-    rm -f "${name}.json"
   fi
+  rm -f "$tmp"
 done
