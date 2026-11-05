@@ -14,8 +14,8 @@
 
 <header>
   <h1>March&#xe9; du travail</h1>
-  <div class="sub">Statistiques sur les demandeurs d'emploi, les offres, les embauches, les tensions et la dynamique de l'emploi par territoire et m&#xe9;tier</div>
-  <div class="sub-tech">March&#xe9; du travail v1 &#x2014; 28 endpoints &#xb7; 30 schemas</div>
+  <div class="sub">Statistiques sur les demandeurs d'emploi, les offres, les embauches et les tensions de recrutement par territoire et m&#xe9;tier</div>
+  <div class="sub-tech">March&#xe9; du travail v1.1 &#x2014; 35 endpoints &#xb7; 35 schemas</div>
   <div class="endpoint-tag"><strong>Base</strong> api.francetravail.io/partenaire/stats-offres-demandes-emploi</div>
 </header>
 
@@ -42,7 +42,7 @@
   <div class="nb">
     <div class="fi">Enveloppe de r&#xe9;ponse commune &#xe0; tous les indicateurs statistiques. Identifie l'indicateur, le territoire et contient les valeurs ventil&#xe9;es par p&#xe9;riode.
       <div class="fi-tech"><code>codeIndicateur</code> &#xb7; <code>codeFamille</code> &#xb7; <code>libIndicateur</code> &#xb7; <code>libTerritoire</code> &#xb7; <code>datMaj</code>
-        <br><span class="ev">DE_1</span> Demandeurs &#xb7; <span class="ev">DE_5</span> Nouveaux inscrits &#xb7; <span class="ev">OFF_1</span> Offres &#xb7; <span class="ev">EMB_1</span> Embauches &#xb7; <span class="ev">DYN_1</span> Dynamique &#xb7; <span class="ev">PERSP_2</span> Tensions &#xb7; <span class="ev">SAL_3</span> Salaires</div>
+        <br><span class="ev">DE_1</span> Demandeurs &#xb7; <span class="ev">DE_5</span> Nouveaux inscrits &#xb7; <span class="ev">DE_8</span> Demandeurs par profil &#xb7; <span class="ev">OFF_1</span> Offres &#xb7; <span class="ev">EMB_1</span> Embauches &#xb7; <span class="ev">EMB_8</span> Embauches par profil &#xb7; <span class="ev">PERSP_2</span> Tensions &#xb7; <span class="ev">SAL_3</span> Salaires</div>
     </div>
 
     <div class="n l1-b stack" id="m-valeurs-periode">
@@ -51,12 +51,12 @@
         <div class="card">0 ou plusieurs <span class="card-tech">array &#xb7; 0:N</span></div>
       </div>
       <div class="nb">
-        <div class="fi">Chaque entr&#xe9;e repr&#xe9;sente une combinaison territoire &#xd7; activit&#xe9; &#xd7; nomenclature &#xd7; p&#xe9;riode. Contient la valeur principale (nombre, taux, montant ou rang) et des valeurs secondaires (pourcentages, taux compl&#xe9;mentaires).
+        <div class="fi">Chaque entr&#xe9;e repr&#xe9;sente une combinaison territoire &#xd7; activit&#xe9; &#xd7; nomenclature &#xd7; p&#xe9;riode. Contient la valeur principale (nombre, nombre d&#xe9;cimal, taux, montant ou rang) et des valeurs secondaires (pourcentages, taux compl&#xe9;mentaires).
           <div class="fi-tech"><code>codeTypeTerritoire</code> &#xb7; <code>codeTerritoire</code> &#xb7; <code>libTerritoire</code>
             <br><code>codeTypeActivite</code> &#xb7; <code>codeActivite</code> &#xb7; <code>libActivite</code>
             <br><code>codeNomenclature</code> &#xb7; <code>libNomenclature</code>
             <br><code>codeTypePeriode</code> &#xb7; <code>codePeriode</code> &#xb7; <code>libPeriode</code>
-            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleTaux</code> &#xb7; <code>valeurPrincipaleMontant</code> &#xb7; <code>valeurPrincipaleRang</code>
+            <br><code>valeurPrincipaleNom</code> &#xb7; <code>valeurPrincipaleNombre</code> &#xb7; <code>valeurPrincipaleDecimale</code> &#xb7; <code>valeurPrincipaleTaux</code> &#xb7; <code>valeurPrincipaleMontant</code> &#xb7; <code>valeurPrincipaleRang</code>
             <br><code>valeurSecondaireNombre</code> &#xb7; <code>valeurSecondairePourcentage</code> &#xb7; <code>valeurSecondairePourcentage2</code> &#xb7; <code>valeurSecondaireTaux</code> &#xb7; <code>libPctParActivite</code></div>
         </div>
 
@@ -87,8 +87,9 @@
   <div class="nb">
     <div class="fi">Corps de la requ&#xea;te POST pour interroger un indicateur. Crit&#xe8;res obligatoires : territoire, activit&#xe9; et p&#xe9;riode. Crit&#xe8;res facultatifs : nomenclature, p&#xe9;riodes sp&#xe9;cifiques, caract&#xe9;ristiques de filtrage.
       <div class="fi-tech"><code>codeTypeTerritoire</code> (<span class="ev">NAT|REG|DEP</span>) &#xb7; <code>codeTerritoire</code> &#xb7; <code>codeTypeActivite</code> (<span class="ev">ROME|NAF|COMP</span>) &#xb7; <code>codeActivite</code>
-        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE|ANNEE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">CATCAND|ORIGINEOFF|DUREEEMP|TYPE_TENSION</span>)
-        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code></div>
+        <br><code>codeTypePeriode</code> (<span class="ev">TRIMESTRE|ANNEE</span>) &#xb7; <code>codeTypeNomenclature</code> (<span class="ev">CATCAND|ORIGINEOFF|DUREEEMP|TYPE_TENSION|PROF_SPECxCATCAND</span>)
+        <br><code>dernierePeriode</code> &#xb7; <code>listeCodePeriode[]</code> &#xb7; <code>listeCodeNomenclature[]</code> &#xb7; <code>sansCaracteristiques</code> &#xb7; <code>listeCaracteristiques[]</code>
+        <br><code>profilDemandeur</code> (<span class="ev">JEUNES</span>&#x2026;) &#x2014; requis selon l'indicateur (DE_8, EMB_8), sinon erreur 400</div>
     </div>
   </div>
 </div>
@@ -124,7 +125,7 @@
 </div>
 
 <div class="note">
-  <strong>Structure commune</strong> &#x2014; Tous les indicateurs (DE_1, DE_5, OFF_1, EMB_1, DYN_1, PERSP_2, SAL_3) retournent le m&#xea;me objet <code>IndicateurRetour</code>. Seuls les champs renseign&#xe9;s changent selon l'indicateur (nombre, taux, montant ou rang). Les r&#xe9;f&#xe9;rentiels (territoire, activit&#xe9;, p&#xe9;riode, nomenclature, caract&#xe9;ristique) sont partag&#xe9;s et consultables via des endpoints GET d&#xe9;di&#xe9;s.
+  <strong>Structure commune</strong> &#x2014; Tous les indicateurs (DE_1, DE_5, DE_8, OFF_1, EMB_1, EMB_8, PERSP_2, SAL_3) retournent le m&#xea;me objet <code>IndicateurRetour</code>. Seuls les champs renseign&#xe9;s changent selon l'indicateur (nombre, taux, montant ou rang). Les r&#xe9;f&#xe9;rentiels (territoire, activit&#xe9;, p&#xe9;riode, nomenclature, caract&#xe9;ristique) sont partag&#xe9;s et consultables via des endpoints GET d&#xe9;di&#xe9;s.
 </div>
 
 </div>
@@ -191,13 +192,14 @@
       <div class="voc-tech"><code>codeTypePeriode</code> — <code>dernierePeriode=true</code> pour la plus récente, sinon <code>listeCodePeriode</code>.</div>
     </div>
     <div class="ref-card voc-card">
-      <div class="ref-head"><span class="ref-title">Nomenclatures</span><span class="ref-count">5</span></div>
+      <div class="ref-head"><span class="ref-title">Nomenclatures</span><span class="ref-count">6</span></div>
       <ul class="ref-list voc-list">
         <li><span class="voc-code">CATCAND</span> Catégorie de candidat (A, B, C…)</li>
         <li><span class="voc-code">ORIGINEOFF</span> Origine de l'offre</li>
         <li><span class="voc-code">TYPE_TENSION</span> Type de tension</li>
         <li><span class="voc-code">DUREEEMP</span> Durée d'emploi</li>
         <li><span class="voc-code">CATCANDxDUREEEMP</span> Catégorie × durée d'emploi</li>
+        <li><span class="voc-code">PROF_SPECxCATCAND</span> Profil spécifique × catégorie de candidat</li>
       </ul>
       <div class="voc-tech"><code>codeTypeNomenclature</code> — axes de découpage propres à certains indicateurs.</div>
     </div>
@@ -208,7 +210,7 @@
   <h2 class="ref-section-title">
     <span class="rs-dot" style="background:#7c3aed;"></span>
     Indicateurs &amp; requêtes possibles
-    <span class="rs-count">7</span>
+    <span class="rs-count">8</span>
     <span class="rs-tech">un appel par indicateur</span>
   </h2>
   <div class="ref-section-intro">
@@ -227,6 +229,11 @@
     </div>
 
     <div class="ref-card voc-card" style="grid-column:1/-1;">
+      <div class="ref-head"><span class="ref-title">Demandeurs par profil</span><span class="ref-count"><span class="ev">DE_8</span></span></div>
+      <div class="expl"><code>stat-demandeurs-profil</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> catégorie de candidat, périodes, caractéristiques. <em>Ajouté en v1.1. Par métier et compétence, pour un profil de demandeur (<code>profilDemandeur</code>, ex. <code>JEUNES</code>) : requis selon l'indicateur, sinon erreur 400.</em></div>
+    </div>
+
+    <div class="ref-card voc-card" style="grid-column:1/-1;">
       <div class="ref-head"><span class="ref-title">Offres enregistrées</span><span class="ref-count"><span class="ev">OFF_1</span></span></div>
       <div class="expl"><code>stat-offres</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> origine de l'offre, périodes.</div>
     </div>
@@ -237,13 +244,13 @@
     </div>
 
     <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title">Tensions de recrutement</span><span class="ref-count"><span class="ev">PERSP_2</span></span></div>
-      <div class="expl"><code>stat-perspective-employeur</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> périodes. <em>Difficultés de recrutement par métier.</em></div>
+      <div class="ref-head"><span class="ref-title">Embauches par profil</span><span class="ref-count"><span class="ev">EMB_8</span></span></div>
+      <div class="expl"><code>stat-embauches-profil</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> catégorie de candidat, durée d'emploi, périodes, caractéristiques. <em>Ajouté en v1.1. Par profil de demandeur (<code>profilDemandeur</code>) et métier recherché.</em></div>
     </div>
 
     <div class="ref-card voc-card" style="grid-column:1/-1;">
-      <div class="ref-head"><span class="ref-title">Dynamique de l'emploi</span><span class="ref-count"><span class="ev">DYN_1</span></span></div>
-      <div class="expl"><code>stat-dynamique-emploi</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> périodes. <em>Indicateur prospectif.</em></div>
+      <div class="ref-head"><span class="ref-title">Tensions de recrutement</span><span class="ref-count"><span class="ev">PERSP_2</span></span></div>
+      <div class="expl"><code>stat-perspective-employeur</code> — <strong>Obligatoire :</strong> territoire, activité. <strong>Facultatif :</strong> périodes. <em>Difficultés de recrutement par métier.</em></div>
     </div>
 
     <div class="ref-card voc-card" style="grid-column:1/-1;">
@@ -266,12 +273,14 @@
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats demandeurs inscrits (DE_1)</span><div class="ep-human">Nombre de demandeurs d'emploi par m&#xe9;tier et comp&#xe9;tence en fin de trimestre</div><span class="ep-path">/v1/indicateur/stat-demandeurs</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats nouveaux inscrits (DE_5)</span><div class="ep-human">Nombre de demandeurs nouvellement inscrits au trimestre et sur 12 mois</div><span class="ep-path">/v1/indicateur/stat-demandeurs-entrant</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats demandeurs par profil (DE_8)</span><div class="ep-human">Demandeurs inscrits en fin de trimestre, par m&#xe9;tier et comp&#xe9;tence, pour un profil de demandeur</div><span class="ep-path">/v1/indicateur/stat-demandeurs-profil</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats offres d'emploi (OFF_1)</span><div class="ep-human">Offres enregistr&#xe9;es par m&#xe9;tier, secteur et comp&#xe9;tence</div><span class="ep-path">/v1/indicateur/stat-offres</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats embauches (EMB_1)</span><div class="ep-human">Embauches par m&#xe9;tier et secteur avec dur&#xe9;e d'emploi</div><span class="ep-path">/v1/indicateur/stat-embauches</span></div></div>
-    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Dynamique emploi (DYN_1)</span><div class="ep-human">Indicateur global de dynamique de l'emploi sur un territoire</div><span class="ep-path">/v1/indicateur/stat-dynamique-emploi</span></div></div>
+    <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Stats embauches par profil (EMB_8)</span><div class="ep-human">Embauches par profil de demandeur et m&#xe9;tier recherch&#xe9;</div><span class="ep-path">/v1/indicateur/stat-embauches-profil</span></div></div>
     <div class="ep-row"><span class="ep-method m-post">POST</span><div><span class="ep-desc">Tensions recrutement (PERSP_2)</span><div class="ep-human">Difficult&#xe9;s de recrutement par m&#xe9;tier (indicateur de tension)</div><span class="ep-path">/v1/indicateur/stat-perspective-employeur</span></div></div>
     <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Salaires en poste (SAL_3)</span><div class="ep-human">Montants des salaires par m&#xe9;tier et territoire</div><span class="ep-path">/v1/indicateur/salaire-rome-fap/{codeTypeTerritoire}/{codeTerritoire}</span></div></div>
   </div>
+  <div class="note"><strong>Retir&#xe9;s en v1.1.</strong> Entre juin et octobre 2026 (v1 &#x2192; v1.1), l'indicateur Dynamique de l'emploi (DYN_1, <code>POST /v1/indicateur/stat-dynamique-emploi</code>) a disparu de cette API ; il reste servi par <a href="informations-territoire.html">Informations sur un territoire</a>. Ont aussi disparu les r&#xe9;f&#xe9;rentiels <code>GET /v1/referentiel/indicateurs</code>, <code>/familles-indicateurs</code>, <code>/famille-indicateur/{codeFamilleIndicateur}</code> et <code>/territoires-communes/{codeTypeTerritoire}</code>. Le catalogue des indicateurs reste consultable via <code>details-indicateurs</code>.</div>
 </div>
 
 <div class="domain">
@@ -288,7 +297,7 @@
 
 <!-- Schemas -->
 <div style="margin-top:24px;">
-  <div class="domain-title">30 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
+  <div class="domain-title">35 Sch&#xe9;mas <span class="dt-human">&#x2014; Types de donn&#xe9;es</span></div>
   <div class="sc-legend">
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#22c55e;"></span> Lecture / R&#xe9;ponse</span>
     <span><span class="sc-dot" style="width:8px;height:8px;border-radius:50%;display:inline-block;background:#3b82f6;"></span> &#xc9;criture / Requ&#xea;te</span>
@@ -463,7 +472,7 @@
 </div>
 
 <footer>
-  OpenAPI 3.0.1 &#x2014; March&#xe9; du travail v1 &#xb7; api.francetravail.io &#xb7; 28 endpoints &#xb7; 30 schemas
+  OpenAPI 3.0.1 &#x2014; March&#xe9; du travail v1.1 &#xb7; api.francetravail.io &#xb7; 35 endpoints &#xb7; 35 schemas
 </footer>
 
 </div>
