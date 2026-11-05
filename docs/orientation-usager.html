@@ -259,7 +259,7 @@
 </div>
 
 <div class="note">
-  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel n&#xe9;cessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>.
+  <strong>Pr&#xe9;requis</strong> &#x2014; Cette API est dans le royaume <code>/agent</code> (client credentials). Chaque appel n&#xe9;cessite le header <code>ft-jeton-usager</code> obtenu via l'API <a href="rechercher-usager.html">Rechercher usager</a>, ainsi que les trois headers d'identification agent : <code>pa-nom-agent</code>, <code>pa-prenom-agent</code>, <code>pa-identifiant-agent</code>. Seule exception, en v2.1 : la liste des motifs de r&#xe9;orientation (<code>GET /nomenclature/motifs-reorientation</code>) ne prend pas de jeton usager.
 </div>
 
 <div class="note">
@@ -1207,7 +1207,7 @@
 <div class="domain">
   <div class="domain-title">Nomenclature <span class="dt-human">&#x2014; Motifs de r&#xe9;orientation</span></div>
   <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les motifs de r&#xe9;orientation</span><div class="ep-human">Les motifs utilisables pour une r&#xe9;orientation (seuls les motifs actifs sont accept&#xe9;s) &#x2014; ajout&#xe9; en v2.1</div><span class="ep-path">/nomenclature/motifs-reorientation</span></div></div>
+    <div class="ep-row"><span class="ep-method m-get">GET</span><div><span class="ep-desc">Lister les motifs de r&#xe9;orientation</span><div class="ep-human">Les motifs de r&#xe9;orientation, filtr&#xe9;s par le param&#xe8;tre <code>actif</code> : par d&#xe9;faut (<code>false</code>) actifs et inactifs, pour relire une orientation ; <code>actif=true</code> pour une d&#xe9;cision, qui n'accepte que les motifs actifs. Sans jeton usager &#x2014; ajout&#xe9; en v2.1</div><span class="ep-path">/nomenclature/motifs-reorientation</span></div></div>
   </div>
 </div>
 
